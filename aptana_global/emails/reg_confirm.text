@@ -1,0 +1,18 @@
+Welcome to ${g_SITENAME}
+
+You're almost done! 
+Simply click the following link to confirm 
+your ${g_SITENAME} account:
+
+http://${g_SITEURL}/login/confirm?key=${code}
+
+If clicking the link above does not work, please 
+visit http://${g_SITEURL}/confirm.php and enter 
+the key ${code} to complete 
+your registration. If you still have a problem please 
+forward this email to support@${g_SITEURL} and we'll do 
+everything we can to resolve the problem.
+
+
+Thank you and welcome to ${g_SITENAME}!
+  - The Crew

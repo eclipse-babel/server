@@ -1,0 +1,23 @@
+From: "${FROM_NAME}" <${FROM_ADDRESS}>
+Reply-To: ${REPLY_TO}
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+        boundary="----=_NextPart_000_001B_01C44228.573124A0"
+
+This is a multi-part message in MIME format.
+
+------=_NextPart_000_001B_01C44228.573124A0
+Content-Type: text/plain;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+${EMAIL_TEXT}
+
+------=_NextPart_000_001B_01C44228.573124A0
+Content-Type: text/html;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+${EMAIL_HTML}
+
+------=_NextPart_000_001B_01C44228.573124A0--

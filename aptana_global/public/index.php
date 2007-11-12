@@ -1,7 +1,18 @@
-<?
+<?php
+/*******************************************************************************
+ * Copyright (c) 2007 Eclipse Foundation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Paul Colton (Aptana)- initial API and implementation
+
+*******************************************************************************/
 // if not logged in redirect to login page
 // otherwise show choices
-require_once("aptana_global/aptana.inc.php");
+require_once("../aptana.inc.php");
 
 // ------...------...------...------...------...------...------...------...------...------...------
 // should move this out of here
@@ -10,7 +21,7 @@ $welcome = "";
 if (isset($_SESSION['s_userName']))
   $welcome = "Welcome back " . $_SESSION['s_userName'];
 else {
-	header("Location: /login.php");
+	header("Location: login.php");
 	exit;
 }
 
@@ -42,7 +53,7 @@ $welcome
 */  
 // ------...------...------...------...------...------...------...------...------...------...------
 
-require_once('aptana_global/head.php');
+require_once(BABEL_BASE_DIR.'head.php');
 echo <<< toTheEnd
 
 
@@ -337,5 +348,5 @@ function dirty() {
 
 </body>
 toTheEnd;
-require_once('aptana_global/foot.php');
+require_once(BABEL_BASE_DIR.'foot.php');
 ?>

@@ -1,11 +1,26 @@
-<?
-require_once('aptana_global/code/login.code.php');
-require_once('aptana_global/head.php');
+<?php
+/*******************************************************************************
+ * Copyright (c) 2007 Eclipse Foundation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Paul Colton (Aptana)- initial API and implementation
+
+*******************************************************************************/
+
+$pageTitle = "Babel Login";
+$pageKeywords = "";
+
+require_once("../aptana.inc.php");
+
+require_once(BABEL_BASE_DIR.'code/login.code.php');
+require_once(BABEL_BASE_DIR.'head.php');
 echo <<< toTheEnd
-<p />
-<center>
+<h1>$pageTitle</h1>
 <form method="post">
-<div id="title" style='font-weight:bold;font-size:20pt;'>aptana.global</div>
 
 <table cellspacing=4 cellpadding=0 width=500px; border=0>
 <tr><td></td><td id="formErr" colspan=2>{$GLOBALS['g_ERRSTRS'][0]}&nbsp;</td></tr>
@@ -29,12 +44,7 @@ echo <<< toTheEnd
 </table>
 </form>
 <p />
-<br />
-<br />
-<a href="/register.php">Sign up</a>
-
-</center>
 
 toTheEnd;
-require_once('aptana_global/foot.php');    
+require_once(BABEL_BASE_DIR.'foot.php');    
 ?>

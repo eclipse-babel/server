@@ -1,4 +1,15 @@
-<?
+<?php
+/*******************************************************************************
+ * Copyright (c) 2007 Eclipse Foundation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Paul Colton (Aptana)- initial API and implementation
+
+*******************************************************************************/
 // ------...------...------...------...------...------...------...------...------...------...------
 
 function emailUser($userEmail,$template,$extra=NULL) {
@@ -7,7 +18,7 @@ function emailUser($userEmail,$template,$extra=NULL) {
   // Get the all the templates
   //   email.body is the email header + MIME template
   //   where the HTM and TEXT version is inserted
-  $body = file_get_contents("aptana_global/emails/email.body",true);
+  $body = file_get_contents(BABEL_BASE_DIR."emails/email.body",true);
   $html = file_get_contents("aptana_global/emails/$template.html",true);
   $html = str_replace("\${g_SITENAME}",$siteName,$html);
   $html = str_replace("\${g_SITEURL}" ,$siteURL,$html);

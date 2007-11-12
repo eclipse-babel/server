@@ -1,6 +1,17 @@
-<?
+<?php
+/*******************************************************************************
+ * Copyright (c) 2007 Eclipse Foundation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Paul Colton (Aptana)- initial API and implementation
+
+*******************************************************************************/
 // ------...------...------...------...------...------...------...------...------...------...------
-require_once("aptana_global/aptana.inc.php");
+require_once(BABEL_BASE_DIR."aptana.inc.php");
 // ------...------...------...------...------...------...------...------...------...------...------
 
 extract(LoadVars());
@@ -33,7 +44,7 @@ function LoadVars() {
   if (isset($_POST['postIT'])) {
     if ($user->formRegValidate($_POST,$pass1,$pass2)) {
       addUser($user,$pass1);
-      exitTo("/registration_done.php?code=1");
+      exitTo("registration_done.php?code=1");
     }
   }
   $dat = $user->PostDATA();
@@ -56,7 +67,7 @@ function addUser($user,$pass) {
   $user->_updated_on    = "NOW()";
   $user->_created_on    = "NOW()";
   if (!$user->selfPost())
-      exitTo("/registration_done.php?code=2");
+      exitTo("registration_done.php?code=2");
   //  emailUser($user->_email,"reg_confirm",array("code" => $user->_code,"email" => $user->_email));
   //else 
 //    exitTo("/error","e_code","1011");

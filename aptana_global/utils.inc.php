@@ -1,12 +1,23 @@
-<?
+<?php
+/*******************************************************************************
+ * Copyright (c) 2007 Eclipse Foundation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Paul Colton (Aptana)- initial API and implementation
+
+*******************************************************************************/
 // ------...------...------...------...------...------...------...------...------...------...------
-require_once("aptana_global/consts.inc.php");
+require_once("consts.inc.php");
 define("COOKIE_REMEMBER","cAPTANAX");
 define("COOKIE_SESSION" ,"sAPTANAX");
 // ------...------...------...------...------...------...------...------...------...------...------
 
 function __autoload($class_name) {
-  require_once("aptana_global/sql/$class_name.class.php");
+  require_once(BABEL_BASE_DIR."sql/$class_name.class.php");
 }
 
 // ------...------...------...------...------...------...------...------...------...------...------
@@ -97,9 +108,9 @@ function log2File($fileName,$str,$delim) {
   $acct     = GetSessionVar('c_acctID');
   $user     = GetSessionVar('c_userID');
 
-  $file = fopen($fileName,"a+");
-  fwrite($file,"$date $addr [$acct:$user] $delim $str\n");
-  fclose($file);
+//  $file = fopen($fileName,"a+");
+//  fwrite($file,"$date $addr [$acct:$user] $delim $str\n");
+//  fclose($file);
 }
 
 // ------...------...------...------...------...------...------...------...------...------...------
@@ -119,9 +130,10 @@ function sqlOpen($database) {
 
   if (!($ini = @parse_ini_file('base.conf'))) {
     errorLog("Failed to find/read database conf file - aborting.");
-    exitTo("/error.php?errNo=101300","error: 101300 - database conf can not be found");
+    exitTo("error.php?errNo=101300","error: 101300 - database conf can not be found");
   }
-  $ini['db_read_pass'] = "aptana$$1";
+  //$ini['db_read_pass'] = "aptana$$1";
+  
   if (!mysql_connect($ini['db_read_host'],$ini['db_read_user'],$ini['db_read_pass'])) {
     errorLog("Failed attempt to connect to server - aborting.");
     exitTo("/error.php?errNo=101301","error: 101301 - data server can not be found");

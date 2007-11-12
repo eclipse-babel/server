@@ -1,6 +1,19 @@
-<?
+<?php
+/*******************************************************************************
+ * Copyright (c) 2007 Eclipse Foundation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Paul Colton (Aptana)- initial API and implementation
+
+*******************************************************************************/
+
+
 // ------...------...------...------...------...------...------...------...------...------...------
-require_once("aptana_global/aptana.inc.php");
+require_once(BABEL_BASE_DIR."aptana.inc.php");
 // ------...------...------...------...------...------...------...------...------...------...------
 
 extract(LoadVars());
@@ -32,12 +45,12 @@ function LoadVars() {
         $errStrs[0] .= "&nbsp;invalid code";
       else if (strlen(!$errStrs[1])) {
         if (!$user->sqlLoad($rec->id))
-          exitTo("/error.pp","e_code","1012");
+          exitTo("error.pp","e_code","1012");
         $user->_type   = 1;
         $user->_status = 1;
 				$user->_code   = '';
         $user->selfPost();
-        exitTo("/registration_done.php");
+        exitTo("registration_done.php");
       }
     }
   }

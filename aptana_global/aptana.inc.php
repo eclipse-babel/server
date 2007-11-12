@@ -1,7 +1,20 @@
-<?
+<?php
+/*******************************************************************************
+ * Copyright (c) 2007 Eclipse Foundation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Paul Colton (Aptana)- initial API and implementation
+
+*******************************************************************************/
+define('BABEL_BASE_DIR', "../");
+
 // ------...------...------...------...------...------...------...------...------...------...------
 $GLOBALS['g_LOADTIME'] = microtime();
-require("aptana_global/utils.inc.php");
+require("utils.inc.php");
 session_name(COOKIE_SESSION);
 session_start();
 extract($_SESSION);
@@ -20,7 +33,7 @@ function InitPage($page) {
   
   if (!$userName && isset($_COOKIE[COOKIE_REMEMBER]) && $page!='login') {
     SetSessionVar('s_pageLast',$GLOBALS['page']);
-    exitTo("/login");
+    exitTo("login");
   }
   
   $GLOBALS['g_PHPSELF']  = $GLOBALS['page'];

@@ -10,9 +10,10 @@
  *    Paul Colton (Aptana)- initial API and implementation
 
 *******************************************************************************/
-
-include(BABEL_BASE_DIR . '/eclipse.org-common/themes/Phoenix/header.php');
+if(USE_PHOENIX) {
+	include(BABEL_BASE_DIR . '/eclipse.org-common/themes/Phoenix/header.php');
+	include(BABEL_BASE_DIR . '/eclipse.org-common/themes/Phoenix/menu.php');
+	include(BABEL_BASE_DIR . '/eclipse.org-common/themes/Phoenix/nav.php');
+}
 
 ?>
-
-<div style='margin-left:25px;margin-right:25px;'>

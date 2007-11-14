@@ -62,8 +62,10 @@ function addUser($user,$pass) {
   //$user->_status   = 0;
   //$user->_code     = guidNbr();
   //$user->_password = $user->sqlGetPassword($user->_password);
-  $user->_password_salt = hash("crc32", $pass);
-  $user->_password_hash = hash("sha256", $pass . $user->_password_salt);
+  # $user->_password_salt = hash("crc32", $pass);
+  $user->_password_salt = crc32($pass);
+  # $user->_password_hash = hash("sha256", $pass . $user->_password_salt);
+  $user->_password_hash = sha1($pass . $user->_password_salt);
   $user->_updated_on    = "NOW()";
   $user->_created_on    = "NOW()";
   if (!$user->selfPost())

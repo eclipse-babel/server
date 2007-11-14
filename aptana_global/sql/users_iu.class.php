@@ -82,7 +82,7 @@ function findUser($str,$password) {
     return 0;
   }
   if ($this->_password_hash != $password)
-    if (hash("sha256", $password . $this->_password_salt) != $this->_password_hash) {
+    if (sha1($password . $this->_password_salt) != $this->_password_hash) {
       return 0;
     }
   

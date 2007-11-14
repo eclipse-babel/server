@@ -11,7 +11,7 @@
 
 *******************************************************************************/
 // ------...------...------...------...------...------...------...------...------...------...------
-require_once("aptana_global/aptana.inc.php");
+require_once(BABEL_BASE_DIR."aptana.inc.php");
 InitPage("registration_done");
 
 $code = (isset($_GET['code'])?$_GET['code']:0);

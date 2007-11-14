@@ -11,8 +11,19 @@
 
 *******************************************************************************/
 define('BABEL_BASE_DIR', "../");
+define('USE_PHOENIX', true);
 
 // ------...------...------...------...------...------...------...------...------...------...------
+# Load up Phoenix classes
+$App;
+if(USE_PHOENIX) {
+	require_once(BABEL_BASE_DIR . '/eclipse.org-common/system/app.class.php');
+	require_once(BABEL_BASE_DIR . "/eclipse.org-common/system/nav.class.php");
+	require_once(BABEL_BASE_DIR . "/eclipse.org-common/system/menu.class.php");
+	$App = new App(); 	
+	$Nav	= new Nav();	
+	$Menu 	= new Menu();
+}
 $GLOBALS['g_LOADTIME'] = microtime();
 require("utils.inc.php");
 session_name(COOKIE_SESSION);

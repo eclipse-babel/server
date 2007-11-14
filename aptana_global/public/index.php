@@ -10,8 +10,9 @@
  *    Paul Colton (Aptana)- initial API and implementation
 
 *******************************************************************************/
-// if not logged in redirect to login page
-// otherwise show choices
+$pageTitle = "Babel";
+$pageKeywords = "";
+
 require_once("../aptana.inc.php");
 
 // ------...------...------...------...------...------...------...------...------...------...------
@@ -24,7 +25,6 @@ else {
 	header("Location: login.php");
 	exit;
 }
-
 
 $user  = new users_iu($s_userAcct);
 $langs = new languages_iu(0);
@@ -53,7 +53,8 @@ $welcome
 */  
 // ------...------...------...------...------...------...------...------...------...------...------
 
-require_once(BABEL_BASE_DIR.'head.php');
+# TODO: move all this JS to a .js file
+require_once(BABEL_BASE_DIR . 'head.php');
 echo <<< toTheEnd
 
 
@@ -270,12 +271,12 @@ function dirty() {
 </script>
 
 
+<div id="maincontent">
+<div id="midcolumn">
 
+<h1>$pageTitle</h1>
 
-
-
-
-
+<!--   huh?   -->
 <body onload="langChange($langSel);">
 <div style='padding-right:20px'>
 
@@ -331,22 +332,15 @@ function dirty() {
 
   </td>  
 
-
-
-
-
-
-
-
   
   <td style='width:100%;border:solid 1px $borderC;padding:10px;' >
   <div id=entryEdit name=entryEdit >
     <div style='width:300px;'></div>
 
   </div>
-  
+</div></div>
 
-</body>
+
 toTheEnd;
 require_once(BABEL_BASE_DIR.'foot.php');
 ?>

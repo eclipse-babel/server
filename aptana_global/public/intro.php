@@ -10,22 +10,26 @@
  *    Paul Colton (Aptana)- initial API and implementation
 
 *******************************************************************************/
+$pageTitle = "Welcome to Babel";
+$pageKeywords = "";
 
-require_once('../head.php');
+require_once("../aptana.inc.php");
+require_once(BABEL_BASE_DIR . 'head.php');
+
 echo <<< toTheEnd
-<p />
-<center>
-<p /><br /><br /><br /><br /><br />
-<div style='width:600px;font-family:Arial;font-size:16px;font-weight:bold;'>
-Welcome to aptana.global. Aptana.global is designed to ease the process
-of translating Aptana into another language.
-<p />
-Ready to begin translating? Let's go!
+<div id="maincontent">
+<div id="midcolumn">
 
-<p /><br /><br />
-<a href='/index.php'><img src='/get-started.gif' border=0></a>
+<h1>$pageTitle</h1>
+<p>Welcome to Babel. Babel is designed to ease the process
+of translating Eclipse into another language.</p>
+<p>Ready to begin translating? Let's go!</p>
+
+<br /><br />
+<a href='index.php'><img src='get-started.gif' border=0></a>
 </div>
-</center>
+</div>
+</div>
 
 toTheEnd;
 require_once('../foot.php');    

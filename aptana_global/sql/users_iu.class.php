@@ -8,15 +8,12 @@
  *
  * Contributors:
  *    Paul Colton (Aptana)- initial API and implementation
-
+ *    Eclipse Foundation 
 *******************************************************************************/
-// ------...------...------...------...------...------...------...------...------...------...------
+
 class users_iu extends users_ix {
-// ------...------...------...------...------...------...------...------...------...------...------
-// ------...------...------...------...------...------...------...------...------...------...------
   public $errStrs;
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function PostDATA($post=NULL) {
   $dat = cXSQL::formBuildData($post);
@@ -25,7 +22,6 @@ function PostDATA($post=NULL) {
   return $dat;
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function formRegValidate($_POST,$pass1,$pass2) {
   $this->formGatherData($_POST);
@@ -70,7 +66,6 @@ function formRegValidate($_POST,$pass1,$pass2) {
   return true;
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function findUser($str,$password) {
   $name = $this->addSET("","username",$str);
@@ -79,19 +74,24 @@ function findUser($str,$password) {
   // using a different DB that hashes the password differently
   $this->sqlLoad("($name OR $mail)");
   if ($this->sql_Cnt != 1) {
-    return 0;
+    $this->_id = 0;
   }
-  if ($this->_password_hash != $password)
-    if (sha1($password . $this->_password_salt) != $this->_password_hash) {
-      return 0;
+  
+  # we don't use the username, so replace it with the email address
+  # same algorithm here as the wiki
+  $this->_username = str_replace("@", ".", $this->_email);
+
+  # Typical Bugzilla algorithm
+  if ($this->_password_hash != $password) {
+    if (!crypt($password, $this->_password_hash) == $this->_password_hash) {
+      $this->_id = 0;
     }
+  }
   
   debugLog("Found user: " . $this->_username . ":" . "********");
   return $this->_id;
 }
+ 
 
-// ------...------...------...------...------...------...------...------...------...------...------
-// ------...------...------...------...------...------...------...------...------...------...------
 }
-// ------...------...------...------...------...------...------...------...------...------...------
 ?>

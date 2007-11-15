@@ -74,7 +74,7 @@ function loginUser($username,$password,$remember) {
     $errStrs[2] = "&nbsp;required";
 
   if (!$errStrs[1] && !$errStrs[2]) {
-    $errStrs[0] = "invalid username/password";
+    $errStrs[0] = "Invalid username/password";
     $user = new users_iu(0);
     if ($user->findUser($username,$password)) {
     

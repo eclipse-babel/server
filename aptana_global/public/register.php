@@ -10,6 +10,13 @@
  *    Paul Colton (Aptana)- initial API and implementation
 
 *******************************************************************************/
+
+/**
+ * @deprecated
+ */
+header("Location: index.php");
+exit;
+
 require_once("../aptana.inc.php");
 error_reporting(E_ALL);
 

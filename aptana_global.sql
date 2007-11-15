@@ -61,21 +61,22 @@ CREATE TABLE `schema_info` (
 
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(11) NOT NULL,
   `username` varchar(256) NOT NULL default '',
   `first_name` varchar(256) NOT NULL default '',
   `last_name` varchar(256) NOT NULL default '',
   `email` varchar(256) NOT NULL default '',
   `primary_language_id` int(11) NOT NULL default '0',
   `hours_per_week` int(11) NOT NULL default '0',
-  `password_salt` varchar(256) NOT NULL default '',
   `password_hash` varchar(256) NOT NULL default '',
   `updated_on` date NOT NULL,
   `updated_at` time NOT NULL,
   `created_on` date NOT NULL,
   `created_at` time NOT NULL,
   PRIMARY KEY  (`id`),
-  KEY `id` (`id`)
+  FOREIGN KEY (primary_language_id) REFERENCES languages(id)
+                      ON DELETE RESTRICT
+                      ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

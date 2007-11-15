@@ -20,7 +20,6 @@ class users_ix extends cXSQL  {
   public $_email               = '';
   public $_primary_language_id = '0';
   public $_hours_per_week      = '0';
-  public $_password_salt       = '';
   public $_password_hash       = '';
   public $_updated_on          = '';
   public $_updated_at          = '';

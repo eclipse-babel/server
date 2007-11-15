@@ -114,7 +114,7 @@ function PostEntry() {
 function resetEntryEdit(l,id) {
   if (id) {
     if (lang && projID && entryIdx && (divItem = document.getElementById('entryEdit')))
-      divItem.innerHTML = "<div style='height:489px;'><center><p /><br /><br /><br /><img src='/spinner.gif'><br />loading...</center>";
+      divItem.innerHTML = "<div style='height:489px;'><center><p /><br /><br /><br /><img src='imgs/spinner.gif'><br />loading...</center>";
     loadXMLDoc("get_entry.php?lang=" + lang + "&proj=" + projID + "&entry=" + entryID,3);
   } 
   else {
@@ -134,7 +134,7 @@ function resetEntryList(l,p) {
   }
   else {
     if (divItem = document.getElementById('entryDiv'))
-      divItem.innerHTML = "<div style='height:489px;'><center><p /><br /><br /><br /><img src='/spinner.gif'><br />loading...</center>";
+      divItem.innerHTML = "<div style='height:489px;'><center><p /><br /><br /><br /><img src='imgs/spinner.gif'><br />loading...</center>";
     loadXMLDoc("get_entries.php?lang=" + l + "&proj=" + p,2);
   }
 }
@@ -146,7 +146,7 @@ function resetEntryList(l,p) {
 function resetProjectList(l) {
   projID = 0;
   if (divItem = document.getElementById('projDiv'))
-    divItem.innerHTML = "<div style='height:489px;'><center><p /><br /><br /><br /><img src='/spinner.gif'><br />loading...</center>";
+    divItem.innerHTML = "<div style='height:489px;'><center><p /><br /><br /><br /><img src='imgs/spinner.gif'><br />loading...</center>";
   loadXMLDoc("get_projects.php?lang=" + l,1);
 }
 

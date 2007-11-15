@@ -166,7 +166,7 @@ tr { vertical-align:top; }
  width:220px;
  padding:0px;
  color:#fffc0d;
- background-image: url(/selected.gif);
+ background-image: url(imgs/selected.gif);
  }
  
  .entryDone {
@@ -214,7 +214,7 @@ tr { vertical-align:top; }
  padding:0px;
  padding-left:4px;
  color:#fffc0d;
- background-image: url(/selected.gif);
+ background-image: url(imgs/selected.gif);
  overflow:hidden;
  }
  
@@ -226,7 +226,7 @@ tr { vertical-align:top; }
  width:100%x;
  padding:0px;
  color:#fffc0d;
- background-image: url(/selected.gif);
+ background-image: url(imgs/selected.gif);
  overflow:hidden;
  }
  
@@ -242,7 +242,7 @@ tr { vertical-align:top; }
 	font-weight:normal;
 }
 :hover.ss {
-  background-image: url(/rollover.gif);
+  background-image: url(imgs/rollover.gif);
 	color:#444444;
 	border-right: solid 1px #cccccc;
 	border-bottom: solid 1px #cccccc;
@@ -260,7 +260,7 @@ width: 100%;
 height: 49px;
 font-size: 14px;
 color: #ffffff;
-background-image: url(/background-header-tile.gif);
+background-image: url(imgs/background-header-tile.gif);
 background-repeat: repeat-x;
 background-attachment: scroll;
 background-x-position: 0%;

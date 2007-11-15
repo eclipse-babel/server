@@ -74,8 +74,8 @@ echo <<< toTheEnd
 
 	<table cellspacing=0 cellpadding=0 border=0>
 		<tr>
-  			<td style='width:200px'><img src='/p.gif' width=200 height=1px></td>
-  			<td style='width:325px'><img src='/p.gif' width=325 height=1px></td>
+  			<td style='width:200px'><img src='imgs/p.gif' width=200 height=1px></td>
+  			<td style='width:325px'><img src='imgs/p.gif' width=325 height=1px></td>
   			<td style='width:100%' ></td>
 		</tr>
 
@@ -107,7 +107,7 @@ echo <<< toTheEnd
 
   		  <td style='width:325px;border-top:solid 1px $borderC;border-bottom:solid 1px $borderC;'>
 	    	<table cellspacing=0 cellpadding=0 border=0>
-    			<tr><td style='width:2px'><img src='/p.gif' width=2 height=47px></td></tr>
+    			<tr><td style='width:2px'><img src='imgs/p.gif' width=2 height=47px></td></tr>
     			<tr><td style='padding:5px;'>&nbsp;<b>Select an Entry</b></td></tr>
     			<tr>
     				<td style='width:325px;'>

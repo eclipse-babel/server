@@ -83,7 +83,7 @@ function findUser($str,$password) {
 
   # Typical Bugzilla algorithm
   if ($this->_password_hash != $password) {
-    if (!crypt($password, $this->_password_hash) == $this->_password_hash) {
+    if (!(crypt($password, $this->_password_hash) == $this->_password_hash)) {
       $this->_id = 0;
     }
   }

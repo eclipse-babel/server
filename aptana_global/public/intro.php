@@ -23,10 +23,7 @@ echo <<< toTheEnd
 <h1>$pageTitle</h1>
 <p>Welcome to Babel. Babel is designed to ease the process
 of translating Eclipse into another language.</p>
-<p>Ready to begin translating? Let's go!</p>
-
-<br /><br />
-<a href='index.php'><img src='get-started.gif' border=0></a>
+<p>Ready to begin translating? <a href='index.php'>Let's go!</a></p>
 </div>
 </div>
 </div>

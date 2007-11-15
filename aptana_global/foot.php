@@ -10,6 +10,7 @@
  *    Paul Colton (Aptana)- initial API and implementation
 
 *******************************************************************************/
+
 include(BABEL_BASE_DIR . '/eclipse.org-common/themes/Phoenix/footer.php');
 $App = new App();
 

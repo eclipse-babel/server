@@ -72,11 +72,12 @@ function loginUser($username,$password,$remember) {
     $errStrs[1] = "&nbsp;required";
   if (empty($password))
     $errStrs[2] = "&nbsp;required";
-    
+
   if (!$errStrs[1] && !$errStrs[2]) {
     $errStrs[0] = "invalid username/password";
     $user = new users_iu(0);
     if ($user->findUser($username,$password)) {
+    
       //switch ($user->_status) {
       //  case 0: // not yet confirmed
       //    $errStrs[0] = "your account has not yet been confirmed";

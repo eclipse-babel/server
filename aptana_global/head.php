@@ -15,5 +15,8 @@ if(USE_PHOENIX) {
 	include(BABEL_BASE_DIR . '/eclipse.org-common/themes/Phoenix/menu.php');
 	include(BABEL_BASE_DIR . '/eclipse.org-common/themes/Phoenix/nav.php');
 }
-
 ?>
+
+<link href='aptana.css' rel="stylesheet">
+<script src='js/babel.js' type='text/javascript'></script>
+

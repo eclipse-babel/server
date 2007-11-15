@@ -16,9 +16,16 @@ body {
   padding: 0;
   background: #FFFFFF;
   font-size:12px;
-  background-color:#dddddd;
 }
 
+.babel-container{
+	margin-right: 20px;
+  	background-color: #dddddd;
+}
+
+.logout{
+	float: right;
+	}
 
 input {
 	font-family: verdana,arial;

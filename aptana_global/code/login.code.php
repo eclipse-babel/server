@@ -8,17 +8,13 @@
  *
  * Contributors:
  *    Paul Colton (Aptana)- initial API and implementation
-
+ * 	  Eclipse Foundation
 *******************************************************************************/
 error_reporting(E_ALL);
-// ------...------...------...------...------...------...------...------...------...------...------
 require_once(BABEL_BASE_DIR."aptana.inc.php");
-// ------...------...------...------...------...------...------...------...------...------...------
 
 
 extract(LoadVars());
-
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function LoadVars() {
 
@@ -28,27 +24,6 @@ function LoadVars() {
   $post_username = (isset($_POST['username'])?$_POST['username']:"");
   $post_password = (isset($_POST['password'])?$_POST['password']:"");
   $post_remember = (isset($_POST['remember'])?$_POST['remember']:"");
-
-  if (isset($_COOKIE['c_username'])) {
-    // If cookie based login, must be me loggin' in
-    $post_username = getCookie('c_username');
-    $post_password = getCookie('c_password');
-    $_POST['postIT'] = true;
-  }
-
-  $cookie = (isset($_COOKIE[COOKIE_REMEMBER])?$_COOKIE[COOKIE_REMEMBER]:"");
-
-  if (strpos($cookie,":")) {
-    // Check for remember cookie and get user info if set
-    list($nbr,$name) = decode_remember($cookie);
-    $user = new users_iu($nbr);
-    if ($user->_id && ($user->_username == $name)) {
-      $post_username = $user->_username;
-      $post_password = $user->_password_hash;
-      $post_remember = 1;
-      $_POST['postIT'] = true;
-    }
-  }
   
   if (!empty($_POST['postIT'])) {
     loginUser($post_username,$post_password,$post_remember);
@@ -59,8 +34,6 @@ function LoadVars() {
   $dat['post_remember'] = ($post_remember?"checked":"");
   return $dat;
 }
-
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function loginUser($username,$password,$remember) {
   unset($_SESSION['s_userAcct']);
@@ -84,8 +57,11 @@ function loginUser($username,$password,$remember) {
       //    break;
       //  case 1:
           if ($remember) {
+          	$session = new sessions_iu(0);
+          	$session->createSession($user->_id);
+
             $cookieName  = COOKIE_REMEMBER;
-            $cookieValue = encode_remember($user->_id,$user->_username);
+            $cookieValue = $session->encode_remember();
             setcookie($cookieName,$cookieValue,time()+3600*24*365,"/");
           }
           SetSessionVar("s_userAcct" ,"$user->_id");
@@ -103,32 +79,6 @@ function loginUser($username,$password,$remember) {
   $GLOBALS['g_ERRSTRS'] = $errStrs;
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
-function decode_remember($remember) {
-  list($nbr,$code) = split(":",$remember);
-  $nbr  = $nbr-111;
-  $name = "";
-  $cnt  = 1;
-  while (strlen($code) && (($hex = substr($code,0,2)) != "10")) {
-    $name .= chr("0x$hex"-$cnt++);
-    $code = substr($code,2);
-  }
-  return array($nbr,$name);
-}
 
-// ------...------...------...------...------...------...------...------...------...------...------
-
-function encode_remember($nbr,$name) {
-  $code = ($nbr+111) . ":";
-  for ($i=0;$i<strlen($name);$i++) 
-    $code .= sprintf("%02x",ord($name{$i})+($i+1));
-  $code .= "10";
-  $name = "eddierohweddereddierohwedder";
-  for ($i=0;$i<rand(1,10);$i++) 
-    $code .= sprintf("%02x",ord($name{$i})+2);
-  return $code;
-}
-
-// ------...------...------...------...------...------...------...------...------...------...------
 ?>

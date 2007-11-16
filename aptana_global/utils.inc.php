@@ -8,19 +8,17 @@
  *
  * Contributors:
  *    Paul Colton (Aptana)- initial API and implementation
-
+ *    Eclipse Foundation
 *******************************************************************************/
-// ------...------...------...------...------...------...------...------...------...------...------
 require_once("consts.inc.php");
-define("COOKIE_REMEMBER","cAPTANAX");
-define("COOKIE_SESSION" ,"sAPTANAX");
-// ------...------...------...------...------...------...------...------...------...------...------
+define("COOKIE_REMEMBER","cBABEL");
+define("COOKIE_SESSION" ,"sBABEL");
+
 
 function __autoload($class_name) {
   require_once(BABEL_BASE_DIR."sql/$class_name.class.php");
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function SetSessionVar($varName,$varVal) {
   global $_SESSION;
@@ -30,7 +28,6 @@ function SetSessionVar($varName,$varVal) {
   return $varVal;
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function GetSessionVar($varName) {
   if (isset($_SESSION[$varName]))
@@ -38,7 +35,6 @@ function GetSessionVar($varName) {
   return 0;
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function ClearSessionVar($varName) {
   if (isset($_SESSION[$varName]))
@@ -48,7 +44,6 @@ function ClearSessionVar($varName) {
   return "";
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function GrabSessionVar($varName) {
   $retVal = GetSessionVar($varName);
@@ -56,7 +51,6 @@ function GrabSessionVar($varName) {
   return $retVal;
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function esc_str($str) {
   $str = str_replace("%","#",$str);
@@ -64,25 +58,22 @@ function esc_str($str) {
   return mysql_escape_string($str);
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function debugLog($str) {
   dump(LOG2DEBUG,$str);
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
+
 
 function errorLog($str) {
   dump(LOG2ERROR,$str);
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function userLog($str) {
   dump(LOG2USER,$str);
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function dump($where,$str) {
   switch ($where) {
@@ -98,7 +89,6 @@ function dump($where,$str) {
   }
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function log2File($fileName,$str,$delim) {
   $fileName = "/var/log/" . $fileName;
@@ -113,7 +103,6 @@ function log2File($fileName,$str,$delim) {
 //  fclose($file);
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function getHtmlTmpl($fileName) {
   $html = file_get_contents($fileName);
@@ -121,10 +110,6 @@ function getHtmlTmpl($fileName) {
   return $html;
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
-// ------...------...------...------...------...------...------...------...------...------...------
-// ------...------...------...------...------...------...------...------...------...------...------
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function sqlOpen($database) {
 
@@ -149,7 +134,10 @@ function sqlOpen($database) {
   }
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
+function sqlClose() {
+	mysql_close();
+}
+
 
 function sqlQuery($cmd) {
   if (!($qry = mysql_query($cmd))) 
@@ -157,7 +145,6 @@ function sqlQuery($cmd) {
   return $qry;
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function sqlGetRec($statement) {
   if ($qry = sqlQuery($statement)) {
@@ -170,7 +157,6 @@ function sqlGetRec($statement) {
 
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function sqlGetCnt($statement) {
   if ($qry = sqlQuery($statement)) {
@@ -183,9 +169,9 @@ function sqlGetCnt($statement) {
 
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function exitTo() {
+  sqlClose();
   if (func_num_args() == 1) {
     $url = func_get_arg(0);
     header("Location: $url");
@@ -208,7 +194,6 @@ function exitTo() {
   }
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function flushTo() {
   if (func_num_args() == 1) {
@@ -232,7 +217,6 @@ function flushTo() {
   }
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function getCookie($name) {
   $retVal = "";
@@ -245,7 +229,6 @@ function getCookie($name) {
   return $retVal;
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function isValidDate($dat) {
   if (empty($dat) || (substr($dat,0,10) == "0000-00-00"))
@@ -264,7 +247,6 @@ function isValidDate($dat) {
  return true;
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function GetFormID($idStr) {
   if ($idNbr = getCookie("c_$idStr"))
@@ -272,13 +254,11 @@ function GetFormID($idStr) {
   return GetSessionVar("s_$idStr");
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function guidNbr() {
   return md5(uniqid(rand(),true));
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 
 function guidStr() {
   $str = strtoupper(md5(uniqid(rand(),true)));
@@ -290,5 +270,4 @@ function guidStr() {
   return $str;
 }
 
-// ------...------...------...------...------...------...------...------...------...------...------
 ?>

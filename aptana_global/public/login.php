@@ -8,7 +8,7 @@
  *
  * Contributors:
  *    Paul Colton (Aptana)- initial API and implementation
-
+ *    Eclipse Foundation
 *******************************************************************************/
 
 $pageTitle = "Babel Login";
@@ -25,10 +25,10 @@ echo <<< toTheEnd
 <div id="midcolumn">
 
 <h1>$pageTitle</h1>
-<p>Welcome to Babel - the Eclipse translation tool.  TODO: Explain what this is and how to use.  Link to Privacy/Terms?</p>
+<p>Welcome to Babel - the Eclipse translation tool. TODO: Explain what this is and how to use.  Link to Privacy/Terms?</p>
 
 <p>Use your Bugzilla e-mail address and 
-password to login. If you don't have a Bugzilla account, you can <a href="https://bugs.eclipse.org/bugs/createaccount.cgi">create one here</a></p>
+password to login. If you don't have a Bugzilla account, you can <a href="https://bugs.eclipse.org/bugs/createaccount.cgi">create one here</a>.</p>
 <form method="post">
 
 <table cellspacing=4 cellpadding=0 border=0>

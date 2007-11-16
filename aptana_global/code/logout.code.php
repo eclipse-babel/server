@@ -7,17 +7,24 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Paul Colton (Aptana)- initial API and implementation
- *    Eclipse Foundation
+ * 	  Eclipse Foundation - Initial API and implementation
 *******************************************************************************/
+require_once(BABEL_BASE_DIR."aptana.inc.php");
 
+extract(LoadVars());
 
-class sessions_ix extends cXSQL  {
-  public $_id         = '';
-  public $_userid     = '';
-  public $_gid		  = '';
-  public $_subnet     = '';
-  public $_updated_at = '';
+function LoadVars() {
+  
+  InitPage("login");
+  logoutUser();
 }
+
+function logoutUser() {
+  $session = new sessions_iu(0);
+  $session->destroy();
+  setcookie(COOKIE_REMEMBER, "", -36000, "/");
+}
+
+
 
 ?>

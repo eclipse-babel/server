@@ -8,15 +8,10 @@
  *
  * Contributors:
  *    Paul Colton (Aptana)- initial API and implementation
-
+ *    Eclipse Foundation
 *******************************************************************************/
-// ------...------...------...------...------...------...------...------...------...------...------
 require_once("../aptana.inc.php");
-unset($_SESSION['s_userAcct']);
-unset($_SESSION['s_userName']);
-unset($_SESSION['s_userType']);
-setcookie("cAPTANAX","",-36000,"/");
+require_once(BABEL_BASE_DIR . 'code/logout.code.php');
 $lastURL = GetSessionVar('s_pageLast');
 exitTo("" . ($lastURL?$lastURL:"index.php"));
-// ------...------...------...------...------...------...------...------...------...------...------
 ?>

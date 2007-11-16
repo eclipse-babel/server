@@ -50,13 +50,16 @@ CREATE TABLE `schema_info` (
 
 
  CREATE TABLE `sessions` (
-  `id` int(11) NOT NULL auto_increment,
-  `session_id` varchar(255) default NULL,
-  `data` text,
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
+  `gid` char(32) default NULL,
+  `subnet` char(15),
   `updated_at` datetime default NULL,
   PRIMARY KEY  (`id`),
-  KEY `index_sessions_on_session_id` (`session_id`),
-  KEY `index_sessions_on_updated_at` (`updated_at`)
+  KEY `gid` (`gid`),
+  FOREIGN KEY (userid) REFERENCES users(id)
+                      ON DELETE CASCADE
+                      ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 

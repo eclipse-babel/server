@@ -58,7 +58,7 @@ function loginUser($username,$password,$remember) {
       //  case 1:
           if ($remember) {
           	$session = new sessions_iu(0);
-          	$session->createSession($user->_id);
+          	$session->create($user->_id);
 
             $cookieName  = COOKIE_REMEMBER;
             $cookieValue = $session->encode_remember();

@@ -27,6 +27,11 @@ class sessions_iu extends sessions_ix {
         	setcookie(COOKIE_REMEMBER, "", -36000, "/");
         	$rValue = 0;
         }
+        else {
+        	# Update the session updated_at
+        	$this->sqlTouch("updated_at");
+        	$this->maintenance();
+        }
         SetSessionVar('s_userAcct', $this->_userid);
         return $rValue;
       }
@@ -50,7 +55,7 @@ class sessions_iu extends sessions_ix {
       }
 	}
 	
-	function createSession($_userid) {
+	function create($_userid) {
 		$this->_userid 	= $_userid;
 		$this->_gid 	= guidNbr();
 		$this->_subnet 	= $this->getSubnet();
@@ -59,6 +64,11 @@ class sessions_iu extends sessions_ix {
 		$this->selfPost();
 	}
 	
+	function maintenance() {
+		# Delete sessions older than 14 days
+		$this->sqlCmd("DELETE FROM {SELF} WHERE updated_at < DATE_SUB(NOW(), INTERVAL 14 DAY)");
+	}
+		
 	function getSubnet() {
 		# return class-c subnet
 		return substr($_SERVER['REMOTE_ADDR'], 0, strrpos($_SERVER['REMOTE_ADDR'], ".")) . ".0";

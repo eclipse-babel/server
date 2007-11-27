@@ -17,7 +17,7 @@ define("COOKIE_SESSION" ,	"sBABEL");
 
 
 # Load up Phoenix classes
-$App;
+global $App;
 if(USE_PHOENIX) {
 	require_once('eclipse.org-common/system/app.class.php');
 	require_once("eclipse.org-common/system/nav.class.php");
@@ -28,6 +28,7 @@ if(USE_PHOENIX) {
 }
 $GLOBALS['g_LOADTIME'] = microtime();
 require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
+require_once(BABEL_BASE_DIR . "classes/system/user.class.php");
 session_name(COOKIE_SESSION);
 session_start();
 extract($_SESSION);
@@ -35,7 +36,7 @@ extract($_SESSION);
 
 function InitPage($page) {
   $lastPage = GetSessionVar('s_pageName');
-  $userName = GetSessionVar('s_userName');
+  $User = GetSessionVar('User');
   
   if (empty($GLOBALS['page']))
 	  $GLOBALS['page'] = '';
@@ -45,11 +46,13 @@ function InitPage($page) {
 		SetSessionVar('s_pageName',$GLOBALS['page']);
   
   $dbc = new DBConnection();
+  global $dbh;
   $dbh = $dbc->connect();
-  
-  if (!$userName && isset($_COOKIE[COOKIE_REMEMBER])) {
+
+  //if(!isset($User) && isset($_COOKIE[COOKIE_REMEMBER])) {
   	# Try to fetch username from session
-  	//$session = new sessions_iu(0);
+  	//require_once(BABEL_BASE_DIR . "classes/system/session.class.php");
+  	//$Session = new Session();
 
   	//if(!$session->validate()) {
     	//SetSessionVar('s_pageLast',$GLOBALS['page']);
@@ -61,7 +64,7 @@ function InitPage($page) {
   		# hack! Not every one has a username
   		//SetSessionVar("s_userName",  str_replace("@", ".", $user->_email));
   	//}
-  }
+  //}
   
   $GLOBALS['g_PHPSELF']  = $GLOBALS['page'];
   $GLOBALS['g_PAGE']     = $page;
@@ -76,6 +79,7 @@ function InitPage($page) {
 function errorLog($str) {
 	
 }
+
 function exitTo() {
   # TODO: sqlClose();
   if (func_num_args() == 1) {

@@ -19,9 +19,9 @@ define("COOKIE_SESSION" ,	"sBABEL");
 # Load up Phoenix classes
 $App;
 if(USE_PHOENIX) {
-	require_once(BABEL_BASE_DIR . '/eclipse.org-common/system/app.class.php');
-	require_once(BABEL_BASE_DIR . "/eclipse.org-common/system/nav.class.php");
-	require_once(BABEL_BASE_DIR . "/eclipse.org-common/system/menu.class.php");
+	require_once('eclipse.org-common/system/app.class.php');
+	require_once("eclipse.org-common/system/nav.class.php");
+	require_once("eclipse.org-common/system/menu.class.php");
 	$App = new App(); 	
 	$Nav	= new Nav();	
 	$Menu 	= new Menu();

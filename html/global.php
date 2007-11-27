@@ -22,12 +22,12 @@ if(USE_PHOENIX) {
 	require_once('eclipse.org-common/system/app.class.php');
 	require_once("eclipse.org-common/system/nav.class.php");
 	require_once("eclipse.org-common/system/menu.class.php");
-	$App = new App(); 	
-	$Nav	= new Nav();	
+	$App 	= new App();
+	$Nav	= new Nav();
 	$Menu 	= new Menu();
 }
 $GLOBALS['g_LOADTIME'] = microtime();
-// require("utils.inc.php");
+require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
 session_name(COOKIE_SESSION);
 session_start();
 extract($_SESSION);
@@ -41,24 +41,26 @@ function InitPage($page) {
 	  $GLOBALS['page'] = '';
 		
   if (($lastPage != $_SERVER['PHP_SELF']) AND ($lastPage != "login"))
-    SetSessionVar('s_pageLast',$lastPage);
-  SetSessionVar('s_pageName',$GLOBALS['page']);
+		SetSessionVar('s_pageLast',$lastPage);
+		SetSessionVar('s_pageName',$GLOBALS['page']);
   
-  sqlOpen(NULL);
+  $dbc = new DBConnection();
+  $dbh = $dbc->connect();
+  
   if (!$userName && isset($_COOKIE[COOKIE_REMEMBER])) {
   	# Try to fetch username from session
-  	$session = new sessions_iu(0);
+  	//$session = new sessions_iu(0);
 
-  	if(!$session->validate()) {
-    	SetSessionVar('s_pageLast',$GLOBALS['page']);
-    	exitTo("login.php");
-  	}
-  	else {
-  		$user = new users_iu(0);
-  		$user->sqlLoad($session->_userid);
+  	//if(!$session->validate()) {
+    	//SetSessionVar('s_pageLast',$GLOBALS['page']);
+    	//exitTo("login.php");
+  	//}
+  	//else {
+  		//$user = new users_iu(0);
+  		//$user->sqlLoad($session->_userid);
   		# hack! Not every one has a username
-  		SetSessionVar("s_userName",  str_replace("@", ".", $user->_email));
-  	}
+  		//SetSessionVar("s_userName",  str_replace("@", ".", $user->_email));
+  	//}
   }
   
   $GLOBALS['g_PHPSELF']  = $GLOBALS['page'];
@@ -97,6 +99,18 @@ function exitTo() {
     exit;
   }
 }
+function GetSessionVar($varName) {
+  if (isset($_SESSION[$varName]))
+    return $_SESSION[$varName];
+  return 0;
+}
 
+function SetSessionVar($varName,$varVal) {
+  global $_SESSION;
+
+  $GLOBALS[$varName]  = $varVal;
+  $_SESSION[$varName] = $varVal;
+  return $varVal;
+}
 
 ?>

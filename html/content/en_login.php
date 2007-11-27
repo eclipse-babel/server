@@ -9,30 +9,30 @@ password to login. If you don't have a Bugzilla account, you can <a href="https:
 <form method="post">
 
 <table cellspacing=4 cellpadding=0 border=0>
-<tr><td></td><td id="formErr" colspan=2 style="color:red;">{$GLOBALS['g_ERRSTRS'][0]}&nbsp;</td></tr>
+<tr><td></td><td id="formErr" colspan=2 style="color:red;"><?= $GLOBALS['g_ERRSTRS'][0] ?></td></tr>
 <tr>
   <td id="formErr" style='width:100px;'>&nbsp;</td>
-  <td id="formLbl">Email:</td><td style='text-align:left;'><input type="text" name="username" value="$post_username" size="42" maxlength="255" /></td>
-  <td id="formErr" style='width:100px; color:red;'>{$GLOBALS['g_ERRSTRS'][1]}&nbsp;</td>
+  <td id="formLbl">Email:</td><td style='text-align:left;'><input type="text" name="username" value="<?= $USERNAME ?>" size="42" maxlength="255" /></td>
+  <td id="formErr" style='width:100px; color:red;'><?= $GLOBALS['g_ERRSTRS'][1] ?></td>
 </tr>
 <tr>
   <td id="formErr" style='width:100px;'>&nbsp;</td>
-  <td id="formLbl">Password:</td><td style='text-align:left;'><input type="password" name="password" value="$post_password" size="42" maxlength="255"/> <a href="https://bugs.eclipse.org/bugs/index.cgi?GoAheadAndLogIn=1#forgot">Forgot my password</a></td>
-  <td id="formErr" style='width:100px; color:red;'>{$GLOBALS['g_ERRSTRS'][2]}&nbsp;</td>
+  <td id="formLbl">Password:</td><td style='text-align:left;'><input type="password" name="password" value="<?= $PASSWORD ?>" size="42" maxlength="255" /> <a href="https://bugs.eclipse.org/bugs/index.cgi?GoAheadAndLogIn=1#forgot">Forgot my password</a></td>
+  <td id="formErr" style='width:100px; color:red;'><?= $GLOBALS['g_ERRSTRS'][2] ?></td>
 </tr>
 <tr>
   <td id="formErr" style='width:100px;'>&nbsp;</td>
-  <td></td><td style='text-align:left;'><input type="checkbox" name="remember" value="1" $post_remember />remember me </td>
+  <td></td><td style='text-align:left;'><input type="checkbox" name="remember" value="1" <?= $REMEMBER ?> />remember me </td>
 </tr>
 <tr>
   <td id="formErr" style='width:100px;'>&nbsp;</td>
-  <td></td><td style='text-align:left;'><input type="submit" name="postIT" value="Login" style="font-size:14px;" /></td></tr>
+  <td></td><td style='text-align:left;'><input type="submit" name="submit" value="Login" style="font-size:14px;" /></td></tr>
 </table>
 </form>
 </div><div id="rightcolumn">
 
 <div class="sideitem">
-	<h6>Related Linkx</h6>
+	<h6>Related Links</h6>
 	<ul>
 		<li><a href="//www.eclipse.org/babel/">Babel project home</a></li>
 	</ul>

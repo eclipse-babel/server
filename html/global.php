@@ -10,8 +10,10 @@
  *    Paul Colton (Aptana)- initial API and implementation
  *    Eclipse Foundation
 *******************************************************************************/
-define('BABEL_BASE_DIR', "../");
-define('USE_PHOENIX', true);
+define('BABEL_BASE_DIR', 	"../");
+define('USE_PHOENIX', 		true);
+define("COOKIE_REMEMBER",	"cBABEL");
+define("COOKIE_SESSION" ,	"sBABEL");
 
 
 # Load up Phoenix classes
@@ -25,7 +27,7 @@ if(USE_PHOENIX) {
 	$Menu 	= new Menu();
 }
 $GLOBALS['g_LOADTIME'] = microtime();
-require("utils.inc.php");
+// require("utils.inc.php");
 session_name(COOKIE_SESSION);
 session_start();
 extract($_SESSION);
@@ -67,13 +69,33 @@ function InitPage($page) {
   $GLOBALS['g_ERRSTRS']  = array("","","","","","","","","","","",);
   // $GLOBALS['g_MAINMENU'] = buildMainMenu($page,$userName);
   $GLOBALS['DEBUG']      = "";
- 
-  // Build left nav
-  // $GLOBALS['g_LEFTNAV'] = "&nbsp;";
+}
 
-  // Build rite nav/ad
-  // $GLOBALS['g_RITENAV'] = "&nbsp;";
-
+function errorLog($str) {
+	
+}
+function exitTo() {
+  # TODO: sqlClose();
+  if (func_num_args() == 1) {
+    $url = func_get_arg(0);
+    header("Location: $url");
+    exit;
+  }
+  else if (func_num_args() == 2) {
+    $url  = func_get_arg(0);
+    $arg1 = func_get_arg(1);
+    SetSessionVar("errStr",$arg1);
+    header("Location: $url");
+    exit;
+  }
+  else if (func_num_args() == 3) {
+    $url  = func_get_arg(0);
+    $arg1 = func_get_arg(1);
+    $arg2 = func_get_arg(2);
+    SetSessionVar($arg1,$arg2);
+    header("Location: $url");
+    exit;
+  }
 }
 
 

@@ -15,26 +15,32 @@ class DBConnection {
 	#
 	#*****************************************************************************
 
-	var $MysqlUrl 		= "localhost";
-	var $MysqlUser		= "ef_rw";
-	var $MysqlPassword	= "68rf32eas3";
-	var $MysqlDatabase 	= "eclipsefoundation";
-
 	function connect()
 	{
 		static $dbh;
-				
-		$dbh = mysql_connect($this->MysqlUrl, $this->MysqlUser, $this->MysqlPassword);
+		if (!($ini = @parse_ini_file('base.conf'))) {
+			errorLog("Failed to find/read database conf file - aborting.");
+			exitTo("error.php?errNo=101300","error: 101300 - database conf can not be found");
+  		}
+  
+		if (!mysql_connect($ini['db_read_host'],$ini['db_read_user'],$ini['db_read_pass'])) {
+			errorLog("Failed attempt to connect to server - aborting.");
+			exitTo("/error.php?errNo=101301","error: 101301 - data server can not be found");
+		}
+
+		$dbh = mysql_connect($ini['db_read_host'],$ini['db_read_user'],$ini['db_read_pass']);
 	
 		if (!$dbh) {
-	  		echo( "<P>Unable to connect to the database server at this time.</P>" );
-	  		exit();
+    		errorLog("Failed attempt to connect to server - aborting.");
+    		exitTo("/error.php?errNo=101301","error: 101301 - data server can not be found");
 		}
-		$DbSelected = mysql_select_db($this->MysqlDatabase, $dbh);
-		if (!$DbSelected) {
-		   die ("Can't use $this->MysqlDatabase : " . mysql_error());
-		}
-		
+    	$database = $ini['db_read_name'];
+		if (isset($database)) {
+			if (!mysql_select_db($database)) {
+				errorLog("Failed attempt to open database: $database - aborting \n\t" . mysql_error());
+				exitTo("/error.php?errNo=101303","error: 101303 - unknown database name");
+			}
+		}					
 		return $dbh;
 	}
 	

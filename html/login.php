@@ -42,6 +42,11 @@ if($SUBMIT == "Login") {
 		$GLOBALS['g_ERRSTRS'][0] = "Your username and password must not be empty.";
 	}
 }
+if($SUBMIT == "Logout") {
+	$Session = new Session();
+	$Session->destroy();
+	$GLOBALS['g_ERRSTRS'][0] = "You have successfully logged out.  You can login again using the form below.";
+}
 
 # TODO: finish the intro text
 

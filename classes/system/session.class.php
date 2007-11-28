@@ -71,22 +71,14 @@ class Session {
 	}
 
 	function destroy() {
-		# TODO
-	  $cookie = (isset($_COOKIE[COOKIE_REMEMBER])?$_COOKIE[COOKIE_REMEMBER]:"");
-      $rValue = 1;
-	  
-      if (strpos($cookie,":")) {
-        // Check for remember cookie and get user info if set
-        list($nbr,$gid) = $this->decode_remember($cookie);
-        if($nbr) {
-        	# TODO: untaint
-        	$sql = "DELETE FROM sessions WHERE userid = " . $nbr;
-        	sqlQuery($sql);
-        	unset($_SESSION['s_userAcct']);
-  			unset($_SESSION['s_userName']);
-  			unset($_SESSION['s_userType']);
-        }
-      }
+		$cookie = (isset($_COOKIE[COOKIE_REMEMBER]) ? $_COOKIE[COOKIE_REMEMBER] : "");
+		if($cookie != "" && $this->load($cookie)) {
+			global $App, $dbh;
+			$sql = "DELETE FROM sessions WHERE userid = " . $this->_userid;
+			mysql_query($sql, $dbh);
+		}
+		setcookie(COOKIE_REMEMBER, "", -36000, "/");
+		session_destroy();
 	}
 	
 	function create($_userid, $_remember) {
@@ -119,8 +111,14 @@ class Session {
 	
 	function maintenance() {
 		# Delete sessions older than 14 days
+		# and sessions where the same subnet,user has different gids
 		global $dbh, $App;
-		mysql_query("DELETE FROM sessions WHERE updated_at < DATE_SUB(NOW(), INTERVAL 14 DAY)", $dbh);
+		$sql = "DELETE FROM sessions 
+				WHERE updated_at < DATE_SUB(NOW(), INTERVAL 14 DAY) 
+					OR (userid = " . $this->_userid . "
+						AND subnet = " . $App->returnQuotedString($this->getSubnet()) . "
+						AND gid <> " . $App->returnQuotedString($this->_gid) . ")";
+		mysql_query($sql, $dbh);
 	}
 		
 	function getSubnet() {

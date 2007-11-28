@@ -10,7 +10,7 @@
  *    Paul Colton (Aptana)- initial API and implementation
  *    Eclipse Foundation
 *******************************************************************************/
-define('BABEL_BASE_DIR', 	"../");
+define('BABEL_BASE_DIR', $_SERVER['DOCUMENT_ROOT']."/../");
 define('USE_PHOENIX', 		true);
 define("COOKIE_REMEMBER",	"cBABEL");
 define("COOKIE_SESSION" ,	"sBABEL");
@@ -122,5 +122,14 @@ function SetSessionVar($varName,$varVal) {
   $_SESSION[$varName] = $varVal;
   return $varVal;
 }
+
+function getLanguagebyID($id){
+	global $dbh;
+	$query = "select name from languages where language_id = '".addslashes($id)."' limit 1";
+	$res = mysql_query($query,$dbh);
+	$ret = mysql_fetch_array($res, MYSQL_ASSOC);
+	return $ret['name'];
+}
+
 
 ?>

@@ -18,5 +18,10 @@ if(USE_PHOENIX) {
 ?>
 
 <link href='aptana.css' rel="stylesheet">
-<script src='js/babel.js' type='text/javascript'></script>
+
+<script src='js/yui2.3.1/yahoo/yahoo.js' type='text/javascript'></script>
+<script src='js/yui2.3.1/dom/dom/js' type='text/javascript'></script>
+<script src='js/yui2.3.1/event/event.js' type='text/javascript'></script>
+<script src='js/yui2.3.1/connection/connectons.js' type='text/javascript'></script>
+<script src='js/yui2.3.1/logger/logger.js' type='text/javascript'></script>
 

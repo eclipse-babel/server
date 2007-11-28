@@ -18,7 +18,7 @@ class DBConnection {
 	function connect()
 	{
 		static $dbh;
-		if (!($ini = @parse_ini_file(BABEL_BASE_DIR . 'base.conf'))) {
+		if (!($ini = @parse_ini_file(BABEL_BASE_DIR . 'classes/base.conf'))) {
 			errorLog("Failed to find/read database conf file - aborting.");
 			exitTo("error.php?errNo=101300","error: 101300 - database conf can not be found");
   		}
@@ -41,6 +41,7 @@ class DBConnection {
 				exitTo("/error.php?errNo=101303","error: 101303 - unknown database name");
 			}
 		}					
+		
 		return $dbh;
 	}
 	

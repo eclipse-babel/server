@@ -210,6 +210,14 @@ CREATE TABLE `users` (
   PRIMARY KEY  (`userid`),
   KEY `primary_language_id` (`primary_language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+insert into languages values(null, "en", null, "English", 1);
+
+
+insert into projects values("eclipse", 1);
+
+
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

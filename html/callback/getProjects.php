@@ -10,6 +10,7 @@
  *    Paul Colton (Aptana)- initial API and implementation
 
 *******************************************************************************/
+define('BABEL_BASE_DIR', "../../");
 require("../global.php");
 
 InitPage("login");

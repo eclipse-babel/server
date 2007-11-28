@@ -20,7 +20,7 @@ if(defined(BABEL_BASE_DIR)){
 
 InitPage("login");
 
-$query = "select * from languages where is_active = 1";
+$query = "select * from languages where is_active = 1 and language_id != 1";
 
 $res = mysql_query($query,$dbh);
 

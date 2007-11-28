@@ -19,22 +19,22 @@ class Session {
 	public $_updated_at = '';
 
 	function validate() {
-	  $cookie = (isset($_COOKIE[COOKIE_REMEMBER]) ? $_COOKIE[COOKIE_REMEMBER] : 0);
-      $rValue = 1;
-      if ($cookie != 0) {
-        if ( (!$this->load($cookie))
-        	|| $this->getSubnet() != $this->_subnet) {
-        	# Failed - no such session, or session no match.  Need to relogin
-        	setcookie(COOKIE_REMEMBER, "", -36000, "/");
-        	$rValue = 0;
-        }
-        else {
-        	# Update the session updated_at
-        	$this->touch();
-        	$this->maintenance();
-        }
-        return $rValue;
-      }
+		$cookie = (isset($_COOKIE[COOKIE_REMEMBER]) ? $_COOKIE[COOKIE_REMEMBER] : "");
+		$rValue = 0;
+		if ($cookie != "") {
+			if ( (!$this->load($cookie))
+				|| $this->getSubnet() != $this->_subnet) {
+				# Failed - no such session, or session no match.  Need to relogin
+				setcookie(COOKIE_REMEMBER, "", -36000, "/");
+			}
+			else {
+				# Update the session updated_at
+				$this->touch();
+				$this->maintenance();
+				$rValue = 1;
+			}
+		}
+		return $rValue;
 	}
 	
 	function load($_gid) {

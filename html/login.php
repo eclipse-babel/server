@@ -35,7 +35,7 @@ if($SUBMIT == "Login") {
 			$Session = new Session();
 			$Session->create($User->userid, $REMEMBER);
 			SetSessionVar('User', $User);
-			exitTo(".");
+			exitTo("index.php");
 		}
 	}
 	else {

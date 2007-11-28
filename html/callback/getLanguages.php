@@ -14,6 +14,7 @@
 if(defined(BABEL_BASE_DIR)){
 	require_once(BABEL_BASE_DIR."html/global.php");
 }else{
+	define('BABEL_BASE_DIR', "../../");
 	require_once("../global.php");
 }
 

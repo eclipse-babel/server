@@ -14,19 +14,15 @@
 class Session {
 	public $_id         = '';
 	public $_userid     = '';
-	public $_gid		  = '';
+	public $_gid		= '';
 	public $_subnet     = '';
 	public $_updated_at = '';
 
 	function validate() {
-	  $cookie = (isset($_COOKIE[COOKIE_REMEMBER])?$_COOKIE[COOKIE_REMEMBER]:"");
+	  $cookie = (isset($_COOKIE[COOKIE_REMEMBER]) ? $_COOKIE[COOKIE_REMEMBER] : 0);
       $rValue = 1;
-	  
-      if (strpos($cookie,":")) {
-        // Check for remember cookie and get user info if set
-        list($nbr,$gid) = $this->decode_remember($cookie);
-        if ( (!$this->sqlLoad("gid", $gid)) 
-        	|| $gid != $this->_gid
+      if ($cookie != 0) {
+        if ( (!$this->load($cookie))
         	|| $this->getSubnet() != $this->_subnet) {
         	# Failed - no such session, or session no match.  Need to relogin
         	setcookie(COOKIE_REMEMBER, "", -36000, "/");
@@ -34,15 +30,48 @@ class Session {
         }
         else {
         	# Update the session updated_at
-        	$this->sqlTouch("updated_at");
+        	$this->touch();
         	$this->maintenance();
         }
-        SetSessionVar('s_userAcct', $this->_userid);
         return $rValue;
       }
 	}
+	
+	function load($_gid) {
+		$rValue = false;
+		global $App, $dbh;
+		$_gid = $App->sqlSanitize($_gid, $dbh);
+		
+		$sql = "SELECT id, userid, gid, subnet, updated_at FROM sessions WHERE gid = " . $App->returnQuotedString($_gid);
+		
+		$result = mysql_query($sql, $dbh);
+		if($result && mysql_num_rows($result) > 0) {
+			$rValue = true;
+			$myrow = mysql_fetch_assoc($result);
+			$this->_id			= $myrow['id'];
+			$this->_userid		= $myrow['userid'];
+			$this->_gid			= $myrow['gid'];
+			$this->_subnet		= $myrow['subnet'];
+			$this->updated_at	= $myrow['updated_at'];
+		}
+		else {
+			$GLOBALS['g_ERRSTRS'][1] = mysql_error();
+		}
+		
+		return $rValue;
+	}
+	
+	function touch() {
+		global $App, $dbh;
+		$_gid = $App->sqlSanitize($this->_gid, $dbh);
+		
+		$sql = "UPDATE sessions SET updated_at = NOW() WHERE gid = " . $App->returnQuotedString($_gid);
+		
+		mysql_query($sql, $dbh);
+	}
 
 	function destroy() {
+		# TODO
 	  $cookie = (isset($_COOKIE[COOKIE_REMEMBER])?$_COOKIE[COOKIE_REMEMBER]:"");
       $rValue = 1;
 	  

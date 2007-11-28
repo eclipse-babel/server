@@ -11,7 +11,7 @@
  *    Eclipse Foundation
 *******************************************************************************/
 include("global.php");
-InitPage("login");
+InitPage("");
 
 require_once(BABEL_BASE_DIR . "classes/system/user.class.php");
 require_once(BABEL_BASE_DIR . "classes/system/session.class.php");
@@ -35,8 +35,6 @@ if($SUBMIT == "Login") {
 			$Session = new Session();
 			$Session->create($User->userid, $REMEMBER);
 			SetSessionVar('User', $User);
-			$Crap = GetSessionVar('User');
-			echo "User class: ". get_class($Crap); exit;
 			exitTo(".");
 		}
 	}

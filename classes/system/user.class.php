@@ -64,5 +64,40 @@ class User {
 		}
 		return $this->userid;
 	}
+	
+	function loadFromID($_userid) {
+		$rValue = false;
+		if($_userid != "") {
+			global $App, $dbh;
+			
+			$_userid	= $App->sqlSanitize($_userid, $dbh);
+
+			$sql = "SELECT *
+				FROM 
+					users 
+				WHERE userid = $_userid";
+			$result = mysql_query($sql, $dbh);
+			if($result && mysql_num_rows($result) > 0) {
+				$rValue = true;
+				$myrow = mysql_fetch_assoc($result);
+				
+				$this->userid              = $myrow['userid'];
+				$this->username            = $myrow['username'];
+				$this->first_name          = $myrow['first_name'];
+				$this->last_name           = $myrow['last_name'];
+				$this->email               = $myrow['email'];
+				$this->primary_language_id = $myrow['primary_language_id'];
+				$this->hours_per_week      = $myrow['hours_per_week'];
+				$this->updated_on          = $myrow['updated_on'];
+				$this->updated_at          = $myrow['updated_at'];
+				$this->created_on          = $myrow['created_on'];
+				$this->created_at			= $myrow['created_at'];
+			}
+			else {
+				$GLOBALS['g_ERRSTRS'][1] = mysql_error();
+			}
+		}
+		return $rValue;
+	}
 }
 ?>

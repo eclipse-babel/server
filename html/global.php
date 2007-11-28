@@ -34,7 +34,8 @@ session_start();
 extract($_SESSION);
 
 
-function InitPage($page) {
+function InitPage($login) {
+	$page = $login;
   $lastPage = GetSessionVar('s_pageName');
   $User = GetSessionVar('User');
   
@@ -49,22 +50,28 @@ function InitPage($page) {
   global $dbh;
   $dbh = $dbc->connect();
 
-  //if(!isset($User) && isset($_COOKIE[COOKIE_REMEMBER])) {
-  	# Try to fetch username from session
-  	//require_once(BABEL_BASE_DIR . "classes/system/session.class.php");
-  	//$Session = new Session();
+  if($login == "login" && !$User) {
+  	# Login required, but the User object isn't there.
+  
+  	if(isset($_COOKIE[COOKIE_REMEMBER])) {
+  		# Try to fetch username from session
+  		require_once(BABEL_BASE_DIR . "classes/system/session.class.php");
+  		$Session = new Session();
 
-  	//if(!$session->validate()) {
-    	//SetSessionVar('s_pageLast',$GLOBALS['page']);
-    	//exitTo("login.php");
-  	//}
-  	//else {
-  		//$user = new users_iu(0);
-  		//$user->sqlLoad($session->_userid);
-  		# hack! Not every one has a username
-  		//SetSessionVar("s_userName",  str_replace("@", ".", $user->_email));
-  	//}
-  //}
+  		if(!$Session->validate()) {
+    		SetSessionVar('s_pageLast', $GLOBALS['page']);
+    		exitTo("login.php");
+  		}
+  		else {
+  			$User = new User();
+  			$User->loadFromID($Session->_userid);
+  			SetSessionVar("User", $User);
+  		}
+  	}
+  	else {
+  		exitTo("login.php");
+  	}
+  }
   
   $GLOBALS['g_PHPSELF']  = $GLOBALS['page'];
   $GLOBALS['g_PAGE']     = $page;
@@ -72,7 +79,6 @@ function InitPage($page) {
   $GLOBALS['g_SITENAME'] = substr($GLOBALS['g_SITEURL'],0,strlen($GLOBALS['g_SITEURL'])-4);
   $GLOBALS['g_TITLE']    = $GLOBALS['g_SITENAME'];
   $GLOBALS['g_ERRSTRS']  = array("","","","","","","","","","","",);
-  // $GLOBALS['g_MAINMENU'] = buildMainMenu($page,$userName);
   $GLOBALS['DEBUG']      = "";
 }
 

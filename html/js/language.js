@@ -33,6 +33,7 @@ function setupSelectLanguageCB(){
 	for(var i =0; i < langs.length; i++){
 		YAHOO.util.Event.addListener(langs[i],"click",setLanguagePref);
 	}
+	hideThings("language-area");
 }
 
 function setLanguagePref(e){
@@ -43,12 +44,13 @@ function setLanguagePref(e){
 		},
 		success: function(o) {
 			showCurrentLanguage(o.responseText);
+			getAjaxProjects();
 		},
 		failure: function(o) {
 			YAHOO.log('failed!');
 		} 
 	} 
-	var target = YAHOO.util.Event.getTarget(e)
+	var target = YAHOO.util.Event.getTarget(e);
 	YAHOO.util.Connect.asyncRequest('POST', "callback/setCurrentLangue.php", callback, "lang="+target);
 }
 
@@ -58,4 +60,5 @@ function showCurrentLanguage(curLang){
 
 	var langDomNode = document.getElementById('language-area');
 	langDomNode.innerHTML = display;
+	showThings("language-area");
 }

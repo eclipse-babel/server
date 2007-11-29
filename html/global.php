@@ -62,7 +62,7 @@ function InitPage($login) {
 
   		if(!$Session->validate()) {
     		SetSessionVar('s_pageLast', $GLOBALS['page']);
-    		exitTo("login.php");
+    		exitTo("/login.php");
   		}
   		else {
   			$User = new User();
@@ -71,7 +71,7 @@ function InitPage($login) {
   		}
   	}
   	else {
-  		exitTo("login.php");
+  		exitTo("/login.php");
   	}
   }
   

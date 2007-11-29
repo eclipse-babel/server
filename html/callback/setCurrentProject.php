@@ -11,15 +11,7 @@
  *    Eclipse Foundation
 *******************************************************************************/
 
-
-if(defined(BABEL_BASE_DIR)){
-	require_once(BABEL_BASE_DIR."html/global.php");
-}else{
-	define('BABEL_BASE_DIR', "../../");
-	require_once("../global.php");
-}
-
-InitPage("login");
+require_once("cb_global.php");
 
 $language_post = $App->getHTTPParameter("proj", "POST");
 

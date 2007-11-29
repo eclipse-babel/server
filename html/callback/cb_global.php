@@ -11,20 +11,11 @@
  *    Eclipse Foundation
 *******************************************************************************/
 
-require_once("cb_global.php");
-
-
-$query = "select * from languages where is_active = 1 and language_id != 1";
-
-$res = mysql_query($query,$dbh);
-
-while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
-	$return .= "<li><a href='?language_id=".$line['language_id']."'>".$line['iso_code']. " - ". $line['name']. "</a>";
+if(defined(BABEL_BASE_DIR)){
+	require_once(BABEL_BASE_DIR."html/global.php");
+}else{
+	define('BABEL_BASE_DIR', "../../");
+	require_once("../global.php");
 }
 
-?>
-
-<ul id='language-choices'>
-	Please select a langue to translate:<br>
-	<?=$return;?>
-</ul>
+InitPage("login");

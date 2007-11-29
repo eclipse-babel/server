@@ -21,35 +21,42 @@ include("head.php");
 echo $User->userid;
 echo $User->first_name;
 
+//$_SESSION['language'] = "";
+//$_SESSION['project'] = "";
+
 ?>
 
 <div id="contentArea">
 	<h1 id="page-message">Welcome to the Babel Project</h1>
 	<div id="language-area">lang</div>
 	<div id="project-area">proj</div>
-	<div id="string-area">strings</div>
+	<div id="string-area">
+		<ul id="not-translated">
+		</ul>
+		<ul id="flagged-incorrect">
+		</ul>
+		<ul id="awaiting-ratings">
+		</ul>
+	</div>
 	<div id="translation-area">translation</div>
 </div>
 
 <?php
-//$_SESSION['language'] = "";
-
-if(!$_SESSION['language']){
-	//NO LANGUAGE SELECT FOR EDITING
-	?><script>getAjaxLanguages();</script><?php
-}else{
-	//SHOW CURRENT LANGUAGE
-	?><script>showCurrentLanguage("<?=getLanguagebyID($_SESSION['language']);?>");</script><?php
-	
-	//LIST PROJECTS TO EDIT
-	if(!$_SESSION['project']){
-		?><script>getAjaxProjects();</script><?php
+	if(!$_SESSION['language']){
+		//NO LANGUAGE SELECT FOR EDITING
+		?><script>getAjaxLanguages();</script><?php
 	}else{
-		?><script>showCurrentProject("<?=$_SESSION['project'];?>");</script><?php
-	}
-}
-?>
-
-<?php 
-include("foot.php");
+		//SHOW CURRENT LANGUAGE
+		?><script>showCurrentLanguage("<?=getLanguagebyID($_SESSION['language']);?>");</script><?php
+		
+		//LIST PROJECTS TO EDIT
+		if(!$_SESSION['project']){
+			?><script>getAjaxProjects();</script><?php
+		}else{
+			?><script>showCurrentProject("<?=$_SESSION['project'];?>");</script><?php
+			
+			?><script>getAjaxProjectStrings();</script><?php
+		}
+	}	
+	include("foot.php");
 ?>

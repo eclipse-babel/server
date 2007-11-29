@@ -13,18 +13,32 @@
 
 require_once("cb_global.php");
 
+$proj_post = $App->getHTTPParameter("proj", "POST");
+if(!$proj_post){
+	$proj_post = $_SESSION['project'];
+}
 
-$query = "select * from languages where is_active = 1 and language_id != 1";
+
+$query = "select 
+			strings.* 
+		  from 
+		  	strings,
+		  	files 
+		  where 
+		  	strings.is_active != 0 
+		  and 
+		  	strings.file_id = files.file_id 
+		  and 
+			files.project_id = '".addslashes($proj_post)."'";
 
 $res = mysql_query($query,$dbh);
 
 while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
-	$return .= "<li><a href='?language_id=".$line['language_id']."'>".$line['iso_code']. " - ". $line['name']. "</a>";
+	$return .= "<li><a href='?string_id=".$line['string_id']."'>".$line['value']."</a>";
 }
 
 ?>
 
-<ul id='language-choices'>
-	Please select a langue to translate:<br>
+<ul id='string-choices'>
 	<?=$return;?>
 </ul>

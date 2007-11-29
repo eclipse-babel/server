@@ -26,6 +26,7 @@ function getAjaxProjects(){
 		} 
 	} 
 	YAHOO.util.Connect.asyncRequest('GET', "callback/getProjects.php", callback, null); 
+	hideThings("project-area");
 }
 
 function setupSelectProjectCB(){
@@ -44,6 +45,7 @@ function setProjectPref(e){
 		},
 		success: function(o) {
 			showCurrentProject(o.responseText);
+			getAjaxProjectStrings();
 		},
 		failure: function(o) {
 			YAHOO.log('failed!');

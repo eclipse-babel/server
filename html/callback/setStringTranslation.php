@@ -13,18 +13,22 @@
 
 require_once("cb_global.php");
 
+$string_id = $App->getHTTPParameter("string_id", "POST");
+$translation = $App->getHTTPParameter("translation", "POST");
+$language_id = $_SESSION["language"];
+$user_id =	$User->userid;
 
-$query = "select * from languages where is_active = 1 and language_id != 1";
+$query = "insert into 
+			translations
+		  set
+		  	string_id = '".addslashes($string_id)."',
+		  	language_id = '".addslashes($language_id)."',
+		  	value = '".addslashes($translation)."',
+		  	userid = '".addslashes($user_id)."',
+		  	created_on = NOW()
+		  	";
+print $query;
 
 $res = mysql_query($query,$dbh);
 
-while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
-	$return .= "<li><a href='?language_id=".$line['language_id']."'>".$line['iso_code']. " - ". $line['name']. "</a>";
-}
-
 ?>
-
-<ul id='language-choices'>
-	Please select a langue to translate:<br>
-	<?=$return;?>
-</ul>

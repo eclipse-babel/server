@@ -10,16 +10,13 @@
  *    Paul Colton (Aptana)- initial API and implementation
 
 *******************************************************************************/
-define('BABEL_BASE_DIR', "../../");
-require("../global.php");
-
-InitPage("login");
+require_once("cb_global.php");
 
 $query = "select * from projects where is_active = 1";
 $res = mysql_query($query,$dbh);
 
 $return = '<ul id="project-choices">';
-
+$return .= "Please select a project to translate:<br>";
 while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
 	$return .= '<li><a href="project_id='.$line['project_id'].'">'.$line['project_id'].'</a>';
 }

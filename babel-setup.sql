@@ -190,7 +190,7 @@ CREATE TABLE `translations` (
 DELIMITER ;;
 /*!50003 SET SESSION SQL_MODE="" */;;
 /*!50003 CREATE TRIGGER `ins_version` BEFORE INSERT ON `translations` FOR EACH ROW SET NEW.version = 
-    (SELECT MAX(version)+1 FROM translations 
+    (SELECT IFNULL(MAX(version),0)+1 FROM translations 
         WHERE translation_id = NEW.translation_id and language_id = NEW.language_id) */;;
 
 DELIMITER ;

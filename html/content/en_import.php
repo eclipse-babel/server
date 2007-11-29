@@ -27,7 +27,7 @@
 </form>
 <?php
 	if($strings != "" && $SUBMIT == "Import") {
-		echo '<p>Successfully imported these strings:<br /><ul>';
+		echo '<h2>Successfully imported these strings:</h2><p><ul>';
 		$strCount = 0;
 		foreach($aStrings as $str) {
 			$strCount++;

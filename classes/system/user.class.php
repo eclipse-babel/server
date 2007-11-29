@@ -19,8 +19,9 @@ class User {
   public $first_name          = '';
   public $last_name           = '';
   public $email               = '';
-  public $primary_language_id = '0';
-  public $hours_per_week      = '0';
+  public $primary_language_id = 0;
+  public $hours_per_week      = 0;
+  public $is_committer		  = 0;
   public $updated_on          = '';
   public $updated_at          = '';
   public $created_on          = '';
@@ -51,6 +52,7 @@ class User {
 					$this->last_name           = $myrow['last_name'];
 					$this->email               = $myrow['email'];
 					$this->primary_language_id = $myrow['primary_language_id'];
+					$this->is_committer			= $myrow['is_committer'];
 					$this->hours_per_week      = $myrow['hours_per_week'];
 					$this->updated_on          = $myrow['updated_on'];
 					$this->updated_at          = $myrow['updated_at'];
@@ -98,6 +100,7 @@ class User {
 				$this->last_name           = $myrow['last_name'];
 				$this->email               = $myrow['email'];
 				$this->primary_language_id = $myrow['primary_language_id'];
+				$this->is_committer			= $myrow['is_committer'];
 				$this->hours_per_week      = $myrow['hours_per_week'];
 				$this->updated_on          = $myrow['updated_on'];
 				$this->updated_at          = $myrow['updated_at'];

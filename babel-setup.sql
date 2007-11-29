@@ -191,7 +191,7 @@ DELIMITER ;;
 /*!50003 SET SESSION SQL_MODE="" */;;
 /*!50003 CREATE TRIGGER `ins_version` BEFORE INSERT ON `translations` FOR EACH ROW SET NEW.version = 
     (SELECT IFNULL(MAX(version),0)+1 FROM translations 
-        WHERE translation_id = NEW.translation_id and language_id = NEW.language_id) */;;
+        WHERE string_id = NEW.string_id and language_id = NEW.language_id) */;;
 
 DELIMITER ;
 /*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;
@@ -210,6 +210,7 @@ CREATE TABLE `users` (
   `primary_language_id` int(11) NOT NULL default '0',
   `hours_per_week` int(11) NOT NULL default '0',
   `password_hash` varchar(256) NOT NULL default '',
+  `is_committer` tinyint unsigned not null default 0,
   `updated_on` date NOT NULL,
   `updated_at` time NOT NULL,
   `created_on` date NOT NULL,

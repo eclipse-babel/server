@@ -12,6 +12,11 @@
 include("global.php");
 InitPage("login");
 
+global $User;
+if(!$User->is_committer) {
+	exitTo("error.php?errorCode=3214");
+}
+
 require(BABEL_BASE_DIR . "classes/file/file.class.php");
 
 

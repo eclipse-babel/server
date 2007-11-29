@@ -14,7 +14,7 @@ InitPage("login");
 
 global $User;
 if(!$User->is_committer) {
-	exitTo("error.php?errorCode=3214");
+	exitTo("error.php?errNo=3214","error: 3214 - you must be an Eclipse committer to access this page.");
 }
 
 require(BABEL_BASE_DIR . "classes/file/file.class.php");

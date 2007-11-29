@@ -2,14 +2,15 @@
 <div id="midcolumn">
 
 <h1><?= $pageTitle ?></h1>
-<p />
+<p>Use this form to import .properties files to be translated. The CVS path is calculated from the file path on your computer, but can be overriden if it is not correct.</p>
 <form name="frmLogin" method="post" enctype="multipart/form-data">
 
 <table cellspacing=4 cellpadding=0 border=0>
 
 <tr><td></td><td colspan=2 style="color:red;"><?= $GLOBALS['g_ERRSTRS'][0] ?></td></tr>
 <tr>
-  <td>Project:</td><td><input type="text" name="project_id" value="<?= $PROJECT_ID ?>" size="42" maxlength="255" /></td>
+  <td>Project:</td><td><select name="project_id">
+  <option value="eclipse"/>Eclipse</option></select></td>
   <td style='width:100px; color:red;'><?= $GLOBALS['g_ERRSTRS'][1] ?></td>
 </tr>
 <tr>
@@ -21,7 +22,7 @@
   <td style='width:100px; color:red;'><?= $GLOBALS['g_ERRSTRS'][3] ?></td>
 </tr>
 <tr>
-  <td></td><td style='text-align:left;'><input type="submit" name="submit" value="Import" style="font-size:14px;" /></td></tr>
+  <td></td><td><input type="submit" name="submit" value="Import" style="font-size:14px;" /></td></tr>
 </table>
 </form>
 <?php

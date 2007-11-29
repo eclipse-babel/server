@@ -39,6 +39,6 @@ while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
 
 ?>
 
-<ul id='string-choices'>
+<ul id='string-choices' style="border: 1px solid black; height: 5em; width: 600px; overflow-y: scroll;">
 	<?=$return;?>
 </ul>

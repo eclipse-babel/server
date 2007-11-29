@@ -28,7 +28,9 @@ if(USE_PHOENIX) {
 }
 $GLOBALS['g_LOADTIME'] = microtime();
 require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
+require(BABEL_BASE_DIR . "classes/system/event_log.class.php");
 require_once(BABEL_BASE_DIR . "classes/system/user.class.php");
+
 session_name(COOKIE_SESSION);
 session_start();
 extract($_SESSION);

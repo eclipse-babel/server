@@ -56,11 +56,22 @@ class User {
 					$this->updated_at          = $myrow['updated_at'];
 					$this->created_on          = $myrow['created_on'];
 					$this->created_at			= $myrow['created_at'];
+
 				}
 				else {
 					$GLOBALS['g_ERRSTRS'][1] = mysql_error();
 				}
+				
 			}
+		}
+		
+		if($this->userid > 0) {
+			$Event = new EventLog("users", "userid", $this->userid, "__auth_success");
+			$Event->add();
+		}
+		else {
+			$Event = new EventLog("users", "userid", $_SERVER['REMOTE_ADDR'] . ":" . $email, "__auth_failure");
+			$Event->add();
 		}
 		return $this->userid;
 	}

@@ -37,6 +37,8 @@ class File {
 				$where = " WHERE file_id = " . $App->sqlSanitize($this->file_id, $dbh);
 			}
 			
+			$Event = new EventLog("files", "file_id", $this->file_id, $sql);
+			
 			$sql .= " files 
 						SET file_id 	= " . $App->sqlSanitize($this->file_id, $dbh) . ",
 							project_id	= " . $App->returnQuotedString($App->sqlSanitize($this->project_id, $dbh)) . ", 
@@ -45,8 +47,10 @@ class File {
 			if(mysql_query($sql, $dbh)) {
 				if($this->file_id == 0) {
 					$this->file_id = mysql_insert_id($dbh);
+					$Event->key_value = $this->file_id;
 				}
 				$rValue = true;
+				$Event->add();
 			}
 			else {
 				$GLOBALS['g_ERRSTRS'][1] = mysql_error();

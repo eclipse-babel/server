@@ -27,16 +27,18 @@ class String {
 			global $App, $dbh;
 
 			$String = $this->getStringFromName($this->file_id, $this->name);
-			if($String->value != $this->value) {
+			if($String->value != $this->value || $String->is_active != $this->is_active) {
 				$sql 		= "INSERT INTO";
 				$created_on = "NOW()";
 				$where 		= "";
 				if($String->string_id > 0) {
 					$this->string_id = $String->string_id;
+					$this->is_active = 1;
 					$sql = "UPDATE";
 					$created_on = "created_on";
 					$where = " WHERE string_id = " . $App->sqlSanitize($this->string_id, $dbh);
-					# TODO: add existing string values to audit trail
+					$Event = new EventLog("strings", "string_id:old_value", $this->string_id . ":" . $String->value, "UPDATE");
+					$Event->add();
 				}
 				
 				$sql .= " strings 
@@ -46,7 +48,7 @@ class String {
 								value		= " . $App->returnQuotedString($App->sqlSanitize($this->value, $dbh)) . ",
 								userid		= " . $App->returnQuotedString($App->sqlSanitize($this->userid, $dbh)) . ",
 								created_on	= " . $created_on . ",
-								is_active	= " . $App->sqlSanitize($this->file_id, $dbh) . $where;
+								is_active	= " . $App->sqlSanitize($this->is_active, $dbh) . $where;
 				if(mysql_query($sql, $dbh)) {
 					if($this->string_id == 0) {
 						$this->string_id = mysql_insert_id($dbh);
@@ -148,6 +150,9 @@ class String {
 					SET is_active = 0 WHERE string_id = " . $App->sqlSanitize($_string_id, $dbh);	
 
 			$rValue = mysql_query($sql, $dbh);
+			
+			$Event = new EventLog("strings", "string_id", $_string_id, "DEACTIVATE");
+			$Event->add();
 		}
 		return $rValue;
 	}

@@ -15,9 +15,16 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
---
--- Table structure for table `files`
---
+CREATE TABLE `event_log` (
+  `event_id` int(10) unsigned NOT NULL auto_increment,
+  `table_name` varchar(100) NOT NULL,
+  `key_name` varchar(100) NOT NULL,
+  `key_value` varchar(100) default NULL,
+  `action` varchar(100) NOT NULL,
+  `userid` mediumint(9) NOT NULL,
+  `created_on` datetime NOT NULL,
+  PRIMARY KEY  (`event_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `files`;
 CREATE TABLE `files` (

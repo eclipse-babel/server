@@ -78,7 +78,10 @@ class File {
 	function parseProperties($_content) {
 		$rValue = "";
 		if($_content != "") {
+			
 			global $User, $App;
+			
+			# step 1 - import existing strings.  $String->save() will deal with merges
 			$lines = explode("\n", $_content);
 			foreach($lines as $line) {
 				if(strlen($line) > 0 && $line[0] != "#" && $line[0] != ";") {
@@ -98,6 +101,25 @@ class File {
 						$String->is_active 	= 1;
 						$String->save();
 					}
+				}
+			}
+			
+			# step 2 - remove strings that are no longer in the properties file
+			$String = new String();
+			$aStrings = $String->getActiveStrings($this->file_id);
+			foreach ($aStrings as $String) {
+				$found = false;
+				
+				$aStringList = explode(",",$rValue);
+				foreach($aStringList as $strName) {
+					if($strName == $String->name) {
+						$found = true;
+						break;
+					}
+				}
+				
+				if(!$found) {
+					$String->deactivate($String->string_id);
 				}
 			}
 		}

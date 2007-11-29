@@ -26,47 +26,58 @@ class String {
 		if($this->file_id != 0 && $this->name != "" && $this->userid > 0) {
 			global $App, $dbh;
 
-			
-			if($this->string_id == 0) {
-				$this->string_id = $this->getIDFromName($this->file_id, $this->name);
-			}
-
-			$sql 		= "INSERT INTO";
-			$created_on = "NOW()";
-			$where 		= "";
-			if($this->string_id > 0) {
-				$sql = "UPDATE";
-				$created_on = "created_on";
-				$where = " WHERE string_id = " . $App->sqlSanitize($this->string_id, $dbh);
-			}
-			
-			$sql .= " strings 
-						SET string_id 	= " . $App->sqlSanitize($this->string_id, $dbh) . ",
-							file_id		= " . $App->sqlSanitize($this->file_id, $dbh) . ", 
-							name		= " . $App->returnQuotedString($App->sqlSanitize($this->name, $dbh)) . ",
-							value		= " . $App->returnQuotedString($App->sqlSanitize($this->value, $dbh)) . ",
-							userid		= " . $App->returnQuotedString($App->sqlSanitize($this->userid, $dbh)) . ",
-							created_on	= " . $created_on . ",
-							is_active	= " . $App->sqlSanitize($this->file_id, $dbh) . $where;
-			if(mysql_query($sql, $dbh)) {
-				if($this->string_id == 0) {
-					$this->string_id = mysql_insert_id($dbh);
+			$String = $this->getStringFromName($this->file_id, $this->name);
+			if($String->value != $this->value) {
+				$sql 		= "INSERT INTO";
+				$created_on = "NOW()";
+				$where 		= "";
+				if($String->string_id > 0) {
+					$this->string_id = $String->string_id;
+					$sql = "UPDATE";
+					$created_on = "created_on";
+					$where = " WHERE string_id = " . $App->sqlSanitize($this->string_id, $dbh);
+					# TODO: add existing string values to audit trail
 				}
-				$rValue = true;
+				
+				$sql .= " strings 
+							SET string_id 	= " . $App->sqlSanitize($this->string_id, $dbh) . ",
+								file_id		= " . $App->sqlSanitize($this->file_id, $dbh) . ", 
+								name		= " . $App->returnQuotedString($App->sqlSanitize($this->name, $dbh)) . ",
+								value		= " . $App->returnQuotedString($App->sqlSanitize($this->value, $dbh)) . ",
+								userid		= " . $App->returnQuotedString($App->sqlSanitize($this->userid, $dbh)) . ",
+								created_on	= " . $created_on . ",
+								is_active	= " . $App->sqlSanitize($this->file_id, $dbh) . $where;
+				if(mysql_query($sql, $dbh)) {
+					if($this->string_id == 0) {
+						$this->string_id = mysql_insert_id($dbh);
+					}
+					$rValue = true;
+				}
+				else {
+					$GLOBALS['g_ERRSTRS'][1] = mysql_error();
+				}
 			}
 			else {
-				$GLOBALS['g_ERRSTRS'][1] = mysql_error();
+				# Nothing to do.  Imported string is identical.
+				$rValue = true;
 			}
 		}
 		return $rValue;
 	}
 	
-	function getIDFromName($_file_id, $_name) {
-		$rValue = 0;
+	/**
+	 * Get string object from name of a value
+	 *
+	 * @param Integer $_file_id
+	 * @param String $_name
+	 * @return String String object
+	 */
+	function getStringFromName($_file_id, $_name) {
+		$rValue = new String();
 		if($_file_id > 0 && $_name != "") {
 			global $App, $dbh;
 
-			$sql = "SELECT string_id
+		$sql = "SELECT *
 				FROM 
 					strings
 				WHERE file_id = " . $App->sqlSanitize($_file_id, $dbh) . "
@@ -75,8 +86,68 @@ class String {
 			$result = mysql_query($sql, $dbh);
 			if($result && mysql_num_rows($result) > 0) {
 				$myrow = mysql_fetch_assoc($result);
-				$rValue = $myrow['string_id'];
+				$String = new String();
+				$String->string_id 	= $myrow['string_id'];
+				$String->file_id 	= $myrow['file_id'];
+				$String->name 		= $myrow['name'];
+				$String->value 		= $myrow['value'];
+				$String->userid 	= $myrow['userid'];
+				$String->created_on = $myrow['created_on'];
+				$String->is_active 	= $myrow['is_active'];
+				$rValue = $String;
 			}
+		}
+		return $rValue;
+	}
+	
+	/**
+	* Returns Array of active strings
+	* @author droy
+	* @param Integer file_id
+	* @return Array Array of String objects
+	*/
+	function getActiveStrings($_file_id) {
+		$rValue = Array();
+		if($_file_id > 0) {
+			global $App, $dbh;
+
+			$sql = "SELECT *
+				FROM 
+					strings
+				WHERE file_id = " . $App->sqlSanitize($_file_id, $dbh) . "
+					AND is_active = 1";	
+
+			$result = mysql_query($sql, $dbh);
+			while($myrow = mysql_fetch_assoc($result)) {
+				$String = new String();
+				$String->string_id 	= $myrow['string_id'];
+				$String->file_id 	= $myrow['file_id'];
+				$String->name 		= $myrow['name'];
+				$String->value 		= $myrow['value'];
+				$String->userid 	= $myrow['userid'];
+				$String->created_on = $myrow['created_on'];
+				$String->is_active 	= $myrow['is_active'];
+				$rValue[count($rValue)] = $String;
+			}
+		}
+		return $rValue;
+	}
+	
+	/**
+	* Sets a string as inactive
+	* @author droy
+	* @param Integer string_id
+	* @return bool success status
+	*/
+	function deactivate($_string_id) {
+		$rValue = 0;
+		if($_string_id > 0) {
+			global $App, $dbh;
+
+			$sql = "UPDATE strings 
+					SET is_active = 0 WHERE string_id = " . $App->sqlSanitize($_string_id, $dbh);	
+
+			$rValue = mysql_query($sql, $dbh);
 		}
 		return $rValue;
 	}

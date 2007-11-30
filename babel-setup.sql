@@ -30,11 +30,12 @@ DROP TABLE IF EXISTS `files`;
 CREATE TABLE `files` (
   `file_id` int(10) unsigned NOT NULL auto_increment,
   `project_id` varchar(100) NOT NULL,
+  `version` double NOT NULL,
   `name` text NOT NULL,
   `is_active` tinyint(3) unsigned NOT NULL default '1',
   PRIMARY KEY  (`file_id`),
   KEY `project_id` (`project_id`),
-  CONSTRAINT `files_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON UPDATE CASCADE
+  CONSTRAINT `files_ibfk_1` FOREIGN KEY (`project_id`,`version`) REFERENCES `project_versions` (`project_id`,`version`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -80,6 +81,15 @@ CREATE TABLE `projects` (
   `project_id` varchar(100) NOT NULL,
   `is_active` tinyint(3) unsigned NOT NULL default '1',
   PRIMARY KEY  (`project_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `project_versions`;
+CREATE TABLE `project_versions` (
+  `project_id` varchar(100) NOT NULL,
+  `version` double NOT NULL,
+  `is_active` tinyint(3) unsigned NOT NULL default '1',
+  PRIMARY KEY  (`project_id`, `version`),
+  CONSTRAINT `project_versions_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

@@ -30,7 +30,7 @@ DROP TABLE IF EXISTS `files`;
 CREATE TABLE `files` (
   `file_id` int(10) unsigned NOT NULL auto_increment,
   `project_id` varchar(100) NOT NULL,
-  `version` double NOT NULL,
+  `version` varchar(64) NOT NULL,
   `name` text NOT NULL,
   `is_active` tinyint(3) unsigned NOT NULL default '1',
   PRIMARY KEY  (`file_id`),
@@ -86,7 +86,7 @@ CREATE TABLE `projects` (
 DROP TABLE IF EXISTS `project_versions`;
 CREATE TABLE `project_versions` (
   `project_id` varchar(100) NOT NULL,
-  `version` double NOT NULL,
+  `version` varchar(64) NOT NULL,
   `is_active` tinyint(3) unsigned NOT NULL default '1',
   PRIMARY KEY  (`project_id`, `version`),
   CONSTRAINT `project_versions_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON UPDATE CASCADE ON DELETE CASCADE
@@ -151,6 +151,20 @@ CREATE TABLE `strings` (
   CONSTRAINT `strings_ibfk_2` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+/* If a string is updated (and changed), need to set all translations as possibly_incorrect  */
+DELIMITER ;;
+CREATE TRIGGER `upd_string` AFTER UPDATE ON `strings` FOR EACH ROW 
+  BEGIN
+    IF(NEW.value <> OLD.value) THEN
+      UPDATE translations SET possibly_incorrect = 1 WHERE string_id = NEW.string_id; 
+    END IF;
+  END;
+;;
+DELIMITER ;
+
+
+
 --
 -- Table structure for table `translation_archives`
 --
@@ -184,6 +198,7 @@ CREATE TABLE `translations` (
   `language_id` smallint(5) unsigned NOT NULL,
   `version` int(10) unsigned NOT NULL default '1',
   `value` text NOT NULL,
+  `possibly_incorrect` tinyint unsigned NOT NULL default '0',
   `is_active` tinyint(3) unsigned NOT NULL default '1',
   `userid` int(10) unsigned NOT NULL,
   `created_on` datetime NOT NULL,

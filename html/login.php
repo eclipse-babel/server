@@ -24,6 +24,7 @@ $PASSWORD 	= $App->getHTTPParameter("password", "POST");
 $REMEMBER 	= $App->getHTTPParameter("remember", "POST");
 $SUBMIT 	= $App->getHTTPParameter("submit", "POST");
 
+
 if($SUBMIT == "Login") {
 	if($USERNAME != "" && $PASSWORD != ""){
 		$User = new User();

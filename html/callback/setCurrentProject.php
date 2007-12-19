@@ -13,17 +13,6 @@
 
 require_once("cb_global.php");
 
-$language_post = $App->getHTTPParameter("proj", "POST");
-
-if($language_post){
-	$lang = explode("=",$language_post);
-	if($lang[1]){
-		# TODO check database before setting to make sure input is valid choice
-		$_SESSION['project'] = $lang[1];
-		print $lang[1];
-	}else{
-		echo "bad";
-	}
-}
+$_SESSION['project'] = $App->getHTTPParameter("project", "POST");
 
 ?>

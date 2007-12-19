@@ -18,44 +18,105 @@ $pageKeywords 	= "translation,language,nlpack,pack,eclipse,babel";
 
 include("head.php");
 
-echo $User->userid;
-echo $User->first_name;
+//echo $User->userid;
+//echo $User->first_name;
 
 //$_SESSION['language'] = "";
 //$_SESSION['project'] = "";
+//$_SESSION['version'] = "";
 
+//print "<pre>";
+//print_r($_SESSION);
+//print "</pre>";
 ?>
 
+<h1 id="page-message">Welcome to the Babel Project</h1>
 <div id="contentArea">
-	<h1 id="page-message">Welcome to the Babel Project</h1>
-	<div id="language-area">lang</div>
-	<div id="project-area">proj</div>
-	<div id="string-area">
-		<ul id="not-translated">
-		</ul>
-		<ul id="flagged-incorrect">
-		</ul>
-		<ul id="awaiting-ratings">
-		</ul>
+
+	<h2>Languages / Projects / Versions</h1>
+	<div id="language" class="side-component">
+		<h4 id="language-selection">Langues</h4>
+		<div id="language-area"class="scrollable-area"></div>
 	</div>
-	<div id="translation-area">translation</div>
+
+	<div id="project" class="side-component">
+		<h4 id="project-selection">Projects</h4>
+		<div id="project-area" class="scrollable-area"></div>
+	</div>
+	
+	<div id="project" class="side-component">
+		<h4 id="version-selection">Versions</h4>
+		<div id="version-area" class="scrollable-area"></div>
+	</div>
+	
+	<div class="clearing"></div>
+	
+	
+<!--  	
+<script type="text/javascript"> 
+	var myTabs = new YAHOO.widget.TabView("string-area"); 
+</script>  
+-->
+
+
+	
+	<div id="string-area" class="yui-navset full-component">
+	<h2>Translatable Strings</h2>
+<!--
+	    <ul class="yui-nav"> 
+        <li class="selected"><a href="#tab1"><em>Untranslated</em></a></li> 
+	        <li><a href="#tab2"><em>Flagged Incorrect</em></a></li> 
+	        <li><a href="#tab3"><em>Awaiting Rating</em></a></li> 
+	    </ul>             
+  	  	<div class="yui-content" style="clear: both;"> 
+			<div id="not-translated">
+			</div>
+			
+			<ul id="flagged-incorrect">
+			</ul>
+			
+			<ul id="awaiting-ratings">
+			</ul>
+		</div>
+	    
+-->	    
+  	  	<div id="projecs-strings-area" class="yui-content" style="clear: both;"> 
+		</div>
+		<div id="not-translated">
+		</div>
+	</div>
+	
+	
+	<div id="translation-area" class="full-component">
+	   <h2>String Translation</h2>
+	   <div id="translation-form-container"></div>
+	</div>
+	
+	<div class="clearing"></div>
+	
 </div>
 
 <?php
 	if(!$_SESSION['language']){
 		//NO LANGUAGE SELECT FOR EDITING
-		?><script>getAjaxLanguages();</script><?php
+		?><script>YAHOO.languageManager.getAjaxLanguages();</script><?php
 	}else{
 		//SHOW CURRENT LANGUAGE
-		?><script>showCurrentLanguage("<?=getLanguagebyID($_SESSION['language']);?>");</script><?php
+		?><script>YAHOO.languageManager.getAjaxLanguages("<?=$_SESSION['language'];?>");</script><?php
 		
 		//LIST PROJECTS TO EDIT
 		if(!$_SESSION['project']){
-			?><script>getAjaxProjects();</script><?php
+			?><script>YAHOO.projectManager.getAjaxProject("<?=$_SESSION['project'];?>");</script><?php
 		}else{
-			?><script>showCurrentProject("<?=$_SESSION['project'];?>");</script><?php
-			
-			?><script>getAjaxProjectStrings();</script><?php
+			?><script>YAHOO.projectManager.getAjaxProject("<?=$_SESSION['project'];?>");</script><?php
+			if(!$_SESSION['version']){
+				?><script>YAHOO.versionManager.getAjaxVersions("<?=$_SESSION['version'];?>");</script><?php
+			}else{
+				?>
+				<script>YAHOO.versionManager.getAjaxVersions("<?=$_SESSION['version'];?>");</script>
+				<script>YAHOO.projectStringsManager.getAjaxProjectStrings();</script>
+				<?php
+			}
 		}
 	}	
 	include("foot.php");

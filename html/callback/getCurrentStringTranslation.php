@@ -14,13 +14,7 @@
 require_once("cb_global.php");
 
 
-$string_post = $App->getHTTPParameter("string_id", "POST");
-//$string_post = 1;
-
-$exploded = explode("=",$string_post);
-if($exploded[1]){
-	$string_id = $exploded[1];
-}
+$string_id = $App->getHTTPParameter("string_id", "POST");
 
 $query = "select 
 			strings.string_id,
@@ -45,14 +39,25 @@ $res = mysql_query($query,$dbh);
 $line = mysql_fetch_array($res, MYSQL_ASSOC);
 
 ?>
-
 <form id='translation-form'>
 	<input type="hidden" name="string_id" value="<?=$line['string_id'];?>">
+
+	<div id="english-area" class="side-component">
+		<h4>English String</h4>
+		<div id="english-current-area">
+			<?= nl2br($line['string_value']);?>
+		</div>
+	</div>
 	
-	English : <?= $line['string_value'];?><br>
-	Translation : <textarea style='display: inline; width: 300px; height: 100px;' name="translation"><?= $line['translation_value'];?></textarea>
-	<?if($rating){?>
-		Rating : <?=$rating;?><br>
-	<?}?>
-	<input type="submit" value="translate">
+	<div id="translation-textarea" class="side-component">
+		<h4>Your New Translation</h4>
+		<textarea style='display: inline; width: 400px; height: 150px;' name="translation"></textarea>
+		<br>
+		<input type="submit" value="translate">
+	</div>
+	<div id="translation-history" class="side-component">
+		<h4>History of Translations</h4>
+		<div id="translation-history">Coming soon!</div>
+	</div>
+	
 </form>

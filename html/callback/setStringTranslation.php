@@ -13,6 +13,8 @@
 
 require_once("cb_global.php");
 
+print_r($_POST);
+
 $string_id = $App->getHTTPParameter("string_id", "POST");
 $translation = $App->getHTTPParameter("translation", "POST");
 $language_id = $_SESSION["language"];
@@ -27,7 +29,7 @@ $query = "insert into
 		  	userid = '".addslashes($user_id)."',
 		  	created_on = NOW()
 		  	";
-print $query;
+//print $query;
 
 $res = mysql_query($query,$dbh);
 

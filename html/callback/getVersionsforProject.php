@@ -8,11 +8,23 @@
  *
  * Contributors:
  *    Paul Colton (Aptana)- initial API and implementation
- *    Eclipse Foundation
-*******************************************************************************/
 
+*******************************************************************************/
 require_once("cb_global.php");
 
-$_SESSION['language'] = $App->getHTTPParameter("lang", "POST");
+
+$query = "select * from project_versions where is_active = 1 and project_id = '".addslashes($_SESSION['project'])."'";
+
+//print $query."\n";
+
+$res = mysql_query($query,$dbh);
+
+while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
+	$ret = Array();
+	$ret['version'] = $line['version'];
+	$return[] = $ret;
+}
+
+print json_encode($return);
 
 ?>

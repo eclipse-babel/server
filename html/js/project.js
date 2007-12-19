@@ -10,56 +10,90 @@
  *    Eclipse Foundation
 *******************************************************************************/
 
-function getAjaxProjects(){
-	var callback = 
-	{ 
-		start:function(eventType, args){ 
-		},
-		success: function(o) {
-			YAHOO.log(o.responseText);
-			var domNode = document.getElementById('project-area');
-			domNode.innerHTML = o.responseText;
-			YAHOO.util.Event.onAvailable("project-choices",setupSelectProjectCB);
-		},
-		failure: function(o) {
-			YAHOO.log('failed!');
+
+YAHOO.projectManager = {
+	getAjaxProject: function(selectedIn){
+		this.selectedDBID = selectedIn;
+		var callback = 
+		{ 
+			start:function(eventType, args){ 
+			},
+			success: function(o) {
+				var response = eval("("+o.responseText+")");
+				var domNode = document.getElementById('project-area');
+//				YAHOO.log(o.responseText);
+				domNode.innerHTML = "";
+				for(var i = 0; i < response.length; i++){
+					var proj = new project(response[i]['project']);
+					domNode.appendChild(proj.createHTML());
+				}
+				
+	//			domNode.innerHTML = o.responseText;
+	//			YAHOO.util.Event.onAvailable("project-choices",setupSelectProjectCB);
+			},
+			failure: function(o) {
+				YAHOO.log('failed!');
+			} 
 		} 
-	} 
-	YAHOO.util.Connect.asyncRequest('GET', "callback/getProjects.php", callback, null); 
-	hideThings("project-area");
-}
+		YAHOO.util.Connect.asyncRequest('GET', "callback/getProjects.php", callback, null); 
+	},
 
-function setupSelectProjectCB(){
-	var langs  = YAHOO.util.Dom.getElementsByClassName("","li","project-choices");
-	for(var i =0; i < langs.length; i++){
-		YAHOO.log(langs[i].innerHTML);
-		YAHOO.util.Event.addListener(langs[i],"click",setProjectPref);
+	getSelectedDBID: function(){
+		return this.selectedDBID;
+	},
+	getSelected: function(){
+		return this.selected;
+	},
+	
+	updateSelected: function(selec){
+		if(this.selected){
+			this.selected.unselect();
+		}
+		this.selected = selec;
+		this.selected.selected();
 	}
+};
+
+
+
+
+function project(projectIn){
+	project.superclass.constructor.call();
+	this.project = projectIn;
+	this.initSelectable();
+}
+YAHOO.extend(project,selectable);
+project.prototype.isSelected = function(){
+ return (this == YAHOO.projectManager.selected);
 }
 
-function setProjectPref(e){
+
+project.prototype.clicked = function(e){
 	YAHOO.util.Event.stopEvent(e);
 	var callback = 
 	{ 
 		start:function(eventType, args){ 
 		},
 		success: function(o) {
-			showCurrentProject(o.responseText);
-			getAjaxProjectStrings();
+			YAHOO.versionManager.getAjaxVersions();
 		},
 		failure: function(o) {
 			YAHOO.log('failed!');
 		} 
 	} 
-	var target = YAHOO.util.Event.getTarget(e)
-	YAHOO.log(target)
-	YAHOO.util.Connect.asyncRequest('POST', "callback/setCurrentProject.php", callback, "proj="+target);
+	YAHOO.projectManager.updateSelected(this);
+	YAHOO.util.Connect.asyncRequest('POST', "callback/setCurrentProject.php", callback, "project="+this.project);	
 }
+project.prototype.createHTML = function(){
+	this.domElem = document.createElement("li");
+	this.domElem.innerHTML = this.project;
+	this.addEvents();
 
-function showCurrentProject(curProj){
-	var display = '<h3>Current Project: '+curProj+' (<a id="change-proj" href="#">change)</h3>';	
-	YAHOO.util.Event.onAvailable("change-lang",function(){ YAHOO.util.Event.addListener("change-proj","click",getAjaxProjects); });
-
-	var langDomNode = document.getElementById('project-area');
-	langDomNode.innerHTML = display;
+	YAHOO.log(this.project+" == "+YAHOO.projectManager.getSelectedDBID());
+	
+	if(this.project == YAHOO.projectManager.getSelectedDBID()){
+		YAHOO.projectManager.updateSelected(this);
+	}
+	
+	return this.domElem;
 }

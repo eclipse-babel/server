@@ -13,71 +13,49 @@
 YAHOO.widget.Logger.enableBrowserConsole();
 
 
-function hideThings(hide){
-	switch(hide){
-		case "language-area":
-			YAHOO.util.Dom.setStyle("project-area","display","none");
-		case "project-area":
-			YAHOO.util.Dom.setStyle("string-choices","display","none");
-		case "string-choices":
-			YAHOO.util.Dom.setStyle("translation-area","display","none");
-		case "translation-area":
+function selectable(){
+}
+selectable.prototype.initSelectable = function(){
+	this.hoverColor = "LightSkyBlue";
+	this.bgColor = "white";
+	this.selectedColor = "lightblue";
+}
+selectable.prototype.mouseOver = function(){
+YAHOO.log("in");
+	YAHOO.util.Dom.setStyle(this.domElem,"background",this.hoverColor);
+}
+selectable.prototype.mouseOut = function(){
+	if(this.isSelected()){
+		this.selected();
+	}else{
+		YAHOO.util.Dom.setStyle(this.domElem,"background",this.bgColor);
 	}
 }
+selectable.prototype.selected = function(){
+	YAHOO.util.Dom.setStyle(this.domElem,"background",this.selectedColor);
+}
+selectable.prototype.unselect = function(){
+	YAHOO.util.Dom.setStyle(this.domElem,"background",this.bgColor);
+}
 
-function showThings(hide){
-	switch(hide){
-		case "translation-area":
-			YAHOO.util.Dom.setStyle("translation-area","display","block");
-		case "string-choices":
-			YAHOO.util.Dom.setStyle("translation-area","display","block");
-		case "project-area":
-			YAHOO.util.Dom.setStyle("string-choices","display","block");
-		case "language-area":
-			YAHOO.util.Dom.setStyle("project-area","display","block");
-	}
+selectable.prototype.addEvents = function(){
+	YAHOO.util.Event.addListener(this.domElem,"click",this.clicked,this,true);
+	YAHOO.util.Event.addListener(this.domElem,"mouseover",this.mouseOver,this,true);
+	YAHOO.util.Event.addListener(this.domElem,"mouseout",this.mouseOut,this,true);
 }
 
 
-function getAjaxProjectStrings(){
+
+
+
+function showTranslateStringForm(stringIdIn){
 	var callback = 
 	{ 
 		start:function(eventType, args){ 
 		},
 		success: function(o) {
-			YAHOO.log(o.responseText);
-			var langDomNode = document.getElementById('string-area');
+			var langDomNode = document.getElementById('translation-form-container');
 			langDomNode.innerHTML = o.responseText;
-			YAHOO.util.Event.onAvailable("string-choices",setupSelectStringCB);
-		},
-		failure: function(o) {
-			YAHOO.log('failed!');
-		} 
-	} 
-	YAHOO.util.Connect.asyncRequest('GET', "callback/getStringsforProject.php", callback, null); 
-}
-
-function setupSelectStringCB(){
-	var langs  = YAHOO.util.Dom.getElementsByClassName("","li","string-choices");
-	for(var i =0; i < langs.length; i++){
-		YAHOO.util.Event.addListener(langs[i],"click",showTranslateStringForm);
-	}
-}
-
-
-
-
-function showTranslateStringForm(e){
-	showThings("translation-area");
-
-	YAHOO.util.Event.stopEvent(e);
-	var callback = 
-	{ 
-		start:function(eventType, args){ 
-		},
-		success: function(o) {
-			var langDomNode = document.getElementById('translation-area');
-			langDomNode.innerHTML = "<br>"+o.responseText;
 			YAHOO.util.Event.onAvailable("translation-form",setupTranslatFormCB);
 			
 		},
@@ -85,9 +63,7 @@ function showTranslateStringForm(e){
 			YAHOO.log('failed!');
 		} 
 	} 
-	var target = YAHOO.util.Event.getTarget(e);
-
-	YAHOO.util.Connect.asyncRequest('POST', "callback/getCurrentStringTranslation.php", callback, "string_id="+target);
+	YAHOO.util.Connect.asyncRequest('POST', "callback/getCurrentStringTranslation.php", callback, "string_id="+stringIdIn);
 }
 
 function setupTranslatFormCB(){
@@ -103,9 +79,8 @@ function translationSumbit(e){
 		start:function(eventType, args){ 
 		},
 		success: function(o) {
-			alert("thanks for the translation!");
-			YAHOO.log(o.responseText);
-//			showTranslateStringForm();
+//			YAHOO.log(o.responseText);
+			YAHOO.projectStringsManager.getAjaxProjectStrings(YAHOO.projectStringsManager.getSelected());
 		},
 		failure: function(o) {
 			YAHOO.log('failed!');

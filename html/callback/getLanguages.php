@@ -13,18 +13,24 @@
 
 require_once("cb_global.php");
 
-
 $query = "select * from languages where is_active = 1 and language_id != 1";
 
 $res = mysql_query($query,$dbh);
 
+
+$return = Array();
+
 while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
-	$return .= "<li><a href='?language_id=".$line['language_id']."'>".$line['iso_code']. " - ". $line['name']. "</a>";
+//	$return .= "<li><a href='?language_id=".$line['language_id']."'>".$line['iso_code']. " - ". $line['name']. "</a>";
+	$return[] = $line;
 }
+
+
+print json_encode($return);
+exit();
 
 ?>
 
 <ul id='language-choices'>
-	Please select a langue to translate:<br>
 	<?=$return;?>
 </ul>

@@ -10,8 +10,8 @@
  *    Eclipse Foundation
 *******************************************************************************/
 
-YAHOO.languageManager = {
-	getAjaxLanguages: function(selectedIn){
+YAHOO.versionManager = {
+	getAjaxVersions: function(selectedIn){
 		this.selectedDBID = selectedIn;
 		var callback = 
 		{ 
@@ -19,10 +19,12 @@ YAHOO.languageManager = {
 			},
 			success: function(o) {
 				var response = eval("("+o.responseText+")");
-				var domNode = document.getElementById('language-area');
-				YAHOO.log(o.responseText);
+				var domNode = document.getElementById('version-area');
+//				YAHOO.log(o.responseText);
+				domNode.innerHTML = "";
+				
 				for(var i = 0; i < response.length; i++){
-					var proj = new language(response[i]);
+					var proj = new version(response[i]);
 					domNode.appendChild(proj.createHTML());
 				}
 			},
@@ -30,7 +32,7 @@ YAHOO.languageManager = {
 				YAHOO.log('failed!');
 			} 
 		} 
-		YAHOO.util.Connect.asyncRequest('GET', "callback/getLanguages.php", callback, null); 
+		YAHOO.util.Connect.asyncRequest('GET', "callback/getVersionsforProject.php", callback, null); 
 	},
 
 	getSelectedDBID: function(){
@@ -49,46 +51,42 @@ YAHOO.languageManager = {
 	}
 };
 
-
-
-function language(dataIn){
-	language.superclass.constructor.call();
+function version(dataIn){
+	this.version = dataIn['version'];
+	version.superclass.constructor.call();
 	this.initSelectable();
-	
-	this.languageId = dataIn['language_id'];
-	this.name = dataIn['name'];
-	this.iso = dataIn['iso'];
+}
+YAHOO.extend(version,selectable);
+version.prototype.isSelected = function(){
+ return (this == YAHOO.versionManager.selected);
 }
 
-YAHOO.extend(language,selectable);
-language.prototype.isSelected = function(){
- return (this == YAHOO.languageManager.selected);
-}
 
-language.prototype.clicked = function(e){
+version.prototype.clicked = function(e){
 	YAHOO.util.Event.stopEvent(e);
 	var callback = 
 	{ 
 		start:function(eventType, args){ 
 		},
 		success: function(o) {
-			YAHOO.projectManager.getAjaxProject();
+			YAHOO.projectStringsManager.getAjaxProjectStrings();
 		},
 		failure: function(o) {
 			YAHOO.log('failed!');
 		} 
 	} 
 	var target = YAHOO.util.Event.getTarget(e);
-	YAHOO.languageManager.updateSelected(this);
-	YAHOO.util.Connect.asyncRequest('POST', "callback/setCurrentLangue.php", callback, "lang="+this.languageId);
+	YAHOO.versionManager.updateSelected(this);
+	YAHOO.util.Connect.asyncRequest('POST', "callback/setCurrentProjectVersion.php", callback, "version="+this.version);
 }
-language.prototype.createHTML = function(){
+version.prototype.createHTML = function(){
 	this.domElem = document.createElement("li");
-	this.domElem.innerHTML = this.name+"("+this.iso+")";
+	this.domElem.innerHTML = this.version;
 	this.addEvents();
 	
-	if(this.languageId == YAHOO.languageManager.getSelectedDBID()){
-		YAHOO.languageManager.updateSelected(this);
+	if(this.version == YAHOO.versionManager.getSelectedDBID()){
+		YAHOO.versionManager.updateSelected(this);
 	}
 	return this.domElem;
 }
+

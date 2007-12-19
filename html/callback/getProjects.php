@@ -12,16 +12,21 @@
 *******************************************************************************/
 require_once("cb_global.php");
 
-$query = "select * from projects where is_active = 1";
+$query = "select * from project_versions where is_active = 1";
 $res = mysql_query($query,$dbh);
 
-$return = '<ul id="project-choices">';
-$return .= "Please select a project to translate:<br>";
-while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
-	$return .= '<li><a href="project_id='.$line['project_id'].'">'.$line['project_id'].'</a>';
-}
-$return .= "</ul>";
+//$return = '<ul id="project-choices">';
 
-print $return;
+while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
+	$ret = Array();
+	$ret['project'] = $line['project_id'];
+//	$ret['version'] = $line['version'];
+	$return[] = $ret;
+}
+//	$return .= '<li><a href="project_id='.$line['project_id'].'">'.$line['project_id'].'</a>';
+
+//$return .= "</ul>";
+
+print json_encode($return);
 
 ?>

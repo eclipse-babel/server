@@ -30,7 +30,3 @@ print json_encode($return);
 exit();
 
 ?>
-
-<ul id='language-choices'>
-	<?=$return;?>
-</ul>

@@ -18,6 +18,9 @@ YAHOO.languageManager = {
 			start:function(eventType, args){ 
 			},
 			success: function(o) {
+				if(!o.responseText){
+					return false;
+				}
 				var response = eval("("+o.responseText+")");
 				var domNode = document.getElementById('language-area');
 				YAHOO.log(o.responseText);

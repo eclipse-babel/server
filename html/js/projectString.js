@@ -12,6 +12,14 @@
 
 YAHOO.projectStringsManager = {
 	getAjaxProjectStrings : function(selectedIn){
+	
+		if(!YAHOO.languageManager.getSelected() || 
+			!YAHOO.projectManager.getSelected() ||
+			!YAHOO.versionManager.getSelected()
+		  ){
+			return false;
+		} 
+	
 		this.selectedDBID = selectedIn;
 		var callback = 
 		{ 
@@ -73,6 +81,7 @@ YAHOO.projectStringsManager = {
 	
 	updateSelected: function(selec){
 		if(this.selected){
+YAHOO.log("removed!!!!!!!!");	
 			this.selected.unselect();
 		}
 		this.selected = selec;

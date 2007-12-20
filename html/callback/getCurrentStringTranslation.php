@@ -51,7 +51,7 @@ $line = mysql_fetch_array($res, MYSQL_ASSOC);
 	
 	<div id="translation-textarea" class="side-component">
 		<h4>Your New Translation</h4>
-		<textarea style='display: inline; width: 400px; height: 150px;' name="translation"></textarea>
+		<textarea style='display: inline; width: 390px; height: 150px;' name="translation"></textarea>
 		<br>
 		<input type="submit" value="translate">
 	</div>

@@ -2,11 +2,12 @@ Color Scheme with #A25F08 #F4E6CC #FCF5EB #2F8CAB #C9E2E9 #FE4902
 
 /* babel override for Phoenix styles */
 
-
+li{
+	list-decoration: none;
+}
 
 .hovering{
-	color: red;
-	background-color: red;
+	background-color: LightSkyBlue !important;
 	}
 
 .clearing{
@@ -30,7 +31,8 @@ h2{
 	background-color: SteelBlue;
 	color: white;
 	margin: 0px;	
-	font-size: 13px;
+	font-size: 14px;
+	padding: 2px;
 }
 
 #contentArea{
@@ -40,7 +42,6 @@ h2{
 
 .side-component{
 	float: left;	
-	border: 0px solid red;
 	width: 400px;
 }
 	
@@ -60,25 +61,25 @@ h4{
 .scrollable-area{
 	width: 100%;
 	height: 100px;
-	border-top: 1px solid black;
-	border-bottom: 1px solid black;
 	overflow-y: scroll;
 }
 
 #language-area{
-	border-left: 1px solid black;	
 	}
 	
 .project-area{
-	border-right: 1px solid black;	
 	}
 	
 .full-component{
 	width: 100%;
 	height: 200px;
-	border-top: 1px solid black;
-	}
-		
+}
+	
+* html .full-component{
+	height: 150px;
+	border: 1px solid red;
+}
+
 #string-area ul.yui-nav{
 	list-style: none;
 }
@@ -90,7 +91,8 @@ h4{
 #string-area ul.yui-nav li a{
 }
 #translation-area{
-	
+	padding: 0px;
+	margin: 0px;
 	}
 	
 #string-area h4{
@@ -101,7 +103,6 @@ h4{
 	}	
 
 string-choices{
-	border: 1px solid black; 
 	height: 100%; 
 	width: 100%; 
 	overflow-y: scroll;
@@ -124,5 +125,7 @@ string-choices{
 	overflow-y: scroll;
 	height: 165px;
 	}	
-	
+* html #not-translated{
+	width: 1184px;
+}
 	

@@ -21,14 +21,16 @@ selectable.prototype.initSelectable = function(){
 	this.selectedColor = "lightblue";
 }
 selectable.prototype.mouseOver = function(){
-YAHOO.log("in");
-	YAHOO.util.Dom.setStyle(this.domElem,"background",this.hoverColor);
+	YAHOO.util.Dom.addClass(this.domElem,"hovering");
+	
+//	YAHOO.util.Dom.setStyle(this.domElem,"background",this.hoverColor);
 }
 selectable.prototype.mouseOut = function(){
 	if(this.isSelected()){
 		this.selected();
 	}else{
-		YAHOO.util.Dom.setStyle(this.domElem,"background",this.bgColor);
+		YAHOO.util.Dom.removeClass(this.domElem,"hovering");
+//		YAHOO.util.Dom.setStyle(this.domElem,"background",this.bgColor);
 	}
 }
 selectable.prototype.selected = function(){
@@ -80,7 +82,7 @@ function translationSumbit(e){
 		},
 		success: function(o) {
 //			YAHOO.log(o.responseText);
-			YAHOO.projectStringsManager.getAjaxProjectStrings(YAHOO.projectStringsManager.getSelected());
+			YAHOO.projectStringsManager.getAjaxProjectStrings();
 		},
 		failure: function(o) {
 			YAHOO.log('failed!');

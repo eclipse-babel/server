@@ -21,9 +21,9 @@ include("head.php");
 //echo $User->userid;
 //echo $User->first_name;
 
-//$_SESSION['language'] = "";
-//$_SESSION['project'] = "";
-//$_SESSION['version'] = "";
+$_SESSION['language'] = "";
+$_SESSION['project'] = "";
+$_SESSION['version'] = "";
 
 //print "<pre>";
 //print_r($_SESSION);
@@ -33,20 +33,20 @@ include("head.php");
 <h1 id="page-message">Welcome to the Babel Project</h1>
 <div id="contentArea">
 
-	<h2>Languages / Projects / Versions</h1>
+	<h2>Languages / Projects / Versions</h2>
 	<div id="language" class="side-component">
 		<h4 id="language-selection">Langues</h4>
-		<div id="language-area"class="scrollable-area"></div>
+		<ul id="language-area"class="scrollable-area"></ul>
 	</div>
 
 	<div id="project" class="side-component">
 		<h4 id="project-selection">Projects</h4>
-		<div id="project-area" class="scrollable-area"></div>
+		<ul id="project-area" class="scrollable-area"></ul>
 	</div>
 	
 	<div id="project" class="side-component">
 		<h4 id="version-selection">Versions</h4>
-		<div id="version-area" class="scrollable-area"></div>
+		<ul id="version-area" class="scrollable-area"></ul>
 	</div>
 	
 	<div class="clearing"></div>
@@ -80,10 +80,9 @@ include("head.php");
 		</div>
 	    
 -->	    
-  	  	<div id="projecs-strings-area" class="yui-content" style="clear: both;"> 
-		</div>
-		<div id="not-translated">
-		</div>
+  	  	<div id="projecs-strings-area" class="yui-content"> </div>
+		
+		<div id="not-translated"></div>
 	</div>
 	
 	

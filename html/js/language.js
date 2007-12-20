@@ -75,7 +75,9 @@ language.prototype.clicked = function(e){
 		start:function(eventType, args){ 
 		},
 		success: function(o) {
+		YAHOO.log("language success about to ajax!");
 			YAHOO.projectManager.getAjaxProject();
+			YAHOO.projectStringsManager.getAjaxProjectStrings();
 		},
 		failure: function(o) {
 			YAHOO.log('failed!');

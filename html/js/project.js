@@ -10,10 +10,17 @@
  *    Eclipse Foundation
 *******************************************************************************/
 
-
 YAHOO.projectManager = {
 	getAjaxProject: function(selectedIn){
-		this.selectedDBID = selectedIn;
+		if(selectedIn){
+			this.selectedDBID = selectedIn;
+		}else{
+			this.selectedDBID = (YAHOO.projectManager.getSelected());
+			if(this.selectedDBID){
+			  this.selectedDBID = this.selectedDBID.project;
+			}
+		}
+		
 		var callback = 
 		{ 
 			start:function(eventType, args){ 
@@ -42,6 +49,7 @@ YAHOO.projectManager = {
 		return this.selectedDBID;
 	},
 	getSelected: function(){
+//	YAHOO.log("projectManager getSelcted:"+this.selected);
 		return this.selected;
 	},
 	
@@ -88,12 +96,11 @@ project.prototype.createHTML = function(){
 	this.domElem = document.createElement("li");
 	this.domElem.innerHTML = this.project;
 	this.addEvents();
+	
+YAHOO.log(this.project+" == "+YAHOO.projectManager.getSelectedDBID());	
 
-	YAHOO.log(this.project+" == "+YAHOO.projectManager.getSelectedDBID());
-	
-	if(this.project == YAHOO.projectManager.getSelectedDBID()){
+	if(this.project == YAHOO.projectManager.getSelectedDBID() | this == YAHOO.projectManager.getSelected() ){
 		YAHOO.projectManager.updateSelected(this);
-	}
-	
+	}	
 	return this.domElem;
 }

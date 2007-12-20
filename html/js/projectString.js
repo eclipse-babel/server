@@ -40,12 +40,14 @@ YAHOO.projectStringsManager = {
 				ntDomNode.appendChild(this.sp.tableDom);
 				
 				var trCount = 0;
-				var response = eval("("+o.responseText+")");					
-				for(var i = 0; i < response.length; i++){
-					var proj = new projectString(response[i]);
-					var tr = this.sp.tableDom.insertRow(trCount);
-					proj.createHTML(tr);
-					trCount++;
+				if(o.responseText){
+					var response = eval("("+o.responseText+")");					
+					for(var i = 0; i < response.length; i++){
+						var proj = new projectString(response[i]);
+						var tr = this.sp.tableDom.insertRow(trCount);
+						proj.createHTML(tr);
+						trCount++;
+					}
 				}
 			},
 			failure: function(o) {

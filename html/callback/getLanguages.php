@@ -25,6 +25,7 @@ while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
 	$return[] = $line;
 }
 
+print_r($return);
 
 print json_encode($return);
 exit();

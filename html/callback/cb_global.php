@@ -19,3 +19,13 @@ if(defined(BABEL_BASE_DIR)){
 }
 
 InitPage("login");
+
+
+if( !function_exists(json_encode) ){
+	include("/home/data/httpd/babel.eclipse.org/html/json_encode.php");
+ 
+	function json_encode($encode){
+ 		$jsons = new Services_JSON();
+		return $jsons->encode($encode);
+	}
+}

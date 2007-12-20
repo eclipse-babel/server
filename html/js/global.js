@@ -21,16 +21,16 @@ selectable.prototype.initSelectable = function(){
 	this.selectedColor = "lightblue";
 }
 selectable.prototype.mouseOver = function(){
-	YAHOO.util.Dom.addClass(this.domElem,"hovering");
+//	YAHOO.util.Dom.addClass(this.domElem,"hovering");
 	
-//	YAHOO.util.Dom.setStyle(this.domElem,"background",this.hoverColor);
+	YAHOO.util.Dom.setStyle(this.domElem,"background",this.hoverColor);
 }
 selectable.prototype.mouseOut = function(){
 	if(this.isSelected()){
 		this.selected();
 	}else{
-		YAHOO.util.Dom.removeClass(this.domElem,"hovering");
-//		YAHOO.util.Dom.setStyle(this.domElem,"background",this.bgColor);
+//		YAHOO.util.Dom.removeClass(this.domElem,"hovering");
+		YAHOO.util.Dom.setStyle(this.domElem,"background",this.bgColor);
 	}
 }
 selectable.prototype.selected = function(){

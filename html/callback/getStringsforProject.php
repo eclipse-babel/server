@@ -100,17 +100,47 @@ switch($state){
 					files.version = '".addslashes($version)."'
   				  group by strings.string_id,translations.version desc
 				";
+
+		
+		$query = "select 
+					strings.string_id as stringId,
+					strings.value as text,
+					strings.created_on as createdOn,
+					translations.value as translationString,
+					max(translations.version)
+				from 
+				  	strings
+				  	
+				  	left join project_versions on
+					  	project_versions.project_id = '".addslashes($project_id)."'
+				  	
+				  	left join translations on (
+				  		translations.language_id = '".addslashes($language)."'
+				  	  and
+				  		translations.string_id  = strings.string_id
+				  	)
+				  where 
+				  	strings.is_active != 0 
+				  and 
+					project_versions.project_id = '".addslashes($project_id)."'
+				  and	
+					project_versions.version = '".addslashes($version)."'
+					
+  				  group by strings.string_id,translations.version desc
+				";
+		
 		
 //				  	translations.string_id is null
 //				  and
 		
 	
 }
+
 //print $query."<br>";
 
 $res = mysql_query($query,$dbh);
 
-print mysql_error();
+//print mysql_error();
 
 $stringids = Array();
 $return = Array();

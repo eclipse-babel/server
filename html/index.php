@@ -21,10 +21,13 @@ include("head.php");
 //echo $User->userid;
 //echo $User->first_name;
 
-$_SESSION['language'] = "";
-$_SESSION['project'] = "";
-$_SESSION['version'] = "";
-
+//$_SESSION['language'] = "";
+//$_SESSION['project'] = "";
+//$_SESSION['version'] = "";
+//session_destroy();
+//unset($_SESSION);
+//exit();
+	
 //print "<pre>";
 //print_r($_SESSION);
 //print "</pre>";

@@ -29,7 +29,8 @@ $query = "insert into
 		  	userid = '".addslashes($user_id)."',
 		  	created_on = NOW()
 		  	";
-//print $query;
+
+print $query;
 
 $res = mysql_query($query,$dbh);
 

@@ -12,7 +12,7 @@
 *******************************************************************************/
 require_once("cb_global.php");
 
-$query = "select * from project_versions where is_active = 1";
+$query = "select * from projects where is_active = 1";
 $res = mysql_query($query,$dbh);
 
 //$return = '<ul id="project-choices">';

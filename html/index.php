@@ -18,19 +18,6 @@ $pageKeywords 	= "translation,language,nlpack,pack,eclipse,babel";
 
 include("head.php");
 
-//echo $User->userid;
-//echo $User->first_name;
-
-//$_SESSION['language'] = "";
-//$_SESSION['project'] = "";
-//$_SESSION['version'] = "";
-//session_destroy();
-//unset($_SESSION);
-//exit();
-	
-//print "<pre>";
-//print_r($_SESSION);
-//print "</pre>";
 ?>
 
 <h1 id="page-message">Welcome to the Babel Project</h1>
@@ -120,6 +107,7 @@ include("head.php");
 				<?php
 			}
 		}
-	}	
+	}
+		
 	include("foot.php");
 ?>

@@ -12,7 +12,21 @@
 *******************************************************************************/
 require_once("cb_global.php");
 
-$query = "select * from projects where is_active = 1";
+$query = "select 
+			DISTINCT projects.*  
+		  from 
+		  	projects,
+		  	files,
+		  	strings
+		  where 
+		  	projects.project_id =files.project_id
+		  and
+		  	files.file_id = strings.file_id
+		  and
+		  	projects.is_active = 1
+		  ";
+
+
 $res = mysql_query($query,$dbh);
 
 //$return = '<ul id="project-choices">';

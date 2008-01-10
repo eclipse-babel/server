@@ -13,7 +13,19 @@
 require_once("cb_global.php");
 
 
-$query = "select * from project_versions where is_active = 1 and project_id = '".addslashes($_SESSION['project'])."'";
+$query = "select 
+			* 
+		  from 
+		  	project_versions,
+		  	files
+		  where 
+		  	files.project_id = project_versions.project_id
+		  and
+		  	files.version = project_versions.version
+		  and
+		  	project_versions.is_active = 1 
+		  and 
+		  	project_versions.project_id = '".addslashes($_SESSION['project'])."'";
 
 //print $query."\n";
 

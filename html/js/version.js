@@ -18,14 +18,18 @@ YAHOO.versionManager = {
 			start:function(eventType, args){ 
 			},
 			success: function(o) {
-				var response = eval("("+o.responseText+")");
 				var domNode = document.getElementById('version-area');
-//				YAHOO.log(o.responseText);
-				domNode.innerHTML = "";
-				
-				for(var i = 0; i < response.length; i++){
-					var proj = new version(response[i]);
-					domNode.appendChild(proj.createHTML());
+				var response = eval("("+o.responseText+")");
+				if(response){
+	//				YAHOO.log(o.responseText);
+					domNode.innerHTML = "";
+					
+					for(var i = 0; i < response.length; i++){
+						var proj = new version(response[i]);
+						domNode.appendChild(proj.createHTML());
+					}
+				}else{
+					domNode.innerHTML = "";
 				}
 			},
 			failure: function(o) {

@@ -17,6 +17,8 @@ YAHOO.projectStringsManager = {
 			!YAHOO.projectManager.getSelected() ||
 			!YAHOO.versionManager.getSelected()
 		  ){
+			var domNode = document.getElementById('projecs-strings-area');
+			domNode.innerHTML = "";
 			return false;
 		} 
 	
@@ -65,11 +67,17 @@ YAHOO.projectStringsManager = {
 		tr = this.tableDom.insertRow(0);
 		tr.id = "translatable-strings-labels-area";
 		td = tr.insertCell(0);
-		td.innerHTML = "String";
+		td.innerHTML = "Label";
+		td.width = "10%";
 		td = tr.insertCell(1);
-		td.innerHTML = "Last Translation";
+		td.innerHTML = "String";
+		td.width = "20%";
 		td = tr.insertCell(2);
+		td.innerHTML = "Last Translation";
+		td.width = "50%";
+		td = tr.insertCell(3);
 		td.innerHTML = "Create On";
+		td.width = "20%";
 		
 		return this.tableDom;
 	},
@@ -112,16 +120,24 @@ projectString.prototype.clicked = function(e){
 	YAHOO.projectStringsManager.updateSelected(this);
 }
 projectString.prototype.createHTML = function(tr){
-	td = tr.insertCell(0);
-	td.innerHTML = this.data['text'];
-	
 	this.domElem = tr;
 
+	td = tr.insertCell(0);
+	td.innerHTML = this.data['label'];
+	td.width = "10%";
+
 	td = tr.insertCell(1);
-	td.innerHTML = this.data['translationString'];
+	td.innerHTML = this.data['text'];
+	td.width = "20%";
 	
+
 	td = tr.insertCell(2);
+	td.innerHTML = "<div style='width: 100%; overflow: hidden;'>"+this.data['translationString']+"</div>";
+	td.width = "50%";
+	
+	td = tr.insertCell(3);
 	td.innerHTML = this.data['createdOn'];
+	td.width = "20%";
 	
 	this.addEvents();
 

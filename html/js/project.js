@@ -12,14 +12,6 @@
 
 YAHOO.projectManager = {
 	getAjaxProject: function(selectedIn){
-		if(selectedIn){
-			this.selectedDBID = selectedIn;
-		}else{
-			this.selectedDBID = (YAHOO.projectManager.getSelected());
-			if(this.selectedDBID){
-			  this.selectedDBID = this.selectedDBID.project;
-			}
-		}
 		
 		var callback = 
 		{ 
@@ -33,10 +25,16 @@ YAHOO.projectManager = {
 				for(var i = 0; i < response.length; i++){
 					var proj = new project(response[i]['project']);
 					domNode.appendChild(proj.createHTML());
+					if(response[i]['current']){
+						YAHOO.projectManager.updateSelected(proj);
+					}	
 				}
 				
 	//			domNode.innerHTML = o.responseText;
 	//			YAHOO.util.Event.onAvailable("project-choices",setupSelectProjectCB);
+	
+				//start versions
+				YAHOO.versionManager.getAjaxVersions();
 			},
 			failure: function(o) {
 				YAHOO.log('failed!');
@@ -45,9 +43,6 @@ YAHOO.projectManager = {
 		YAHOO.util.Connect.asyncRequest('GET', "callback/getProjects.php", callback, null); 
 	},
 
-	getSelectedDBID: function(){
-		return this.selectedDBID;
-	},
 	getSelected: function(){
 //	YAHOO.log("projectManager getSelcted:"+this.selected);
 		return this.selected;
@@ -96,11 +91,5 @@ project.prototype.createHTML = function(){
 	this.domElem = document.createElement("li");
 	this.domElem.innerHTML = this.project;
 	this.addEvents();
-	
-YAHOO.log(this.project+" == "+YAHOO.projectManager.getSelectedDBID());	
-
-	if(this.project == YAHOO.projectManager.getSelectedDBID() | this == YAHOO.projectManager.getSelected() ){
-		YAHOO.projectManager.updateSelected(this);
-	}	
 	return this.domElem;
 }

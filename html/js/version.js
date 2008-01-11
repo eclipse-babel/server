@@ -12,7 +12,6 @@
 
 YAHOO.versionManager = {
 	getAjaxVersions: function(selectedIn){
-		this.selectedDBID = selectedIn;
 		var callback = 
 		{ 
 			start:function(eventType, args){ 
@@ -27,10 +26,17 @@ YAHOO.versionManager = {
 					for(var i = 0; i < response.length; i++){
 						var proj = new version(response[i]);
 						domNode.appendChild(proj.createHTML());
+						if(response[i]['current']){
+							YAHOO.versionManager.updateSelected(proj);
+						}
+						
+						
 					}
 				}else{
 					domNode.innerHTML = "";
 				}
+				
+				YAHOO.projectStringsManager.getAjaxProjectStrings();
 			},
 			failure: function(o) {
 				YAHOO.log('failed!');
@@ -39,9 +45,6 @@ YAHOO.versionManager = {
 		YAHOO.util.Connect.asyncRequest('GET', "callback/getVersionsforProject.php", callback, null); 
 	},
 
-	getSelectedDBID: function(){
-		return this.selectedDBID;
-	},
 	getSelected: function(){
 		return this.selected;
 	},
@@ -87,10 +90,6 @@ version.prototype.createHTML = function(){
 	this.domElem = document.createElement("li");
 	this.domElem.innerHTML = this.version;
 	this.addEvents();
-	
-	if(this.version == YAHOO.versionManager.getSelectedDBID()){
-		YAHOO.versionManager.updateSelected(this);
-	}
 	return this.domElem;
 }
 

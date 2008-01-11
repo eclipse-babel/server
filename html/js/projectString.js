@@ -11,8 +11,8 @@
 *******************************************************************************/
 
 YAHOO.projectStringsManager = {
-	getAjaxProjectStrings : function(selectedIn){
-	
+	getAjaxProjectStrings : function(){
+
 		if(!YAHOO.languageManager.getSelected() || 
 			!YAHOO.projectManager.getSelected() ||
 			!YAHOO.versionManager.getSelected()
@@ -22,7 +22,6 @@ YAHOO.projectStringsManager = {
 			return false;
 		} 
 	
-		this.selectedDBID = selectedIn;
 		var callback = 
 		{ 
 			sp : this,
@@ -82,9 +81,6 @@ YAHOO.projectStringsManager = {
 		return this.tableDom;
 	},
 	
-	getSelectedDBID: function(){
-		return this.selectedDBID;
-	},
 	getSelected: function(){
 		return this.selected;
 	},
@@ -140,9 +136,5 @@ projectString.prototype.createHTML = function(tr){
 	td.width = "20%";
 	
 	this.addEvents();
-
-	if(this.data['stringId'] == YAHOO.projectStringsManager.getSelectedDBID()){
-		YAHOO.projectStringManager.updateSelected(this);
-	}
 }
 

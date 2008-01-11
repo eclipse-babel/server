@@ -85,29 +85,10 @@ include("head.php");
 	
 </div>
 
+<script>YAHOO.languageManager.getAjaxLanguages();</script>
+
 <?php
-	if(!$_SESSION['language']){
-		//NO LANGUAGE SELECT FOR EDITING
-		?><script>YAHOO.languageManager.getAjaxLanguages();</script><?php
-	}else{
-		//SHOW CURRENT LANGUAGE
-		?><script>YAHOO.languageManager.getAjaxLanguages("<?=$_SESSION['language'];?>");</script><?php
-		
-		//LIST PROJECTS TO EDIT
-		if(!$_SESSION['project']){
-			?><script>YAHOO.projectManager.getAjaxProject("<?=$_SESSION['project'];?>");</script><?php
-		}else{
-			?><script>YAHOO.projectManager.getAjaxProject("<?=$_SESSION['project'];?>");</script><?php
-			if(!$_SESSION['version']){
-				?><script>YAHOO.versionManager.getAjaxVersions("<?=$_SESSION['version'];?>");</script><?php
-			}else{
-				?>
-				<script>YAHOO.versionManager.getAjaxVersions("<?=$_SESSION['version'];?>");</script>
-				<script>YAHOO.projectStringsManager.getAjaxProjectStrings();</script>
-				<?php
-			}
-		}
-	}
+
 		
 	include("foot.php");
 ?>

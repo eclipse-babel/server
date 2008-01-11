@@ -50,8 +50,8 @@ $line = mysql_fetch_array($res, MYSQL_ASSOC);
 	</div>
 	
 	<div id="translation-textarea" class="side-component">
-		<h4>Your New Translation</h4>
-		<textarea style='display: inline; width: 390px; height: 150px;' name="translation"></textarea>
+		<h4>Current Translation</h4>
+		<textarea style='display: inline; width: 390px; height: 150px;' name="translation"><?= nl2br($line['translation_value']);?></textarea>
 		<br>
 		<input type="submit" value="translate">
 	</div>

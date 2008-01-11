@@ -35,6 +35,9 @@ while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
 	$ret = Array();
 	$ret['project'] = $line['project_id'];
 //	$ret['version'] = $line['version'];
+	if($line['project_id'] == $_SESSION['project']){
+		$ret['current'] = true;
+	}
 	$return[] = $ret;
 }
 //	$return .= '<li><a href="project_id='.$line['project_id'].'">'.$line['project_id'].'</a>';

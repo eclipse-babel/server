@@ -12,7 +12,6 @@
 
 YAHOO.languageManager = {
 	getAjaxLanguages: function(selectedIn){
-		this.selectedDBID = selectedIn;
 		var callback = 
 		{ 
 			start:function(eventType, args){ 
@@ -23,11 +22,18 @@ YAHOO.languageManager = {
 				}
 				var response = eval("("+o.responseText+")");
 				var domNode = document.getElementById('language-area');
-				YAHOO.log(o.responseText);
+//				YAHOO.log(o.responseText);
+
 				for(var i = 0; i < response.length; i++){
 					var proj = new language(response[i]);
 					domNode.appendChild(proj.createHTML());
+					if(response[i]['current']){
+						YAHOO.languageManager.updateSelected(proj);
+					}
 				}
+				
+				//start project
+				YAHOO.projectManager.getAjaxProject();
 			},
 			failure: function(o) {
 				YAHOO.log('failed!');
@@ -36,9 +42,6 @@ YAHOO.languageManager = {
 		YAHOO.util.Connect.asyncRequest('GET', "callback/getLanguages.php", callback, null); 
 	},
 
-	getSelectedDBID: function(){
-		return this.selectedDBID;
-	},
 	getSelected: function(){
 		return this.selected;
 	},
@@ -92,8 +95,5 @@ language.prototype.createHTML = function(){
 	this.domElem.innerHTML = this.name+"("+this.iso+")";
 	this.addEvents();
 	
-	if(this.languageId == YAHOO.languageManager.getSelectedDBID()){
-		YAHOO.languageManager.updateSelected(this);
-	}
 	return this.domElem;
 }

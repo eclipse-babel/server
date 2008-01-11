@@ -40,7 +40,7 @@ $query = "select
 		  limit 1
 			";
 
-print $query;
+//print $query;
 
 $res = mysql_query($query,$dbh);
 

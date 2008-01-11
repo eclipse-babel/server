@@ -18,6 +18,9 @@ $pageKeywords 	= "translation,language,nlpack,pack,eclipse,babel";
 
 include("head.php");
 
+//$_SESSION['language'] = "";
+//$_SESSION['project'] = "";
+//$_SESSION['version'] = "";
 ?>
 
 <h1 id="page-message">Welcome to the Babel Project</h1>

@@ -16,6 +16,8 @@ require_once("cb_global.php");
 
 $string_id = $App->getHTTPParameter("string_id", "POST");
 
+$language = $_SESSION['language'];
+
 $query = "select 
 			strings.string_id,
 			strings.value as string_value,
@@ -24,7 +26,11 @@ $query = "select
 		  from
 		  	strings
 		  	left join translations on
-		  		(strings.string_id = translations.string_id and translations.is_active != 0)
+		  		(strings.string_id = translations.string_id 
+		  		 and 
+		  		 translations.is_active != 0 
+		  		 and 
+		  		 translations.language_id = '".addslashes($language)."')
 		  where
 		  	strings.is_active != 0
 		  and
@@ -33,6 +39,8 @@ $query = "select
 		  order by translations.version desc
 		  limit 1
 			";
+
+print $query;
 
 $res = mysql_query($query,$dbh);
 

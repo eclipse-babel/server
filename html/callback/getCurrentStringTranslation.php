@@ -17,6 +17,7 @@ require_once("cb_global.php");
 $string_id = $App->getHTTPParameter("string_id", "POST");
 
 $language = $_SESSION['language'];
+$version = $_SESSION['version'];
 
 $query = "select 
 			strings.string_id,
@@ -24,6 +25,7 @@ $query = "select
 			translations.value as translation_value,
 			max(translations.version)
 		  from
+		  	files,
 		  	strings
 		  	left join translations on
 		  		(strings.string_id = translations.string_id 
@@ -35,6 +37,10 @@ $query = "select
 		  	strings.is_active != 0
 		  and
 			  strings.string_id = '".addslashes($string_id)."'
+		  and
+		  	  strings.file_id = files.file_id
+		  and
+		  	  files.version = '".addslashes($version)."'
 		  group by translations.version
 		  order by translations.version desc
 		  limit 1

@@ -133,6 +133,35 @@ switch($state){
 //				  	translations.string_id is null
 //				  and
 		
+		
+		
+		$query = "select 
+					strings.string_id as stringId,
+					strings.value as text,
+					strings.created_on as createdOn,
+					translations.value as translationString,
+					max(translations.version)
+				from 
+					files,
+				  	strings
+				  	
+				  	left join translations on (
+				  		translations.language_id = '".addslashes($language)."'
+				  	  and
+				  		translations.string_id  = strings.string_id
+				  	)
+				  where 
+				  	strings.is_active = 1 
+				  and 
+					files.file_id = strings.file_id
+				  and	
+					files.version = '".addslashes($version)."'
+				  and 
+					files.project_id = '".addslashes($project_id)."'
+							
+  				  group by strings.string_id,translations.version desc
+				";
+		
 	
 }
 

@@ -54,6 +54,23 @@ CREATE TABLE `languages` (
   KEY `locale` (`locale`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+
+--
+-- Table structure for table `map_files`
+--
+
+DROP TABLE IF EXISTS `map_files`;
+CREATE TABLE `map_files` (
+  `project_id` varchar(100) NOT NULL,
+  `version` varchar(64) NOT NULL,
+  `filename` varchar(100) NOT NULL,
+  `location` varchar(255) NOT NULL,
+  `is_active` tinyint(3) unsigned NOT NULL default '1',
+  PRIMARY KEY  (`project_id`, `version`, `filename`),
+  CONSTRAINT `map_files_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --
 -- Table structure for table `profiles`
 --

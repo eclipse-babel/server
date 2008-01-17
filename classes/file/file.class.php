@@ -16,18 +16,18 @@ class File {
   
   public $file_id		= 0;
   public $project_id	= '';
+  public $version		= '';
   public $name			= '';
   public $is_active 	= 0;
 
 	
 	function save() {
 		$rValue = false;
-		if($this->name != "" && $this->project_id != "") {
+		if($this->name != "" && $this->project_id != "" && $this->version > 0) {
 			global $App, $dbh;
 
-			
 			if($this->file_id == 0) {
-				$this->file_id = $this->getFileID($this->name, $this->project_id);
+				$this->file_id = $this->getFileID($this->name, $this->project_id, $this->version);
 			}
 			
 			$sql 	= "INSERT INTO";
@@ -42,6 +42,7 @@ class File {
 			$sql .= " files 
 						SET file_id 	= " . $App->sqlSanitize($this->file_id, $dbh) . ",
 							project_id	= " . $App->returnQuotedString($App->sqlSanitize($this->project_id, $dbh)) . ", 
+							version		= " . $App->sqlSanitize($this->version, $dbh) . ", 
 							name		= " . $App->returnQuotedString($App->sqlSanitize($this->name, $dbh)) . ",
 							is_active	= 1" . $where;
 			if(mysql_query($sql, $dbh)) {
@@ -59,16 +60,17 @@ class File {
 		return $rValue;
 	}
 	
-	function getFileID($_name, $_project_id) {
+	function getFileID($_name, $_project_id, $_version) {
 		$rValue = 0;
-		if($this->name != "" && $this->project_id != "") {
+		if($this->name != "" && $this->project_id != "" && $_version > 0) {
 			global $App, $dbh;
 
 			$sql = "SELECT file_id
 				FROM 
 					files 
 				WHERE name = " . $App->returnQuotedString($App->sqlSanitize($_name, $dbh)) . "
-					AND project_id = " . $App->returnQuotedString($App->sqlSanitize($_project_id, $dbh));	
+					AND project_id = " . $App->returnQuotedString($App->sqlSanitize($_project_id, $dbh)) . "	
+					AND version = " . $App->sqlSanitize($_version, $dbh);
 
 			$result = mysql_query($sql, $dbh);
 			if($result && mysql_num_rows($result) > 0) {
@@ -89,11 +91,17 @@ class File {
 			$lines = explode("\n", $_content);
 			foreach($lines as $line) {
 				if(strlen($line) > 0 && $line[0] != "#" && $line[0] != ";") {
+					
+					#TODO: valid lines ending with \ mean the next line is a continuation, like UNIX!!
+					
 					$tags = explode("=", trim($line), 2);
 					if(count($tags) > 1) {
 						if($rValue != "") {
 							$rValue .= ",";
 						}
+						$tags[0] = trim($tags[0]);
+						$tags[1] = trim($tags[1]);
+						
 						$rValue .= $tags[0];
 						
 						$String = new String();
@@ -129,6 +137,5 @@ class File {
 		}
 		return $rValue;
 	}
-	
 }
 ?>

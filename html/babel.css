@@ -15,7 +15,7 @@ li{
 	height: 1px;
 	}
 #container{	margin: 10px auto;
-	width: 1202px;
+	width: 1001px;
 }
 
 #contentArea{
@@ -42,7 +42,7 @@ h2{
 
 .side-component{
 	float: left;	
-	width: 400px;
+	width: 333px;
 }
 	
 #translatable-strings-labels-area,

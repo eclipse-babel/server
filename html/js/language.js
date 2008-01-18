@@ -63,7 +63,8 @@ function language(dataIn){
 	
 	this.languageId = dataIn['language_id'];
 	this.name = dataIn['name'];
-	this.iso = dataIn['iso'];
+	this.iso = dataIn['iso_code'];
+	this.locale = dataIn['locale'];
 }
 
 YAHOO.extend(language,selectable);
@@ -92,7 +93,10 @@ language.prototype.clicked = function(e){
 }
 language.prototype.createHTML = function(){
 	this.domElem = document.createElement("li");
-	this.domElem.innerHTML = this.name+"("+this.iso+")";
+	this.domElem.innerHTML = this.name;
+	if(this.locale){
+		this.domElem.innerHTML += "("+this.locale+")";
+	}
 	this.addEvents();
 	
 	return this.domElem;

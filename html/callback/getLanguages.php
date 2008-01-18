@@ -13,7 +13,7 @@
 
 require_once("cb_global.php");
 
-$query = "select * from languages where is_active = 1 and language_id != 1";
+$query = "select * from languages where is_active = 1 and language_id != 1 order by name";
 
 $res = mysql_query($query,$dbh);
 
@@ -27,8 +27,6 @@ while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
     }
 	$return[] = $line;
 }
-
-//print_r($return);
 
 print json_encode($return);
 exit();

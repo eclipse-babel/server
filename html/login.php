@@ -36,7 +36,7 @@ if($SUBMIT == "Login") {
 			$Session = new Session();
 			$Session->create($User->userid, $REMEMBER);
 			SetSessionVar('User', $User);
-			exitTo("index.php");
+			exitTo("translate.php");
 		}
 	}
 	else {

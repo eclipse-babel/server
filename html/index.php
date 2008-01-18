@@ -11,7 +11,7 @@
  *    Eclipse Foundation
 *******************************************************************************/
 require("global.php");
-InitPage("login");
+InitPage("");
 
 $pageTitle 		= "Babel Project";
 $pageKeywords 	= "translation,language,nlpack,pack,eclipse,babel";
@@ -24,68 +24,46 @@ include("head.php");
 ?>
 
 <h1 id="page-message">Welcome to the Babel Project</h1>
-<div id="contentArea">
-
-	<h2>Languages / Projects / Versions</h2>
-	<div id="language" class="side-component">
-		<h4 id="language-selection">Langues</h4>
-		<ul id="language-area"class="scrollable-area"></ul>
-	</div>
-
-	<div id="project" class="side-component">
-		<h4 id="project-selection">Projects</h4>
-		<ul id="project-area" class="scrollable-area"></ul>
+<div>
+	<h2>Eclipse in your language</h2>
+	
+	<div style='float: right; border: 0px solid black; background-color: lightblue;'>
+		<h3 style='margin: 0px; padding: 0px;'>Login to Babel</h3>
+		<form name="frmLogin" method="post" action="login.php">
+			<table cellspacing=4 cellpadding=0 border=0>
+			<tr>
+			  <td id="formLbl">Email:</td><td style='text-align:left;'><input type="text" name="username" value="<?= $USERNAME ?>" size="20" maxlength="255" /></td>
+			</tr>
+			<tr>
+			  <td id="formLbl">Password:</td><td style='text-align:left;'><input type="password" name="password" value="<?= $PASSWORD ?>" size="20" maxlength="255" /></td> 
+			</tr>
+			<tr>
+			  <td></td><td style='text-align:left;'><input type="checkbox" name="remember" value="1" <?= $REMEMBER ?> />remember me </td>
+			</tr>
+			<tr>
+			  <td></td><td style='text-align:left;'><input type="submit" name="submit" value="Login" style="font-size:14px;" /></td></tr>
+			</table>
+		</form>
 	</div>
 	
-	<div id="project" class="side-component">
-		<h4 id="version-selection">Versions</h4>
-		<ul id="version-area" class="scrollable-area"></ul>
-	</div>
-	
+	<p>Eclipse is a part of the global community of open source projects. 
+	 It is in everyone’s interest to ensure that Eclipse is available and translated in as many locales as possible. 
+	 The Babel project is a set of open tools to make the job of globalizing Eclipse projects easier. 
+	 Babel provides ways for people world wide, who are interested, to contribute translations in their language of choice.
+	 </p>
+
 	<div class="clearing"></div>
-	
-	
-<!--  	
-<script type="text/javascript"> 
-	var myTabs = new YAHOO.widget.TabView("string-area"); 
-</script>  
--->
+	<h2>Who can help?</h2>
+	<p>Anyone who knows more than one language can become become a star translator for any of the Eclipse projects.  
+	You don't need to be a developer to help out on this project, just a desire to contribute to one of the best open source project, Eclipse.
+	</p>
 
-
-	
-	<div id="string-area" class="yui-navset full-component">
-	<h2>Translatable Strings</h2>
-<!--
-	    <ul class="yui-nav"> 
-        <li class="selected"><a href="#tab1"><em>Untranslated</em></a></li> 
-	        <li><a href="#tab2"><em>Flagged Incorrect</em></a></li> 
-	        <li><a href="#tab3"><em>Awaiting Rating</em></a></li> 
-	    </ul>             
-  	  	<div class="yui-content" style="clear: both;"> 
-			<div id="not-translated">
-			</div>
-			
-			<ul id="flagged-incorrect">
-			</ul>
-			
-			<ul id="awaiting-ratings">
-			</ul>
-		</div>
-	    
--->	    
-  	  	<div id="projecs-strings-area" class="yui-content"> </div>
-		
-		<div id="not-translated"></div>
-	</div>
-	
-	
-	<div id="translation-area" class="full-component">
-	   <h2>String Translation</h2>
-	   <div id="translation-form-container"></div>
-	</div>
-	
+	<h2>How do I get started?</h2>
+ 	<p>All you need to contribute translations is an active Eclipse bugzilla account and some spare time.  
+ 	So what are you waiting for?
+ 	</p>
+ 	
 	<div class="clearing"></div>
-	
 </div>
 
 <script>YAHOO.languageManager.getAjaxLanguages();</script>

@@ -139,8 +139,7 @@ switch($state){
 					strings.string_id as stringId,
 					strings.value as text,
 					strings.created_on as createdOn,
-					translations.value as translationString,
-					max(translations.version)
+					translations.value as translationString
 				from 
 					files,
 				  	strings
@@ -149,6 +148,8 @@ switch($state){
 				  		translations.language_id = '".addslashes($language)."'
 				  	  and
 				  		translations.string_id  = strings.string_id
+				  	  and 
+				  	  	translations.is_active = 1
 				  	)
 				  where 
 				  	strings.is_active = 1 
@@ -158,7 +159,6 @@ switch($state){
 					files.version = '".addslashes($version)."'
 				  and 
 					files.project_id = '".addslashes($project_id)."'
-							
   				  group by strings.string_id,translations.version desc
 				";
 		

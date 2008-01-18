@@ -65,18 +65,18 @@ YAHOO.projectStringsManager = {
 		
 		tr = this.tableDom.insertRow(0);
 		tr.id = "translatable-strings-labels-area";
+//		td = tr.insertCell(0);
+//		td.innerHTML = "Label";
+//		td.width = "10%";
 		td = tr.insertCell(0);
-		td.innerHTML = "Label";
-		td.width = "10%";
-		td = tr.insertCell(1);
 		td.innerHTML = "String";
-		td.width = "20%";
-		td = tr.insertCell(2);
+		td.width = "38%";
+		td = tr.insertCell(1);
 		td.innerHTML = "Last Translation";
 		td.width = "50%";
-		td = tr.insertCell(3);
+		td = tr.insertCell(2);
 		td.innerHTML = "Create On";
-		td.width = "20%";
+		td.width = "12%";
 		
 		return this.tableDom;
 	},
@@ -87,7 +87,6 @@ YAHOO.projectStringsManager = {
 	
 	updateSelected: function(selec){
 		if(this.selected){
-YAHOO.log("removed!!!!!!!!");	
 			this.selected.unselect();
 		}
 		this.selected = selec;
@@ -118,22 +117,22 @@ projectString.prototype.clicked = function(e){
 projectString.prototype.createHTML = function(tr){
 	this.domElem = tr;
 
+//	td = tr.insertCell(0);
+//	td.innerHTML = this.data['label'];
+//	td.width = "10%";
+
 	td = tr.insertCell(0);
-	td.innerHTML = this.data['label'];
-	td.width = "10%";
-
-	td = tr.insertCell(1);
 	td.innerHTML = this.data['text'];
-	td.width = "20%";
+	td.width = "38%";
 	
-
-	td = tr.insertCell(2);
-	td.innerHTML = "<div style='width: 100%; overflow: hidden;'>"+this.data['translationString']+"</div>";
+	td = tr.insertCell(1);
+	var temp = this.data['translationString'] ? this.data['translationString'] : ''
+	td.innerHTML = "<div style='width: 100%; overflow: hidden;'>"+temp+"</div>";
 	td.width = "50%";
 	
-	td = tr.insertCell(3);
+	td = tr.insertCell(2);
 	td.innerHTML = this.data['createdOn'];
-	td.width = "20%";
+	td.width = "12%";
 	
 	this.addEvents();
 }

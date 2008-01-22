@@ -88,30 +88,44 @@ class File {
 			global $User, $App;
 			
 			# step 1 - import existing strings.  $String->save() will deal with merges
-			$lines = explode("\n", $_content);
+			$previous_line 	= "";
+			$lines 			= explode("\n", $_content);
 			foreach($lines as $line) {
 				if(strlen($line) > 0 && $line[0] != "#" && $line[0] != ";") {
+					$line = trim($line);
 					
-					#TODO: valid lines ending with \ mean the next line is a continuation, like UNIX!!
-					
-					$tags = explode("=", trim($line), 2);
-					if(count($tags) > 1) {
-						if($rValue != "") {
-							$rValue .= ",";
+					# Does line end with a \ ?
+					if(preg_match("/ \\$", $line)) {
+						# Line ends with \
+						
+						# strip the backslash
+						$previous_line .= substr($line, 0, length($line) - 1);
+					}
+					else {
+						if($previous_line != "") {
+							$line 			= $previous_line . $line;
+							$previous_line 	= "";
 						}
-						$tags[0] = trim($tags[0]);
-						$tags[1] = trim($tags[1]);
-						
-						$rValue .= $tags[0];
-						
-						$String = new String();
-						$String->file_id 	= $this->file_id;
-						$String->name 		= $tags[0];
-						$String->value 		= $tags[1];
-						$String->userid 	= $User->userid;
-						$String->created_on = $App->getCURDATE();
-						$String->is_active 	= 1;
-						$String->save();
+
+						$tags = explode("=", trim($line), 2);
+						if(count($tags) > 1) {
+							if($rValue != "") {
+								$rValue .= ",";
+							}
+							$tags[0] = trim($tags[0]);
+							$tags[1] = trim($tags[1]);
+							
+							$rValue .= $tags[0];
+							
+							$String = new String();
+							$String->file_id 	= $this->file_id;
+							$String->name 		= $tags[0];
+							$String->value 		= $tags[1];
+							$String->userid 	= $User->userid;
+							$String->created_on = $App->getCURDATE();
+							$String->is_active 	= 1;
+							$String->save();
+						}
 					}
 				}
 			}

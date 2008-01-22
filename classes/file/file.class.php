@@ -95,7 +95,7 @@ class File {
 					$line = trim($line);
 					
 					# Does line end with a \ ?
-					if(preg_match("/\\$/", $line)) {
+					if(preg_match("/\\\\$/", $line)) {
 						# Line ends with \
 						
 						# strip the backslash

@@ -95,11 +95,11 @@ class File {
 					$line = trim($line);
 					
 					# Does line end with a \ ?
-					if(preg_match("/ \\$", $line)) {
+					if(preg_match("/\\$/", $line)) {
 						# Line ends with \
 						
 						# strip the backslash
-						$previous_line .= substr($line, 0, length($line) - 1);
+						$previous_line .= $line . "\n";
 					}
 					else {
 						if($previous_line != "") {

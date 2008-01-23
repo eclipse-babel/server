@@ -113,9 +113,9 @@ $query = "SELECT
 				
 //print $query;
 
-$res = mysql_query($query,$dbh);
 
 /*
+$res = mysql_query($query,$dbh);
 while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 	print "<pre>--";
 	print_r($same_trans);
@@ -145,7 +145,8 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 		<h4>Current Translation</h4>
 		<textarea style='display: inline; width: 320px; height: 150px;' name="translation"><?= nl2br($line['translation_value']);?></textarea>
 		<br>
-		<input type="submit" value="translate">
+		<input type="submit" name="all_versions" value="All Versions">
+		<input type="submit" name="this_versions" value="Only Version <?=$_SESSION['version']?>">
 	</div>
 	
 	<div id="translation-history" class="side-component">

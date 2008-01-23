@@ -134,11 +134,10 @@ $query = "insert into
 		  				'".addslashes($user_id)."',
 						NOW()
 	  				FROM 
-					 	strings AS S 
 					 	
-					 	inner join files AS F 
-					 	on 
-					 		F.file_id = S.file_id 
+					 	files AS F ,
+					 		
+					 	strings AS S 
 					 		
 					 	left join translations AS T 
 					 	on (
@@ -147,7 +146,7 @@ $query = "insert into
 					 		T.string_id is null
 					 		)
  						and 
-					 		(T.value = (select translations.value from strings,translations where strings.string_id = '".addslashes($string_id)."' and translations.string_id = strings.string_id and translations.is_active = 1 limit 1) 
+					 		(T.value = (select translations.value from translations where translations.string_id = '".addslashes($string_id)."' and  translations.is_active = 1 limit 1) 
 					 		or
 					 		T.value is null)
  						 AND 
@@ -157,7 +156,8 @@ $query = "insert into
 					 		T.is_active is null
 					 	 )
 					 where 
-
+				 		F.file_id = S.file_id 
+					 AND					 
 					 	F.project_id = '".addslashes($project_id)."' 
 					 AND 
 					 	F.name in (SELECT files.name FROM files where project_id = '".addslashes($project_id)."')

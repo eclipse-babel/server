@@ -14,7 +14,7 @@ require_once("cb_global.php");
 
 
 $query = "select 
-			* 
+			distinct version,project_id
 		  from 
 		  	project_versions,
 		  	files

@@ -27,21 +27,26 @@ include("head.php");
 <div id="contentArea">
 
 	<h2>Languages / Projects / Versions</h2>
-	<div id="language" class="side-component">
+	<div id="language" class="side-component-small">
 		<h4 id="language-selection">Langues</h4>
 		<ul id="language-area"class="scrollable-area"></ul>
 	</div>
 
-	<div id="project" class="side-component">
+	<div id="project" class="side-component-small">
 		<h4 id="project-selection">Projects</h4>
 		<ul id="project-area" class="scrollable-area"></ul>
 	</div>
 	
-	<div id="project" class="side-component">
+	<div id="version" class="side-component-small">
 		<h4 id="version-selection">Versions</h4>
 		<ul id="version-area" class="scrollable-area"></ul>
 	</div>
-	
+
+	<div id="files" class="side-component-small files">
+		<h4 id="files-selection">Files</h4>
+		<ul id="files-area" class="scrollable-area"></ul>
+	</div>
+
 	<div class="clearing"></div>
 	
 	

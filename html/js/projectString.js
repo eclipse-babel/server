@@ -15,7 +15,8 @@ YAHOO.projectStringsManager = {
 
 		if(!YAHOO.languageManager.getSelected() || 
 			!YAHOO.projectManager.getSelected() ||
-			!YAHOO.versionManager.getSelected()
+			!YAHOO.versionManager.getSelected() ||
+			!YAHOO.filesManager.getSelected()
 		  ){
 			var domNode = document.getElementById('projecs-strings-area');
 			domNode.innerHTML = "";
@@ -43,10 +44,12 @@ YAHOO.projectStringsManager = {
 				var trCount = 0;
 				if(o.responseText){
 					var response = eval("("+o.responseText+")");					
+//					alert("about to start");
 					for(var i = 0; i < response.length; i++){
 						var proj = new projectString(response[i]);
 						var tr = this.sp.tableDom.insertRow(trCount);
 						proj.createHTML(tr);
+//						YAHOO.log("tr:"+response[i].text);
 						trCount++;
 					}
 				}

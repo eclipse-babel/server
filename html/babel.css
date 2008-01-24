@@ -45,6 +45,17 @@ h2{
 	width: 333px;
 }
 	
+	
+.side-component-small{
+	float: left;	
+	width: 120px;
+}
+
+.side-component-small+.files{
+	width: 639px;	
+}
+
+	
 #translatable-strings-labels-area,
 h4{
 	padding: 0px;

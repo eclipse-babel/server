@@ -26,6 +26,7 @@ if(!$proj_post){
 	$project_id = $_SESSION['project'];
 	$version =  $_SESSION['version'];
 	$language =  $_SESSION['language'];
+	$file =  $_SESSION['file'];
 }
 switch($state){
 	case "flagged" :
@@ -157,6 +158,8 @@ switch($state){
 					files.file_id = strings.file_id
 				  and	
 					files.version = '".addslashes($version)."'
+				  and
+				  	files.name = '".addslashes($file)."'
 				  and 
 					files.project_id = '".addslashes($project_id)."'
   				  group by strings.string_id,translations.version desc

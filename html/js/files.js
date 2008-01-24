@@ -10,24 +10,24 @@
  *    Eclipse Foundation
 *******************************************************************************/
 
-YAHOO.versionManager = {
-	getAjaxVersions: function(selectedIn){
+YAHOO.filesManager = {
+	getAjax: function(selectedIn){
 		var callback = 
 		{ 
 			start:function(eventType, args){ 
 			},
 			success: function(o) {
-				var domNode = document.getElementById('version-area');
+				var domNode = document.getElementById('files-area');
 				var response = eval("("+o.responseText+")");
 				if(response){
 	//				YAHOO.log(o.responseText);
 					domNode.innerHTML = "";
 					
 					for(var i = 0; i < response.length; i++){
-						var proj = new version(response[i]);
+						var proj = new afile(response[i]);
 						domNode.appendChild(proj.createHTML());
 						if(response[i]['current']){
-							YAHOO.versionManager.updateSelected(proj);
+							YAHOO.filesManager.updateSelected(proj);
 						}
 						
 						
@@ -36,13 +36,13 @@ YAHOO.versionManager = {
 					domNode.innerHTML = "";
 				}
 				
-				YAHOO.filesManager.getAjax();
+				YAHOO.projectStringsManager.getAjaxProjectStrings();
 			},
 			failure: function(o) {
 				YAHOO.log('failed!');
 			} 
 		} 
-		YAHOO.util.Connect.asyncRequest('GET', "callback/getVersionsforProject.php", callback, null); 
+		YAHOO.util.Connect.asyncRequest('GET', "callback/getFilesForProject.php", callback, null); 
 	},
 
 	getSelected: function(){
@@ -58,18 +58,18 @@ YAHOO.versionManager = {
 	}
 };
 
-function version(dataIn){
-	this.version = dataIn['version'];
-	version.superclass.constructor.call();
+function afile(dataIn){
+	this.filename = dataIn['name'];
+	afile.superclass.constructor.call();
 	this.initSelectable();
 }
-YAHOO.extend(version,selectable);
-version.prototype.isSelected = function(){
- return (this == YAHOO.versionManager.selected);
+YAHOO.extend(afile,selectable);
+afile.prototype.isSelected = function(){
+ return (this == YAHOO.filesManager.selected);
 }
 
 
-version.prototype.clicked = function(e){
+afile.prototype.clicked = function(e){
 	YAHOO.util.Event.stopEvent(e);
 	var callback = 
 	{ 
@@ -83,12 +83,12 @@ version.prototype.clicked = function(e){
 		} 
 	} 
 	var target = YAHOO.util.Event.getTarget(e);
-	YAHOO.versionManager.updateSelected(this);
-	YAHOO.util.Connect.asyncRequest('POST', "callback/setCurrentProjectVersion.php", callback, "version="+this.version);
+	YAHOO.filesManager.updateSelected(this);
+	YAHOO.util.Connect.asyncRequest('POST', "callback/setCurrentFile.php", callback, "file="+this.filename);
 }
-version.prototype.createHTML = function(){
+afile.prototype.createHTML = function(){
 	this.domElem = document.createElement("li");
-	this.domElem.innerHTML = this.version;
+	this.domElem.innerHTML = this.filename;
 	this.addEvents();
 	return this.domElem;
 }

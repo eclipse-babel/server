@@ -28,6 +28,8 @@ $query = "select
 		  	project_versions.project_id = '".addslashes($_SESSION['project'])."'
 		  and
 		  	files.version = '".addslashes($_SESSION['version'])."'
+		  order by
+		  	files.name
 		  	";
 
 //print $query."\n";

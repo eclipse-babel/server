@@ -15,7 +15,6 @@ define('USE_PHOENIX', 		true);
 define("COOKIE_REMEMBER",	"cBABEL");
 define("COOKIE_SESSION" ,	"sBABEL");
 
-
 # Load up Phoenix classes
 global $App;
 if(USE_PHOENIX) {
@@ -25,6 +24,16 @@ if(USE_PHOENIX) {
 	$App 	= new App();
 	$Nav	= new Nav();
 	$Menu 	= new Menu();
+	$MenuItemList = array();
+	$MenuItemList[0] = new MenuItem("Home", "./", "_self", 0);
+	$MenuItemList[1] = new MenuItem("For committers", "map_files.php", "_self", 0);
+	$MenuItemList[2] = new MenuItem("About Babel", "http://www.eclipse.org/babel", "_self", 0);
+	$Menu->setMenuItemList($MenuItemList);
+	
+	# set Phoenix defaults to prevent errors. These can be overridden on the page.
+	$pageTitle		= "";
+	$pageAuthor		= "";
+	$pageKeywords	= "";
 }
 $GLOBALS['g_LOADTIME'] = microtime();
 require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");

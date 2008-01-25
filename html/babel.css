@@ -35,6 +35,18 @@ h2{
 	padding: 2px;
 }
 
+h3{
+	padding: 0px;
+	margin: 0px;	
+	margin-top: .5em;
+	font-size: .9em;
+}
+
+p{
+	padding: .5em;
+	margin: 0px;	
+}
+
 #contentArea{
 	font-size: 12px;
 }

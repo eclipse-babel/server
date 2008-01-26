@@ -72,24 +72,23 @@ function setupTranslatFormCB(){
 	YAHOO.util.Event.addListener("translation-form","submit",translationSumbit);
 }
 
+
 function translationSumbit(e){
 	YAHOO.util.Event.stopEvent(e);
 	var target = YAHOO.util.Event.getTarget(e);
-
+		
 	var callback = 
 	{ 
 		start:function(eventType, args){ 
 		},
 		success: function(o) {
-//			YAHOO.log(o.responseText);
 			YAHOO.projectStringsManager.getAjaxProjectStrings();
 		},
 		failure: function(o) {
 			YAHOO.log('failed!');
 		} 
 	} 
-	YAHOO.util.Connect.asyncRequest('POST', "callback/setStringTranslation.php", callback, "string_id="+target.string_id.value+"&translation="+target.translation.value);
+	
+	YAHOO.util.Connect.asyncRequest('POST', "callback/setStringTranslation.php", callback, "string_id="+target.string_id.value+"&translation="+target.translation.value+"&translate_action="+e.explicitOriginalTarget.value);
 }
-
-
 

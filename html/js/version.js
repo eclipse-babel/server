@@ -76,7 +76,7 @@ version.prototype.clicked = function(e){
 		start:function(eventType, args){ 
 		},
 		success: function(o) {
-			YAHOO.projectStringsManager.getAjaxProjectStrings();
+			YAHOO.filesManager.getAjax();
 		},
 		failure: function(o) {
 			YAHOO.log('failed!');

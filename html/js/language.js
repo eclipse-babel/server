@@ -22,6 +22,9 @@ YAHOO.languageManager = {
 				}
 				var response = eval("("+o.responseText+")");
 				var domNode = document.getElementById('language-area');
+				if(!domNode){
+					return false;
+				}
 //				YAHOO.log(o.responseText);
 
 				for(var i = 0; i < response.length; i++){

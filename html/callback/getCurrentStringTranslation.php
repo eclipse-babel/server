@@ -145,14 +145,16 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 		<h4>Current Translation</h4>
 		<textarea style='display: inline; width: 320px; height: 150px;' name="translation"><?= nl2br($line['translation_value']);?></textarea>
 		<br>
-		<input type="submit" name="all_versions" value="All Versions">
-		<input type="submit" name="this_versions" value="Only Version <?=$_SESSION['version']?>">
+		<input type="submit" name="translateAction" value="All Versions" nClick="translationSumbit(this.form,this);">
+		<input type="submit" name="translateAction" value="Only Version <?=$_SESSION['version']?>" nClick="translationSumbit(this.form,this);">
 	</div>
 	
 	<div id="translation-history" class="side-component">
 		<h4>History of Translations</h4>
 		<div id="translation-history">Coming soon!</div>
 	</div>
+	
+	
 	
 	
 </form>

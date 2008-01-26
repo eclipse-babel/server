@@ -26,7 +26,7 @@ include("head.php");
 <h1 id="page-message">Welcome to the Babel Project</h1>
 <div id="contentArea">
 
-	<h2>Languages / Projects / Versions</h2>
+	<h2>Languages / Projects / Versions / Files</h2>
 	<div id="language" class="side-component-small">
 		<h4 id="language-selection">Langues</h4>
 		<ul id="language-area"class="scrollable-area"></ul>

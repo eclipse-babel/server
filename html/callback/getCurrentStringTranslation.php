@@ -57,6 +57,7 @@ $line = mysql_fetch_array($res, MYSQL_ASSOC);
 
 //print_r($line);
 
+$trans = "";
 
 if($line['translation_value']){
 	$trans = " AND translations.value = '".addslashes($line['translation_value'])."'  			
@@ -153,8 +154,5 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 		<h4>History of Translations</h4>
 		<div id="translation-history">Coming soon!</div>
 	</div>
-	
-	
-	
 	
 </form>

@@ -11,7 +11,7 @@
  *    Eclipse Foundation
 *******************************************************************************/
 
-if(defined(BABEL_BASE_DIR)){
+if(defined('BABEL_BASE_DIR')){
 	require_once(BABEL_BASE_DIR."html/global.php");
 }else{
 	define('BABEL_BASE_DIR', "../../");
@@ -21,7 +21,7 @@ if(defined(BABEL_BASE_DIR)){
 InitPage("login");
 
 
-if( !function_exists(json_encode) ){
+if( !function_exists('json_encode') ){
 	require("/home/data/httpd/babel.eclipse.org/html/json_encode.php");
  
 	function json_encode($encode){

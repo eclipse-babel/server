@@ -10,7 +10,9 @@
  *    Paul Colton (Aptana)- initial API and implementation
  *    Eclipse Foundation
 *******************************************************************************/
-define('BABEL_BASE_DIR', "../");
+if(!defined('BABEL_BASE_DIR')){
+	define('BABEL_BASE_DIR', "../");
+}
 define('USE_PHOENIX', 		true);
 define("COOKIE_REMEMBER",	"cBABEL");
 define("COOKIE_SESSION" ,	"sBABEL");

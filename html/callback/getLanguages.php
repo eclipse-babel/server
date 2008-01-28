@@ -13,6 +13,8 @@
 
 require_once("cb_global.php");
 
+
+
 $query = "select * from languages where is_active = 1 and language_id != 1 order by name";
 
 $res = mysql_query($query,$dbh);
@@ -22,7 +24,7 @@ $return = Array();
 
 while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
 //	$return .= "<li><a href='?language_id=".$line['language_id']."'>".$line['iso_code']. " - ". $line['name']. "</a>";
-    if($line['language_id'] == $_SESSION['language']){
+    if(isset($_SESSION['language']) and $line['language_id'] == $_SESSION['language']){
     	$line['current'] = true;
     }
 	$return[] = $line;

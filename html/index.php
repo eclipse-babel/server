@@ -21,6 +21,12 @@ include("head.php");
 //$_SESSION['language'] = "";
 //$_SESSION['project'] = "";
 //$_SESSION['version'] = "";
+
+$USERNAME 	= $App->getHTTPParameter("username", "POST");
+$PASSWORD 	= $App->getHTTPParameter("password", "POST");
+$REMEMBER 	= $App->getHTTPParameter("remember", "POST");
+$SUBMIT 	= $App->getHTTPParameter("submit", "POST");
+
 ?>
 
 <h1 id="page-message">Welcome to the Babel Project</h1>
@@ -83,7 +89,5 @@ include("head.php");
 <script>YAHOO.languageManager.getAjaxLanguages();</script>
 
 <?php
-
-		
 	include("foot.php");
 ?>

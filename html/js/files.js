@@ -18,7 +18,10 @@ YAHOO.filesManager = {
 			},
 			success: function(o) {
 				var domNode = document.getElementById('files-area');
-				var response = eval("("+o.responseText+")");
+				var response;
+				if(o.responseText){
+					response =  eval("("+o.responseText+")");
+				}
 				if(response){
 	//				YAHOO.log(o.responseText);
 					domNode.innerHTML = "";
@@ -35,7 +38,6 @@ YAHOO.filesManager = {
 				}else{
 					domNode.innerHTML = "";
 				}
-				
 				YAHOO.projectStringsManager.getAjaxProjectStrings();
 			},
 			failure: function(o) {

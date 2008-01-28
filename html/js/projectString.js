@@ -13,6 +13,7 @@
 YAHOO.projectStringsManager = {
 	getAjaxProjectStrings : function(){
 
+
 		if(!YAHOO.languageManager.getSelected() || 
 			!YAHOO.projectManager.getSelected() ||
 			!YAHOO.versionManager.getSelected() ||

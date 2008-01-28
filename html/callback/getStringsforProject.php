@@ -22,11 +22,18 @@ $version = $App->getHTTPParameter("version", "POST");
 //	AWAITING (TRANSLATED BUT NO RAITINGS YET)
 $state = $App->getHTTPParameter("state", "POST"); 
 
-if(!$proj_post){
-	$project_id = $_SESSION['project'];
-	$version =  $_SESSION['version'];
-	$language =  $_SESSION['language'];
-	$file =  $_SESSION['file'];
+if(!isset($proj_post)){
+	if(isset($_SESSION['project']))
+		$project_id = $_SESSION['project'];
+		
+	if(isset($_SESSION['version']))
+		$version =  $_SESSION['version'];
+		
+	if(isset($_SESSION['language']))
+		$language =  $_SESSION['language'];
+		
+	if(isset($_SESSION['file']))
+		$file =  $_SESSION['file'];
 }
 switch($state){
 	case "flagged" :
@@ -177,7 +184,7 @@ $res = mysql_query($query,$dbh);
 $stringids = Array();
 $return = Array();
 while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
-    if($stringids[$line['stringId']] ){
+    if(isset($stringids[$line['stringId']])){
  		  continue;
     }else{
 		$return[] = $line;

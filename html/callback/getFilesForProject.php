@@ -12,7 +12,6 @@
 *******************************************************************************/
 require_once("cb_global.php");
 
-
 $query = "select 
 			DISTINCT files.name
 		  from 
@@ -39,7 +38,8 @@ $res = mysql_query($query,$dbh);
 while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
 	$ret = Array();
 	$ret['name'] = $line['name'];
-	if($line['file'] == $_SESSION['file']){
+	
+	if(isset($_SESSION['file']) and $line['name'] == $_SESSION['file']){
 		$ret['current'] = true;
 	}
 	$return[] = $ret;

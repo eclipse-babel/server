@@ -18,7 +18,10 @@ YAHOO.versionManager = {
 			},
 			success: function(o) {
 				var domNode = document.getElementById('version-area');
-				var response = eval("("+o.responseText+")");
+				var response;
+				if(o.responseText){
+					response = eval("("+o.responseText+")");
+				}
 				if(response){
 	//				YAHOO.log(o.responseText);
 					domNode.innerHTML = "";

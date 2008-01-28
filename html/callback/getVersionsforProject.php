@@ -13,6 +13,11 @@
 require_once("cb_global.php");
 
 
+
+if(!isset($_SESSION['project'])){
+	return array();
+}
+
 $query = "select 
 			DISTINCT files.version,files.project_id
 		  from 
@@ -34,7 +39,7 @@ $res = mysql_query($query,$dbh);
 while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
 	$ret = Array();
 	$ret['version'] = $line['version'];
-	if($line['version'] == $_SESSION['version']){
+	if(isset($_SESSION['version']) and $line['version'] == $_SESSION['version']){
 		$ret['current'] = true;
 	}
 	$return[] = $ret;

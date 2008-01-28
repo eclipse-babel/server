@@ -60,11 +60,11 @@ p{
 	
 .side-component-small{
 	float: left;	
-	width: 120px;
+	width: 130px;
 }
 
 .side-component-small+.files{
-	width: 639px;	
+	width: 609px;	
 }
 
 	

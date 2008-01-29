@@ -169,7 +169,6 @@ CREATE TABLE `strings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/* If a string is updated (and changed), need to set all translations as possibly_incorrect  */
 DELIMITER ;;
 CREATE TRIGGER `upd_string` AFTER UPDATE ON `strings` FOR EACH ROW 
   BEGIN

@@ -152,20 +152,7 @@ while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
 			 */
 			$fullpath =  $temporary_dir . $filename;
 			preg_match( "/^((.*)\/)?(.+?)$/", $fullpath, $matches );
-			$dirs1 = split( "\/", $matches[1] );
-			$dirs2 = array();
-			$d = '';
-			foreach ( $dirs1 as $each ) {
-				if( $each ) {
-					$d .= $each . '/';
-					$dirs2[] = $d;
-				}
-			}
-			foreach( $dirs2 as $each ) {
-				if( !file_exists( $each) ) {
-					exec( "mkdir " . $each );
-				}
-			}
+			exec( "mkdir -p " . $matches[1]);
 			/*
 			 * Start writing to the file
 			 */

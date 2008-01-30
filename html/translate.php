@@ -28,7 +28,7 @@ include("head.php");
 
 	<h2>Languages / Projects / Versions / Files</h2>
 	<div id="language" class="side-component-small">
-		<h4 id="language-selection">Langues</h4>
+		<h4 id="language-selection">Languages</h4>
 		<ul id="language-area"class="scrollable-area"></ul>
 	</div>
 

@@ -20,7 +20,7 @@ if(!isset($User->userid)) {
 	exitTo("importing.php");
 }
 
-if(!isset($User->is_committer)) {
+if($User->is_committer != 1) {
 	exitTo("login.php?errNo=3214","error: 3214 - you must be an Eclipse committer to access this page.");
 }
 

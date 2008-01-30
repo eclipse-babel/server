@@ -57,7 +57,7 @@ if( !file_exists( $base_out_dir ) ) {
 
 $temporary_dir = $base_out_dir."tmp_generated/";
 $staging_update_site = $base_out_dir."staging/";
-$source_files_for_generate = $base_out_dir."source_files_for_generate/";
+$source_files_for_generate = "source_files_for_generate/";
 
 $leader1 = "";
 $leader1S= "";

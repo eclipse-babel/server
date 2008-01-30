@@ -16,7 +16,7 @@ InitPage("");
 require_once(BABEL_BASE_DIR . "classes/system/user.class.php");
 require_once(BABEL_BASE_DIR . "classes/system/session.class.php");
 
-$pageTitle 		= "Babel Login";
+$pageTitle 		= "Contribute Translations to Babel";
 $pageKeywords 	= "translation,language,nlpack,pack,eclipse,babel";
 
 $USERNAME 	= $App->getHTTPParameter("username", "POST");

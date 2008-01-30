@@ -30,7 +30,37 @@ $SUBMIT 	= $App->getHTTPParameter("submit", "POST");
 ?>
 
 <h1 id="page-message">Welcome to the Babel Project</h1>
-<div>
+<div id="index-page">
+
+	  <a href="downloads.php"><img src="http://dev.eclipse.org/large_icons/apps/internet-web-browser.png"><h2>Eclipse Speaks your Langauge</h2></a>
+      <br style='clear: both;'>
+	  <p><a href="downloads.php">Download a language pack</a> in one of many different languages.</p>
+         
+	  <a href="login.php"><img src="http://dev.eclipse.org/large_icons/apps/accessories-text-editor.png"><h2>Help Translate Eclipse</h2></a>
+      <br style='clear: both;'>
+	  <p>Eclipse needs help from everyone in the community to <a href="login.php">speak in many tongues</a>.</p>
+      
+	  <a href="map_files.php"><img src="http://dev.eclipse.org/large_icons/apps/system-users.png"><h2>Add an Existing Eclipse Project to Babel</h2></a>
+      <br style='clear: both;'>
+	  <p>Find out how simple it is to include any existing Eclipse project <a href="map_files.php"> in Babel</a>.</p>
+	   
+<!--  
+<br>
+<br>
+<br>
+
+	- consume
+         - page explaining how to get them and current caveats
+         
+      - contribute translations
+         - login page the explains what it takes and make it VERY clear you use your bugzilla login
+         - need to find out how long it takes from creating bugzilla account to being able to login (Denis)?
+      - translate your project
+         - a place for project leads and other to find out how  simple it is to get your project babelized 
+
+
+
+
 	<h2>Eclipse in your language</h2>
 	
 	<div style='float: right; border: 0px solid black; background-color: lightblue;'>
@@ -82,8 +112,9 @@ $SUBMIT 	= $App->getHTTPParameter("submit", "POST");
  	So what are you waiting for?
  	</p>
 	
- 	
 	<div class="clearing"></div>
+--> 	
+	
 </div>
 
 <script>YAHOO.languageManager.getAjaxLanguages();</script>

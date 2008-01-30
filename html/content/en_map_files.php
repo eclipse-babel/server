@@ -25,7 +25,7 @@
   <td style='width:100px; color:red;'><?= $GLOBALS['g_ERRSTRS'][4] ?></td>
 </tr>
 <tr>
-  <td><a href="http://dev.eclipse.org/viewcvs/index.cgi">ViewVC</a> download URL to map file:</td><td><input type="text" name="location" value="<?= $LOCATION ?>" size="80" onchange="fnCheckUrl();" /></td>
+  <td><a href="http://dev.eclipse.org/viewcvs/index.cgi">ViewCVS</a> download URL to map file:</td><td><input type="text" name="location" value="<?= $LOCATION ?>" size="80" onchange="fnCheckUrl();" /></td>
   <td style='width:100px; color:red;'><?= $GLOBALS['g_ERRSTRS'][2] ?></td>
 </tr>
 <tr>
@@ -48,7 +48,8 @@
 </table>
 </form>
 
-
+</div>
+</div>
 
 <script language="javascript">
 	function fnSetVersionList() {
@@ -75,7 +76,7 @@
 	
 	function fnCheckUrl() {
 		if(!document.form1.location.value.match(/view=co/)) {
-			alert("The ViewVC URL must contain view=co");
+			alert("The ViewCVS URL must contain view=co");
 			document.form1.submit.disabled = "disabled";
 			
 		}

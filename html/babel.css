@@ -2,6 +2,7 @@ Color Scheme with #A25F08 #F4E6CC #FCF5EB #2F8CAB #C9E2E9 #FE4902
 
 /* babel override for Phoenix styles */
 
+
 li{
 	list-decoration: none;
 }
@@ -151,4 +152,48 @@ string-choices{
 * html #not-translated{
 	width: 1184px;
 }
-	
+
+
+#index-page{
+	width: 650px;
+	margin: 0px auto;
+	}
+#index-page h2{
+	float: left; 
+	font-size: 15px; 
+	margin-top: 5px; 
+	background-color: white; 
+	color: black;
+}
+#index-page p{
+	margin-left: 28px;
+}
+#index-page img{
+	float: left;	
+}
+
+
+#index-page a :hover{
+	text-decoration: underline;
+}
+
+#known-issues li{
+   list-style-image: url();
+}
+
+ol#known-issues li{
+	margin-top: 10px;
+}
+
+ol#known-issues ul li{
+   list-style-image: url();
+   list-style: none;
+	margin-top: 0px;
+}
+
+#known-issues ul li.stop{
+   list-style-image: url(http://dev.eclipse.org/small_icons/actions/process-stop.png);
+   font-style: italic;
+   font-weight: bold;
+}
+

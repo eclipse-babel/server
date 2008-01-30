@@ -49,8 +49,18 @@ if( file_exists( "${staging_update_site}features/" ) ) {
 /*
  * Get the data (plugins, files, translations) from the live database
  */
-$dbh = mysql_connect( 'localhost', 'babelstg_rw', '8623xsaas2.' );
-mysql_select_db( 'babelstg', $dbh );
+
+if(defined('BABEL_BASE_DIR')){
+	require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
+}else{
+    define('BABEL_BASE_DIR', "../../");
+	require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
+} 
+
+$dbc = new DBConnection();
+global $dbh;
+$dbh = $dbc->connect();
+
 
 /*
  * Generate one language pack per language

@@ -1,3 +1,4 @@
+<link href='babel.css' rel="stylesheet">
 <h1>Map files for project: <?= $PROJECT_ID ?></h1>
 <table cellspacing=1 cellpadding=3 border=1 width="100%">
 <tr>

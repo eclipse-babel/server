@@ -1,8 +1,5 @@
 <div id="maincontent">
 <div id="midcolumn">
-
-
-
 <h1><?= $pageTitle ?></h1>
 
 <div id="index-page">
@@ -11,12 +8,10 @@
     <br style='clear: both;'>
 	<p>If you don't already have an Eclipse Bugzilla account then <a href="https://bugs.eclipse.org/bugs/createaccount.cgi">create one today</a>.  
 	It takes Babel a few minutes to receive your new Bugzilla account information. 
-	If logging in doesn't work right away try again before complaining.</p>
+	If logging in doesn't work after a few minutes, please contact <a href="mailto:webmaster@eclipse.org">webmaster@eclipse.org</a>.</p>
 
     <br style='clear: both;'>
 	<p>If you already have an Eclipse Bugzilla account, then log in and started helping Eclipse speak your language.</p>
-
-
 
 <form style="margin-left: 35px;" name="frmLogin" method="post">
 <div>
@@ -63,7 +58,12 @@
 	
 </div>
 
-
+<?php
+/*
+ * Commented this way to not send gobs to the browser
+ * 
+ * DO we still need all this?
+ 
 <!--  
 
 <p>Welcome to Babel - the Eclipse translation tool. Help globalize Eclipse by providing 
@@ -106,6 +106,9 @@ password to login. If you don't have a Bugzilla account, you can <a href="https:
 	</ul>
 </div>
 -->
+
+*/
+?>
 
 </div>
 

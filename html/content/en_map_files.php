@@ -47,10 +47,6 @@
   </tr>
 </table>
 </form>
-
-</div>
-</div>
-
 <script language="javascript">
 	function fnSetVersionList() {
 		document.form1.version.options.length = 0;

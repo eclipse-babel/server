@@ -18,9 +18,46 @@
 /*
  * Globals
  */
-$temporary_dir = "tmp_generated/";
-$staging_update_site = "staging/";
-$source_files_for_generate = "source_files_for_generate/";
+ob_start();  
+
+
+if(defined('BABEL_BASE_DIR')){
+	require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
+}else{
+    define('BABEL_BASE_DIR', "../../");
+	require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
+} 
+
+if (!($ini = @parse_ini_file(BABEL_BASE_DIR . 'classes/base.conf'))) {
+	errorLog("Failed to find/read database conf file - aborting.");
+	exitTo("error.php?errNo=101300","error: 101300 - database conf can not be found");
+}
+  
+$context = $ini['context'];
+if($context == "") {
+	$context = "staging";
+}
+global $context;
+
+
+$base_out_dir = "/home/babel-working/";
+
+if(!file_exists($base_out_dir)){
+	$base_out_dir = "";
+}
+
+if($context == "live"){
+	$base_out_dir .= "live/";
+}else{
+	$base_out_dir .= "staging/";
+}
+if( !file_exists( $base_out_dir ) ) {
+	exec( "mkdir $base_out_dir" );
+}
+
+$temporary_dir = $base_out_dir."tmp_generated/";
+$staging_update_site = $base_out_dir."staging/";
+$source_files_for_generate = $base_out_dir."source_files_for_generate/";
 
 $leader1 = "";
 $leader1S= "";
@@ -49,13 +86,6 @@ if( file_exists( "${staging_update_site}features/" ) ) {
 /*
  * Get the data (plugins, files, translations) from the live database
  */
-
-if(defined('BABEL_BASE_DIR')){
-	require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
-}else{
-    define('BABEL_BASE_DIR', "../../");
-	require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
-} 
 
 $dbc = new DBConnection();
 global $dbh;
@@ -307,4 +337,6 @@ echo "Completed generating update site\n";
 	language packs for each
 */
 
+$alloutput = fopen($base_out_dir."langpack_output_".date("m_d_Y"), "w" );
+fwrite( $alloutput,ob_get_contents());
 ?>

@@ -22,7 +22,7 @@ $pageKeywords 	= "translation,language,nlpack,pack,eclipse,babel";
 $USERNAME 	= $App->getHTTPParameter("username", "POST");
 $PASSWORD 	= $App->getHTTPParameter("password", "POST");
 $REMEMBER 	= $App->getHTTPParameter("remember", "POST");
-$SUBMIT 	= $App->getHTTPParameter("submit", "POST");
+$SUBMIT 	= $App->getHTTPParameter("submit");
 
 
 if($SUBMIT == "Login") {

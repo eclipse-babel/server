@@ -242,7 +242,7 @@ while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
 		/*
 		 * Jar up this directory as the fragment plug-in jar
 		 */
-		system( "cd $temporary_dir; jar cfM ../${staging_update_site}plugins/$fragment_filename ." );
+		system( "cd $temporary_dir; jar cfM ${staging_update_site}plugins/$fragment_filename ." );
 		echo "${leader1}${leader}completed  plug-in fragment $plugin_name\n";
 	}
         /*
@@ -292,7 +292,7 @@ while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
         /*
          * Jar up this directory as the feature jar
          */
-        system( "cd $temporary_dir; jar cfM ../${staging_update_site}features/$feature_filename ." );
+        system( "cd $temporary_dir; jar cfM ${staging_update_site}features/$feature_filename ." );
 	/*
 	 * Register this feature with the site.xml
 	 */

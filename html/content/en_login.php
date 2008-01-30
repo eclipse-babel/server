@@ -112,7 +112,6 @@ password to login. If you don't have a Bugzilla account, you can <a href="https:
 
 </div>
 
-</div>
 <script language="javascript">
 	document.forms['frmLogin'].username.focus();
 </script>

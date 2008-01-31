@@ -79,7 +79,7 @@ YAHOO.projectStringsManager = {
 		td.innerHTML = "Last Translation";
 		td.width = "50%";
 		td = tr.insertCell(2);
-		td.innerHTML = "Create On";
+		td.innerHTML = "Created On";
 		td.width = "12%";
 		
 		return this.tableDom;

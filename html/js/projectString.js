@@ -148,7 +148,7 @@ projectString.prototype.createHTML = function(tableDom){
 	values.string = this.data['text'];
 	var temp = this.data['translationString'] ? this.data['translationString'] : ''
 	values.translation = "<div style='width: 100%; overflow: hidden;'>"+temp+"</div>";
-	values.translator = this.data['translator'];
+	values.translator = this.data['translator'] ? this.data['translator'] : '';
 	values.createdon = this.data['createdOn'];
 	
 	var lineDome = YAHOO.projectStringsManager.createHTML(values,tableDom);

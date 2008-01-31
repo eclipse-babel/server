@@ -71,7 +71,9 @@ function showTranslateStringForm(stringIdIn){
 }
 
 function setupTranslatFormCB(){
-	YAHOO.util.Event.addListener("translation-form","submit",translationSumbit);
+	YAHOO.util.Event.addListener("translation-form","submit",translationSumbitStop);
+	YAHOO.util.Event.addListener("allversions","click",translateAll);
+	YAHOO.util.Event.addListener("onlysametrans","click",translateOnlySameTranslations);
 }
 
 
@@ -84,10 +86,21 @@ function translationClear(){
 	}
 }
 
-function translationSumbit(e){
+
+function translateAll(e){
+	translationSumbit("all");
+}
+function translateOnlySameTranslations(e){
+	translationSumbit("onlysame")
+}
+
+function translationSumbitStop(e){
 	YAHOO.util.Event.stopEvent(e);
-	var target = YAHOO.util.Event.getTarget(e);
-		
+}
+
+function translationSumbit(allornot){
+	var target = document.getElementById('translation-form');
+
 	var callback = 
 	{ 
 		start:function(eventType, args){ 
@@ -104,7 +117,8 @@ function translationSumbit(e){
 	
 	var post = "string_id="+target.string_id.value+
 			   "&translation="+sub(target.translation.value)+
-			   "&translate_action="+e.explicitOriginalTarget.value;
+			   "&translate_action="+allornot;
+			   
 	YAHOO.util.Connect.asyncRequest('POST', "callback/setStringTranslation.php", callback, post);
 }
 

@@ -133,10 +133,11 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 		<div style='margin-bottom: .5em;'>
 			<b><?= nl2br($line['string_value']);?></b>
 		</div>
-		<h4>File From</h4>
+<!--		<h4>File From</h4>
 		<div style='margin-bottom: .5em;'>
 			<?= htmlspecialchars_decode(nl2br($line['name']));?>
 		</div>
+-->		
 		<h4>Externalized Token</h4>
 		<div>
 		<?= htmlspecialchars_decode(nl2br($line['token']));?>
@@ -148,8 +149,8 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 		<h4>Current Translation</h4>
 		<textarea style='display: inline; width: 320px; height: 150px;' name="translation"><?=stripslashes(($line['translation_value']));?></textarea>
 		<br>
-		<input type="submit" name="translateAction" value="All Versions" nClick="translationSumbit(this.form,this);">
-		<input type="submit" name="translateAction" value="Only Version <?=$_SESSION['version']?>" nClick="translationSumbit(this.form,this);">
+		<button id="allversions" type="submit" name="translateAction" value="All Versions" nClick="translationSumbit(this.form,this);">All Versions</button>
+		<button id="onlysametrans" type="submit" name="translateAction" value="Only Version <?=$_SESSION['version']?>" nClick="translationSumbit(this.form,this);">Only Version <?=$_SESSION['version']?></button>
 	</div>
 	
 	<div id="translation-history" class="side-component">

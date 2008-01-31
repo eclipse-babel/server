@@ -27,7 +27,7 @@ $version = $_SESSION["version"];
 
 $user_id =	$User->userid;
 
-if($_POST['translate_action'] != "All Versions"){
+if($_POST['translate_action'] != "all"){
 $query = "update 
 			translations 
 		  set
@@ -52,7 +52,7 @@ $query = "insert into
 			  	";
 $res = mysql_query($query,$dbh);
 
-//print $query;
+print $query;
 
 }else{
 

@@ -45,12 +45,21 @@ YAHOO.projectStringsManager = {
 				domNode.appendChild(this.tableDom);
 
 				translationClear();
+
+				var ntDomNode = document.getElementById('not-translated');
+				this.sp.tableDom = document.createElement("table")
+				this.sp.tableDom.className = "translatable";
+				this.sp.tableDom.cellSpacing = 0;
+				this.sp.tableDom.width = "100%"
+				ntDomNode.innerHTML = "";
+				ntDomNode.appendChild(this.sp.tableDom);
+
 				
 				if(o.responseText){
 					var response = eval("("+o.responseText+")");					
 					for(var i = 0; i < response.length; i++){
 						var proj = new projectString(response[i]);
-						proj.createHTML(this.tableDom);
+						proj.createHTML(this.sp.tableDom);
 					}
 				}
 			},
@@ -69,7 +78,7 @@ YAHOO.projectStringsManager = {
 			tableDom.cellSpacing = 0;
 			tableDom.width = "100%";
 			tr = tableDom.insertRow(0);
-			this.trCounter = 1;
+			this.trCounter = 0;
 		}else{
 			tableDom = appenToDOm;
 			tr = tableDom.insertRow(this.trCounter);

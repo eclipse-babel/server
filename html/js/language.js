@@ -98,7 +98,10 @@ language.prototype.createHTML = function(){
 	this.domElem = document.createElement("li");
 	this.domElem.innerHTML = this.name;
 	if(this.locale){
-		this.domElem.innerHTML += "("+this.locale+")";
+		this.domElem.innerHTML += this.locale;
+	}
+	if(this.iso){
+		this.domElem.innerHTML += "11("+this.iso+")";
 	}
 	this.addEvents();
 	

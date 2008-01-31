@@ -12,6 +12,13 @@
 *******************************************************************************/
 require_once("cb_global.php");
 
+$return = array();
+
+
+if(!isset($_SESSION['project']) or !isset($_SESSION['version'])){
+	return $return; 
+}
+
 $query = "select 
 			DISTINCT files.name
 		  from 
@@ -34,6 +41,7 @@ $query = "select
 //print $query."\n";
 
 $res = mysql_query($query,$dbh);
+
 
 while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
 	$ret = Array();

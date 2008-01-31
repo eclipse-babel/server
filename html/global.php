@@ -47,8 +47,11 @@ if (!($ini = @parse_ini_file(BABEL_BASE_DIR . 'classes/base.conf'))) {
 	errorLog("Failed to find/read database conf file - aborting.");
 	exitTo("error.php?errNo=101300","error: 101300 - database conf can not be found");
 }
-  
-$context = $ini['context'];
+
+$context = "";
+if(isset($ini['context'])) 
+	$context = $ini['context'];
+
 if($context == "") {
 	$context = "staging";
 }

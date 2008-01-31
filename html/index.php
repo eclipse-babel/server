@@ -40,7 +40,7 @@ $SUBMIT 	= $App->getHTTPParameter("submit", "POST");
       
 	  <a href="map_files.php"><img src="http://dev.eclipse.org/large_icons/apps/system-users.png"><h2>Add an Existing Eclipse Project to Babel</h2></a>
       <br style='clear: both;'>
-	  <p>Find out how simple it is to include any existing Eclipse.org project <a href="map_files.php">in Babel</a>.</p>
+	  <p>Eclipse committers, find out how simple it is to include any existing Eclipse.org project <a href="map_files.php">in Babel</a>.</p>
 </div>
 
 <script>YAHOO.languageManager.getAjaxLanguages();</script>

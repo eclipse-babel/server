@@ -101,7 +101,7 @@ language.prototype.createHTML = function(){
 		this.domElem.innerHTML += this.locale;
 	}
 	if(this.iso){
-		this.domElem.innerHTML += "11("+this.iso+")";
+		this.domElem.innerHTML += "("+this.iso+")";
 	}
 	this.addEvents();
 	

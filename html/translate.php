@@ -93,11 +93,10 @@ include("head.php");
 	<div class="clearing"></div>
 	
 </div>
+	<div class="clearing"></div>
 
 <script>YAHOO.languageManager.getAjaxLanguages();</script>
 
 <?php
-
-		
 	include("foot.php");
 ?>

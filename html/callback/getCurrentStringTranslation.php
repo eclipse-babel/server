@@ -124,6 +124,7 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 }
 */
 ?>
+
 <form id='translation-form'>
 	<input type="hidden" name="string_id" value="<?=$line['string_id'];?>">
 
@@ -134,17 +135,18 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 		</div>
 		<h4>File From</h4>
 		<div style='margin-bottom: .5em;'>
-			<?= nl2br($line['name']);?>
+			<?= htmlspecialchars_decode(nl2br($line['name']));?>
 		</div>
 		<h4>Externalized Token</h4>
 		<div>
-			<?= nl2br($line['token']);?>
+		<?= htmlspecialchars_decode(nl2br($line['token']));?>
 		</div>
+		
 	</div>
 	
 	<div id="translation-textarea" class="side-component">
 		<h4>Current Translation</h4>
-		<textarea style='display: inline; width: 320px; height: 150px;' name="translation"><?= nl2br($line['translation_value']);?></textarea>
+		<textarea style='display: inline; width: 320px; height: 150px;' name="translation"><?=stripslashes(($line['translation_value']));?></textarea>
 		<br>
 		<input type="submit" name="translateAction" value="All Versions" nClick="translationSumbit(this.form,this);">
 		<input type="submit" name="translateAction" value="Only Version <?=$_SESSION['version']?>" nClick="translationSumbit(this.form,this);">

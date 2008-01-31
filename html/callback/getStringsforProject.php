@@ -147,7 +147,8 @@ switch($state){
 					strings.string_id as stringId,
 					strings.value as text,
 					strings.created_on as createdOn,
-					translations.value as translationString
+					translations.value as translationString,
+					users.username as translator
 				from 
 					files,
 				  	strings
@@ -158,6 +159,10 @@ switch($state){
 				  		translations.string_id  = strings.string_id
 				  	  and 
 				  	  	translations.is_active = 1
+				  	)
+				  	
+				  	left join users on (
+				  		translations.userid = users.userid
 				  	)
 				  where 
 				  	strings.is_active = 1 
@@ -172,6 +177,7 @@ switch($state){
   				  group by strings.string_id,translations.version desc
 				";
 		
+//		print $query;
 	
 }
 
@@ -187,6 +193,7 @@ while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
     if(isset($stringids[$line['stringId']])){
  		  continue;
     }else{
+    	$line['translationString'] = stripslashes($line['translationString']);
 		$return[] = $line;
 		$stringids[$line['stringId']] = 1;
     }

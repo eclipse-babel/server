@@ -73,6 +73,11 @@ function setupTranslatFormCB(){
 }
 
 
+function translationClear(){
+	var langDomNode = document.getElementById('translation-form-container');
+	langDomNode.innerHTML = "";
+}
+
 function translationSumbit(e){
 	YAHOO.util.Event.stopEvent(e);
 	var target = YAHOO.util.Event.getTarget(e);
@@ -88,7 +93,13 @@ function translationSumbit(e){
 			YAHOO.log('failed!');
 		} 
 	} 
-	
-	YAHOO.util.Connect.asyncRequest('POST', "callback/setStringTranslation.php", callback, "string_id="+target.string_id.value+"&translation="+target.translation.value+"&translate_action="+e.explicitOriginalTarget.value);
+	var post = "string_id="+target.string_id.value+
+			   "&translation="+sub(target.translation.value)+
+			   "&translate_action="+e.explicitOriginalTarget.value;
+	YAHOO.util.Connect.asyncRequest('POST', "callback/setStringTranslation.php", callback, post);
 }
 
+function sub(it){
+	it = it.replace(/\+/g,"%2b");
+	return it.replace(/&/g,"%26"); 
+}

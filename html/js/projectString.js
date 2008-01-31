@@ -11,6 +11,8 @@
 *******************************************************************************/
 
 YAHOO.projectStringsManager = {
+	trCounter : 0,
+	
 	getAjaxProjectStrings : function(){
 
 
@@ -32,26 +34,23 @@ YAHOO.projectStringsManager = {
 			success: function(o) {
 				var domNode = document.getElementById('projecs-strings-area');
 				domNode.innerHTML = "";
-				domNode.appendChild(this.sp.creatHTML());
+				var values = new Object();
+				values.cssID = "translatable-strings-labels-area";
+				values.cssClass = "";
+				values.string = "String";
+				values.translation = "Last Translation";
+				values.translator = "User";
+				values.createdon = "Created On";
+				this.tableDom = this.sp.createHTML(values)
+				domNode.appendChild(this.tableDom);
+
+				translationClear();
 				
-				var ntDomNode = document.getElementById('not-translated');
-				this.sp.tableDom = document.createElement("table")
-				this.sp.tableDom.className = "translatable";
-				this.sp.tableDom.cellSpacing = 0;
-				this.sp.tableDom.width = "100%"
-				ntDomNode.innerHTML = "";
-				ntDomNode.appendChild(this.sp.tableDom);
-				
-				var trCount = 0;
 				if(o.responseText){
 					var response = eval("("+o.responseText+")");					
-//					alert("about to start");
 					for(var i = 0; i < response.length; i++){
 						var proj = new projectString(response[i]);
-						var tr = this.sp.tableDom.insertRow(trCount);
-						proj.createHTML(tr);
-//						YAHOO.log("tr:"+response[i].text);
-						trCount++;
+						proj.createHTML(this.tableDom);
 					}
 				}
 			},
@@ -61,28 +60,42 @@ YAHOO.projectStringsManager = {
 		} 
 		YAHOO.util.Connect.asyncRequest('GET', "callback/getStringsforProject.php", callback, null);
 	},
-
-	creatHTML : function(){
-		this.tableDom = document.createElement("table");
-		this.tableDom.cellSpacing = 0;
-		this.tableDom.width = "100%"
+	
+	createHTML : function(values,appenToDOm){
+		var tableDom;
+		var tr;
+		if(typeof appenToDOm == "undefined"){
+			tableDom = document.createElement("table");
+			tableDom.cellSpacing = 0;
+			tableDom.width = "100%";
+			tr = tableDom.insertRow(0);
+			this.trCounter = 1;
+		}else{
+			tableDom = appenToDOm;
+			tr = tableDom.insertRow(this.trCounter);
+			this.trCounter++;
+		}
 		
-		tr = this.tableDom.insertRow(0);
-		tr.id = "translatable-strings-labels-area";
-//		td = tr.insertCell(0);
-//		td.innerHTML = "Label";
-//		td.width = "10%";
+		tr.id =  values.cssID;//"translatable-strings-labels-area";
+		tr.class =  values['cssClass'];//"translatable-strings-labels-area";
 		td = tr.insertCell(0);
-		td.innerHTML = "String";
-		td.width = "38%";
+		td.innerHTML = values['string']//"String";
+		td.width = "30%";
 		td = tr.insertCell(1);
-		td.innerHTML = "Last Translation";
+		td.innerHTML = values['translation']//"Last Translation";
 		td.width = "50%";
 		td = tr.insertCell(2);
-		td.innerHTML = "Created On";
+		td.innerHTML = values['translator']//"User";
+		td.width = "8%";
+		td = tr.insertCell(3);
+		td.innerHTML = values['createdon']//"Created On";
 		td.width = "12%";
 		
-		return this.tableDom;
+		if(typeof appenToDOm == "undefined"){
+			return tableDom;
+		}else{
+			return tr;
+		}
 	},
 	
 	getSelected: function(){
@@ -118,26 +131,18 @@ projectString.prototype.clicked = function(e){
 	showTranslateStringForm(this.data['stringId']);
 	YAHOO.projectStringsManager.updateSelected(this);
 }
-projectString.prototype.createHTML = function(tr){
-	this.domElem = tr;
-
-//	td = tr.insertCell(0);
-//	td.innerHTML = this.data['label'];
-//	td.width = "10%";
-
-	td = tr.insertCell(0);
-	td.innerHTML = this.data['text'];
-	td.width = "38%";
-	
-	td = tr.insertCell(1);
+projectString.prototype.createHTML = function(tableDom){
+	var values = new Object();
+	values.cssID = "";
+	values.cssClass = "";
+	values.string = this.data['text'];
 	var temp = this.data['translationString'] ? this.data['translationString'] : ''
-	td.innerHTML = "<div style='width: 100%; overflow: hidden;'>"+temp+"</div>";
-	td.width = "50%";
+	values.translation = "<div style='width: 100%; overflow: hidden;'>"+temp+"</div>";
+	values.translator = this.data['translator'];
+	values.createdon = this.data['createdOn'];
 	
-	td = tr.insertCell(2);
-	td.innerHTML = this.data['createdOn'];
-	td.width = "12%";
-	
+	var lineDome = YAHOO.projectStringsManager.createHTML(values,tableDom);
+	this.domElem = lineDome;
 	this.addEvents();
 }
 

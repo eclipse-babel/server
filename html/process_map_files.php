@@ -67,7 +67,7 @@ while($myrow = mysql_fetch_assoc($rs_maps)) {
 				$aOutLines = split("\n", $out);
 				foreach ($aOutLines as $out_line) {
 					$out_line = trim($out_line);
-					if(preg_match("/\.properties$/", $out_line)) {
+					if(preg_match("/\.properties$/", $out_line) && !preg_match("/build\.properties$/", $out_line)) {
 						# this is a .properties file!
 						$parts = split(" ", $out_line);
 						$file_name = $parts[1]; 

@@ -13,24 +13,15 @@
 require("global.php");
 InitPage("");
 
-$pageTitle 		= "Babel Project";
+$pageTitle 		= "Babel Project - Eclipse translation";
 $pageKeywords 	= "translation,language,nlpack,pack,eclipse,babel,english,french,german,chinese,japanese,spanish,arabic,hebrew,hungarian,polish,italian,russian,dutch,finnish,greek,norwegian,sweedish,turkish";
 
 include("head.php");
 
-//$_SESSION['language'] = "";
-//$_SESSION['project'] = "";
-//$_SESSION['version'] = "";
-
-$USERNAME 	= $App->getHTTPParameter("username", "POST");
-$PASSWORD 	= $App->getHTTPParameter("password", "POST");
-$REMEMBER 	= $App->getHTTPParameter("remember", "POST");
-$SUBMIT 	= $App->getHTTPParameter("submit", "POST");
-
 ?>
 <h1 id="page-message">Welcome to the Babel Project</h1>
 <div id="index-page">
-	  <a href="downloads.php"><img src="http://dev.eclipse.org/large_icons/apps/internet-web-browser.png"><h2>Eclipse Speaks your Langauge</h2></a>
+	  <a href="downloads.php"><img src="http://dev.eclipse.org/large_icons/apps/internet-web-browser.png"><h2>Eclipse Speaks your Language</h2></a>
       <br style='clear: both;'>
 	  <p><a href="downloads.php">Download a language pack</a> in one of many different languages.</p>
          

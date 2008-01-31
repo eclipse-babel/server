@@ -21,6 +21,7 @@ include("head.php");
 //$_SESSION['language'] = "";
 //$_SESSION['project'] = "";
 //$_SESSION['version'] = "";
+//$_SESSION['file'] = "";
 ?>
 
 <h1 id="page-message">Welcome to the Babel Project</h1>

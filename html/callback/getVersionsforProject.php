@@ -36,6 +36,8 @@ $query = "select
 
 $res = mysql_query($query,$dbh);
 
+$return = array();
+
 while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
 	$ret = Array();
 	$ret['version'] = $line['version'];

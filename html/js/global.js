@@ -67,7 +67,6 @@ function showTranslateStringForm(stringIdIn){
 			YAHOO.log('failed!');
 		} 
 	} 
-	YAHOO.tranlsation.posted = true;
 	YAHOO.util.Connect.asyncRequest('POST', "callback/getCurrentStringTranslation.php", callback, "string_id="+stringIdIn);
 }
 
@@ -100,6 +99,9 @@ function translationSumbit(e){
 			YAHOO.log('failed!');
 		} 
 	} 
+	
+	YAHOO.tranlsation.posted = true;
+	
 	var post = "string_id="+target.string_id.value+
 			   "&translation="+sub(target.translation.value)+
 			   "&translate_action="+e.explicitOriginalTarget.value;

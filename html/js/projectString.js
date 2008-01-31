@@ -23,6 +23,8 @@ YAHOO.projectStringsManager = {
 		  ){
 			var domNode = document.getElementById('projecs-strings-area');
 			domNode.innerHTML = "";
+			translationClear();
+			
 			return false;
 		} 
 	
@@ -85,17 +87,21 @@ YAHOO.projectStringsManager = {
 			this.trCounter++;
 		}
 		
-		tr.id =  values.cssID;
-		tr.class =  values['cssClass'];
+		tr.id =  values['cssID'];
+		tr.className =  values['cssClass'];
+		
 		td = tr.insertCell(0);
 		td.innerHTML = values['string'];
 		td.width = "30%";
+
 		td = tr.insertCell(1);
 		td.innerHTML = values['translation'];
 		td.width = "50%";
+
 		td = tr.insertCell(2);
 		td.innerHTML = values['translator'];
 		td.width = "8%";
+		
 		td = tr.insertCell(3);
 		td.innerHTML = values['createdon'];
 		td.width = "12%";

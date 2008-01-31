@@ -47,7 +47,9 @@ selectable.prototype.addEvents = function(){
 }
 
 
+YAHOO.tranlsation = new Object();
 
+YAHOO.tranlsation.posted = false;
 
 
 function showTranslateStringForm(stringIdIn){
@@ -65,6 +67,7 @@ function showTranslateStringForm(stringIdIn){
 			YAHOO.log('failed!');
 		} 
 	} 
+	YAHOO.tranlsation.posted = true;
 	YAHOO.util.Connect.asyncRequest('POST', "callback/getCurrentStringTranslation.php", callback, "string_id="+stringIdIn);
 }
 
@@ -74,8 +77,12 @@ function setupTranslatFormCB(){
 
 
 function translationClear(){
-	var langDomNode = document.getElementById('translation-form-container');
-	langDomNode.innerHTML = "";
+	if(YAHOO.tranlsation.posted == true){
+		YAHOO.tranlsation.posted = false;
+	}else{
+		var langDomNode = document.getElementById('translation-form-container');
+		langDomNode.innerHTML = "";
+	}
 }
 
 function translationSumbit(e){

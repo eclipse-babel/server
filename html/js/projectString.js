@@ -85,19 +85,19 @@ YAHOO.projectStringsManager = {
 			this.trCounter++;
 		}
 		
-		tr.id =  values.cssID;//"translatable-strings-labels-area";
-		tr.class =  values['cssClass'];//"translatable-strings-labels-area";
+		tr.id =  values.cssID;
+		tr.class =  values['cssClass'];
 		td = tr.insertCell(0);
-		td.innerHTML = values['string']//"String";
+		td.innerHTML = values['string'];
 		td.width = "30%";
 		td = tr.insertCell(1);
-		td.innerHTML = values['translation']//"Last Translation";
+		td.innerHTML = values['translation'];
 		td.width = "50%";
 		td = tr.insertCell(2);
-		td.innerHTML = values['translator']//"User";
+		td.innerHTML = values['translator'];
 		td.width = "8%";
 		td = tr.insertCell(3);
-		td.innerHTML = values['createdon']//"Created On";
+		td.innerHTML = values['createdon'];
 		td.width = "12%";
 		
 		if(typeof appenToDOm == "undefined"){
@@ -120,20 +120,15 @@ YAHOO.projectStringsManager = {
 	}
 };
 
-
-
 function projectString(dataIn){
-//stringIdIn,textIn,createdOnIn,translationString){
-//['stringId'],response[i]['text'],response[i]['created_on']
-
 	projectString.superclass.constructor.call();
 	this.initSelectable();
 
 	this.data = dataIn;
 }
 YAHOO.extend(projectString,selectable);
-projectString.prototype.isSelected = function(){
- return (this == YAHOO.projectStringsManager.selected);
+	projectString.prototype.isSelected = function(){
+ 	return (this == YAHOO.projectStringsManager.selected);
 }
 
 projectString.prototype.clicked = function(e){
@@ -154,4 +149,3 @@ projectString.prototype.createHTML = function(tableDom){
 	this.domElem = lineDome;
 	this.addEvents();
 }
-

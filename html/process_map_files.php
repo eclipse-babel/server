@@ -67,10 +67,11 @@ while($myrow = mysql_fetch_assoc($rs_maps)) {
 				$aOutLines = split("\n", $out);
 				foreach ($aOutLines as $out_line) {
 					$out_line = trim($out_line);
+					echo $html_spacer . $html_spacer . "CVS out line: " . $out_line . "<br />";
+					# U org.eclipse.ant.ui/Ant Editor/org/eclipse/ant/internal/ui/dtd/util/AntDTDUtilMessages.properties
 					if(preg_match("/\.properties$/", $out_line) && !preg_match("/build\.properties$/", $out_line)) {
 						# this is a .properties file!
-						$parts = split(" ", $out_line);
-						$file_name = $parts[1]; 
+						$file_name = trim(substr($out_line, 2)); 
 						echo $html_spacer . $html_spacer . $html_spacer . "<font color=green>Processing .properties file: " . $file_name . "</font><br />";
 						
 						$File = new File();
@@ -89,6 +90,7 @@ while($myrow = mysql_fetch_assoc($rs_maps)) {
 							fclose($fh);
 						
 							$strings = $File->parseProperties($content);
+							echo $html_spacer . $html_spacer . $html_spacer . $html_spacer . "Strings processed: $strings<br /><br />";
 						}
 									
 					}

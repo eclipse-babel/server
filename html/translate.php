@@ -85,7 +85,7 @@ include("head.php");
 	</div>
 	
 	
-	<div id="translation-area" class="full-component">
+	<div id="translation-area" class="full-component" style='height: 230px;'>
 	   <h2>String Translation</h2>
 	   <div id="translation-form-container"></div>
 	</div>

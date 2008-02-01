@@ -1,12 +1,12 @@
 /* babel override for Phoenix styles */
 
 form{
-	margin: 10px;
+	margin: 0px;
 	padding: 0px;
 	}
 	
 #translation-form{
-	margin: 10px;
+	margin: 0px;
 	padding: 0px;
 }
 

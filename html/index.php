@@ -21,6 +21,9 @@ include("head.php");
 ?>
 <h1 id="page-message">Welcome to the Babel Project</h1>
 <div id="index-page">
+	  <? include("fragments/language_progress.php");?>
+
+
 	  <a href="downloads.php"><img src="http://dev.eclipse.org/large_icons/apps/internet-web-browser.png"><h2>Eclipse Speaks your Language</h2></a>
       <br style='clear: both;'>
 	  <p><a href="downloads.php">Download a language pack</a> in one of many different languages.</p>
@@ -32,6 +35,7 @@ include("head.php");
 	  <a href="map_files.php"><img src="http://dev.eclipse.org/large_icons/apps/system-users.png"><h2>Add an Existing Eclipse Project to Babel</h2></a>
       <br style='clear: both;'>
 	  <p>Eclipse committers, find out how simple it is to include any existing Eclipse.org project <a href="map_files.php">in Babel</a>.</p>
+	  
 </div>
 
 <script>YAHOO.languageManager.getAjaxLanguages();</script>

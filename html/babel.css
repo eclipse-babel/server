@@ -225,15 +225,18 @@ ol#known-issues ul li{
 
 #trans-progress-area{
 	position: absolute;
+	left: auto;
 	right: 0px;
 	top: 0px;
 	padding: 0px;
 	margin: 0px;
-	border: 0px solid darkblue;
+	border: 0px solid red;
+	width: 160px;
 }
 #trans-progress-area h2{
 	float: none;
 	border-bottom: 1px solid SteelBlue;
+	text-align: center;
 }
 #trans-progress-area dl{
 	width: 100px;

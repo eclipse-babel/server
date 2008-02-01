@@ -88,12 +88,12 @@ include("head.php");
 	<div id="translation-area" class="full-component" style='height: 230px;'>
 	   <h2>String Translation</h2>
 	   <div id="translation-form-container"></div>
+	   <div class="clearing"></div>
 	</div>
 	
 	<div class="clearing"></div>
 	
 </div>
-	<div class="clearing"></div>
 
 <script>YAHOO.languageManager.getAjaxLanguages();</script>
 

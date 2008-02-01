@@ -69,7 +69,7 @@ p{
 	
 .side-component-small{
 	float: left;	
-	width: 130px;
+	width: 135px;
 	height: 113px;
 }
 
@@ -78,11 +78,11 @@ p{
 }
 
 .side-component-small+.files{
-	width: 609px;	
+	width: 594px;	
 }
 
 * html #files{
-	width: 609px;
+	width: 594px;
 }
 
 #translatable-strings-labels-area,

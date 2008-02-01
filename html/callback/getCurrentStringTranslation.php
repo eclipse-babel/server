@@ -124,8 +124,7 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 }
 */
 ?>
-
-<form id='translation-form'>
+<form id='translation-form' >
 	<input type="hidden" name="string_id" value="<?=$line['string_id'];?>">
 
 	<div id="english-area" class="side-component">

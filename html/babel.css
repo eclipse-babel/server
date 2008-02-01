@@ -3,6 +3,11 @@ Color Scheme with #A25F08 #F4E6CC #FCF5EB #2F8CAB #C9E2E9 #FE4902
 /* babel override for Phoenix styles */
 
 
+form{
+	margin: 0px;
+	padding: 0px;
+	}
+
 li{
 	list-decoration: none;
 }

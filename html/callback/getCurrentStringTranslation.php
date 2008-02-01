@@ -124,6 +124,4 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 }
 */
 ?>
-<form id='translation-form'>
-OWOW
-</form>
+XXX

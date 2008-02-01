@@ -134,7 +134,8 @@ h4{
 #translation-area{
 	padding: 0px;
 	margin: 0px;
-	}
+	height: 215px;
+}
 	
 #string-area h4{
 	color: white;

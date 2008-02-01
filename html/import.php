@@ -9,6 +9,13 @@
  * Contributors:
  *    Eclipse Foundation - Initial API and implementation
 *******************************************************************************/
+
+/**
+ * @deprecated - need to tie to project/versions 
+ */
+
+exit;
+
 include("global.php");
 InitPage("login");
 

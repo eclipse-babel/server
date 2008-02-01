@@ -1,3 +1,10 @@
+<?php
+	/**
+	 * @deprecated
+	 */
+?>
+
+
 <div id="maincontent">
 <div id="midcolumn">
 

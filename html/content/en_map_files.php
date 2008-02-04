@@ -2,7 +2,8 @@
 <div id="midcolumn">
 
 <h1><?= $pageTitle ?></h1>
-<p>Use this form to define the map files for your project.  This page is only accessible by Eclipse committers.</p>
+<p>Use this form to define the map files for your project. The map files are read nightly, and any .properties files (except build.properties) contained in the plugins they reference will be parsed and imported into Babel, allowing the community to translate the externalized strings.</p>  
+<p>This page is only accessible by Eclipse committers.</p>
 <form name="form1" method="post">
 <table cellspacing=4 cellpadding=0 border=0 width="950">
 <tr><td></td><td colspan=2 style="color:red;"><?= $GLOBALS['g_ERRSTRS'][0] ?></td></tr>

@@ -9,6 +9,7 @@
  * Contributors:
  *    Paul Colton (Aptana)- initial API and implementation
  *    Eclipse Foundation
+ * 	  Eclipse Contributors (bug 217257)
 *******************************************************************************/
 
 require_once("cb_global.php");
@@ -27,7 +28,12 @@ $version = $_SESSION["version"];
 
 $user_id =	$User->userid;
 
-if($_POST['translate_action'] != "all"){
+if (empty($translation) || (trim($translation) == '')) {
+
+	// do nothing
+	
+} else if($_POST['translate_action'] != "all"){
+
 $query = "update 
 			translations 
 		  set

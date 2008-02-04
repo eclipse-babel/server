@@ -14,7 +14,7 @@
 
 require_once("frag_global.php");
 
-$query = "select b.name, count(*) as StringCount from translations as a inner join languages as b on b.language_id = a.language_id where a.value <> '' and a.is_active = 1 group by a.language_id order by StringCount desc";
+$query = "select b.name,b.locale, count(*) as StringCount from translations as a inner join languages as b on b.language_id = a.language_id where a.value <> '' and a.is_active = 1 group by a.language_id order by StringCount desc";
 
 $res = mysql_query($query);
 
@@ -24,7 +24,9 @@ $res = mysql_query($query);
 	<dl>
 	<?
 		while($row = mysql_fetch_assoc($res)){
-			?><dt><?=$row['name'];?></dt><?
+			?><dt><?=$row['name']; 
+				if($row['locale'] != "") echo "<br>(".$row['locale'].")";
+			?></dt><?
 			?><dd><?=$row['StringCount'];?></dd><?
 		}
 	?>

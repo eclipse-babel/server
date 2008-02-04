@@ -52,18 +52,24 @@
 	function fnSetVersionList() {
 		document.form1.version.options.length = 0;
 		
-		for(i = 0; i < versions[document.form1.project_id.value].length; i++) {
-			var opt = document.createElement("OPTION");
-			document.form1.version.options.add(opt);
-			document.form1.version.options[i].text 		= versions[document.form1.project_id.value][i];
-			document.form1.version.options[i].value 	= versions[document.form1.project_id.value][i];
-			if(versions[document.form1.project_id.value][i] == "<?= $VERSION ?>") {
-				document.form1.version.options[i].selected = "selected";
+		if(typeof(versions[document.form1.project_id.value]) != "undefined") {
+			for(i = 0; i < versions[document.form1.project_id.value].length; i++) {
+				var opt = document.createElement("OPTION");
+				document.form1.version.options.add(opt);
+				document.form1.version.options[i].text 		= versions[document.form1.project_id.value][i];
+				document.form1.version.options[i].value 	= versions[document.form1.project_id.value][i];
+				if(versions[document.form1.project_id.value][i] == "<?= $VERSION ?>") {
+					document.form1.version.options[i].selected = "selected";
+				}
 			}
 		}
-		
+		else {
+			var opt = document.createElement("OPTION");
+			document.form1.version.options.add(opt);
+			document.form1.version.options[0].text 		= "unspecified";
+			document.form1.version.options[0].value 	= "unspecified";
+		}
 		fnUpdateFileList();
-		
 	}
 	
 	function fnUpdateFileList() {
@@ -75,7 +81,6 @@
 		if(!document.form1.location.value.match(/view=co/)) {
 			alert("The ViewCVS URL must contain view=co");
 			document.form1.submit.disabled = "disabled";
-			
 		}
 		else {
 			document.form1.submit.disabled = "";

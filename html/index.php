@@ -23,10 +23,9 @@ include("head.php");
 <div id="index-page">
 	  <? include("fragments/language_progress.php");?>
 
-
-	  <a href="downloads.php"><img src="http://dev.eclipse.org/large_icons/apps/internet-web-browser.png"><h2>Eclipse Speaks your Language</h2></a>
+	  <a href="http://www.eclipse.org/babel/downloads.php"><img src="http://dev.eclipse.org/large_icons/apps/internet-web-browser.png"><h2>Eclipse Speaks your Language</h2></a>
       <br style='clear: both;'>
-	  <p><a href="downloads.php">Download a language pack</a> in one of many different languages.</p>
+	  <p><a href="http://www.eclipse.org/babel/downloads.php">Download a language pack</a> in one of many different languages.</p>
          
 	  <a href="translate.php"><img src="http://dev.eclipse.org/large_icons/apps/accessories-text-editor.png"><h2>Help Translate Eclipse</h2></a>
       <br style='clear: both;'>

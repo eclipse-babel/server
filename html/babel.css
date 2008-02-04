@@ -201,28 +201,6 @@ h4{
 	text-decoration: underline;
 }
 
-#known-issues li{
-   list-style-image: url();
-}
-
-ol#known-issues li{
-	margin-top: 10px;
-}
-
-ol#known-issues ul li{
-   list-style-image: url();
-   list-style: none;
-	margin-top: 0px;
-}
-
-#known-issues ul li.stop{
-   list-style-image: url(http://dev.eclipse.org/small_icons/actions/process-stop.png);
-   font-style: italic;
-   font-weight: bold;
-}
-
-
-
 #trans-progress-area{
 	position: absolute;
 	left: auto;

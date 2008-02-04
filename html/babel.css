@@ -235,5 +235,7 @@ h4{
 }
 #trans-progress-area dt{
 	width: 70px;
-	clear: left;
+}
+#trans-progress-area dd{
+	clear: right;
 }

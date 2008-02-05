@@ -46,7 +46,7 @@ CREATE TABLE `files` (
 DROP TABLE IF EXISTS `languages`;
 CREATE TABLE `languages` (
   `language_id` smallint(5) unsigned NOT NULL auto_increment,
-  `iso_code` char(2) NOT NULL,
+  `iso_code` varchar(6) NOT NULL,
   `locale` varchar(12) default NULL,
   `name` varchar(50) NOT NULL,
   `is_active` tinyint(3) unsigned NOT NULL default '1',
@@ -297,7 +297,7 @@ INSERT INTO `languages` VALUES (1,'en',NULL,'English',1),
 (9,'ko',NULL,'Korean',1),
 (10,'pt','Brazil','Portuguese',1),
 (11,'zh','Simplified','Chinese',1),
-(12,'zh','Traditional','Chinese',1),
+(12,'zh_TW','Traditional','Chinese',1),
 (13,'cs',NULL,'Czech',1),
 (14,'hu',NULL,'Hungarian',1),
 (15,'pl',NULL,'Polish',1),
@@ -312,6 +312,7 @@ INSERT INTO `languages` VALUES (1,'en',NULL,'English',1),
 (24,'tr',NULL,'Turkish',1),
 (25,'ar',NULL,'Arabic',1),
 (26,'he',NULL,'Hebrew',1);
+insert into languages set iso_code = 'hi', name = "Hindi";
 insert into project_versions set project_id = "eclipse", version = "3.4", is_active = 1;
 
 

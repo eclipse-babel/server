@@ -12,6 +12,14 @@
 include("global.php");
 InitPage("");
 
+$headless = 0;
+if(!isset($User)) {
+	echo "User not defined -- running headless.";
+	$User = new User();
+	$User->loadFromID(40623);  // genie
+	$headless = 1;
+}
+
 
 require(BABEL_BASE_DIR . "classes/file/file.class.php");
 $html_spacer = "&#160;&#160;&#160;&#160;";
@@ -98,6 +106,10 @@ while($myrow = mysql_fetch_assoc($rs_maps)) {
 			}			
 		}
 	}
+}
+
+if($headless) {
+	$User = null;
 }
 
 function parseLocation($in_string) {

@@ -91,7 +91,7 @@ if (empty($translation) || (trim($translation) == '')) {
 	if($string_translation){
 		$query	= "
 			select 
-				translation_id,string_id
+				translation_id,string_id,language_id
 			from
 				translations
 			where
@@ -113,7 +113,7 @@ if (empty($translation) || (trim($translation) == '')) {
 					 	translations
 					 set
 	 					string_id = '".addslashes($row['string_id'])."', 
-						language_id = '".addslashes($language)."' , 
+						language_id = '".addslashes($row['language_id'])."' , 
 						value = '".addslashes($translation)."', 
   						userid = '".addslashes($user_id)."',
 				   		created_on  = NOW()

@@ -33,37 +33,31 @@ if (empty($translation) || (trim($translation) == '')) {
 	// do nothing
 	
 } else if($_POST['translate_action'] != "all"){
-
-$query = "update 
-			translations 
-		  set
-			is_active = 0 
-		  where 		  	
-			string_id = '".addslashes($string_id)."'
-		  and
-		  	language_id = '".addslashes($language_id)."'
-		  and 
-		  	is_active = 1
-		  ";
-$res = mysql_query($query,$dbh);
-
-$query = "insert into 
-				translations
+	$query = "update 
+				translations 
 			  set
-			  	string_id = '".addslashes($string_id)."',
-			  	language_id = '".addslashes($language_id)."',
-			  	value = '".addslashes($translation)."',
-			  	userid = '".addslashes($user_id)."',
-			  	created_on = NOW()
-			  	";
-$res = mysql_query($query,$dbh);
-
-print $query;
-
+				is_active = 0 
+			  where 		  	
+				string_id = '".addslashes($string_id)."'
+			  and
+			  	language_id = '".addslashes($language_id)."'
+			  and 
+			  	is_active = 1
+			  ";
+	$res = mysql_query($query,$dbh);
+	
+	$query = "insert into 
+					translations
+				  set
+				  	string_id = '".addslashes($string_id)."',
+				  	language_id = '".addslashes($language_id)."',
+				  	value = '".addslashes($translation)."',
+				  	userid = '".addslashes($user_id)."',
+				  	created_on = NOW()
+				  	";
+	$res = mysql_query($query,$dbh);
 }else{
-
-//FIND ALL STRINGS THAT ARE THE SAME ACROSS VERSIONS
-
+	//FIND ALL STRINGS THAT ARE THE SAME ACROSS VERSIONS
 	$query = "select 
 				string_id
 			  from 
@@ -86,7 +80,7 @@ print $query;
 	}
 	
 	//GET CURRENT TRANSLATION FOR THIS STRING
-	$query= "select value from translations where string_id = '".addslashes($string_id)."' and is_active = 1 order by version limit 1";
+	$query= "select value from translations where string_id = '".addslashes($string_id)."'and language_id = '".addslashes($language_id)."' and is_active = 1 order by version limit 1";
 	$res = mysql_query($query,$dbh);
 	$string_translation = "";
 	while($row = mysql_fetch_assoc($res)){

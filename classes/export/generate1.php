@@ -152,7 +152,7 @@ while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
 			 */
 			$fullpath =  $temporary_dir . $filename;
 			preg_match( "/^((.*)\/)?(.+?)$/", $fullpath, $matches );
-			exec( "mkdir -p " . $matches[1]);
+			exec( "mkdir -p \"" . $matches[1] . "\"");
 			/*
 			 * Start writing to the file
 			 */

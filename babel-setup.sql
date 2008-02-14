@@ -295,14 +295,14 @@ INSERT INTO `languages` VALUES (1,'en',NULL,'English',1),
 (7,'it',NULL,'Italian',1),
 (8,'ja',NULL,'Japanese',1),
 (9,'ko',NULL,'Korean',1),
-(10,'pt','Brazil','Portuguese',1),
+(10,'pt_BR','Brazil','Portuguese',1),
 (11,'zh','Simplified','Chinese',1),
 (12,'zh_TW','Traditional','Chinese',1),
 (13,'cs',NULL,'Czech',1),
 (14,'hu',NULL,'Hungarian',1),
 (15,'pl',NULL,'Polish',1),
 (16,'ru',NULL,'Russian',1),
-(17,'da',NULL,'Russian',1),
+(17,'da',NULL,'Danish',1),
 (18,'nl',NULL,'Dutch',1),
 (19,'fi',NULL,'Finnish',1),
 (20,'el',NULL,'Greek',1),
@@ -311,7 +311,7 @@ INSERT INTO `languages` VALUES (1,'en',NULL,'English',1),
 (23,'sv',NULL,'Swedish',1),
 (24,'tr',NULL,'Turkish',1),
 (25,'ar',NULL,'Arabic',1),
-(26,'he',NULL,'Hebrew',1);
+(26,'iw',NULL,'Hebrew',1);
 insert into languages set iso_code = 'hi', name = "Hindi";
 insert into project_versions set project_id = "eclipse", version = "3.4", is_active = 1;
 

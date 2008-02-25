@@ -23,7 +23,7 @@ class File {
 	
 	function save() {
 		$rValue = false;
-		if($this->name != "" && $this->project_id != "" && $this->version > 0) {
+		if($this->name != "" && $this->project_id != "" && $this->version != "") {
 			global $App, $dbh;
 
 			if($this->file_id == 0) {
@@ -42,7 +42,7 @@ class File {
 			$sql .= " files 
 						SET file_id 	= " . $App->sqlSanitize($this->file_id, $dbh) . ",
 							project_id	= " . $App->returnQuotedString($App->sqlSanitize($this->project_id, $dbh)) . ", 
-							version		= " . $App->sqlSanitize($this->version, $dbh) . ", 
+							version		= " . $App->returnQuotedString($App->sqlSanitize($this->version, $dbh)) . ", 
 							name		= " . $App->returnQuotedString($App->sqlSanitize($this->name, $dbh)) . ",
 							is_active	= 1" . $where;
 			if(mysql_query($sql, $dbh)) {
@@ -54,8 +54,12 @@ class File {
 				$Event->add();
 			}
 			else {
+				echo $sql;
 				$GLOBALS['g_ERRSTRS'][1] = mysql_error();
 			}
+		}
+		else {
+			echo "ERROR: One missing:Name: " . $this->name . "Project: " . $this->project_id  . "Version: " . $this->version;
 		}
 		return $rValue;
 	}

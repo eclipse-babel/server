@@ -74,7 +74,7 @@ class File {
 					files 
 				WHERE name = " . $App->returnQuotedString($App->sqlSanitize($_name, $dbh)) . "
 					AND project_id = " . $App->returnQuotedString($App->sqlSanitize($_project_id, $dbh)) . "	
-					AND version = " . $App->sqlSanitize($_version, $dbh);
+					AND version = '" . $App->sqlSanitize($_version, $dbh) . "'";
 
 			$result = mysql_query($sql, $dbh);
 			if($result && mysql_num_rows($result) > 0) {

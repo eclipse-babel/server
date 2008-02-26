@@ -34,18 +34,20 @@ chdir("/tmp/tmp-babel")  || die("Cannot use working directory");
 
 
 
-$sql = "SELECT * FROM map_files WHERE is_active = 1 ORDER BY RAND()";
+$sql = "SELECT * FROM map_files WHERE is_active = 1 ORDER BY version";
 $rs_maps = mysql_query($sql, $dbh);
-while($myrow = mysql_fetch_assoc($rs_maps)) {
-	echo "Processing map file: " . $myrow['filename'] . " in location: " . $myrow['location'] . "<br />";
+while($myrow_maps = mysql_fetch_assoc($rs_maps)) {
+	echo "Processing map file: " . $myrow_maps['filename'] . " in location: " . $myrow_maps['location'] . "<br />";
 	
-	$tmpdir = "/tmp/tmp-babel/" . $myrow['project_id'];
-	if(!is_dir($tmpdir)) {
-		mkdir($tmpdir) || die("Cannot create working directory $tmpdir !");
+	$tmpdir = "/tmp/tmp-babel/" . $myrow_maps['project_id'];
+	if(is_dir($tmpdir)) {
+		# zap the directory to make sure CVS versions don't overlap
+		exec("rm -rf " . $tmpdir);
 	}
+	mkdir($tmpdir) || die("Cannot create working directory $tmpdir !");
 	chdir($tmpdir) || die("Cannot write to $tmpdir !"); 
 	
-	$h = fopen($myrow['location'], "rb");
+	$h = fopen($myrow_maps['location'], "rb");
 	$file_contents = stream_get_contents($h);
 	fclose($h);
 	$aLines = split("\n", $file_contents);
@@ -67,6 +69,8 @@ while($myrow = mysql_fetch_assoc($rs_maps)) {
 					$tagstring = "-r " . $aStuff['tag'] . " ";
 				}
 				
+				echo "Elements 1: " . $aElements[1] . "<br />";
+				
 				$command = "cvs -d " . $aStuff['cvsroot'] . " co " . $tagstring . $aElements[1];
 				echo $html_spacer . $html_spacer ."<font color=blue>" . $command . "</font><br />";
 				$out = shell_exec($command);
@@ -83,8 +87,8 @@ while($myrow = mysql_fetch_assoc($rs_maps)) {
 						echo $html_spacer . $html_spacer . $html_spacer . "<font color=green>Processing .properties file: " . $file_name . "</font><br />";
 						
 						$File = new File();
-						$File->project_id 	= $myrow['project_id'];
-						$File->version		= $myrow['version'];
+						$File->project_id 	= $myrow_maps['project_id'];
+						$File->version		= $myrow_maps['version'];
 						$File->name 		= $file_name;
 						if(!$File->save()) {
 							echo $html_spacer . $html_spacer . $html_spacer . $html_spacer . "<font color=red>Error saving file: " . $file_name . "</font><br />";
@@ -115,21 +119,22 @@ if($headless) {
 function parseLocation($in_string) {
 	# in_string looks something like this:
 	# v_832,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,
-	$aElements = array();
+	# v20080204,:pserver:anonymous@dev.eclipse.org:/cvsroot/birt,,source/org.eclipse.birt.report.designer.core
+	$aTheseElements = array();
 	
 	$aLocation = split(",", $in_string);
 	foreach($aLocation as $location_part) {
 		# TAG  
-		if(preg_match("/^[0-9a-zA-Z_]+$/", $location_part) && !isset($aElements['cvsroot'])) {
-			$aElements['tag'] = $location_part;
+		if(preg_match("/^[0-9a-zA-Z_]+$/", $location_part) && !isset($aTheseElements['cvsroot'])) {
+			$aTheseElements['tag'] = $location_part;
 		}
 		# CVSROOT
 		if(preg_match("/^:.*:.*@.*:\//", $location_part)) {
-			$aElements['cvsroot'] = $location_part;
+			$aTheseElements['cvsroot'] = $location_part;
 		}
 	}
 	
-	return $aElements;
+	return $aTheseElements;
 }
 
 ?>

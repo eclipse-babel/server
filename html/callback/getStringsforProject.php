@@ -193,7 +193,8 @@ while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
     if(isset($stringids[$line['stringId']])){
  		  continue;
     }else{
-    	$line['translationString'] = stripslashes($line['translationString']);
+    	$line['text'] = htmlspecialchars(stripslashes($line['text']));
+    	$line['translationString'] = htmlspecialchars(stripslashes($line['translationString']));
 		$return[] = $line;
 		$stringids[$line['stringId']] = 1;
     }

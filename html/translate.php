@@ -18,8 +18,6 @@ $pageKeywords 	= "translation,language,nlpack,pack,eclipse,babel";
 
 include("head.php");
 
-phpinfo();
-exit();
 
 //$_SESSION['language'] = "";
 //$_SESSION['project'] = "";

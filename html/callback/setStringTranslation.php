@@ -56,6 +56,8 @@ if (empty($translation) || (trim($translation) == '')) {
 				  	created_on = NOW()
 				  	";
 	$res = mysql_query($query,$dbh);
+	
+	print $query;
 }else{
 	//FIND ALL STRINGS THAT ARE THE SAME ACROSS VERSIONS
 	$query = "select 

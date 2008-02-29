@@ -13,12 +13,17 @@
 
 require_once("cb_global.php");
 
-
 $string_id = $App->getHTTPParameter("string_id", "POST");
 
-$language = $_SESSION['language'];
-$version = $_SESSION['version'];
-$project_id = $_SESSION['project'];
+
+if(isset($_SESSION['language']) and isset($_SESSION['version']) and isset($_SESSION['project'])){
+	$language = $_SESSION['language'];
+	$version = $_SESSION['version'];
+	$project_id = $_SESSION['project'];
+}else{
+	return false;
+}
+
 
 $query = "select 
 			strings.string_id,
@@ -129,7 +134,7 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 	<div id="english-area" class="side-component">
 		<h4>English String</h4>
 		<div style='margin-bottom: .5em;'>
-			<b><?= nl2br($line['string_value']);?></b>
+			<b><?= htmlspecialchars_decode(nl2br($line['string_value']));?></b>
 		</div>
 		<h4>Externalized Token</h4>
 		<div>

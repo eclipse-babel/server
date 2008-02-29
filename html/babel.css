@@ -14,6 +14,24 @@ li{
 	list-decoration: none;
 }
 
+#spinner{
+	width: auto; 
+	height: 30px;
+	padding: 5px; 
+	background-color: rgb(240,240,240); 
+	text-align: center;
+	margin: 20px auto;
+}
+#spinner img{
+	width: 16px;
+	margin: 0px auto;
+}
+#spinner h1{
+	margin: auto; 
+	width: 200px;
+	font-size: 12px;
+	color: black;
+}
 .hovering{
 	background-color: LightSkyBlue !important;
 	}

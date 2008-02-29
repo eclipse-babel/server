@@ -28,6 +28,8 @@ li{
 #spinner h1{
 	margin: auto; 
 	width: auto;
+	padding: 0px;
+	margin: 0px;
 	font-size: 12px;
 	color: black;
 }

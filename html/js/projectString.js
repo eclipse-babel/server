@@ -70,7 +70,7 @@ YAHOO.projectStringsManager = {
 			} 
 		} 
 		//start spinner
-		var domNode = document.getElementById('projecs-strings-area');
+		var domNode = document.getElementById('not-translated');
 		YAHOO.spinable.attach(domNode);
 		YAHOO.util.Connect.asyncRequest('GET', "callback/getStringsforProject.php", callback, null);
 	},

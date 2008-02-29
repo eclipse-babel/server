@@ -134,7 +134,7 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 	<div id="english-area" class="side-component">
 		<h4>English String</h4>
 		<div style='margin-bottom: .5em;'>
-			<b><?= htmlspecialchars_decode(nl2br($line['string_value']));?></b>
+			<b><?= htmlspecialchars(nl2br($line['string_value']));?></b>
 		</div>
 		<h4>Externalized Token</h4>
 		<div>

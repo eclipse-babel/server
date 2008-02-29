@@ -44,6 +44,9 @@ YAHOO.filesManager = {
 				YAHOO.log('failed!');
 			} 
 		} 
+		//start spining;
+		var domNode = document.getElementById('files-area');
+		YAHOO.spinable.attach(domNode);
 		YAHOO.util.Connect.asyncRequest('GET', "callback/getFilesForProject.php", callback, null); 
 	},
 

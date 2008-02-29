@@ -45,6 +45,9 @@ YAHOO.versionManager = {
 				YAHOO.log('failed!');
 			} 
 		} 
+		//start spinner
+		var domNode = document.getElementById('version-area');
+		YAHOO.spinable.attach(domNode);
 		YAHOO.util.Connect.asyncRequest('GET', "callback/getVersionsforProject.php", callback, null); 
 	},
 

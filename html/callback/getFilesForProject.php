@@ -19,6 +19,7 @@ if(!isset($_SESSION['project']) or !isset($_SESSION['version'])){
 	return $return; 
 }
 
+$language = "";
 if(isset($_SESSION['language'])) {
 		$language =  $_SESSION['language'];
 }

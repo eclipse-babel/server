@@ -12,6 +12,16 @@
 
 YAHOO.widget.Logger.enableBrowserConsole();
 
+YAHOO.spinable = {
+	spinningIconPath :"animations/process-working.png",
+
+	attach: function(domIN){
+		domIN.innerHTML = "<div id='spinner'><img src='http://babel.eclipse.org/images/spinner.gif' alt='spinner'><h1>...loading...</h1></div>";
+	},
+	
+};
+
+
 
 function selectable(){
 }

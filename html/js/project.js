@@ -40,6 +40,9 @@ YAHOO.projectManager = {
 				YAHOO.log('failed!');
 			} 
 		} 
+		//start spinner
+		var domNode = document.getElementById('project-area');
+		YAHOO.spinable.attach(domNode);
 		YAHOO.util.Connect.asyncRequest('GET', "callback/getProjects.php", callback, null); 
 	},
 

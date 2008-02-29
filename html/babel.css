@@ -28,7 +28,7 @@ li{
 }
 #spinner h1{
 	margin: auto; 
-	width: 200px;
+	width: auto;
 	font-size: 12px;
 	color: black;
 }

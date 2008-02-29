@@ -25,6 +25,7 @@ YAHOO.languageManager = {
 				if(!domNode){
 					return false;
 				}
+				domNode.innerHTML = "";
 //				YAHOO.log(o.responseText);
 
 				for(var i = 0; i < response.length; i++){
@@ -42,6 +43,9 @@ YAHOO.languageManager = {
 				YAHOO.log('failed!');
 			} 
 		} 
+		//start spining;
+		var domNode = document.getElementById('language-area');
+		YAHOO.spinable.attach(domNode);
 		YAHOO.util.Connect.asyncRequest('GET', "callback/getLanguages.php", callback, null); 
 	},
 

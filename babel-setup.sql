@@ -27,6 +27,16 @@ CREATE TABLE `event_log` (
   PRIMARY KEY  (`event_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `file_progress`;
+CREATE TABLE `file_progress` (
+  `file_id` int(10) unsigned NOT NULL,
+  `language_id` smallint(5) unsigned NOT NULL,
+  `pct_complete` float NOT NULL,
+  PRIMARY KEY  (`file_id`, `language_id`),
+  CONSTRAINT `file_progress_ibfk_1` FOREIGN KEY (`file_id`) REFERENCES `files` (`file_id`) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT `file_progress_ibfk_2` FOREIGN KEY (`language_id`) REFERENCES `languages` (`language_id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `files`;
 CREATE TABLE `files` (
   `file_id` int(10) unsigned NOT NULL auto_increment,
@@ -38,7 +48,6 @@ CREATE TABLE `files` (
   KEY `project_id` (`project_id`),
   CONSTRAINT `files_ibfk_1` FOREIGN KEY (`project_id`,`version`) REFERENCES `project_versions` (`project_id`,`version`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 --
 -- Table structure for table `languages`
 --
@@ -228,13 +237,34 @@ CREATE TABLE `translations` (
   CONSTRAINT `translations_ibfk_3` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*!50003 SET @OLD_SQL_MODE=@@SQL_MODE*/;
+SET @OLD_SQL_MODE=@@SQL_MODE;
 DELIMITER ;;
 /*!50003 SET SESSION SQL_MODE="" */;;
-/*!50003 CREATE TRIGGER `ins_version` BEFORE INSERT ON `translations` FOR EACH ROW SET NEW.version = 
-    (SELECT IFNULL(MAX(version),0)+1 FROM translations 
-        WHERE string_id = NEW.string_id and language_id = NEW.language_id) */;;
+DROP TRIGGER `ins_version`;;
 
+/* This trigger sets the version to max(version) + 1.  It also updates the file_progress table  */
+/* (COUNT(t.string_id) + 1) because it's a BEFORE INSERT trigger, the translated str is not in the DB yet  */
+/* and without the +1 the percent would always be "one behind"  */   
+CREATE TRIGGER `ins_version` BEFORE INSERT ON `translations` FOR EACH ROW BEGIN
+  SET NEW.version = 
+    (SELECT IFNULL(MAX(version),0)+1 FROM translations 
+        WHERE string_id = NEW.string_id and language_id = NEW.language_id);
+        
+  DELETE FROM file_progress where file_id = (SELECT file_id FROM strings WHERE string_id = NEW.string_id)
+   AND language_id = NEW.language_id;
+ 
+ INSERT INTO file_progress SET file_id = (SELECT file_id FROM strings WHERE string_id = NEW.string_id),
+   language_id = NEW.language_id,
+   pct_complete = (
+     SELECT IF(COUNT(s.string_id) > 0, (COUNT(t.string_id) + 1)/COUNT(s.string_id)*100,0) AS translate_percent
+       FROM files AS f
+         LEFT JOIN strings AS s ON s.file_id = f.file_id
+         LEFT JOIN translations AS t ON (s.string_id = t.string_id 
+           AND t.language_id = NEW.language_id AND t.is_active = 1)
+       WHERE f.file_id = (SELECT file_id FROM strings WHERE string_id = NEW.string_id)
+    ); 
+END;
+;;
 DELIMITER ;
 /*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;
 

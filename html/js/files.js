@@ -62,6 +62,7 @@ YAHOO.filesManager = {
 
 function afile(dataIn){
 	this.filename = dataIn['name'];
+	this.pct = dataIn['pct'];
 	afile.superclass.constructor.call();
 	this.initSelectable();
 }
@@ -90,7 +91,11 @@ afile.prototype.clicked = function(e){
 }
 afile.prototype.createHTML = function(){
 	this.domElem = document.createElement("li");
-	this.domElem.innerHTML = this.filename;
+	var filename_display = this.filename;
+	if(filename_display.length > 100) {
+		filename_display = filename_display.substr(0,35) + "(...)" + filename_display.substr(filename_display.length - 50); 
+	}
+	this.domElem.innerHTML = filename_display + " (" + (this.pct > 0 ? new Number(this.pct).toFixed(1) : 0) + "%)";
 	this.addEvents();
 	return this.domElem;
 }

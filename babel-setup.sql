@@ -385,4 +385,4 @@ FROM files AS f
            AND t.language_id = l.language_id AND t.is_active = 1)
 WHERE f.is_active = 1 
 GROUP BY f.file_id, l.language_id;
-DELETE FROM file_progress WHERE pct_completed = 0;
+DELETE FROM file_progress WHERE pct_complete = 0;

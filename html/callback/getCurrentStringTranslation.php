@@ -148,8 +148,34 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 		<button id="allversions" type="submit" name="translateAction" value="All Versions" nClick="translationSumbit(this.form,this);">All Versions</button>
 		<button id="onlysametrans" type="submit" name="translateAction" value="Only Version <?=$_SESSION['version']?>" nClick="translationSumbit(this.form,this);">Only Version <?=$_SESSION['version']?></button>
 	</div>	
-	<div id="translation-history" class="side-component">
+	<div id="translation-history-area" class="side-component">
 		<h4>History of Translations</h4>
-		<div id="translation-history">Coming soon!</div>
+		<div id="translation-history">
+		
+		<table>
+		<?php
+			$query = "select value,first_name,last_name,translations.created_on from translations,users where string_id = '".addslashes($line['string_id'])."' and language_id = '".addslashes($language)."' and translations.userid = users.userid order by translations.created_on desc";
+			$res_history = mysql_query($query,$dbh);
+			
+			if(!mysql_num_rows($res_history)){
+				print "No history.";
+			}else{		
+				while($line = mysql_fetch_array($res_history, MYSQL_ASSOC)){
+					print "<tr>";
+					print "<td width='40%'>";
+					print $line['value']."";
+					print "</td>";
+					print "<td width='20%'>";
+					print $line['first_name']." ".$line['last_name'];
+					print "</td>";
+					print "<td width='40%'>";
+					print $line['created_on'];
+					print "</td>";
+					print "</tr>";
+				}
+			}
+		?>
+		</table>
+		</div>
 	</div>
 </form>

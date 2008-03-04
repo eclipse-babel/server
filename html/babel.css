@@ -35,7 +35,7 @@ li{
 }
 .hovering{
 	background-color: LightSkyBlue !important;
-	}
+}
 
 .clearing{
 	clear: both;
@@ -44,6 +44,7 @@ li{
 	}
 #container{	margin: 10px auto;
 	width: 1001px;
+	cursor: pointer;
 }
 
 #contentArea{
@@ -257,4 +258,10 @@ h4{
 }
 #trans-progress-area dd{
 	clear: right;
+}
+
+#translation-history{
+	height: 180px;
+	overflow-y: auto;
+	overflow-x: hidden;
 }

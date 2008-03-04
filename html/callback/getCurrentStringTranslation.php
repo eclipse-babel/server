@@ -163,7 +163,7 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 				while($line = mysql_fetch_array($res_history, MYSQL_ASSOC)){
 					print "<tr>";
 					print "<td width='40%'>";
-					print $line['value']."";
+					print htmlspecialchars_decode($line['value'])."";
 					print "</td>";
 					print "<td width='20%'>";
 					print $line['first_name']." ".$line['last_name'];

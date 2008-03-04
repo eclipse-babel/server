@@ -9,6 +9,7 @@
  * Contributors:
  *    Eclipse Foundation - Initial API and implementation
 *******************************************************************************/
+header("Content-type: text/plain");
 include("global.php");
 InitPage("");
 
@@ -22,7 +23,7 @@ if(!isset($User)) {
 
 
 require(BABEL_BASE_DIR . "classes/file/file.class.php");
-$html_spacer = "&#160;&#160;&#160;&#160;";
+$html_spacer = "  ";
 
 global $App, $dbh;
 
@@ -37,7 +38,7 @@ chdir("/tmp/tmp-babel")  || die("Cannot use working directory");
 $sql = "SELECT * FROM map_files WHERE is_active = 1 ORDER BY RAND()";
 $rs_maps = mysql_query($sql, $dbh);
 while($myrow_maps = mysql_fetch_assoc($rs_maps)) {
-	echo "Processing map file: " . $myrow_maps['filename'] . " in location: " . $myrow_maps['location'] . "<br />";
+	echo "Processing map file: " . $myrow_maps['filename'] . " in location: " . $myrow_maps['location'] . "\n";
 	
 	$tmpdir = "/tmp/tmp-babel/" . $myrow_maps['project_id'];
 	if(is_dir($tmpdir)) {
@@ -56,42 +57,47 @@ while($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 	foreach ($aLines as $line) {
 		$line = trim($line);
 
+		# plugin@org.eclipse.emf.query=v200802262150,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query
 		if(preg_match("/^(plugin|fragment)/", $line)) {
-			echo $html_spacer . "Processling line: " . $line . "<br />";
+			echo $html_spacer . "Processling line: " . $line . "\n";
 			$aParts = split("=", $line);
-			$aElements = split("@", $aParts[0]);		
+			$aElements = split("@", $aParts[0]);
+
 			if($aElements[0] == "plugin") {
-				echo $html_spacer . $html_spacer . "Processling plugin: " . $aParts[1] . "<br />";
+				echo $html_spacer . $html_spacer . "Processling plugin: " . $aParts[1] . "\n";
 				$aStuff = parseLocation($aParts[1]);
 				
 				$tagstring = "";
 				if(isset($aStuff['tag'])) {
 					$tagstring = "-r " . $aStuff['tag'] . " ";
 				}
-				
-				echo "Elements 1: " . $aElements[1] . "<br />";
+				if(isset($aStuff['plugin'])) {
+					if($aStuff['plugin'] != "") {
+						$aElements[1] = $aStuff['plugin'];
+					}
+				}
 				
 				$command = "cvs -d " . $aStuff['cvsroot'] . " co " . $tagstring . $aElements[1];
-				echo $html_spacer . $html_spacer ."<font color=blue>" . $command . "</font><br />";
+				echo $html_spacer . $html_spacer ."--> " . $command . "\n";
 				$out = shell_exec($command);
 				
 				# process the output lines for .properties
 				$aOutLines = split("\n", $out);
 				foreach ($aOutLines as $out_line) {
 					$out_line = trim($out_line);
-					echo $html_spacer . $html_spacer . "CVS out line: " . $out_line . "<br />";
+					echo $html_spacer . $html_spacer . "CVS out line: " . $out_line . "\n";
 					# U org.eclipse.ant.ui/Ant Editor/org/eclipse/ant/internal/ui/dtd/util/AntDTDUtilMessages.properties
 					if(preg_match("/\.properties$/", $out_line) && !preg_match("/build\.properties$/", $out_line)) {
 						# this is a .properties file!
 						$file_name = trim(substr($out_line, 2)); 
-						echo $html_spacer . $html_spacer . $html_spacer . "<font color=green>Processing .properties file: " . $file_name . "</font><br />";
+						echo $html_spacer . $html_spacer . $html_spacer . "Processing .properties file: " . $file_name . "\n";
 						
 						$File = new File();
 						$File->project_id 	= $myrow_maps['project_id'];
 						$File->version		= $myrow_maps['version'];
 						$File->name 		= $file_name;
 						if(!$File->save()) {
-							echo $html_spacer . $html_spacer . $html_spacer . $html_spacer . "<font color=red>Error saving file: " . $file_name . "</font><br />";
+							echo $html_spacer . $html_spacer . $html_spacer . $html_spacer . "***ERROR saving file: " . $file_name . "\n";
 						}
 						else {
 							# Start importing the strings!
@@ -102,7 +108,7 @@ while($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 							fclose($fh);
 						
 							$strings = $File->parseProperties($content);
-							echo $html_spacer . $html_spacer . $html_spacer . $html_spacer . "Strings processed: $strings<br /><br />";
+							echo $html_spacer . $html_spacer . $html_spacer . $html_spacer . "Strings processed: $strings\n\n";
 						}
 									
 					}
@@ -121,6 +127,8 @@ function parseLocation($in_string) {
 	# in_string looks something like this:
 	# v_832,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,
 	# v20080204,:pserver:anonymous@dev.eclipse.org:/cvsroot/birt,,source/org.eclipse.birt.report.designer.core
+	# v200802262150,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query
+	
 	$aTheseElements = array();
 	
 	$aLocation = split(",", $in_string);
@@ -134,6 +142,8 @@ function parseLocation($in_string) {
 			$aTheseElements['cvsroot'] = $location_part;
 		}
 	}
+	
+	$aTheseElements['plugin'] = substr($in_string, strrpos($in_string, ",") + 1);
 	
 	return $aTheseElements;
 }

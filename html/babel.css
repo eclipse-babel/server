@@ -1,5 +1,14 @@
 /* babel override for Phoenix styles */
 
+#translation-history table td div,
+#translatable-strings-labels-area,
+#english-area div,
+textarea,
+#container li,
+.translatable td div{
+	unicode-bidi: bidi-override;	
+	}
+
 form{
 	margin: 0px;
 	padding: 0px;

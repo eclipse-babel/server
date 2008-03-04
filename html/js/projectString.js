@@ -148,8 +148,10 @@ projectString.prototype.createHTML = function(tableDom){
 	var values = new Object();
 	values.cssID = "";
 	values.cssClass = "";
-	values.string = this.data['text'];
-	var temp = this.data['translationString'] ? this.data['translationString'] : ''
+	var temp = this.data['text'] ? this.data['text'] : ''
+	values.string = "<div style='width: 100%; overflow: hidden;'>"+temp+"</div>";
+	
+	temp = this.data['translationString'] ? this.data['translationString'] : ''
 	values.translation = "<div style='width: 100%; overflow: hidden;'>"+temp+"</div>";
 	values.translator = this.data['translator'] ? this.data['translator'] : '';
 	values.createdon = this.data['createdOn'];

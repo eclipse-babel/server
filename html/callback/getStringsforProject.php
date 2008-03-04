@@ -35,6 +35,7 @@ if(!isset($proj_post)){
 	if(isset($_SESSION['file']))
 		$file =  $_SESSION['file'];
 }
+
 switch($state){
 	case "flagged" :
 	break;
@@ -61,9 +62,11 @@ switch($state){
 	break;
 	$query = "select 
 				strings.value as string,
-				translations.value as translation
-			  from 
+				translations.value as translation,
+				users.username as translator
+				from 
 			  	strings,
+			  	users,
 			  	files
 			  	left join translations on
 			  		translations.language_id = '".addslashes($language)."'
@@ -77,6 +80,8 @@ switch($state){
 				files.project_id = '".addslashes($project_id)."'
 			  and	
 				files.version = '".addslashes($version)."'
+			  and 
+			  	users.userid = translations.userid
 			";
 	
 	case "untranslated" :
@@ -86,70 +91,9 @@ switch($state){
 					strings.value as text,
 					strings.created_on as createdOn,
 					translations.value as translationString,
-					max(translations.version)
-				from 
-				  	strings
-				  	
-				  	left join files on
-					  	files.project_id = '".addslashes($project_id)."'
-				  	
-				  	left join translations on (
-				  		translations.language_id = '".addslashes($language)."'
-				  	  and
-				  		translations.string_id  = strings.string_id
-				  	)
-				  where 
-				  	strings.is_active != 0 
-				  and 
-				  	strings.file_id = files.file_id 
-				  and 
-					files.project_id = '".addslashes($project_id)."'
-				  and	
-					files.version = '".addslashes($version)."'
-  				  group by strings.string_id,translations.version desc
-				";
-
-		
-		$query = "select 
-					strings.string_id as stringId,
-					strings.value as text,
-					strings.created_on as createdOn,
-					translations.value as translationString,
-					max(translations.version)
-				from 
-				  	strings
-				  	
-				  	left join project_versions on
-					  	project_versions.project_id = '".addslashes($project_id)."'
-				  	
-				  	left join translations on (
-				  		translations.language_id = '".addslashes($language)."'
-				  	  and
-				  		translations.string_id  = strings.string_id
-				  	)
-				  where 
-				  	strings.is_active != 0 
-				  and 
-					project_versions.project_id = '".addslashes($project_id)."'
-				  and	
-					project_versions.version = '".addslashes($version)."'
-					
-  				  group by strings.string_id,translations.version desc
-				";
-		
-		
-//				  	translations.string_id is null
-//				  and
-		
-		
-		
-		$query = "select 
-					strings.string_id as stringId,
-					strings.value as text,
-					strings.created_on as createdOn,
-					translations.value as translationString,
-					users.username as translator
-				from 
+					users.first_name as first,
+					users.last_name as last
+					from 
 					files,
 				  	strings
 				  	
@@ -176,9 +120,6 @@ switch($state){
 					files.project_id = '".addslashes($project_id)."'
   				  group by strings.string_id,translations.version desc
 				";
-		
-//		print $query;
-	
 }
 
 //print $query."<br>";
@@ -195,6 +136,7 @@ while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
     }else{
     	$line['text'] = htmlspecialchars(($line['text']));
     	$line['translationString'] = htmlspecialchars(($line['translationString']));
+    	$line['translator'] = htmlspecialchars(($line['first']." ".$line['last']));
 		$return[] = $line;
 		$stringids[$line['stringId']] = 1;
     }
@@ -202,14 +144,4 @@ while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
 
 print json_encode($return);
 exit();
-
-//	$return .= "<tr>";
-//	$return .= "<td><a href='?string_id=".$line['string']."'>".$line['string']."</a></td>";
-//	$return .= "<td>".$line['translation']."</td>";
-//	$return .= "</tr>";
-//<table id='string-choices'>
-//	<?=$return;?>
-//</table>
-
-
 ?>

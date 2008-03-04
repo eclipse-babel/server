@@ -268,7 +268,7 @@ while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
 <description>Translations in $language_name for all Eclipse Projects</description>
 " );
 	foreach ($plugins as $plugin_name => $plugin_row ) {
-		fwrite( $outp, '<pluging fragment="true" id="'
+		fwrite( $outp, '<plugin fragment="true" id="'
 			. $plugin_row['id'] . '" unpack="false" version="'
 			. $plugin_row['version'] . '"/>
 ' );

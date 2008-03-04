@@ -28,6 +28,14 @@ if(defined('BABEL_BASE_DIR')){
 	require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
 } 
 
+if( !function_exists('json_encode') ){
+	require("/home/data/httpd/babel.eclipse.org/html/json_encode.php");
+	function json_encode($encode){
+ 		$jsons = new Services_JSON();
+		return $jsons->encode($encode);
+	}
+}
+
 if (!($ini = @parse_ini_file(BABEL_BASE_DIR . 'classes/base.conf'))) {
 	errorLog("Failed to find/read database conf file - aborting.");
 	exitTo("error.php?errNo=101300","error: 101300 - database conf can not be found");
@@ -182,7 +190,9 @@ while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
 				fwrite( $outp, $strings_row['key'] . "=" );
 				#echo "${leader1S}${leaderS}${leaderS}${leaderS}" . $strings_row['key'] . "=";
 				if( $strings_row['trans'] ) {
-					fwrite( $outp, $strings_row['trans'] );
+					# json_encode returns the string with quotes fore and aft.  Need to strip them.
+					$tr_string = preg_replace('/^"(.*)"$/', '${1}', json_encode($strings_row['trans']));
+					fwrite( $outp, $tr_string );
 					# echo $strings_row['trans'];
 				} else {
 					fwrite( $outp, $strings_row['orig'] );

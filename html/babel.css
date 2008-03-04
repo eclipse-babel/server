@@ -6,7 +6,8 @@
 textarea,
 #container li,
 .translatable td div{
-	unicode-bidi: bidi-override;	
+	unicode-bidi: normal;	
+	direction: ltr;
 	}
 
 form{

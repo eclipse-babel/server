@@ -15,7 +15,6 @@ YAHOO.projectStringsManager = {
 	
 	getAjaxProjectStrings : function(){
 
-
 		if(!YAHOO.languageManager.getSelected() || 
 			!YAHOO.projectManager.getSelected() ||
 			!YAHOO.versionManager.getSelected() ||
@@ -126,7 +125,13 @@ YAHOO.projectStringsManager = {
 		}
 		this.selected = selec;
 		this.selected.selected();
+	},
+	
+	updateStringTableCurrentTranslation: function(stringTableIndex,trans){
+		this.tableDom.rows[stringTableIndex].cells[1].innerHTML = trans;
 	}
+	
+//$stringTableIndex	
 };
 
 function projectString(dataIn){
@@ -141,7 +146,7 @@ YAHOO.extend(projectString,selectable);
 }
 
 projectString.prototype.clicked = function(e){
-	showTranslateStringForm(this.data['stringId']);
+	showTranslateStringForm(this.data['stringId'],this.domElem.rowIndex);
 	YAHOO.projectStringsManager.updateSelected(this);
 }
 projectString.prototype.createHTML = function(tableDom){

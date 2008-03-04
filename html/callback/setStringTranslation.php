@@ -16,7 +16,7 @@ require_once("cb_global.php");
 
 //print_r($_REQUEST);
 
-print_r($_POST);
+//print_r($_POST);
 
 $string_id = $App->getHTTPParameter("string_id", "POST");
 $translation = $App->getHTTPParameter("translation", "POST");
@@ -57,7 +57,7 @@ if (empty($translation) || (trim($translation) == '')) {
 				  	";
 	$res = mysql_query($query,$dbh);
 	
-	print $query;
+//	print $query;
 }else{
 	//FIND ALL STRINGS THAT ARE THE SAME ACROSS VERSIONS
 	$query = "select 

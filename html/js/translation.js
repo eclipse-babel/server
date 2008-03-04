@@ -15,7 +15,7 @@ YAHOO.tranlsation = new Object();
 YAHOO.tranlsation.posted = false;
 
 
-function showTranslateStringForm(stringIdIn){
+function showTranslateStringForm(stringIdIn,stringTableIndex){
 	var callback = 
 	{ 
 		start:function(eventType, args){ 
@@ -30,7 +30,7 @@ function showTranslateStringForm(stringIdIn){
 			YAHOO.log('failed!');
 		} 
 	} 
-	YAHOO.util.Connect.asyncRequest('POST', "callback/getCurrentStringTranslation.php", callback, "string_id="+stringIdIn);
+	YAHOO.util.Connect.asyncRequest('POST', "callback/getCurrentStringTranslation.php", callback, "string_id="+stringIdIn+"&stringTableIndex="+stringTableIndex);
 }
 
 function setupTranslatFormCB(){
@@ -51,17 +51,17 @@ function translationClear(){
 
 
 function translateAll(e){
-	translationSumbit("all");
+	translationSumbit("all",document.getElementById('translation-form').stringTableIndex.value);
 }
 function translateOnlySameTranslations(e){
-	translationSumbit("onlysame")
+	translationSumbit("onlysame",document.getElementById('translation-form').stringTableIndex.value)
 }
 
 function translationSumbitStop(e){
 	YAHOO.util.Event.stopEvent(e);
 }
 
-function translationSumbit(allornot){
+function translationSumbit(allornot,translationIndex){
 	var target = document.getElementById('translation-form');
 
 	var callback = 
@@ -69,7 +69,7 @@ function translationSumbit(allornot){
 		start:function(eventType, args){ 
 		},
 		success: function(o) {
-			YAHOO.projectStringsManager.getAjaxProjectStrings();
+			YAHOO.projectStringsManager.updateStringTableCurrentTranslation(translationIndex,target.translation.value);
 		},
 		failure: function(o) {
 			YAHOO.log('failed!');

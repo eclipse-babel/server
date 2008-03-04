@@ -14,7 +14,7 @@
 require_once("cb_global.php");
 
 $string_id = $App->getHTTPParameter("string_id", "POST");
-
+$stringTableIndex = $App->getHTTPParameter("stringTableIndex", "POST");
 
 if(isset($_SESSION['language']) and isset($_SESSION['version']) and isset($_SESSION['project'])){
 	$language = $_SESSION['language'];
@@ -131,6 +131,8 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 ?>
 <form id='translation-form'>
 	<input type="hidden" name="string_id" value="<?=$line['string_id'];?>">
+	<input type="hidden" name="stringTableIndex" value="<?=$stringTableIndex;?>">
+
 	<div id="english-area" class="side-component">
 		<h4>English String</h4>
 		<div style='margin-bottom: .5em;'>

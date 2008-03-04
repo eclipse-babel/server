@@ -180,15 +180,15 @@ while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
 			$strings_result = mysql_query( $sql );
 			while( ($strings_row = mysql_fetch_assoc($strings_result)) != null ) {
 				fwrite( $outp, $strings_row['key'] . "=" );
-				echo "${leader1S}${leaderS}${leaderS}${leaderS}" . $strings_row['key'] . "=";
+				#echo "${leader1S}${leaderS}${leaderS}${leaderS}" . $strings_row['key'] . "=";
 				if( $strings_row['trans'] ) {
 					fwrite( $outp, $strings_row['trans'] );
-					echo $strings_row['trans'];
+					# echo $strings_row['trans'];
 				} else {
 					fwrite( $outp, $strings_row['orig'] );
 				}
 				fwrite( $outp, "\n" );
-				echo "\n";
+				# echo "\n";
 			}
 			/*
 			 * Finish the properties file

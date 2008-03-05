@@ -109,7 +109,7 @@ while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
 	$language_name = $language_row['name'];
 	$language_iso  = $language_row['iso_code'];
 	$language_locale  = $language_row['locale'];
-	if ( $language_locale != null ) ) {
+	if ( $language_locale != null ) {
 		$language_name = $language_locale . " " . $language_name;
 	}
 	echo "${leader1}Generating language pack for $language_name ($language_iso)(" . $language_row['language_id'] . ")\n";

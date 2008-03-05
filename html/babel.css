@@ -1,14 +1,8 @@
+@charset "utf-8";
+
 /* babel override for Phoenix styles */
 
-#translation-history table td div,
-#translatable-strings-labels-area,
-#english-area div,
-textarea,
-#container li,
-.translatable td div{
-	unicode-bidi: normal;	
-	direction: ltr;
-	}
+
 
 form{
 	margin: 0px;

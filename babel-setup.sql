@@ -343,6 +343,7 @@ INSERT INTO `languages` VALUES (1,'en',NULL,'English',1),
 (25,'ar',NULL,'Arabic',1),
 (26,'iw',NULL,'Hebrew',1);
 insert into languages set iso_code = 'hi', name = "Hindi";
+insert into languages set iso_code = 'ro', name = "Romanian";
 insert into project_versions set project_id = "eclipse", version = "3.4", is_active = 1;
 
 

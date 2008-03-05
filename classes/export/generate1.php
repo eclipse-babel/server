@@ -108,6 +108,10 @@ $language_result = mysql_query( 'SELECT * FROM languages WHERE languages.is_acti
 while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
 	$language_name = $language_row['name'];
 	$language_iso  = $language_row['iso_code'];
+	$language_locale  = $language_row['locale'];
+	if ( $language_locale != null ) ) {
+		$language_name = $language_locale . " " . $language_name;
+	}
 	echo "${leader1}Generating language pack for $language_name ($language_iso)(" . $language_row['language_id'] . ")\n";
 
 	/*
@@ -296,7 +300,7 @@ while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
 	$site_xml .= "<feature url=\"features/$feature_filename\" id=\"$feature_id\" version=\"$feature_version\">
   <category name=\"Language Packs\"/></feature>
 ";
-	echo "${leader1}completed  language pack for $language_name ($language_iso)\n";
+	echo "${leader1}completed language pack for $language_name ($language_iso)\n";
 }
 /*
  * TODO <site mirrorsURL=... is not yet implemented

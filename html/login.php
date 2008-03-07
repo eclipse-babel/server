@@ -24,12 +24,25 @@ $PASSWORD 	= $App->getHTTPParameter("password", "POST");
 $REMEMBER 	= $App->getHTTPParameter("remember", "POST");
 $SUBMIT 	= $App->getHTTPParameter("submit");
 
+if(!isset($_SESSION['login_failed_attempts'])){
+	$_SESSION['login_failed_attempts'] = array();
+}
 
 if($SUBMIT == "Login") {
 	if($USERNAME != "" && $PASSWORD != ""){
 		$User = new User();
 		if(!$User->load($USERNAME, $PASSWORD)) {
-			$GLOBALS['g_ERRSTRS'][0] = "Authentication failed.  Please verify your username and/or password are correct.";
+			foreach($_SESSION['login_failed_attempts'] as $timestamp){
+				if($timestamp < strtotime("2 minute ago")){
+					unset($_SESSION['login_failed_attempts'][$timestamp]);
+				}
+			}
+			$_SESSION['login_failed_attempts'][] = strtotime('now');
+			if(count($_SESSION['login_failed_attempts']) > 2){
+				$GLOBALS['g_ERRSTRS'][0] = "Authentication failed.  <b>If you just created a NEW BUGZILLA ACCOUNT wait a few minutes and try again</b>.";
+			}else{
+				$GLOBALS['g_ERRSTRS'][0] = "Authentication failed.  Please verify your username and/or password are correct.";
+			}
 		}
 		else {
 			# create session

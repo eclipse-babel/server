@@ -126,6 +126,11 @@ while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
 		AND files.is_active ");
 	$plugins = array();
 	while( ($file_row = mysql_fetch_assoc($file_result)) != null ) {
+		# strip source folder (bug 221675)
+		$pattern = '/^([a-zA-Z0-9_-]+)\.([a-zA-Z0-9_-]+)\.(.*)\/(.*)\/(\1)\/(\2)\/(.*)\.properties$/i';
+		$replace = '${1}.${2}.${3}/${5}/${6}/${7}.properties';
+		$file_row['name'] = preg_replace($pattern, $replace, $file_row['name']);
+		
 		if( preg_match( "/^([a-zA-Z0-9\.]+)\/(.*)$/", $file_row['name'], $matches ) ) {
 			$file_row['subname'] = $matches[2];
 			$plugins[$matches[1]][] = $file_row;

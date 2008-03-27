@@ -16,21 +16,23 @@ require_once("cb_global.php");
 
 //print_r($_REQUEST);
 
-//print_r($_POST);
+// print_r($_POST);
 
 $string_id = $App->getHTTPParameter("string_id", "POST");
 $translation = $App->getHTTPParameter("translation", "POST");
 
 $language_id = $_SESSION["language"];
 $project_id = $_SESSION['project'];
-$language_id = $_SESSION["language"];
 $version = $_SESSION["version"];
 
 $user_id =	$User->userid;
 
+# TODO: refactor these ifs
+$do_nothing = false;
+
 if (empty($translation) || (trim($translation) == '')) {
 
-	// do nothing
+	$do_nothing = true;
 	
 } else if($_POST['translate_action'] != "all"){
 	$query = "update 
@@ -155,10 +157,33 @@ if (empty($translation) || (trim($translation) == '')) {
 				   		created_on  = NOW()
 					";
 			$res2 = mysql_query($query,$dbh);
-		}
-		
-	}
-	
+		}	
+	}	
 }
-	 
+
+if(!$do_nothing) {
+	# Find all string_id's that have the same binary value as the one we're translating
+	# *and* have no translation yet, and update those too.
+	$sql = "SELECT s.string_id, COUNT(t.string_id) AS tr_count
+	FROM strings AS s 
+	LEFT JOIN translations AS t ON t.string_id = s.string_id AND t.language_id = '".addslashes($language_id)."'
+	WHERE BINARY s.value = (select value from strings where string_id = '".addslashes($string_id)."')  
+		AND s.is_active = 1 AND t.value IS NULL GROUP BY s.string_id HAVING tr_count = 0";
+
+	$res 		= mysql_query($sql, $dbh);
+	$str_count 	= mysql_affected_rows();
+	
+	while($myrow = mysql_fetch_assoc($res)) {
+		$sql = "insert into 
+					translations
+				  set
+				  	string_id = " . $myrow['string_id'] . ",
+				  	language_id = '".addslashes($language_id)."',
+				  	value = '".addslashes($translation)."',
+				  	userid = '".addslashes($user_id)."',
+				  	created_on = NOW()";
+		mysql_query($sql, $dbh);
+	}
+}
+
 ?>

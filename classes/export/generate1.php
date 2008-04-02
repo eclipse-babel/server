@@ -308,7 +308,7 @@ while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
 	echo "${leader1}completed language pack for $language_name ($language_iso)\n";
 }
 /*
- * TODO <site mirrorsURL=... is not yet implemented
+ * <site mirrorsURL=... implemented in the weekly build process by sed'ing <site>
  */
 $outp = fopen( "${staging_update_site}site.xml", "w" );
 fwrite( $outp, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>

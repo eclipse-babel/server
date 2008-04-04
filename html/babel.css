@@ -233,7 +233,7 @@ h4{
 	padding: 0px;
 	margin: 0px;
 	border: 0px solid red;
-	width: 160px;
+	width: 190px;
 }
 #trans-progress-area h2{
 	float: none;
@@ -241,7 +241,7 @@ h4{
 	text-align: center;
 }
 #trans-progress-area dl{
-	width: 120px;
+	width: 150px;
 	height: 8em;
 	overflow-y: auto;
 	overflow-x: hidden;	
@@ -263,6 +263,71 @@ h4{
 #trans-progress-area dd{
 	clear: right;
 }
+
+
+
+
+
+
+
+
+
+
+#top-translators-area{
+	position: absolute;
+	left: auto;
+	right: 0px;
+	top: 11em;
+	padding: 0px;
+	margin: 0px;
+	border: 0px solid red;
+	width: 190px;
+}
+#top-translators-area h2{
+	float: none;
+	border-bottom: 1px solid SteelBlue;
+	text-align: center;
+}
+#top-translators-area dl{
+	width: 150px;
+	height: 8em;
+	overflow-y: auto;
+	overflow-x: hidden;	
+	padding: 0px;
+	margin: 0px auto;
+	padding: 2px;
+}
+#top-translators-area dt,
+#top-translators-area dd{
+	float: left;
+	width: 30px;
+	border: 0px solid blue;
+	padding: 0px;
+	margin: 0px;
+}
+#top-translators-area dt{
+	width: 70px;
+}
+#top-translators-area dd{
+	clear: right;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #translation-history{
 	height: 180px;

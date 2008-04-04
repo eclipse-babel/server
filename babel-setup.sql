@@ -291,6 +291,17 @@ CREATE TABLE `users` (
   KEY `primary_language_id` (`primary_language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `scoreboard`;
+CREATE TABLE `scoreboard` (
+  `id` int unsigned not null auto_increment,
+  `itemid` char(6) NOT NULL,
+  `value` varchar(256) NOT NULL default '',
+  `quantity` double NOT NULL default 0,
+  PRIMARY KEY  (`id`),
+  KEY(`quantity`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -387,3 +398,9 @@ FROM files AS f
 WHERE f.is_active = 1 
 GROUP BY f.file_id, l.language_id;
 DELETE FROM file_progress WHERE pct_complete = 0;
+
+/* populate scoreboard */
+truncate table scoreboard;
+INSERT INTO scoreboard SELECT NULL, "LANGPR", CONCAT(b.name,IF(ISNULL(b.locale),"",CONCAT(" ", b.locale))), count(*) as StringCount from translations as a inner join languages as b on b.language_id = a.language_id where a.value <> '' and a.is_active = 1 group by a.language_id order by StringCount desc;
+INSERT INTO scoreboard SELECT NULL, "TOPTR", CONCAT(first_name, IF(ISNULL(last_name),"",CONCAT(" ", last_name))), count(translations.string_id) as cnt from translations inner join users on users.userid = translations.userid where is_active=1 group by first_name, last_name order by cnt desc limit 20;
+INSERT INTO scoreboard SELECT NULL, "LASGEN", "Scoreboard Last Generated", MAX(translation_id) FROM translations;

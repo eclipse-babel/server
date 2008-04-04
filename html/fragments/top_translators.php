@@ -7,20 +7,19 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Paul Colton (Aptana)- initial API and implementation
- *    Eclipse Foundation
+  *    Eclipse Foundation - initial API and implementation
 *******************************************************************************/
 
 
 require_once("frag_global.php");
 
-$query = "SELECT value, quantity FROM scoreboard WHERE itemid = 'LANGPR' ORDER BY quantity DESC";
+$query = "SELECT value, quantity FROM scoreboard WHERE itemid = 'TOPTR' ORDER BY quantity DESC";
 
 $res = mysql_query($query);
 
 ?>
-<div id="trans-progress-area">
-	<h2>Translation Progress</h2>
+<div id="top-translators-area">
+	<h2>Top Translators</h2>
 	<dl>
 	<?
 		while($row = mysql_fetch_assoc($res)){

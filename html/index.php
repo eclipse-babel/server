@@ -21,8 +21,8 @@ include("head.php");
 ?>
 <h1 id="page-message">Welcome to the Babel Project</h1>
 <div id="index-page">
-	  <? include("fragments/language_progress.php");?>
-
+      <? include("fragments/language_progress.php");?>
+	  <? include("fragments/top_translators.php");?>
 	  <a href="http://www.eclipse.org/babel/downloads.php"><img src="http://dev.eclipse.org/large_icons/apps/internet-web-browser.png"><h2>Eclipse Speaks your Language</h2></a>
       <br style='clear: both;'>
 	  <p><a href="http://www.eclipse.org/babel/downloads.php">Download a language pack</a> in one of many different languages.</p>

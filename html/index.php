@@ -20,21 +20,26 @@ include("head.php");
 
 ?>
 <h1 id="page-message">Welcome to the Babel Project</h1>
-<div id="index-page">
-      <? include("fragments/language_progress.php");?>
-	  <? include("fragments/top_translators.php");?>
-	  <a href="http://www.eclipse.org/babel/downloads.php"><img src="http://dev.eclipse.org/large_icons/apps/internet-web-browser.png"><h2>Eclipse Speaks your Language</h2></a>
-      <br style='clear: both;'>
-	  <p><a href="http://www.eclipse.org/babel/downloads.php">Download a language pack</a> in one of many different languages.</p>
-         
-	  <a href="translate.php"><img src="http://dev.eclipse.org/large_icons/apps/accessories-text-editor.png"><h2>Help Translate Eclipse</h2></a>
-      <br style='clear: both;'>
-	  <p>Eclipse needs help from everyone in the community to <a href="translate.php">speak in many tongues</a>.</p>
-      
-	  <a href="map_files.php"><img src="http://dev.eclipse.org/large_icons/apps/system-users.png"><h2>Add an Existing Eclipse Project to Babel</h2></a>
-      <br style='clear: both;'>
-	  <p>Eclipse committers, find out how simple it is to include any existing Eclipse.org project <a href="map_files.php">in Babel</a>.</p>
-	  
+<div id="index-page" style='width: 510px; padding-right: 190px;'>
+	  <div style='float: right;height: 290px; border: 0px solid red;'>
+	      <? include("fragments/language_progress.php");?>
+		  <? include("fragments/top_translators.php");?>
+	  </div>
+
+	  <div style='float: left;border: 0px solid red;'>
+		  <a href="http://www.eclipse.org/babel/downloads.php"><img src="http://dev.eclipse.org/large_icons/apps/internet-web-browser.png"><h2>Eclipse Speaks your Language</h2></a>
+	      <br style='clear: both;'>
+		  <p><a href="http://www.eclipse.org/babel/downloads.php">Download a language pack</a> in one of many different languages.</p>
+	         
+		  <a href="translate.php"><img src="http://dev.eclipse.org/large_icons/apps/accessories-text-editor.png"><h2>Help Translate Eclipse</h2></a>
+	      <br style='clear: both;'>
+		  <p>Eclipse needs help from everyone in the community to <a href="translate.php">speak in many tongues</a>.</p>
+	      
+		  <a href="map_files.php"><img src="http://dev.eclipse.org/large_icons/apps/system-users.png"><h2>Add an Existing Eclipse Project to Babel</h2></a>
+	      <br style='clear: both;'>
+		  <p>Eclipse committers, find out how simple it is to include any existing Eclipse.org project <a href="map_files.php">in Babel</a>.</p>
+	  </div>	  
+	  <br class='clearing'>
 </div>
 
 <script>YAHOO.languageManager.getAjaxLanguages();</script>

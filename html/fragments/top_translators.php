@@ -29,3 +29,4 @@ $res = mysql_query($query);
 	?>
 	</dl>
 </div>
+  <br style='clear: both;'>

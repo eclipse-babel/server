@@ -14,9 +14,6 @@
 
 require_once("cb_global.php");
 
-//print_r($_REQUEST);
-
-// print_r($_POST);
 
 $string_id = $App->getHTTPParameter("string_id", "POST");
 $translation = $App->getHTTPParameter("translation", "POST");
@@ -183,14 +180,6 @@ if(!$do_nothing) {
 				  	userid = '".addslashes($user_id)."',
 				  	created_on = NOW()";
 		mysql_query($sql, $dbh);
-	}
-	
-	# refresh the scoreboard
-	# 25 of every 100 hits (25%) will clean up
-	if(rand(0, 100) < 25) {
-		require_once(BABEL_BASE_DIR . "classes/system/scoreboard.class.php");
-		$sb = new Scoreboard();
-		$sb->refresh();
 	}
 }
 

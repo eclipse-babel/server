@@ -184,6 +184,14 @@ if(!$do_nothing) {
 				  	created_on = NOW()";
 		mysql_query($sql, $dbh);
 	}
+	
+	# refresh the scoreboard
+	# 25 of every 100 hits (25%) will clean up
+	if(rand(0, 100) < 25) {
+		require_once(BABEL_BASE_DIR . "classes/system/scoreboard.class.php");
+		$sb = new Scoreboard();
+		$sb->refresh();
+	}
 }
 
 ?>

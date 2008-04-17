@@ -20,7 +20,7 @@ require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
 $dbc = new DBConnection();
 $dbh = $dbc->connect();
 
-print "fechting translation to heal\n";
+print "fetching translation to heal\n";
 $query = "select translation_id,string_id,language_id,created_on,value from translations group by string_id,language_id order by created_on desc";
 $res = mysql_query($query);
 
@@ -49,7 +49,7 @@ while($row = mysql_fetch_assoc($res)){
 	}
 }
 
-print "deleting file_progess table data\n";
+print "deleting file_progress table data\n";
 //drop all the old calced file progress
 $query = "delete from file_progress";
 mysql_query($query);
@@ -68,12 +68,12 @@ while($row = mysql_fetch_assoc($res)){
 	$lang_ids[] = $row['language_id'];
 }
 
-print "starting to rebuild the file_progess table\n";
+print "starting to rebuild the file_progress table\n";
 //for each file and lang calc the percent the files has been done
 foreach($file_ids as $file_id){
 	foreach($lang_ids as $language_id){
 		$query = "
-				     SELECT IF(COUNT(s.string_id) > 0, (COUNT(t.string_id) + 1)/COUNT(s.string_id)*100,0) AS translate_percent
+				     SELECT IF(COUNT(s.string_id) > 0, (COUNT(t.string_id))/COUNT(s.string_id)*100,0) AS translate_percent
 			       FROM files AS f
 			         LEFT JOIN strings AS s ON s.file_id = ".$file_id."
 			         LEFT JOIN translations AS t ON (s.string_id = t.string_id 
@@ -92,7 +92,7 @@ foreach($file_ids as $file_id){
 	}
 }
 
-print "cleaning up the file progres of all 0 completed!\n";
+print "cleaning up the file progress of all 0 completed!\n";
 //clean up all the pct_complete == 0
 $query = "delete from file_progress where pct_complete = 0";
 mysql_query($query);

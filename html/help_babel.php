@@ -38,7 +38,7 @@ include("head.php");
 
 	<h3 style='margin-left: 40px;'>Projects Members can:</h3>
 	<ol style='margin-left: 20px; margin-top: 0px;'>
-		<li><a href="/importing.php">Get your Eclipse project imported to Babel</a></li>
+		<li><a href="importing.php">Get your Eclipse project imported to Babel</a></li>
 		<li>Help make specific language packs for Eclipse projects (pending)</li>
 		<li>Review translations for quality/consistency (pending)</li>
 		<li>Promote your projects translation progress (pending)</li>

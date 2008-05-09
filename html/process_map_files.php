@@ -35,7 +35,7 @@ chdir("/tmp/tmp-babel")  || die("Cannot use working directory");
 
 
 
-$sql = "SELECT * FROM map_files WHERE is_active = 1 ORDER BY RAND()";
+$sql = "SELECT * FROM map_files WHERE project_id = 'stp' and is_active = 1 ORDER BY RAND()";
 $rs_maps = mysql_query($sql, $dbh);
 while($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 	echo "Processing map file: " . $myrow_maps['filename'] . " in location: " . $myrow_maps['location'] . "\n";
@@ -77,16 +77,33 @@ while($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 					}
 				}
 				
-				$command = "cvs -d " . $aStuff['cvsroot'] . " co " . $tagstring . $aElements[1];
+				$command = "";
+				# determine CVS or SVN
+				if(isset($aStuff['cvsroot'])) {
+					$command = "cvs -d " . $aStuff['cvsroot'] . " co " . $tagstring . $aElements[1];
+				}
+				elseif( isset($aStuff['svnroot'])) {
+					$command = "/usr/local/bin/svn co " . $aStuff['svnroot'] . " --config-dir /tmp";
+				}
 				echo $html_spacer . $html_spacer ."--> " . $command . "\n";
-				$out = shell_exec($command);
+				
+				$out = "";
+				if($command != "") {
+					$out = shell_exec($command);
+				}
 				
 				# process the output lines for .properties
 				$aOutLines = split("\n", $out);
 				foreach ($aOutLines as $out_line) {
 					$out_line = trim($out_line);
+					# remove SVN's multiple spaces
+					$out_line = preg_replace("/\s+/", " ", $out_line);
+					
 					echo $html_spacer . $html_spacer . "CVS out line: " . $out_line . "\n";
+					# CVS:
 					# U org.eclipse.ant.ui/Ant Editor/org/eclipse/ant/internal/ui/dtd/util/AntDTDUtilMessages.properties
+					# SVN: 
+					# A org.eclipse.stp.bpmn/trunk/org.eclipse.stp.bpmn/org.eclipse.stp.eid/trunk/org.eclipse.stp.eid.generator.test/build.properties
 					if(preg_match("/\.properties$/", $out_line) && !preg_match("/build\.properties$/", $out_line)) {
 						# this is a .properties file!
 						$file_name = trim(substr($out_line, 2)); 
@@ -128,6 +145,8 @@ function parseLocation($in_string) {
 	# v_832,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,
 	# v20080204,:pserver:anonymous@dev.eclipse.org:/cvsroot/birt,,source/org.eclipse.birt.report.designer.core
 	# v200802262150,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query
+	# SVN,trunk,http://dev.eclipse.org/svnroot/stp,,org.eclipse.stp.bpmn/trunk/org.eclipse.stp.bpmn
+	# svn://dev.eclipse.org/svnroot/stp/org.eclipse.stp.bpmn/trunk/
 	
 	$aTheseElements = array();
 	
@@ -140,6 +159,13 @@ function parseLocation($in_string) {
 		# CVSROOT
 		if(preg_match("/^:.*:.*@.*:\//", $location_part)) {
 			$aTheseElements['cvsroot'] = $location_part;
+		}
+		# SVNROOT
+		# SVN,trunk,http://dev.eclipse.org/svnroot/stp,,org.eclipse.stp.bpmn/trunk/org.eclipse.stp.bpmn
+		# maps to: svn://dev.eclipse.org/svnroot/stp/org.eclipse.stp.bpmn/trunk/
+		if(preg_match("/^(http|svn):\/\//", $location_part)) {
+			$location_part = str_replace("http", "svn", $location_part);
+			$aTheseElements['svnroot'] = $location_part . "/" . $aLocation[4];
 		}
 	}
 	

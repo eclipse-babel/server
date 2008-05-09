@@ -35,7 +35,7 @@ chdir("/tmp/tmp-babel")  || die("Cannot use working directory");
 
 
 
-$sql = "SELECT * FROM map_files WHERE project_id = 'stp' and is_active = 1 ORDER BY RAND()";
+$sql = "SELECT * FROM map_files WHERE is_active = 1 ORDER BY RAND()";
 $rs_maps = mysql_query($sql, $dbh);
 while($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 	echo "Processing map file: " . $myrow_maps['filename'] . " in location: " . $myrow_maps['location'] . "\n";

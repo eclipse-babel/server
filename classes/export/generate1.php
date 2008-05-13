@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Eclipse Foundation - Initial API and implementation
+ *    Motoki MORT mori-m@mxa.nes.nec.co.jp - patch, bug 227366
 *******************************************************************************/
 
 /* 
@@ -201,6 +202,7 @@ while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
 				if( $strings_row['trans'] ) {
 					# json_encode returns the string with quotes fore and aft.  Need to strip them.
 					$tr_string = preg_replace('/^"(.*)"$/', '${1}', json_encode($strings_row['trans']));
+					$tr_string = str_replace('\\\\', '\\', $tr_string);
 					fwrite( $outp, $tr_string );
 					# echo $strings_row['trans'];
 				} else {

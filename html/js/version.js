@@ -66,6 +66,7 @@ YAHOO.versionManager = {
 
 function version(dataIn){
 	this.version = dataIn['version'];
+	this.pct = dataIn['pct'];
 	version.superclass.constructor.call();
 	this.initSelectable();
 }
@@ -94,7 +95,8 @@ version.prototype.clicked = function(e){
 }
 version.prototype.createHTML = function(){
 	this.domElem = document.createElement("li");
-	this.domElem.innerHTML = this.version;
+	// this.domElem.innerHTML = this.version;
+	this.domElem.innerHTML = this.version + " <span class='percentage_indicator'>&#160; &#160;  (" + (this.pct > 0 ? new Number(this.pct).toFixed(1) : 0) + "%)</span>";
 	this.addEvents();
 	return this.domElem;
 }

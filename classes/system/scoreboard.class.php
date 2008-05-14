@@ -37,6 +37,9 @@ class Scoreboard {
 
 			$sql = "INSERT INTO _tmp_scoreboard SELECT NULL, 'LASGEN', 'Scoreboard Last Generated', MAX(translation_id) FROM translations";
 			mysql_query($sql, $dbh);
+
+			$sql = "INSERT INTO _tmp_scoreboard SELECT NULL, 'LGNOW', 'Scoreboard Last Generated Date/Time', NOW()";
+			mysql_query($sql, $dbh);
 			
 			mysql_query("LOCK TABLES scoreboard WRITE", $dbh);
 			mysql_query("DELETE FROM scoreboard", $dbh);

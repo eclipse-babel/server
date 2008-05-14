@@ -147,8 +147,8 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 		<h4>Current Translation</h4>
 		<textarea style='display: inline; width: 320px; height: 150px;' name="translation"><?=(($line['translation_value']));?></textarea>
 		<br>
-		<button id="allversions" type="submit" name="translateAction" value="All Versions" nClick="translationSumbit(this.form,this);">All Versions</button>
-		<button id="onlysametrans" type="submit" name="translateAction" value="Only Version <?=$_SESSION['version']?>" nClick="translationSumbit(this.form,this);">Only Version <?=$_SESSION['version']?></button>
+		<button id="allversions" type="submit" name="translateAction" value="All Versions" onClick="translationSumbit(this.form,this);">All Versions</button>
+		<button id="onlysametrans" type="submit" name="translateAction" value="Only Version <?=$_SESSION['version']?>" onClick="translationSumbit(this.form,this);">Only Version <?=$_SESSION['version']?></button>
 	</div>	
 	<div id="translation-history-area" class="side-component">
 		<h4>History of Translations</h4>

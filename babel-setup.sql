@@ -110,6 +110,19 @@ CREATE TABLE `projects` (
   PRIMARY KEY  (`project_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `project_progress`;
+CREATE TABLE `project_progress` (
+  `project_id` varchar(100) NOT NULL,
+  `version` varchar(64) NOT NULL,
+  `language_id` smallint(5) unsigned NOT NULL,
+  `pct_complete` float NOT NULL,
+  PRIMARY KEY  (`project_id`, `version`, `language_id`),
+  CONSTRAINT `project_progress_ibfk_1` FOREIGN KEY (`project_id`, `version`) REFERENCES `project_versions` (`project_id`, `version`) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT `project_progress_ibfk_2` FOREIGN KEY (`language_id`) REFERENCES `languages` (`language_id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
 DROP TABLE IF EXISTS `project_versions`;
 CREATE TABLE `project_versions` (
   `project_id` varchar(100) NOT NULL,
@@ -232,6 +245,7 @@ CREATE TABLE `translations` (
   KEY `translation_id` (`translation_id`),
   KEY `language_id` (`language_id`),
   KEY `userid` (`userid`),
+  KEY `created_on` (`created_on`),
   CONSTRAINT `translations_ibfk_1` FOREIGN KEY (`string_id`) REFERENCES `strings` (`string_id`) ON UPDATE CASCADE,
   CONSTRAINT `translations_ibfk_2` FOREIGN KEY (`language_id`) REFERENCES `languages` (`language_id`) ON UPDATE CASCADE,
   CONSTRAINT `translations_ibfk_3` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON UPDATE CASCADE
@@ -243,26 +257,67 @@ DELIMITER ;;
 DROP TRIGGER `ins_version`;;
 
 /* This trigger sets the version to max(version) + 1.  It also updates the file_progress table  */
+/* We check IF(NEW.version > 1) to determine if this is a NEW translation or one that replaces an existing one */
 /* (COUNT(t.string_id) + 1) because it's a BEFORE INSERT trigger, the translated str is not in the DB yet  */
 /* and without the +1 the percent would always be "one behind"  */   
 CREATE TRIGGER `ins_version` BEFORE INSERT ON `translations` FOR EACH ROW BEGIN
   SET NEW.version = 
     (SELECT IFNULL(MAX(version),0)+1 FROM translations 
         WHERE string_id = NEW.string_id and language_id = NEW.language_id);
+  
+  /* Define a few fields we need here */
+  SET @FILE_ID=(SELECT file_id FROM strings WHERE string_id = NEW.string_id);  
+  SET @PROJECT=(SELECT project_id FROM files WHERE file_id = @FILE_ID);
+  SET @VERSION=(SELECT version FROM files WHERE file_id = @FILE_ID);
         
-  DELETE FROM file_progress where file_id = (SELECT file_id FROM strings WHERE string_id = NEW.string_id)
+  
+  /* update this file's progress  */
+  DELETE FROM file_progress where file_id = @FILE_ID
    AND language_id = NEW.language_id;
  
- INSERT INTO file_progress SET file_id = (SELECT file_id FROM strings WHERE string_id = NEW.string_id),
+  /* See notes above for the hairy select  */
+  INSERT INTO file_progress SET file_id = @FILE_ID,
    language_id = NEW.language_id,
    pct_complete = (
-     SELECT IF(COUNT(s.string_id) > 0, (COUNT(t.string_id) + 1)/COUNT(s.string_id)*100,0) AS translate_percent
+     SELECT IF(NEW.version > 1, 
+         IF(COUNT(s.string_id) > 0, (COUNT(t.string_id))/COUNT(s.string_id)*100,0),
+         IF(COUNT(s.string_id) > 0, (COUNT(t.string_id) + 1)/COUNT(s.string_id)*100,0)
+         ) AS translate_percent
        FROM files AS f
-         LEFT JOIN strings AS s ON s.file_id = f.file_id
+         LEFT JOIN strings AS s ON (s.file_id = f.file_id AND s.value <> "" and s.is_active)
          LEFT JOIN translations AS t ON (s.string_id = t.string_id 
            AND t.language_id = NEW.language_id AND t.is_active = 1)
-       WHERE f.file_id = (SELECT file_id FROM strings WHERE string_id = NEW.string_id)
-    ); 
+       WHERE f.file_id = @FILE_ID
+    );
+    
+  /* update project_progress table */
+  
+  DELETE FROM project_progress where project_id = @PROJECT
+   AND version = @VERSION 
+   AND language_id = NEW.language_id;
+   
+   INSERT INTO project_progress SET project_id = @PROJECT,
+   version=@VERSION,
+   language_id = NEW.language_id,
+   pct_complete = (
+     SELECT
+        IF(NEW.version > 1,
+         	IF(COUNT(s.string_id) > 0, ROUND(COUNT(t.string_id)/COUNT(s.string_id) * 100, 2), 0),
+         	IF(COUNT(s.string_id) > 0, ROUND((COUNT(t.string_id) + 1)/COUNT(s.string_id) * 100, 2), 0)         	
+        ) AS pct_complete
+       FROM project_versions AS v 
+       INNER JOIN files AS f 
+           ON (f.project_id = v.project_id AND f.version = v.version AND f.is_active) 
+       INNER JOIN strings AS s 
+           ON (s.file_id = f.file_id AND s.is_active) 
+       INNER JOIN languages AS l ON l.language_id = NEW.language_id
+       LEFT JOIN translations AS t 
+          ON (t.string_id = s.string_id AND t.language_id = l.language_id AND t.is_active) 
+       WHERE
+         s.value <> ""
+        AND v.project_id = @PROJECT
+        AND v.version = @VERSION
+    );
 END;
 ;;
 DELIMITER ;
@@ -355,6 +410,7 @@ INSERT INTO `languages` VALUES (1,'en',NULL,'English',1),
 (26,'iw',NULL,'Hebrew',1);
 insert into languages set iso_code = 'hi', name = "Hindi";
 insert into languages set iso_code = 'ro', name = "Romanian";
+insert into languages set iso_code = 'uk', name = "Ukrainian";
 insert into project_versions set project_id = "eclipse", version = "3.4", is_active = 1;
 
 
@@ -392,12 +448,35 @@ INSERT INTO file_progress
 select f.file_id, l.language_id, IF(COUNT(s.string_id) > 0, COUNT(t.string_id)/COUNT(s.string_id)*100,0) AS translate_percent
 FROM files AS f
         INNER JOIN languages as l ON l.is_active = 1
-        LEFT JOIN strings as s ON s.file_id = f.file_id
+        LEFT JOIN strings as s ON (s.file_id = f.file_id AND s.is_active) 
         LEFT JOIN translations AS t ON (s.string_id = t.string_id 
            AND t.language_id = l.language_id AND t.is_active = 1)
 WHERE f.is_active = 1 
+	AND s.value <> ""
 GROUP BY f.file_id, l.language_id;
 DELETE FROM file_progress WHERE pct_complete = 0;
+
+/* populate project_progress table */
+truncate table project_progress;
+INSERT INTO project_progress
+SELECT 
+    p.project_id, 
+    v.version, 
+    l.language_id,
+    IF(COUNT(s.string_id) > 0, ROUND(COUNT(t.string_id)/COUNT(s.string_id) * 100, 2), 0) AS pct_complete
+FROM projects as p 
+    INNER JOIN project_versions AS v ON v.project_id = p.project_id 
+    INNER JOIN files AS f 
+        ON (f.project_id = p.project_id AND f.version = v.version AND f.is_active) 
+    INNER JOIN strings AS s 
+        ON (s.file_id = f.file_id AND s.is_active) 
+    INNER JOIN languages AS l
+    LEFT JOIN translations AS t 
+        ON (t.string_id = s.string_id AND t.language_id = l.language_id AND t.is_active) 
+WHERE
+    s.value <> ""
+    AND p.is_active 
+GROUP BY p.project_id, v.version, l.language_id;
 
 /* populate scoreboard */
 truncate table scoreboard;

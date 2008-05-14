@@ -98,7 +98,7 @@ afile.prototype.createHTML = function(){
 	if(filename_display.length > 100) {
 		filename_display = filename_display.substr(0,35) + "(...)" + filename_display.substr(filename_display.length - 50); 
 	}
-	this.domElem.innerHTML = filename_display + " (" + (this.pct > 0 ? new Number(this.pct).toFixed(1) : 0) + "%)";
+	this.domElem.innerHTML = filename_display + "<span class='percentage_indicator'>&#160; &#160;  (" + (this.pct > 0 ? new Number(this.pct).toFixed(1) : 0) + "%)</span>";
 	this.addEvents();
 	return this.domElem;
 }

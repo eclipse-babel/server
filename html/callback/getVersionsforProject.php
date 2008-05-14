@@ -18,19 +18,17 @@ if(!isset($_SESSION['project'])){
 	return array();
 }
 
-$query = "select 
-			DISTINCT files.version,files.project_id
-		  from 
-		  	project_versions,
-		  	files
-		  where 
-		  	files.project_id = project_versions.project_id
-		  and
-		  	files.version = project_versions.version
-		  and
-		  	project_versions.is_active = 1 
-		  and 
-		  	project_versions.project_id = '".addslashes($_SESSION['project'])."'";
+$query = "select DISTINCT
+		f.version,
+		f.project_id, 
+		IF(ISNULL(pct_complete),0,ROUND(pct_complete,1)) AS pct_complete
+	from 
+		project_versions AS v
+		INNER JOIN files as f on (f.project_id = v.project_id AND f.version = v.version)
+		LEFT JOIN project_progress AS p ON (p.project_id = v.project_id AND p.version = v.version)
+	where 
+		v.is_active = 1 
+		and v.project_id = '".addslashes($_SESSION['project'])."'";
 
 //print $query."\n";
 
@@ -41,6 +39,8 @@ $return = array();
 while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
 	$ret = Array();
 	$ret['version'] = $line['version'];
+	$ret['pct'] = $line['pct_complete'];
+	
 	if(isset($_SESSION['version']) and $line['version'] == $_SESSION['version']){
 		$ret['current'] = true;
 	}

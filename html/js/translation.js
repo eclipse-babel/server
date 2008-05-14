@@ -63,12 +63,13 @@ function translationSumbitStop(e){
 
 function translationSumbit(allornot,translationIndex){
 	var target = document.getElementById('translation-form');
-
+	
 	var callback = 
 	{ 
-		start:function(eventType, args){ 
+		start:function(eventType, args){
 		},
 		success: function(o) {
+			target.innerHTML = o.responseText;
 			YAHOO.projectStringsManager.updateStringTableCurrentTranslation(translationIndex,target.translation.value);
 		},
 		failure: function(o) {
@@ -81,11 +82,16 @@ function translationSumbit(allornot,translationIndex){
 	var post = "string_id="+target.string_id.value+
 			   "&translation="+sub(target.translation.value)+
 			   "&translate_action="+allornot;
-			   
-	YAHOO.util.Connect.asyncRequest('POST', "callback/setStringTranslation.php", callback, post);
+	spin();
+	var request = YAHOO.util.Connect.asyncRequest('POST', "callback/setStringTranslation.php", callback, post);
 }
 
 function sub(it){
 	it = it.replace(/\+/g,"%2b");
 	return it.replace(/&/g,"%26"); 
+}
+
+function spin() {
+	var domNode = document.getElementById('translation-form');
+	YAHOO.spinable.attach(domNode);
 }

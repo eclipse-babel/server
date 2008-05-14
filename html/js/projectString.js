@@ -73,7 +73,7 @@ YAHOO.projectStringsManager = {
 		YAHOO.spinable.attach(domNode);
 		YAHOO.util.Connect.asyncRequest('GET', "callback/getStringsforProject.php", callback, null);
 	},
-	
+		
 	createHTML : function(values,appenToDOm){
 		var tableDom;
 		var tr;

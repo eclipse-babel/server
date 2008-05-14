@@ -27,6 +27,8 @@ $user_id =	$User->userid;
 # TODO: refactor these ifs
 $do_nothing = false;
 
+$affected_rows = 0;
+
 if (empty($translation) || (trim($translation) == '')) {
 
 	$do_nothing = true;
@@ -55,6 +57,7 @@ if (empty($translation) || (trim($translation) == '')) {
 				  	created_on = NOW()
 				  	";
 	$res = mysql_query($query,$dbh);
+	$affected_rows += mysql_affected_rows();
 	
 //	print $query;
 }else{
@@ -75,6 +78,7 @@ if (empty($translation) || (trim($translation) == '')) {
 			  	";
 		  	
 	$res = mysql_query($query,$dbh);
+	$affected_rows += mysql_affected_rows();
 	
 	while($row = mysql_fetch_assoc($res)){
 		$string_ids[] = $row['string_id'];
@@ -120,6 +124,7 @@ if (empty($translation) || (trim($translation) == '')) {
 				   		created_on  = NOW()
 					";
 			$res2 = mysql_query($query,$dbh);
+			$affected_rows += mysql_affected_rows();
 			
 		}
 		
@@ -154,6 +159,7 @@ if (empty($translation) || (trim($translation) == '')) {
 				   		created_on  = NOW()
 					";
 			$res2 = mysql_query($query,$dbh);
+			$affected_rows += mysql_affected_rows();
 		}	
 	}	
 }
@@ -180,7 +186,10 @@ if(!$do_nothing) {
 				  	userid = '".addslashes($user_id)."',
 				  	created_on = NOW()";
 		mysql_query($sql, $dbh);
+		$affected_rows += mysql_affected_rows();
 	}
 }
-
 ?>
+<br /><br /><br />
+<center><b>Translated <?= $affected_rows ?> string<?= $affected_rows > 1 || $affected_rows == 0 ? "s" : ""  ?> across all Babel projects.
+</b></center>

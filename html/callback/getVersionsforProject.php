@@ -18,6 +18,12 @@ if(!isset($_SESSION['project'])){
 	return array();
 }
 
+$language = "";
+if(isset($_SESSION['language'])) {
+	$language =  $_SESSION['language'];
+}
+
+
 $query = "select DISTINCT
 		f.version,
 		f.project_id, 
@@ -25,7 +31,7 @@ $query = "select DISTINCT
 	from 
 		project_versions AS v
 		INNER JOIN files as f on (f.project_id = v.project_id AND f.version = v.version)
-		LEFT JOIN project_progress AS p ON (p.project_id = v.project_id AND p.version = v.version)
+		LEFT JOIN project_progress AS p ON (p.project_id = v.project_id AND p.version = v.version and p.language_id = " . addslashes($language) . ")
 	where 
 		v.is_active = 1 
 		and v.project_id = '".addslashes($_SESSION['project'])."'";

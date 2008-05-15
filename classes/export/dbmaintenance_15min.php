@@ -74,7 +74,6 @@
 					        AND v.project_id = '" . addslashes($myrow['project_id']) . "'
 					        AND v.version = '" . addslashes($myrow['version']) . "'
 					 )";
-		echo $sql . "\n\n";
 		mysql_query($sql, $dbh);
 		echo mysql_error();
 		

@@ -28,5 +28,8 @@ $res = mysql_query($query);
 		}
 	?>
 	</dl>
+	<br />
+	<a href="stats.php">More stats...</a>
 </div>
-  <br style='clear: both;'>
+
+<br style='clear: both;'>

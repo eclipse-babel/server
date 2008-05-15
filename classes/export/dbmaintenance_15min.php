@@ -32,8 +32,54 @@
 	$dbh = $dbc->connect();
 
 
-	# refresh the scoreboard
-	require_once(BABEL_BASE_DIR . "classes/system/scoreboard.class.php");
-	$sb = new Scoreboard();
-	$sb->refresh();
+	# refresh the scoreboard -- not every 15 minutes
+	if(rand(1, 100) < 6) {
+		require_once(BABEL_BASE_DIR . "classes/system/scoreboard.class.php");
+		$sb = new Scoreboard();
+		$sb->refresh();
+	}
+	
+	# Update project/version/language progress 
+	$sql = "SELECT * FROM project_progress WHERE is_stale";
+	$rs = mysql_query($sql, $dbh);
+	while($myrow = mysql_fetch_assoc($rs)) {
+		mysql_query("LOCK TABLES project_progress WRITE, 
+			project_versions AS v READ, 
+			files AS f READ, 
+			strings AS s READ, 
+			translations AS t READ,
+			languages AS l READ
+			", $dbh);
+		$sql = "DELETE /* dbmaintenance_15min.php */ FROM project_progress where project_id = '" . addslashes($myrow['project_id']) . "'
+   					AND version = '" . addslashes($myrow['version']) . "' 
+   					AND language_id = " . $myrow['language_id'];
+		mysql_query($sql, $dbh);
+
+		$sql = "INSERT /* dbmaintenance_15min.php */ INTO project_progress SET project_id = '" . addslashes($myrow['project_id']) . "',
+   					version = '" . addslashes($myrow['version']) . "',
+   					language_id = " . $myrow['language_id'] . ",
+   					is_stale = 0,
+   					pct_complete = (
+					     SELECT	IF(COUNT(s.string_id) > 0, ROUND(COUNT(t.string_id)/COUNT(s.string_id) * 100, 2), 0) AS pct_complete
+					       FROM project_versions AS v 
+					       INNER JOIN files AS f 
+					           ON (f.project_id = v.project_id AND f.version = v.version AND f.is_active) 
+					       INNER JOIN strings AS s 
+					           ON (s.file_id = f.file_id AND s.is_active) 
+					       INNER JOIN languages AS l ON l.language_id = " . $myrow['language_id'] . "
+					       LEFT JOIN translations AS t 
+					          ON (t.string_id = s.string_id AND t.language_id = l.language_id AND t.is_active) 
+					       WHERE
+					         s.value <> \"\"
+					        AND v.project_id = '" . addslashes($myrow['project_id']) . "'
+					        AND v.version = '" . addslashes($myrow['version']) . "'
+					 )";
+		echo $sql . "\n\n";
+		mysql_query($sql, $dbh);
+		echo mysql_error();
+		
+		# Let's lock and unlock in the loop to allow other queries to go through. There's no rush on completing these stats.
+		mysql_query("UNLOCK TABLES", $dbh);
+		sleep(2);
+	}
 ?>

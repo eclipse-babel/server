@@ -447,7 +447,8 @@ SELECT
     p.project_id, 
     v.version, 
     l.language_id,
-    IF(COUNT(s.string_id) > 0, ROUND(COUNT(t.string_id)/COUNT(s.string_id) * 100, 2), 0) AS pct_complete
+    IF(COUNT(s.string_id) > 0, ROUND(COUNT(t.string_id)/COUNT(s.string_id) * 100, 2), 0) AS pct_complete,
+    0
 FROM projects as p 
     INNER JOIN project_versions AS v ON v.project_id = p.project_id 
     INNER JOIN files AS f 

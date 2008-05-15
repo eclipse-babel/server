@@ -63,14 +63,15 @@ function translationSumbitStop(e){
 
 function translationSumbit(allornot,translationIndex){
 	var target = document.getElementById('translation-form');
+	var tr_value = target.translation.value;
 	
 	var callback = 
 	{ 
 		start:function(eventType, args){
 		},
 		success: function(o) {
+			YAHOO.projectStringsManager.updateStringTableCurrentTranslation(translationIndex, tr_value);
 			target.innerHTML = o.responseText;
-			YAHOO.projectStringsManager.updateStringTableCurrentTranslation(translationIndex,target.translation.value);
 		},
 		failure: function(o) {
 			YAHOO.log('failed!');
@@ -80,7 +81,7 @@ function translationSumbit(allornot,translationIndex){
 	YAHOO.tranlsation.posted = true;
 	
 	var post = "string_id="+target.string_id.value+
-			   "&translation="+sub(target.translation.value)+
+			   "&translation="+sub(tr_value)+
 			   "&translate_action="+allornot;
 	spin();
 	var request = YAHOO.util.Connect.asyncRequest('POST', "callback/setStringTranslation.php", callback, post);

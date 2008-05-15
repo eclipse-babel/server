@@ -116,6 +116,7 @@ CREATE TABLE `project_progress` (
   `version` varchar(64) NOT NULL,
   `language_id` smallint(5) unsigned NOT NULL,
   `pct_complete` float NOT NULL,
+  `is_stale` tinyint unsigned not null default 0,
   PRIMARY KEY  (`project_id`, `version`, `language_id`),
   CONSTRAINT `project_progress_ibfk_1` FOREIGN KEY (`project_id`, `version`) REFERENCES `project_versions` (`project_id`, `version`) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT `project_progress_ibfk_2` FOREIGN KEY (`language_id`) REFERENCES `languages` (`language_id`) ON UPDATE CASCADE ON DELETE CASCADE
@@ -289,35 +290,18 @@ CREATE TRIGGER `ins_version` BEFORE INSERT ON `translations` FOR EACH ROW BEGIN
            AND t.language_id = NEW.language_id AND t.is_active = 1)
        WHERE f.file_id = @FILE_ID
     );
-    
-  /* update project_progress table */
-  
-  DELETE FROM project_progress where project_id = @PROJECT
+
+
+  /* update project_progress table to indicate this proj/lang/vers stats are stale */
+  /* don't know if record is there or not, so do both an insert and an update */
+  UPDATE IGNORE project_progress SET is_stale = 1 where project_id = @PROJECT
    AND version = @VERSION 
    AND language_id = NEW.language_id;
+
+  INSERT IGNORE INTO project_progress SET is_stale = 1, project_id = @PROJECT,
+   version = @VERSION, 
+   language_id = NEW.language_id;
    
-   INSERT INTO project_progress SET project_id = @PROJECT,
-   version=@VERSION,
-   language_id = NEW.language_id,
-   pct_complete = (
-     SELECT
-        IF(NEW.version > 1,
-         	IF(COUNT(s.string_id) > 0, ROUND(COUNT(t.string_id)/COUNT(s.string_id) * 100, 2), 0),
-         	IF(COUNT(s.string_id) > 0, ROUND((COUNT(t.string_id) + 1)/COUNT(s.string_id) * 100, 2), 0)         	
-        ) AS pct_complete
-       FROM project_versions AS v 
-       INNER JOIN files AS f 
-           ON (f.project_id = v.project_id AND f.version = v.version AND f.is_active) 
-       INNER JOIN strings AS s 
-           ON (s.file_id = f.file_id AND s.is_active) 
-       INNER JOIN languages AS l ON l.language_id = NEW.language_id
-       LEFT JOIN translations AS t 
-          ON (t.string_id = s.string_id AND t.language_id = l.language_id AND t.is_active) 
-       WHERE
-         s.value <> ""
-        AND v.project_id = @PROJECT
-        AND v.version = @VERSION
-    );
 END;
 ;;
 DELIMITER ;

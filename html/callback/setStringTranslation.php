@@ -77,7 +77,6 @@ if (empty($translation) || (trim($translation) == '')) {
 			  and s.is_active = 1";
 		  	
 	$res = mysql_query($query,$dbh);
-	$affected_rows += mysql_affected_rows();
 	while($row = mysql_fetch_assoc($res)){
 		$string_ids[] = $row['string_id'];
 	}

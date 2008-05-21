@@ -41,6 +41,10 @@ li{
 	background-color: LightSkyBlue !important;
 }
 
+.nontranslatable{
+	background-color: LightGray;
+}
+
 .clearing{
 	clear: both;
 	height: 1px;
@@ -51,7 +55,9 @@ li{
 #container #index-page{
 	cursor: default;
 	}
-	#container{	margin: 10px auto;
+	
+#container{
+	margin: 10px auto;
 	width: 1001px;
 	cursor: pointer;
 }

@@ -41,6 +41,7 @@ switch($state){
 	break;
 	$query = "select 
 				strings.value as string,
+				strings.non_translatable,
 				translations.value as translation
 			  from 
 			  	strings,
@@ -62,6 +63,7 @@ switch($state){
 	break;
 	$query = "select 
 				strings.value as string,
+				strings.non_translatable,
 				translations.value as translation,
 				users.username as translator
 				from 
@@ -88,6 +90,7 @@ switch($state){
 	default:
 		$query = "select 
 					strings.string_id as stringId,
+					strings.non_translatable,
 					strings.value as text,
 					strings.created_on as createdOn,
 					translations.value as translationString,
@@ -137,6 +140,10 @@ while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
     	$line['text'] = htmlspecialchars(($line['text']));
     	$line['translationString'] = htmlspecialchars(($line['translationString']));
     	$line['translator'] = htmlspecialchars(($line['first']." ".$line['last']));
+    	if($line['non_translatable']){
+    		$line['translationString'] = "<span style='font-style: italic;'>non-translatable string";
+    		$line['nontranslatable'] = true;
+    	}
 		$return[] = $line;
 		$stringids[$line['stringId']] = 1;
     }

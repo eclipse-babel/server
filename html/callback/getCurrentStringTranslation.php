@@ -27,6 +27,7 @@ if(isset($_SESSION['language']) and isset($_SESSION['version']) and isset($_SESS
 
 $query = "select 
 			strings.string_id,
+			strings.non_translatable,
 			strings.value as string_value,
 			translations.value as translation_value,
 			files.name,
@@ -128,7 +129,9 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 	print "</pre>";
 }
 */
+
 ?>
+
 <form id='translation-form'>
 	<input type="hidden" name="string_id" value="<?=$line['string_id'];?>">
 	<input type="hidden" name="stringTableIndex" value="<?=$stringTableIndex;?>">
@@ -141,14 +144,27 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 		<h4>Externalized Token</h4>
 		<div style='overflow-x: hidden; overflow-y: auto; height: 80px;'>
 		<?= htmlspecialchars_decode(nl2br($line['token']));?>
-		</div>		
+		</div>
+		
+		<input id='non-translatable-checkbox' type=checkbox name="non_translatable_string" <?= $line['non_translatable'] ? 'checked' : '' ;?>>Non-Translatable
+		
 	</div>
 	<div id="translation-textarea" class="side-component">
+	<?if($line['non_translatable'] == 0){?>
 		<h4>Current Translation</h4>
 		<textarea style='display: inline; width: 320px; height: 150px;' name="translation"><?=(($line['translation_value']));?></textarea>
 		<br>
 		<button id="allversions" type="submit" name="translateAction" value="All Versions">All Versions</button>
 		<button id="onlysametrans" type="submit" name="translateAction" value="Only Version <?=$_SESSION['version']?>">Only Version <?=$_SESSION['version']?></button>
+	<?}else{?>
+		<h4>Non Translatable String</h4>
+		<br>
+		<br>
+		<br>
+		<div style='text-align:center;'>This string has been marked as <b>'non-translatable'</b>.</div>
+		
+	<?}?>		
+
 	</div>	
 	<div id="translation-history-area" class="side-component">
 		<h4>History of Translations</h4>

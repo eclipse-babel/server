@@ -73,7 +73,7 @@ print "starting to rebuild the file_progress table\n";
 foreach($file_ids as $file_id){
 	foreach($lang_ids as $language_id){
 		$query = "
-				     SELECT IF(COUNT(s.string_id) > 0, (COUNT(t.string_id))/COUNT(s.string_id)*100,0) AS translate_percent
+				     SELECT IF(COUNT(s.string_id) > 0, (COUNT(t.string_id))/COUNT(s.string_id)*100,100) AS translate_percent
 			       FROM files AS f
 			         LEFT JOIN strings AS s ON s.file_id = ".$file_id."
 			         LEFT JOIN translations AS t ON (s.string_id = t.string_id 

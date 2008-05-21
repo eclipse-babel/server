@@ -430,7 +430,7 @@ insert into map_files values ("eclipse", "3.4", "userassist.map", "http://dev.ec
 /* populate file_progress table  */
 truncate table file_progress;
 INSERT INTO file_progress
-select f.file_id, l.language_id, IF(COUNT(s.string_id) > 0, COUNT(t.string_id)/COUNT(s.string_id)*100,0) AS translate_percent
+select f.file_id, l.language_id, IF(COUNT(s.string_id) > 0, COUNT(t.string_id)/COUNT(s.string_id)*100,100) AS translate_percent
 FROM files AS f
         INNER JOIN languages as l ON l.is_active = 1
         LEFT JOIN strings as s ON (s.file_id = f.file_id AND s.is_active) 

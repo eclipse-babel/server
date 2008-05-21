@@ -255,7 +255,7 @@ CREATE TABLE `translations` (
 SET @OLD_SQL_MODE=@@SQL_MODE;
 DELIMITER ;;
 /*!50003 SET SESSION SQL_MODE="" */;;
-DROP TRIGGER `ins_version`;;
+DROP TRIGGER IF EXISTS `ins_version`;;
 
 /* This trigger sets the version to max(version) + 1.  It also updates the file_progress table  */
 /* We check IF(NEW.version > 1) to determine if this is a NEW translation or one that replaces an existing one */

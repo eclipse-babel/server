@@ -32,11 +32,30 @@
 	$dbh = $dbc->connect();
 
 
-	# refresh the scoreboard -- not every 15 minutes
+	# refresh the scoreboard -- not every 15 minutes!
 	if(rand(1, 100) < 6) {
 		require_once(BABEL_BASE_DIR . "classes/system/scoreboard.class.php");
 		$sb = new Scoreboard();
 		$sb->refresh();
+		
+		# Refresh file progress
+		# This only needs to happen once in a while too.
+		# See also: babel-setup.sql
+		mysql_query("DELETE FROM file_progress", $dbh);
+		mysql_query("
+INSERT INTO file_progress
+select f.file_id, l.language_id, IF(COUNT(s.string_id) > 0, COUNT(t.string_id)/COUNT(s.string_id)*100,100) AS translate_percent
+FROM files AS f
+        INNER JOIN languages as l ON l.is_active = 1
+        LEFT JOIN strings as s ON (s.file_id = f.file_id AND s.is_active) 
+        LEFT JOIN translations AS t ON (s.string_id = t.string_id 
+           AND t.language_id = l.language_id AND t.is_active = 1)
+WHERE f.is_active = 1 
+	AND s.value <> ''
+GROUP BY f.file_id, l.language_id", $dbh);
+		mysql_query("DELETE FROM file_progress WHERE pct_complete = 0", $dbh);
+		
+		
 	}
 	
 	# Update project/version/language progress 

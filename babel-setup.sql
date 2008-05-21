@@ -428,6 +428,7 @@ insert into map_files values ("eclipse", "3.4", "update.map", "http://dev.eclips
 insert into map_files values ("eclipse", "3.4", "userassist.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/userassist.map?view=co", 1);
 
 /* populate file_progress table  */
+/* See also: dbmaintenance_15min.php */
 truncate table file_progress;
 INSERT INTO file_progress
 select f.file_id, l.language_id, IF(COUNT(s.string_id) > 0, COUNT(t.string_id)/COUNT(s.string_id)*100,100) AS translate_percent

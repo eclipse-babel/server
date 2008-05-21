@@ -63,29 +63,27 @@ if (empty($translation) || (trim($translation) == '')) {
 }else{
 	//FIND ALL STRINGS THAT ARE THE SAME ACROSS VERSIONS
 	$query = "select 
-				string_id
+				s.string_id
 			  from 
-			  	strings,
-			  	files 
+			  	strings as s
+			  	INNER JOIN files AS f on s.file_id = f.file_id 
+			  	INNER JOIN files AS the_file_selected_for_translation on the_file_selected_for_translation.file_id = (select file_id from strings where string_id = '".addslashes($string_id)."') 
 			  where 
-			  	files.file_id = strings.file_id 
-			  and 
-			  	strings.value = (select value from strings where string_id = '".addslashes($string_id)."')
+			  	s.value = (select value from strings where string_id = '".addslashes($string_id)."')
 			  and
-				strings.name = (select name from strings where string_id = '".addslashes($string_id)."')		  	
-			  and
-			  	strings.is_active = 1
-			  	";
+				s.name = (select name from strings where string_id = '".addslashes($string_id)."')
+			  and f.name =  the_file_selected_for_translation.name
+			  and f.project_id =  the_file_selected_for_translation.project_id
+			  and s.is_active = 1";
 		  	
 	$res = mysql_query($query,$dbh);
 	$affected_rows += mysql_affected_rows();
-	
 	while($row = mysql_fetch_assoc($res)){
 		$string_ids[] = $row['string_id'];
 	}
 	
 	//GET CURRENT TRANSLATION FOR THIS STRING
-	$query= "select value from translations where string_id = '".addslashes($string_id)."'and language_id = '".addslashes($language_id)."' and is_active = 1 order by version limit 1";
+	$query= "select value from translations where string_id = '".addslashes($string_id)."' and language_id = '".addslashes($language_id)."' and is_active = 1 order by version limit 1";
 	$res = mysql_query($query,$dbh);
 	$string_translation = "";
 	while($row = mysql_fetch_assoc($res)){
@@ -105,6 +103,7 @@ if (empty($translation) || (trim($translation) == '')) {
 				value = '".addslashes($string_translation)."'
 			and
 			  	is_active = 1
+			and language_id = '" . addslashes($language_id)."'
 		  ";
 		
 		$res = mysql_query($query,$dbh);

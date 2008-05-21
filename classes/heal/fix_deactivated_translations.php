@@ -20,6 +20,7 @@ require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
 $dbc = new DBConnection();
 $dbh = $dbc->connect();
 
+/*
 print "fetching translation to heal\n";
 $query = "select translation_id,string_id,language_id,created_on,value from translations group by string_id,language_id order by created_on desc";
 $res = mysql_query($query);
@@ -97,6 +98,46 @@ print "cleaning up the file progress of all 0 completed!\n";
 $query = "delete from file_progress where pct_complete = 0";
 mysql_query($query);
 
+*/ 
+print "Removing all files affected by byg 233305\n";
+
+# find lowest version
+$file_count = 0;
+$query = "select min(file_id) as file_id, project_id, version, name from files where version='unspecified' group by project_id, version, name";
+$res = mysql_query($query);
+while($row = mysql_fetch_assoc($res)){
+	$query = "select file_id from files 
+	where project_id = '" . $row['project_id'] . "' 
+	and version = 'unspecified' 
+	and name = '" . $row['name'] . "'
+	and file_id <> " . $row['file_id'];
+
+	$res_f = mysql_query($query);
+	while($row_f = mysql_fetch_assoc($res_f)){
+		# find strings
+		$file_count++;
+		$query = "delete from translations where string_id in (select string_id from strings where file_id = '" . $row_f['file_id'] . "')";
+		print $query . "... ";
+		mysql_query($query);
+		print mysql_affected_rows() . " rows deleted\n";
+		
+		# delete strings
+		$query = "delete from strings where file_id = '" . $row_f['file_id'] . "'";
+		print $query . "... ";
+		mysql_query($query);
+		print mysql_affected_rows() . " rows deleted\n";
+
+		# delete strings
+		$query = "delete from files where file_id = '" . $row_f['file_id'] . "'";
+		print $query . "... ";
+		mysql_query($query);
+		print mysql_affected_rows() . " rows deleted\n";
+		
+	}
+	
+}
+
+print $file_count;
 print "done!\n";
 
 /*

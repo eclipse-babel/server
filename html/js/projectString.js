@@ -45,11 +45,11 @@ YAHOO.projectStringsManager = {
 				this.tableDom = this.sp.createHTML(values)
 				domNode.appendChild(this.tableDom);
 
-				translationClear();
+//				translationClear();
 
 				var ntDomNode = document.getElementById('not-translated');
 				this.sp.tableDom = document.createElement("table")
-				this.sp.tableDom.className = "translatable";
+				this.sp.tableDom.className = "translatable ";
 				this.sp.tableDom.cellSpacing = 0;
 				this.sp.tableDom.width = "100%"
 				ntDomNode.innerHTML = "";
@@ -137,7 +137,6 @@ YAHOO.projectStringsManager = {
 function projectString(dataIn){
 	projectString.superclass.constructor.call();
 	this.initSelectable();
-
 	this.data = dataIn;
 }
 YAHOO.extend(projectString,selectable);
@@ -153,6 +152,9 @@ projectString.prototype.createHTML = function(tableDom){
 	var values = new Object();
 	values.cssID = "";
 	values.cssClass = "";
+	if(this.data['nontranslatable']){
+		values.cssClass = "nontranslatable";
+	}
 	var temp = this.data['text'] ? this.data['text'] : ''
 	values.string = "<div style='width: 100%; overflow: hidden;'>"+temp+"</div>";
 	
@@ -164,4 +166,5 @@ projectString.prototype.createHTML = function(tableDom){
 	var lineDome = YAHOO.projectStringsManager.createHTML(values,tableDom);
 	this.domElem = lineDome;
 	this.addEvents();
+	this.initSelectable();
 }

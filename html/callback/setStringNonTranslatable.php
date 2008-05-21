@@ -4,16 +4,15 @@ require_once("cb_global.php");
 $string_id = $App->getHTTPParameter("string_id", "POST");
 $checked_state = $App->getHTTPParameter("check", "POST");
 
-$query = "select name from strings where string_id = '".addslashes($string_id)."'";
+$query = "select value from strings where string_id = '".addslashes($string_id)."'";
 $res = mysql_query($query,$dbh);
 $row = mysql_fetch_assoc($res);
-$name = $row['name'];
 
 if($checked_state == "true"){
-	$message = "String '$name' has been marked as non-translatable.";
+	$message = "String '".$row['value']."' has been marked as non-translatable.";
 	$checked_state = 1;
 }else{
-	$message = "String '$name' has been marked as translatable.";
+	$message = "String '".$row['value']."' has been marked as translatable.";
 	$checked_state = 0;
 }
 

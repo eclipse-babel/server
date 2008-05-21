@@ -24,21 +24,23 @@ YAHOO.spinable = {
 
 function selectable(){
 }
+
 selectable.prototype.initSelectable = function(){
 	this.hoverColor = "LightSkyBlue";
-	this.bgColor = "white";
-	this.selectedColor = "lightblue";
+	if(this.domElem){
+		this.bgColor = this.domElem.style.backgroundColor;
+	}else{
+		this.bgColor = "white";
+	}
+	this.selectedColor = "LightSkyBlue";
 }
 selectable.prototype.mouseOver = function(){
-//	YAHOO.util.Dom.addClass(this.domElem,"hovering");
-	
 	YAHOO.util.Dom.setStyle(this.domElem,"background",this.hoverColor);
 }
 selectable.prototype.mouseOut = function(){
 	if(this.isSelected()){
 		this.selected();
 	}else{
-//		YAHOO.util.Dom.removeClass(this.domElem,"hovering");
 		YAHOO.util.Dom.setStyle(this.domElem,"background",this.bgColor);
 	}
 }

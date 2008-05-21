@@ -24,7 +24,6 @@ function showTranslateStringForm(stringIdIn,stringTableIndex){
 			var langDomNode = document.getElementById('translation-form-container');
 			langDomNode.innerHTML = o.responseText;
 			YAHOO.util.Event.onAvailable("translation-form",setupTranslatFormCB);
-			
 		},
 		failure: function(o) {
 			YAHOO.log('failed!');
@@ -34,11 +33,31 @@ function showTranslateStringForm(stringIdIn,stringTableIndex){
 }
 
 function setupTranslatFormCB(){
-	YAHOO.util.Event.addListener("translation-form","submit",translationSumbitStop);
 	YAHOO.util.Event.addListener("allversions","click",translateAll);
 	YAHOO.util.Event.addListener("onlysametrans","click",translateOnlySameTranslations);
+	YAHOO.util.Event.addListener("translation-form","submit",translationSumbitStop);	
+	YAHOO.util.Event.addListener("non-translatable-checkbox","click",notTranslatable);
 }
 
+
+function notTranslatable(){
+	var target = document.getElementById('translation-form');
+	var post = "string_id="+target.string_id.value+"&check="+target.non_translatable_string.checked;
+	
+	var callback = 
+	{ 
+		start:function(eventType, args){
+		},
+		success: function(o) {
+			YAHOO.projectStringsManager.getAjaxProjectStrings();
+			var langDomNode = document.getElementById('translation-form-container');
+			langDomNode.innerHTML = o.responseText;
+		},
+		failure: function(o) {
+		} 
+	} 
+	var request = YAHOO.util.Connect.asyncRequest('POST', "callback/setStringNonTranslatable.php", callback, post);
+}
 
 function translationClear(){
 	if(YAHOO.tranlsation.posted == true){

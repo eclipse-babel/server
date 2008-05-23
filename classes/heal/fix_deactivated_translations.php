@@ -20,7 +20,6 @@ require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
 $dbc = new DBConnection();
 $dbh = $dbc->connect();
 
-/*
 print "fetching translation to heal\n";
 $query = "select translation_id,string_id,language_id,created_on,value from translations group by string_id,language_id order by created_on desc";
 $res = mysql_query($query);
@@ -98,8 +97,9 @@ print "cleaning up the file progress of all 0 completed!\n";
 $query = "delete from file_progress where pct_complete = 0";
 mysql_query($query);
 
-*/ 
-print "Removing all files affected by byg 233305\n";
+ 
+print "Removing all files affected by bug 233305\n";
+print "This may take a while\n";
 
 # find lowest version
 $file_count = 0;

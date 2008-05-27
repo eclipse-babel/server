@@ -68,30 +68,6 @@ while($row = mysql_fetch_assoc($res)){
 	$lang_ids[] = $row['language_id'];
 }
 
-print "starting to rebuild the file_progress table\n";
-//for each file and lang calc the percent the files has been done
-foreach($file_ids as $file_id){
-	foreach($lang_ids as $language_id){
-		$query = "
-				     SELECT IF(COUNT(s.string_id) > 0, (COUNT(t.string_id))/COUNT(s.string_id)*100,100) AS translate_percent
-			       FROM files AS f
-			         LEFT JOIN strings AS s ON s.file_id = ".$file_id."
-			         LEFT JOIN translations AS t ON (s.string_id = t.string_id 
-			           AND t.language_id = ".$language_id." AND t.is_active = 1)
-			       WHERE f.file_id = ".$file_id."
-		";
-		$rez = mysql_query($query);
-		while($row = mysql_fetch_assoc($rez)){
-			$precent = $row['translate_percent'];
-		}
-		$query = " INSERT INTO file_progress SET file_id = $file_id	,
-		   language_id = ".$language_id.",
-		   pct_complete = ".$precent."
-	    ";
-		mysql_query($query);
-	}
-}
-
 print "cleaning up the file progress of all 0 completed!\n";
 //clean up all the pct_complete == 0
 $query = "delete from file_progress where pct_complete = 0";

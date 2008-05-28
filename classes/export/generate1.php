@@ -146,7 +146,7 @@ FROM files AS f
 WHERE 
 	t.language_id = " . $language_row['language_id'] . "
 	AND f.is_active
-	AND v.train_id = '" . $train_row['train_id']) . "'";
+	AND v.train_id = '" . $train_row['train_id'] . "'");
 		$plugins = array();
 		while( ($file_row = mysql_fetch_assoc($file_result)) != null ) {
 			# strip source folder (bug 221675)

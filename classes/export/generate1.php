@@ -74,24 +74,7 @@ $leader = ". . ";
 $leaderS= ". . ";
 $generated_timestamp = date("Ymdhis");
 
-/*
- * Clear the staging site
- */
-if( file_exists( $staging_update_site ) ) {
-	exec( "rm -rf $staging_update_site*" );
-} else {
-	exec( "mkdir $staging_update_site" );
-}
-if( file_exists( "${staging_update_site}plugins/" ) ) {
-        exec( "rm -rf ${staging_update_site}plugins/*" );
-} else {
-        exec( "mkdir ${staging_update_site}plugins/" );
-}
-if( file_exists( "${staging_update_site}features/" ) ) {
-        exec( "rm -rf ${staging_update_site}features/*" );
-} else {
-        exec( "mkdir ${staging_update_site}features/" );
-}
+
 /*
  * Get the data (plugins, files, translations) from the live database
  */
@@ -102,233 +85,272 @@ $dbh = $dbc->connect();
 
 
 /*
- * Generate one language pack per language
+ * Generate one update site pack per train
  */
 $site_xml = '';
-$language_result = mysql_query( 'SELECT * FROM languages WHERE languages.is_active' );
-while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
-	$language_name = $language_row['name'];
-	$language_iso  = $language_row['iso_code'];
-	$language_locale  = $language_row['locale'];
-	if ( $language_locale != null ) {
-		$language_name = $language_locale . " " . $language_name;
-	}
-	echo "${leader1}Generating language pack for $language_name ($language_iso)(" . $language_row['language_id'] . ")\n";
+$train_result = mysql_query( 'SELECT * FROM release_train_projects' );
+while( ($train_row = mysql_fetch_assoc($train_result)) != null ) {
+	$train_id 	= $train_row['train_id'];
+	$project_id = $language_row['project_id'];
+	$version  	= $language_row['version'];
 
+	
 	/*
-	 * Determine which plug-ins need to be in this language pack.
+	 * Clear the staging site
 	 */
-	$file_result = mysql_query( "SELECT DISTINCT files.file_id, files.name 
-		FROM files, strings, translations
-	  	WHERE files.file_id = strings.file_id
-		AND strings.string_id = translations.string_id
-		AND translations.language_id = ". $language_row['language_id'] . "
-		AND translations.is_active
-		AND files.is_active ");
-	$plugins = array();
-	while( ($file_row = mysql_fetch_assoc($file_result)) != null ) {
-		# strip source folder (bug 221675)
-		$pattern = '/^([a-zA-Z0-9_-]+)\.([a-zA-Z0-9_-]+)\.(.*)\/(.*)\/(\1)\/(\2)\/(.*)\.properties$/i';
-		$replace = '${1}.${2}.${3}/${5}/${6}/${7}.properties';
-		$file_row['name'] = preg_replace($pattern, $replace, $file_row['name']);
+	
+	# output/europa/plugins
+	# output/ganymede/plugins
+	# etc...
+	$staging_update_site .= $train_row['train_id'] . "/";
+	
+	if( file_exists( $staging_update_site ) ) {
+		exec( "rm -rf $staging_update_site*" );
+	} else {
+		exec( "mkdir $staging_update_site" );
+	}
+	if( file_exists( "${staging_update_site}plugins/" ) ) {
+	        exec( "rm -rf ${staging_update_site}plugins/*" );
+	} else {
+	        exec( "mkdir ${staging_update_site}plugins/" );
+	}
+	if( file_exists( "${staging_update_site}features/" ) ) {
+	        exec( "rm -rf ${staging_update_site}features/*" );
+	} else {
+	        exec( "mkdir ${staging_update_site}features/" );
+	}
+	
+	/*
+	 * Generate one language pack per language
+	 */
 		
-		if( preg_match( "/^([a-zA-Z0-9\.]+)\/(.*)$/", $file_row['name'], $matches ) ) {
-			$file_row['subname'] = $matches[2];
-			$plugins[$matches[1]][] = $file_row;
-		} else {
-			echo "  WARNING: no plug-in name found in file " . $file_row['file_id'] . " \"" . $file_row['name'] . "\"\n";
+	$language_result = mysql_query( 'SELECT * FROM languages WHERE languages.is_active' );
+	while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
+		$language_name = $language_row['name'];
+		$language_iso  = $language_row['iso_code'];
+		$language_locale  = $language_row['locale'];
+		if ( $language_locale != null ) {
+			$language_name = $language_locale . " " . $language_name;
 		}
-	}
-	/*
-	 * Generate one plug-in fragment for each plug-in
-	 */
-	foreach ($plugins as $plugin_name => $plugin_row ) {
-		echo "${leader1}${leader}Generating plug-in fragment $plugin_name \n";
+		echo "${leader1}Generating language pack for $train_id - $language_name ($language_iso)(" . $language_row['language_id'] . ")\n";
+	
 		/*
-		 * Clean and create the temporary directory
+		 * Determine which plug-ins need to be in this language pack.
 		 */
-		if ( file_exists( $temporary_dir ) ) {
-			exec( "rm -rf $temporary_dir; mkdir $temporary_dir" );
-		} else {
-			exec( "mkdir $temporary_dir" );
-		}
-
-		/*
-		 * Generate each *.properties file
-		 */
-		foreach ($plugin_row as $properties_file) {
-			/*
-			 * Convert the filename to *_lang.properties, e.g., foo_fr.properties
-			 */
-			$filename = $properties_file['subname'];
-			if( preg_match( "/^(.*)\.properties$/", $filename, $matches ) ) {
-				$filename = $matches[1] . '_' . $language_iso . '.properties';
+		$file_result = mysql_query( "SELECT DISTINCT
+	f.file_id, f.name 
+FROM files AS f
+	INNER JOIN strings AS s ON f.file_id = s.file_id
+	INNER JOIN translations AS t on (s.string_id = t.string_id AND t.is_active)
+	INNER JOIN release_train_projects as v on (f.project_id = v.project_id AND f.version = v.version)
+WHERE 
+	t.language_id = " . $language_row['language_id'] . "
+	AND f.is_active
+	AND v.train_id = " . $train_row['train_id']);
+		$plugins = array();
+		while( ($file_row = mysql_fetch_assoc($file_result)) != null ) {
+			# strip source folder (bug 221675)
+			$pattern = '/^([a-zA-Z0-9_-]+)\.([a-zA-Z0-9_-]+)\.(.*)\/(.*)\/(\1)\/(\2)\/(.*)\.properties$/i';
+			$replace = '${1}.${2}.${3}/${5}/${6}/${7}.properties';
+			$file_row['name'] = preg_replace($pattern, $replace, $file_row['name']);
+			
+			if( preg_match( "/^([a-zA-Z0-9\.]+)\/(.*)$/", $file_row['name'], $matches ) ) {
+				$file_row['subname'] = $matches[2];
+				$plugins[$matches[1]][] = $file_row;
+			} else {
+				echo "  WARNING: no plug-in name found in file " . $file_row['file_id'] . " \"" . $file_row['name'] . "\"\n";
 			}
-			echo "${leader1}${leader}${leader}Generating properties file $filename (" . $properties_file['file_id'] . ")\n";
+		}
+		/*
+		 * Generate one plug-in fragment for each plug-in
+		 */
+		foreach ($plugins as $plugin_name => $plugin_row ) {
+			echo "${leader1}${leader}Generating plug-in fragment $plugin_name \n";
 			/*
-			 * Create any needed sub-directories
+			 * Clean and create the temporary directory
 			 */
-			$fullpath =  $temporary_dir . $filename;
-			preg_match( "/^((.*)\/)?(.+?)$/", $fullpath, $matches );
-			exec( "mkdir -p \"" . $matches[1] . "\"");
+			if ( file_exists( $temporary_dir ) ) {
+				exec( "rm -rf $temporary_dir; mkdir $temporary_dir" );
+			} else {
+				exec( "mkdir $temporary_dir" );
+			}
+	
 			/*
-			 * Start writing to the file
+			 * Generate each *.properties file
 			 */
-			$outp = fopen( $fullpath, "w" );
-			fwrite( $outp, "# Copyright by many contributors; see http://babel.eclipse.org/\n" ); 
-			//TODO correct copyrights from all contributors
-			/*
-			 * For each string that is translated in this file, write it out
-			 * Note that if a string is not translated, then it will not be
-			 * included and thus Eclipse will pick up the default string for
-			 * that key from the default *.properities file. Thus we only 
-			 * include the strings that are translated.
-			 */
-			$sql = "
-				SELECT 
-				    strings.name AS `key`, 
-				    strings.value AS orig, 
-				    translations.value AS trans
-					FROM strings, translations
-					WHERE strings.string_id = translations.string_id
-					AND translations.language_id = " . $language_row['language_id'] . "
-					AND strings.file_id = " . $properties_file['file_id'] . "
-					AND translations.is_active
-				";
-			$strings_result = mysql_query( $sql );
-			while( ($strings_row = mysql_fetch_assoc($strings_result)) != null ) {
-				fwrite( $outp, $strings_row['key'] . "=" );
-				#echo "${leader1S}${leaderS}${leaderS}${leaderS}" . $strings_row['key'] . "=";
-				if( $strings_row['trans'] ) {
-					# json_encode returns the string with quotes fore and aft.  Need to strip them.
-					$tr_string = preg_replace('/^"(.*)"$/', '${1}', json_encode($strings_row['trans']));
-					$tr_string = str_replace('\\\\', '\\', $tr_string);
-					fwrite( $outp, $tr_string );
-					# echo $strings_row['trans'];
-				} else {
-					fwrite( $outp, $strings_row['orig'] );
+			foreach ($plugin_row as $properties_file) {
+				/*
+				 * Convert the filename to *_lang.properties, e.g., foo_fr.properties
+				 */
+				$filename = $properties_file['subname'];
+				if( preg_match( "/^(.*)\.properties$/", $filename, $matches ) ) {
+					$filename = $matches[1] . '_' . $language_iso . '.properties';
 				}
-				fwrite( $outp, "\n" );
-				# echo "\n";
+				echo "${leader1}${leader}${leader}Generating properties file $filename (" . $properties_file['file_id'] . ")\n";
+				/*
+				 * Create any needed sub-directories
+				 */
+				$fullpath =  $temporary_dir . $filename;
+				preg_match( "/^((.*)\/)?(.+?)$/", $fullpath, $matches );
+				exec( "mkdir -p \"" . $matches[1] . "\"");
+				/*
+				 * Start writing to the file
+				 */
+				$outp = fopen( $fullpath, "w" );
+				fwrite( $outp, "# Copyright by many contributors; see http://babel.eclipse.org/\n" ); 
+				//TODO correct copyrights from all contributors
+				/*
+				 * For each string that is translated in this file, write it out
+				 * Note that if a string is not translated, then it will not be
+				 * included and thus Eclipse will pick up the default string for
+				 * that key from the default *.properities file. Thus we only 
+				 * include the strings that are translated.
+				 */
+				$sql = "
+					SELECT 
+					    strings.name AS `key`, 
+					    strings.value AS orig, 
+					    translations.value AS trans
+						FROM strings, translations
+						WHERE strings.string_id = translations.string_id
+						AND translations.language_id = " . $language_row['language_id'] . "
+						AND strings.file_id = " . $properties_file['file_id'] . "
+						AND translations.is_active
+					";
+				$strings_result = mysql_query( $sql );
+				while( ($strings_row = mysql_fetch_assoc($strings_result)) != null ) {
+					fwrite( $outp, $strings_row['key'] . "=" );
+					#echo "${leader1S}${leaderS}${leaderS}${leaderS}" . $strings_row['key'] . "=";
+					if( $strings_row['trans'] ) {
+						# json_encode returns the string with quotes fore and aft.  Need to strip them.
+						$tr_string = preg_replace('/^"(.*)"$/', '${1}', json_encode($strings_row['trans']));
+						$tr_string = str_replace('\\\\', '\\', $tr_string);
+						fwrite( $outp, $tr_string );
+						# echo $strings_row['trans'];
+					} else {
+						fwrite( $outp, $strings_row['orig'] );
+					}
+					fwrite( $outp, "\n" );
+					# echo "\n";
+				}
+				/*
+				 * Finish the properties file
+				 */
+				fclose( $outp );
+				echo "${leader1}${leader}${leader}completed  properties file $filename\n";
 			}
 			/*
-			 * Finish the properties file
+			 * Copy in the various legal files
 			 */
+			exec( "cp ${source_files_for_generate}about.html ${temporary_dir}" );
+			exec( "cp ${source_files_for_generate}license.html ${temporary_dir}" );
+			exec( "cp ${source_files_for_generate}epl-v10.html ${temporary_dir}" );
+			exec( "cp ${source_files_for_generate}eclipse_update_120.jpg ${temporary_dir}" );
+			/*
+			 * Generate the META-INF/MANIFEST.MF file
+			 */
+			$parent_plugin_id = $plugin_name;
+			$fragment_id = "${parent_plugin_id}.nl_$language_iso";
+			$fragment_major_version = "0.2.0"; //TODO what version number should these plugins be?
+			$fragment_version = $fragment_major_version . ".v" . $generated_timestamp;
+			$fragment_filename = $fragment_id . "_" . $fragment_version . ".jar";
+			$parent_min_version = "0.0.0"; //TODO specify a min version (when versions are supported)
+			$parent_max_version = "9.9.9"; //TODO specify a max version (when versions are supported)
+	
+			$plugins[$plugin_name]['id'] = $fragment_id;
+			$plugins[$plugin_name]['version'] = $fragment_version;
+	
+			exec( "mkdir $temporary_dir/META-INF" );
+			$outp = fopen( "$temporary_dir/META-INF/MANIFEST.MF", "w" );
+			fwrite( $outp, "Manifest-Version: 1.0\n");
+			fwrite( $outp, "Bundle-Name: $parent_plugin_id $language_name NLS Support\n");
+			fwrite( $outp, "Bundle-SymbolicName: $fragment_id ;singleton=true\n");
+			fwrite( $outp, "Bundle-Version: $fragment_version\n");
+			fwrite( $outp, "Bundle-Vendor: Eclipse Foundation Inc.\n");
+			fwrite( $outp, "Fragment-Host: $parent_plugin_id;bundle-version=\"[$parent_min_version,$parent_max_version)\"\n");
 			fclose( $outp );
-			echo "${leader1}${leader}${leader}completed  properties file $filename\n";
+			/*
+			 * Jar up this directory as the fragment plug-in jar
+			 */
+			system( "cd $temporary_dir; jar cfM ${staging_update_site}plugins/$fragment_filename ." );
+			echo "${leader1}${leader}completed  plug-in fragment $plugin_name\n";
 		}
+	        /*
+	         * Clean and create the temporary directory
+	         */
+	        if ( file_exists( $temporary_dir ) ) {
+	        	exec( "rm -rf $temporary_dir; mkdir $temporary_dir" );
+	        } else {
+	        	exec( "mkdir $temporary_dir" );
+	        }
 		/*
-		 * Copy in the various legal files
+		 * Create the feature.xml
+		 *
+		 * TODO <url><update label=... url=... and <url><discovery label=... url=... are not implemented
+		 *
+	  	 * <url>
+		 *   <update label="%updateSiteName" url="http://update.eclipse.org/updates/3.2" /> 
+		 *   <discovery label="%updateSiteName" url="http://update.eclipse.org/updates/3.2" /> 
+		 * </url>
 		 */
-		exec( "cp ${source_files_for_generate}about.html ${temporary_dir}" );
-		exec( "cp ${source_files_for_generate}license.html ${temporary_dir}" );
-		exec( "cp ${source_files_for_generate}epl-v10.html ${temporary_dir}" );
-		exec( "cp ${source_files_for_generate}eclipse_update_120.jpg ${temporary_dir}" );
-		/*
-		 * Generate the META-INF/MANIFEST.MF file
-		 */
-		$parent_plugin_id = $plugin_name;
-		$fragment_id = "${parent_plugin_id}.nl_$language_iso";
-		$fragment_major_version = "0.2.0"; //TODO what version number should these plugins be?
-		$fragment_version = $fragment_major_version . ".v" . $generated_timestamp;
-		$fragment_filename = $fragment_id . "_" . $fragment_version . ".jar";
-		$parent_min_version = "0.0.0"; //TODO specify a min version (when versions are supported)
-		$parent_max_version = "9.9.9"; //TODO specify a max version (when versions are supported)
-
-		$plugins[$plugin_name]['id'] = $fragment_id;
-		$plugins[$plugin_name]['version'] = $fragment_version;
-
-		exec( "mkdir $temporary_dir/META-INF" );
-		$outp = fopen( "$temporary_dir/META-INF/MANIFEST.MF", "w" );
-		fwrite( $outp, "Manifest-Version: 1.0\n");
-		fwrite( $outp, "Bundle-Name: $parent_plugin_id $language_name NLS Support\n");
-		fwrite( $outp, "Bundle-SymbolicName: $fragment_id ;singleton=true\n");
-		fwrite( $outp, "Bundle-Version: $fragment_version\n");
-		fwrite( $outp, "Bundle-Vendor: Eclipse Foundation Inc.\n");
-		fwrite( $outp, "Fragment-Host: $parent_plugin_id;bundle-version=\"[$parent_min_version,$parent_max_version)\"\n");
+		$feature_id = "org.eclipse.nls.$language_iso";
+	        $feature_major_version = "0.2.0"; //TODO what version number should this feature be?
+	        $feature_version = $feature_major_version . ".v" . $generated_timestamp;
+	        $feature_filename = $feature_id . "_" . $feature_version . ".jar";
+	
+		$outp = fopen( "$temporary_dir/feature.xml", "w" );
+		fwrite( $outp, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?> 
+	<feature 
+	  id=\"$feature_id\" 
+	  label=\"Eclipse Language Pack for $language_name\"
+	  image=\"eclipse_update_120.jpg\"
+	  provider-name=\"Eclipse Foundation Inc.\" 
+	  version=\"$feature_version\">
+	<license url=\"license.html\">" 
+		. htmlspecialchars( file_get_contents( "${source_files_for_generate}license.txt" ) ) . "</license>
+	<description>Translations in $language_name for all Eclipse Projects</description>
+	" );
+		foreach ($plugins as $plugin_name => $plugin_row ) {
+			fwrite( $outp, '<plugin fragment="true" id="'
+				. $plugin_row['id'] . '" unpack="false" version="'
+				. $plugin_row['version'] . '"/>
+	' );
+		}
+		fwrite( $outp, '</feature>
+	' );
 		fclose( $outp );
+	        /*
+	         * Jar up this directory as the feature jar
+	         */
+	        system( "cd $temporary_dir; jar cfM ${staging_update_site}features/$feature_filename ." );
 		/*
-		 * Jar up this directory as the fragment plug-in jar
+		 * Register this feature with the site.xml
 		 */
-		system( "cd $temporary_dir; jar cfM ${staging_update_site}plugins/$fragment_filename ." );
-		echo "${leader1}${leader}completed  plug-in fragment $plugin_name\n";
+		$site_xml .= "<feature url=\"features/$feature_filename\" id=\"$feature_id\" version=\"$feature_version\">
+	  <category name=\"Language Packs\"/></feature>
+	";
+		echo "${leader1}completed language pack for $language_name ($language_iso)\n";
 	}
-        /*
-         * Clean and create the temporary directory
-         */
-        if ( file_exists( $temporary_dir ) ) {
-        	exec( "rm -rf $temporary_dir; mkdir $temporary_dir" );
-        } else {
-        	exec( "mkdir $temporary_dir" );
-        }
 	/*
-	 * Create the feature.xml
-	 *
-	 * TODO <url><update label=... url=... and <url><discovery label=... url=... are not implemented
-	 *
-  	 * <url>
-	 *   <update label="%updateSiteName" url="http://update.eclipse.org/updates/3.2" /> 
-	 *   <discovery label="%updateSiteName" url="http://update.eclipse.org/updates/3.2" /> 
-	 * </url>
+	 * <site mirrorsURL=... implemented in the weekly build process by sed'ing <site>
 	 */
-	$feature_id = "org.eclipse.nls.$language_iso";
-        $feature_major_version = "0.2.0"; //TODO what version number should this feature be?
-        $feature_version = $feature_major_version . ".v" . $generated_timestamp;
-        $feature_filename = $feature_id . "_" . $feature_version . ".jar";
-
-	$outp = fopen( "$temporary_dir/feature.xml", "w" );
-	fwrite( $outp, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?> 
-<feature 
-  id=\"$feature_id\" 
-  label=\"Eclipse Language Pack for $language_name\"
-  image=\"eclipse_update_120.jpg\"
-  provider-name=\"Eclipse Foundation Inc.\" 
-  version=\"$feature_version\">
-<license url=\"license.html\">" 
-	. htmlspecialchars( file_get_contents( "${source_files_for_generate}license.txt" ) ) . "</license>
-<description>Translations in $language_name for all Eclipse Projects</description>
-" );
-	foreach ($plugins as $plugin_name => $plugin_row ) {
-		fwrite( $outp, '<plugin fragment="true" id="'
-			. $plugin_row['id'] . '" unpack="false" version="'
-			. $plugin_row['version'] . '"/>
-' );
-	}
-	fwrite( $outp, '</feature>
-' );
+	$outp = fopen( "${staging_update_site}site.xml", "w" );
+	fwrite( $outp, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+	<site>
+	  <description url=\"http://babel.eclipse.org/\">This update site contains
+	user-contributed translations of the strings in all Eclipse projects. Please
+	see the http://babel.eclipse.org/ Babel project web pages for a full how-to-use
+	explanation of these translations as well as how you can contribute to
+	the translations of this and future versions of Eclipse.</description>
+	  <category-def name=\"Language Packs\" label=\"Language Packs\">
+	    <description>Language packs for all Eclipse projects</description>
+	  </category-def>
+	" );
+	fwrite( $outp, $site_xml );
+	fwrite( $outp, "</site>
+	" );
 	fclose( $outp );
-        /*
-         * Jar up this directory as the feature jar
-         */
-        system( "cd $temporary_dir; jar cfM ${staging_update_site}features/$feature_filename ." );
-	/*
-	 * Register this feature with the site.xml
-	 */
-	$site_xml .= "<feature url=\"features/$feature_filename\" id=\"$feature_id\" version=\"$feature_version\">
-  <category name=\"Language Packs\"/></feature>
-";
-	echo "${leader1}completed language pack for $language_name ($language_iso)\n";
 }
-/*
- * <site mirrorsURL=... implemented in the weekly build process by sed'ing <site>
- */
-$outp = fopen( "${staging_update_site}site.xml", "w" );
-fwrite( $outp, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<site>
-  <description url=\"http://babel.eclipse.org/\">This update site contains
-user-contributed translations of the strings in all Eclipse projects. Please
-see the http://babel.eclipse.org/ Babel project web pages for a full how-to-use
-explanation of these translations as well as how you can contribute to
-the translations of this and future versions of Eclipse.</description>
-  <category-def name=\"Language Packs\" label=\"Language Packs\">
-    <description>Language packs for all Eclipse projects</description>
-  </category-def>
-" );
-fwrite( $outp, $site_xml );
-fwrite( $outp, "</site>
-" );
-fclose( $outp );
-
 echo "Completed generating update site\n";
 
 /*

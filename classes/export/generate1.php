@@ -88,12 +88,9 @@ $dbh = $dbc->connect();
  * Generate one update site pack per train
  */
 $site_xml = '';
-$train_result = mysql_query( 'SELECT * FROM release_train_projects' );
+$train_result = mysql_query( 'SELECT DISTINCT train_id FROM release_train_projects' );
 while( ($train_row = mysql_fetch_assoc($train_result)) != null ) {
 	$train_id 	= $train_row['train_id'];
-	$project_id = $train_row['project_id'];
-	$version  	= $train_row['version'];
-
 	
 	/*
 	 * Clear the staging site
@@ -102,7 +99,7 @@ while( ($train_row = mysql_fetch_assoc($train_result)) != null ) {
 	# output/europa/plugins
 	# output/ganymede/plugins
 	# etc...
-	$staging_update_site .= $train_row['train_id'] . "/";
+	$staging_update_site = $base_out_dir . "output/" . $train_row['train_id'] . "/";
 	
 	if( file_exists( $staging_update_site ) ) {
 		exec( "rm -rf $staging_update_site*" );

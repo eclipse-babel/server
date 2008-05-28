@@ -33,7 +33,7 @@ if($PROJECT_VERSION != "") {
 $LANGUAGE_ID= $App->getHTTPParameter("language_id");
 $SUBMIT 	= $App->getHTTPParameter("submit");
 
-$sql = "SELECT project_id, version FROM project_versions WHERE is_active ORDER BY project_id ASC, version DESC";
+$sql = "SELECT DISTINCT pv.project_id, pv.version FROM project_versions AS pv INNER JOIN map_files as m ON pv.project_id = m.project_id AND pv.version = m.version WHERE pv.is_active ORDER BY pv.project_id ASC, pv.version DESC";
 $rs_p_list = mysql_query($sql, $dbh);
 
 $sql = "SELECT language_id, name FROM languages WHERE is_active ORDER BY name";

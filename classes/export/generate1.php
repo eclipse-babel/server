@@ -141,8 +141,8 @@ while( ($train_row = mysql_fetch_assoc($train_result)) != null ) {
 	f.file_id, f.name 
 FROM files AS f
 	INNER JOIN strings AS s ON f.file_id = s.file_id
-	INNER JOIN translations AS t on (s.string_id = t.string_id AND t.is_active)
-	INNER JOIN release_train_projects as v on (f.project_id = v.project_id AND f.version = v.version)
+	INNER JOIN translations AS t ON (s.string_id = t.string_id AND t.is_active)
+	INNER JOIN release_train_projects as v ON (f.project_id = v.project_id AND f.version = v.version)
 WHERE 
 	t.language_id = " . $language_row['language_id'] . "
 	AND f.is_active

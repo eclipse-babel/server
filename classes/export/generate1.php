@@ -91,8 +91,8 @@ $site_xml = '';
 $train_result = mysql_query( 'SELECT * FROM release_train_projects' );
 while( ($train_row = mysql_fetch_assoc($train_result)) != null ) {
 	$train_id 	= $train_row['train_id'];
-	$project_id = $language_row['project_id'];
-	$version  	= $language_row['version'];
+	$project_id = $train_row['project_id'];
+	$version  	= $train_row['version'];
 
 	
 	/*

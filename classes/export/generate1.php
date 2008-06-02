@@ -220,8 +220,9 @@ WHERE
 					#echo "${leader1S}${leaderS}${leaderS}${leaderS}" . $strings_row['key'] . "=";
 					if( $strings_row['trans'] ) {
 						# json_encode returns the string with quotes fore and aft.  Need to strip them.
-						$tr_string = preg_replace('/^"(.*)"$/', '${1}', json_encode($strings_row['trans']));
-						$tr_string = str_replace('\\\\', '\\', $tr_string);
+						# $tr_string = preg_replace('/^"(.*)"$/', '${1}', json_encode($strings_row['trans']));
+						# $tr_string = str_replace('\\\\', '\\', $tr_string);
+						$tr_string = toescapedunicode($strings_row['trans']);
 						fwrite( $outp, $tr_string );
 						# echo $strings_row['trans'];
 					} else {

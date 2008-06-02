@@ -146,9 +146,14 @@ WHERE
 	AND v.train_id = '" . $train_row['train_id'] . "'");
 		$plugins = array();
 		while( ($file_row = mysql_fetch_assoc($file_result)) != null ) {
-			# strip source folder (bug 221675)
-			$pattern = '/^([a-zA-Z0-9_-]+)\.([a-zA-Z0-9_-]+)\.(.*)\/(.*)\/(\1)\/(\2)\/(.*)\.properties$/i';
-			$replace = '${1}.${2}.${3}/${5}/${6}/${7}.properties';
+			# strip useless CVS structure before the plugin name (bug 221675 c14):
+			$pattern = '/^([a-zA-Z0-9\/_-])+\/([a-zA-Z0-9_-]+)\.([a-zA-Z0-9_-]+)(.*)\.properties$/i';
+			$replace = '${2}.${3}${4}.properties';
+			$file_row['name'] = preg_replace($pattern, $replace, $file_row['name']);
+			
+			# strip source folder (bug 221675) (org.eclipse.plugin/source_folder/org/eclipse/plugin)
+			$pattern = '/^([a-zA-Z0-9_-]+)\.([a-zA-Z0-9_-]+)\.([a-zA-Z0-9\._-]+)(.*)\/(\1)([\.\/])(\2)([\.\/])(.*)\.properties$/i';
+			$replace = '${1}.${2}.${3}/${5}${6}${7}${8}${9}.properties';
 			$file_row['name'] = preg_replace($pattern, $replace, $file_row['name']);
 			
 			if( preg_match( "/^([a-zA-Z0-9\.]+)\/(.*)$/", $file_row['name'], $matches ) ) {

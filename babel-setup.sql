@@ -147,6 +147,15 @@ CREATE TABLE `ratings` (
   CONSTRAINT `ratings_ibfk_1` FOREIGN KEY (`translation_id`) REFERENCES `translations` (`translation_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `release_train_projects`;
+CREATE TABLE `release_train_projects` (
+    `train_id` varchar(30) NOT NULL,
+    `project_id` varchar(100) NOT NULL,
+    `version` varchar(64) NOT NULL,
+    PRIMARY KEY (`train_id`, `project_id`, `version`),
+    CONSTRAINT `release_train_progress_ibfk_1` FOREIGN KEY (`project_id`, `version`) REFERENCES `project_versions` (`project_id`, `version`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --
 -- Table structure for table `schema_info`
 --
@@ -426,6 +435,20 @@ insert into map_files values ("eclipse", "3.4", "text.map", "http://dev.eclipse.
 insert into map_files values ("eclipse", "3.4", "ui.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/ui.map?view=co", 1);
 insert into map_files values ("eclipse", "3.4", "update.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/update.map?view=co", 1);
 insert into map_files values ("eclipse", "3.4", "userassist.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/userassist.map?view=co", 1);
+
+
+insert into release_train_projects values ('europa',   'eclipse',   '3.3.1');
+insert into release_train_projects values ('ganymede', 'birt',      '2.3.0');
+insert into release_train_projects values ('ganymede', 'eclipse',   '3.4');
+insert into release_train_projects values ('ganymede', 'modeling.emf',   '2.4.0');
+insert into release_train_projects values ('ganymede', 'modeling.emft',   '0.8');
+insert into release_train_projects values ('ganymede', 'modeling.gmf',   '2.1');
+insert into release_train_projects values ('ganymede', 'modeling.mdt',   '2.4.0');
+insert into release_train_projects values ('ganymede', 'stp',       '1.0');
+insert into release_train_projects values ('ganymede', 'tools.cdt', '5.0');
+insert into release_train_projects values ('ganymede', 'tools.gef', '3.4');
+insert into release_train_projects values ('ganymede', 'tools.pdt', '1.5.1');
+insert into release_train_projects values ('ganymede', 'webtools',  '3.0');
 
 /* populate file_progress table  */
 /* See also: dbmaintenance_15min.php */

@@ -16,9 +16,9 @@ InitPage("");
 global $User;
 global $App, $dbh;
 
-$pageTitle 		= "Babel - Translation statistics";
+$pageTitle 		= "Babel - Recent Translations";
 $pageKeywords 	= "";
-$incfile 		= "content/en_stats.php";
+$incfile 		= "content/en_recent_html.php";
 
 $PROJECT_VERSION = $App->getHTTPParameter("project_version");
 $PROJECT_ID = "";
@@ -31,6 +31,20 @@ if($PROJECT_VERSION != "") {
 	$VERSION	= $items[1];
 }
 $LANGUAGE_ID= $App->getHTTPParameter("language_id");
+if($LANGUAGE_ID == "") {
+	$LANGUAGE_ID = $_SESSION["language"];
+}
+if($LANGUAGE_ID == "All") {
+	$LANGUAGE_ID = "";
+}
+$LIMIT 		= $App->getHTTPParameter("limit");
+if($LIMIT == "" || $LIMIT <= 0 || $LIMIT > 1000) {
+	$LIMIT = 200;
+}
+$FORMAT		= $App->getHTTPParameter("format");
+if($FORMAT == "rss") {
+	$incfile 		= "content/en_recent_rss.php";
+}
 $SUBMIT 	= $App->getHTTPParameter("submit");
 
 $sql = "SELECT DISTINCT pv.project_id, pv.version FROM project_versions AS pv INNER JOIN map_files as m ON pv.project_id = m.project_id AND pv.version = m.version WHERE pv.is_active ORDER BY pv.project_id ASC, pv.version DESC";
@@ -39,19 +53,18 @@ $rs_p_list = mysql_query($sql, $dbh);
 $sql = "SELECT language_id, name FROM languages WHERE is_active ORDER BY name";
 $rs_l_list = mysql_query($sql, $dbh);
 
-
-$where = "";
+$where = " t.is_active ";
 
 if($PROJECT_ID != "") {
-	$where = $App->addAndIfNotNull($where) . " p.project_id = ";
+	$where = $App->addAndIfNotNull($where) . " f.project_id = ";
 	$where .= $App->returnQuotedString($App->sqlSanitize($PROJECT_ID, $dbh));
 }
 if($LANGUAGE_ID != "") {
-	$where = $App->addAndIfNotNull($where) . " l.language_id = ";
+	$where = $App->addAndIfNotNull($where) . " t.language_id = ";
 	$where .= $App->returnQuotedString($App->sqlSanitize($LANGUAGE_ID, $dbh));
 }
 if($VERSION != "") {
-	$where = $App->addAndIfNotNull($where) . "p.version = ";
+	$where = $App->addAndIfNotNull($where) . "f.version = ";
 	$where .= $App->returnQuotedString($App->sqlSanitize($VERSION, $dbh));
 }
 
@@ -59,11 +72,26 @@ if($where != "") {
 	$where = " WHERE " . $where;
 }
 
-$sql = "SELECT p.project_id, p.version, l.name, p.pct_complete FROM project_progress AS p INNER JOIN languages AS l ON l.language_id = p.language_id $where ORDER BY p.pct_complete DESC, p.project_id, p.version, l.name";
-$rs_p_stat = mysql_query($sql, $dbh);
 
+$sql = "SELECT 
+  s.name AS String_Key, s.value AS English_Value, 
+  t.value AS Translation, 
+  CONCAT(CONCAT(first_name, ' '), u.last_name) AS Who, 
+  t.created_on AS Created_on,
+  f.project_id AS Project, f.version AS Version, f.name AS File_Name
+FROM 
+  translations as t 
+  LEFT JOIN strings as s on s.string_id = t.string_id 
+  LEFT JOIN files as f on s.file_id = f.file_id 
+  LEFT JOIN users as u on u.userid = t.userid 
+$where
+ORDER BY t.created_on desc 
+LIMIT $LIMIT";
+$rs_p_stat = mysql_query($sql, $dbh);
 include("head.php");
 include($incfile);
 include("foot.php");  
+
+
 
 ?>

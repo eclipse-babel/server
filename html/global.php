@@ -29,7 +29,8 @@ if(USE_PHOENIX) {
 	$MenuItemList = array();
 	$MenuItemList[0] = new MenuItem("Home", "./", "_self", 0);
 	$MenuItemList[1] = new MenuItem("For committers", "map_files.php", "_self", 0);
-	$MenuItemList[2] = new MenuItem("About Babel", "http://www.eclipse.org/babel", "_self", 0);
+	$MenuItemList[2] = new MenuItem("Recent Translations", "recent.php", "_self", 0);
+	$MenuItemList[3] = new MenuItem("About Babel", "http://www.eclipse.org/babel", "_self", 0);
 	$Menu->setMenuItemList($MenuItemList);
 	
 	# set Phoenix defaults to prevent errors. These can be overridden on the page.

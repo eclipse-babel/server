@@ -94,7 +94,6 @@ $where
 ORDER BY t.created_on desc 
 LIMIT $LIMIT";
 $rs_p_stat = mysql_query($sql, $dbh);
-echo $sql;
 include("head.php");
 include($incfile);
 include("foot.php");  

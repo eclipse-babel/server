@@ -80,7 +80,9 @@ if($where != "") {
 $sql = "SELECT 
   s.name AS string_key, s.value as string_value, 
   t.value as translation, 
-  CONCAT(CONCAT(first_name, ' '), u.last_name) AS who, 
+  IF(u.last_name <> '' AND u.first_name <> '', 
+  	CONCAT(CONCAT(first_name, ' '), u.last_name), 
+  	IF(u.first_name <> '', u.first_name, u.last_name)) AS who, 
   t.created_on,
   f.project_id, f.version, f.name
 FROM 
@@ -92,6 +94,7 @@ $where
 ORDER BY t.created_on desc 
 LIMIT $LIMIT";
 $rs_p_stat = mysql_query($sql, $dbh);
+echo $sql;
 include("head.php");
 include($incfile);
 include("foot.php");  

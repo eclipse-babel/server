@@ -18,7 +18,7 @@ global $App, $dbh;
 
 $pageTitle 		= "Babel - Recent Translations";
 $pageKeywords 	= "";
-$incfile 		= "content/en_recent_html.php";
+$incfile 		= "content/en_recent_html_list.php";
 
 $PROJECT_VERSION = $App->getHTTPParameter("project_version");
 $PROJECT_ID = "";
@@ -41,6 +41,10 @@ $LIMIT 		= $App->getHTTPParameter("limit");
 if($LIMIT == "" || $LIMIT <= 0 || $LIMIT > 1000) {
 	$LIMIT = 200;
 }
+$LAYOUT 		= $App->getHTTPParameter("layout");
+if($LAYOUT == "list" || $LAYOUT == "table") {
+	$incfile = "content/en_recent_html_" . $LAYOUT . ".php";
+}
 $FORMAT		= $App->getHTTPParameter("format");
 if($FORMAT == "rss") {
 	$incfile 		= "content/en_recent_rss.php";
@@ -50,7 +54,7 @@ $SUBMIT 	= $App->getHTTPParameter("submit");
 $sql = "SELECT DISTINCT pv.project_id, pv.version FROM project_versions AS pv INNER JOIN map_files as m ON pv.project_id = m.project_id AND pv.version = m.version WHERE pv.is_active ORDER BY pv.project_id ASC, pv.version DESC";
 $rs_p_list = mysql_query($sql, $dbh);
 
-$sql = "SELECT language_id, name FROM languages WHERE is_active ORDER BY name";
+$sql = "SELECT language_id, IF(locale <> '', CONCAT(CONCAT(locale, ' '), name), name) as name FROM languages WHERE is_active ORDER BY name";
 $rs_l_list = mysql_query($sql, $dbh);
 
 $where = " t.is_active ";
@@ -74,11 +78,11 @@ if($where != "") {
 
 
 $sql = "SELECT 
-  s.name AS String_Key, s.value AS English_Value, 
-  t.value AS Translation, 
-  CONCAT(CONCAT(first_name, ' '), u.last_name) AS Who, 
-  t.created_on AS Created_on,
-  f.project_id AS Project, f.version AS Version, f.name AS File_Name
+  s.name AS string_key, s.value as string_value, 
+  t.value as translation, 
+  CONCAT(CONCAT(first_name, ' '), u.last_name) AS who, 
+  t.created_on,
+  f.project_id, f.version, f.name
 FROM 
   translations as t 
   LEFT JOIN strings as s on s.string_id = t.string_id 

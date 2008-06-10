@@ -16,7 +16,7 @@
 	padding: 2px;
 }
 li {
-	height: 19px;
+	padding-bottom: 5px;
 }
 </style>
 

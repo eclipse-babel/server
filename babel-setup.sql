@@ -438,6 +438,7 @@ insert into map_files values ("eclipse", "3.4", "userassist.map", "http://dev.ec
 
 
 insert into release_train_projects values ('europa',   'eclipse',   '3.3.1');
+insert into release_train_projects values ('europa',   'stp',   	'0.8');
 insert into release_train_projects values ('ganymede', 'birt',      '2.3.0');
 insert into release_train_projects values ('ganymede', 'eclipse',   '3.4');
 insert into release_train_projects values ('ganymede', 'modeling.emf',   '2.4.0');

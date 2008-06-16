@@ -79,11 +79,12 @@ class String {
 		if($_file_id > 0 && $_name != "") {
 			global $App, $dbh;
 
+		# Bug 236454 - string token needs to be case sensitive
 		$sql = "SELECT *
 				FROM 
 					strings
 				WHERE file_id = " . $App->sqlSanitize($_file_id, $dbh) . "
-					AND name = " . $App->returnQuotedString($App->sqlSanitize($_name, $dbh));	
+					AND BINARY(name) = " . $App->returnQuotedString($App->sqlSanitize($_name, $dbh));	
 
 			$result = mysql_query($sql, $dbh);
 			if($result && mysql_num_rows($result) > 0) {

@@ -96,7 +96,8 @@ class File {
 			$lines 			= explode("\n", $_content);
 			foreach($lines as $line) {
 				if(strlen($line) > 0 && $line[0] != "#" && $line[0] != ";") {
-					$line = trim($line);
+					# Bug 235553 - don't trim the space at the end of a line!
+					# $line = trim($line);
 					
 					# Does line end with a \ ?
 					if(preg_match("/\\\\$/", $line)) {
@@ -117,6 +118,7 @@ class File {
 								$rValue .= ",";
 							}
 							$tags[0] = trim($tags[0]);
+							# Bug 235553 - don't trim the space at the end of a line!						
 							$tags[1] = trim($tags[1]);
 							
 							$rValue .= $tags[0];

@@ -89,8 +89,9 @@ function translationSumbit(allornot,translationIndex){
 		start:function(eventType, args){
 		},
 		success: function(o) {
-			YAHOO.projectStringsManager.updateStringTableCurrentTranslation(translationIndex, tr_value);
-			target.innerHTML = o.responseText;
+			var response = eval("("+o.responseText+")");			
+			YAHOO.projectStringsManager.updateStringTableCurrentTranslation(translationIndex, response.translationString);
+			target.innerHTML = response.translationArea;
 		},
 		failure: function(o) {
 			YAHOO.log('failed!');

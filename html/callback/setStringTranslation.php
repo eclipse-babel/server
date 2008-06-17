@@ -187,7 +187,13 @@ if(!$do_nothing) {
 		$affected_rows += mysql_affected_rows();
 	}
 }
+
+$response['translationString'] = htmlspecialchars($translation);
+
+$response['translationArea'] = "<br /><br /><br />
+<center><b>Translated  $affected_rows  string  ". ($affected_rows > 1 || $affected_rows == 0 ? "s" : "" ) ." across all Babel projects.
+</b></center>";
+
+print json_encode($response);
+
 ?>
-<br /><br /><br />
-<center><b>Translated <?= $affected_rows ?> string<?= $affected_rows > 1 || $affected_rows == 0 ? "s" : ""  ?> across all Babel projects.
-</b></center>

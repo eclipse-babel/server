@@ -376,6 +376,18 @@ pass: password
 insert into profiles set login_name = "test", cryptpassword = "", realname = "tester", disabledtext = false, mybugslink = 1, extern_id = 1, disable_mail = false;
 insert into users set userid = 1, username = "babel@eclipse.org",first_name="babel",last_name="fish",email="babel@eclipse.org",primary_language_id = "",password_hash = "HSD9a.ShTTdvo", is_committer = true;
 insert into projects set project_id = 'eclipse', is_active = 1 ;
+insert into projects set project_id = 'europa', is_active = 1 ;
+insert into projects set project_id = 'birt', is_active = 1 ;
+insert into projects set project_id = 'modeling.emf', is_active = 1 ;
+insert into projects set project_id = 'modeling.emft', is_active = 1 ;
+insert into projects set project_id = 'modeling.gmf', is_active = 1 ;
+insert into projects set project_id = 'modeling.mdt', is_active = 1 ;
+insert into projects set project_id = 'stp', is_active = 1 ;
+insert into projects set project_id = 'tools.cdt', is_active = 1 ;
+insert into projects set project_id = 'tools.gef', is_active = 1 ;
+insert into projects set project_id = 'tools.pdt', is_active = 1 ;
+insert into projects set project_id = 'webtools', is_active = 1 ;
+
 INSERT INTO `languages` VALUES (1,'en',NULL,'English',1),
 (2,'fr',NULL,'French',1),
 (3,'ja',NULL,'Japanese',1),
@@ -407,6 +419,18 @@ insert into languages set iso_code = 'uk', name = "Ukrainian";
 insert into languages set iso_code = 'es_CA', name = "Spanish-Catalonian";
 insert into project_versions set project_id = "eclipse", version = "3.4", is_active = 1;
 
+insert into project_versions set project_id = "eclipse", version = "3.3.1", is_active = 0;
+insert into project_versions set project_id = "stp", version = "0.8", is_active = 0;
+insert into project_versions set project_id = "birt", version = "2.3.0", is_active = 1;
+insert into project_versions set project_id = "modeling.emf", version = "2.4.0", is_active = 1;
+insert into project_versions set project_id = "modeling.emft", version = "0.8", is_active = 1;
+insert into project_versions set project_id = "modeling.gmf", version = "2.1", is_active = 1;
+insert into project_versions set project_id = "modeling.mdt", version = "2.4.0", is_active = 1;
+insert into project_versions set project_id = "stp", version = "1.0", is_active = 1;
+insert into project_versions set project_id = "tools.cdt", version = "5.0", is_active = 1;
+insert into project_versions set project_id = "tools.gef", version = "3.4", is_active = 1;
+insert into project_versions set project_id = "tools.pdt", version = "1.5.1", is_active = 1;
+insert into project_versions set project_id = "webtools", version = "3.0", is_active = 1;
 
 /* MAP INPUTS */
 insert into map_files values ("eclipse", "3.4", "ant.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/ant.map?view=co", 1);

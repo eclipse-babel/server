@@ -30,7 +30,7 @@ YAHOO.versionManager = {
 						var proj = new version(response[i]);
 						domNode.appendChild(proj.createHTML());
 						if(response[i]['current']){
-							YAHOO.versionManager.updateSelected(proj);
+							YAHOO.versionManager.updateSelected(proj, domNode.scrollHeight);
 						}
 						
 						
@@ -55,12 +55,16 @@ YAHOO.versionManager = {
 		return this.selected;
 	},
 	
-	updateSelected: function(selec){
+	updateSelected: function(selec, scrollto_position){
 		if(this.selected){
 			this.selected.unselect();
 		}
 		this.selected = selec;
 		this.selected.selected();
+		var domNode = document.getElementById('version-area');
+		if(domNode.scrollTop == 0) {
+			domNode.scrollTop = scrollto_position;
+		}
 	}
 };
 

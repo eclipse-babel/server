@@ -30,10 +30,8 @@ YAHOO.filesManager = {
 						var proj = new afile(response[i]);
 						domNode.appendChild(proj.createHTML());
 						if(response[i]['current']){
-							YAHOO.filesManager.updateSelected(proj);
-						}
-						
-						
+							YAHOO.filesManager.updateSelected(proj,domNode.scrollHeight);
+						}						
 					}
 				}else{
 					domNode.innerHTML = "";
@@ -54,12 +52,16 @@ YAHOO.filesManager = {
 		return this.selected;
 	},
 	
-	updateSelected: function(selec){
+	updateSelected: function(selec, scrollto_position){
 		if(this.selected){
 			this.selected.unselect();
 		}
 		this.selected = selec;
 		this.selected.selected();
+		var domNode = document.getElementById('files-area');
+		if(domNode.scrollTop == 0) {
+			domNode.scrollTop = scrollto_position;
+		}
 	}
 };
 

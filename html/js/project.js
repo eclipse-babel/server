@@ -26,7 +26,7 @@ YAHOO.projectManager = {
 					var proj = new project(response[i]['project']);
 					domNode.appendChild(proj.createHTML());
 					if(response[i]['current']){
-						YAHOO.projectManager.updateSelected(proj);
+						YAHOO.projectManager.updateSelected(proj, domNode.scrollHeight);
 					}	
 				}
 				
@@ -51,12 +51,17 @@ YAHOO.projectManager = {
 		return this.selected;
 	},
 	
-	updateSelected: function(selec){
+	updateSelected: function(selec, scrollto_position){
 		if(this.selected){
 			this.selected.unselect();
 		}
 		this.selected = selec;
 		this.selected.selected();
+		
+		var domNode = document.getElementById('project-area');
+		if(domNode.scrollTop == 0) {
+			domNode.scrollTop = scrollto_position;
+		}
 	}
 };
 

@@ -34,6 +34,9 @@ if(!isset($proj_post)){
 		
 	if(isset($_SESSION['file']))
 		$file =  $_SESSION['file'];
+
+	if(isset($_SESSION['string']))
+		$string =  $_SESSION['string'];
 }
 
 switch($state){
@@ -90,6 +93,7 @@ switch($state){
 	default:
 		$query = "select 
 					strings.string_id as stringId,
+					strings.name as stringName,
 					strings.non_translatable,
 					strings.value as text,
 					strings.created_on as createdOn,
@@ -138,6 +142,13 @@ while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
  		  continue;
     }else{
     	$line['text'] = htmlspecialchars(($line['text']));
+        if(isset($string) && $line['stringName'] == $string){
+			$line['current'] = true;
+		}
+		else {
+			$line['current'] = false;
+		}
+    	
     	$line['translationString'] = htmlspecialchars(($line['translationString']));
     	$line['translator'] = htmlspecialchars(($line['first']." ".$line['last']));
     	if($line['non_translatable']){

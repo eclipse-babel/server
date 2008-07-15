@@ -31,7 +31,13 @@ li {
 			$prev_date = substr($myrow['created_on'],0,10);
 			echo "<h2>$prev_date</h2>";
 		}
-		echo "<li>" . substr($myrow['created_on'],11,5) . " " . $myrow['string_value'] . " -> " . $myrow['translation'] . " [<a href='#'>" . $myrow['string_key'] . "</a>] <b>" . $myrow['project_id'] . " " . $myrow['version'] . "</b> (" . $myrow['who'] . ")"; 
+		echo "<li>" . 
+			substr($myrow['created_on'],11,5) . " " . $myrow['string_value'] . 
+				" -> " . $myrow['translation'] . 
+				" [<a href='translate.php?project=" . $myrow['project_id'] . "&version=" . $myrow['version'] . "&file=" . $myrow['name'] . "&string=" . $myrow['string_key'] . "'>" .$myrow['string_key'] . "</a>] <b>" . 
+				$myrow['project_id'] . " " . 
+				$myrow['version'] . "</b> (" . 
+				$myrow['who'] . ")"; 
 		echo "</li>";
 		
 		// $myrow['string_key'] . " " . 

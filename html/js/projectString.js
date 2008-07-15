@@ -61,6 +61,10 @@ YAHOO.projectStringsManager = {
 					for(var i = 0; i < response.length; i++){
 						var proj = new projectString(response[i]);
 						proj.createHTML(this.sp.tableDom);
+						if(response[i]['current']){
+							YAHOO.projectStringsManager.updateSelected(proj, ntDomNode.scrollHeight);
+						}	
+						
 					}
 				}
 			},
@@ -119,12 +123,18 @@ YAHOO.projectStringsManager = {
 		return this.selected;
 	},
 	
-	updateSelected: function(selec){
+	updateSelected: function(selec, scrollto_position){
 		if(this.selected){
 			this.selected.unselect();
 		}
 		this.selected = selec;
 		this.selected.selected();
+		
+		var domNode = document.getElementById('not-translated');
+		if(domNode.scrollTop == 0) {
+			domNode.scrollTop = scrollto_position;
+		}
+		
 	},
 	
 	updateStringTableCurrentTranslation: function(stringTableIndex,trans){

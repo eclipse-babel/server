@@ -36,7 +36,7 @@ $SUBMIT 	= $App->getHTTPParameter("submit");
 $sql = "SELECT DISTINCT pv.project_id, pv.version FROM project_versions AS pv INNER JOIN map_files as m ON pv.project_id = m.project_id AND pv.version = m.version WHERE pv.is_active ORDER BY pv.project_id ASC, pv.version DESC";
 $rs_p_list = mysql_query($sql, $dbh);
 
-$sql = "SELECT language_id, name FROM languages WHERE is_active ORDER BY name";
+$sql = "SELECT language_id, IF(locale <> '', CONCAT(CONCAT(name, ' '), locale), name) as name FROM languages WHERE is_active ORDER BY name";
 $rs_l_list = mysql_query($sql, $dbh);
 
 
@@ -59,7 +59,7 @@ if($where != "") {
 	$where = " WHERE " . $where;
 }
 
-$sql = "SELECT p.project_id, p.version, l.name, p.pct_complete FROM project_progress AS p INNER JOIN languages AS l ON l.language_id = p.language_id $where ORDER BY p.pct_complete DESC, p.project_id, p.version, l.name";
+$sql = "SELECT p.project_id, p.version, l.name, l.locale, p.pct_complete FROM project_progress AS p INNER JOIN languages AS l ON l.language_id = p.language_id $where ORDER BY p.pct_complete DESC, p.project_id, p.version, l.name";
 $rs_p_stat = mysql_query($sql, $dbh);
 
 include("head.php");

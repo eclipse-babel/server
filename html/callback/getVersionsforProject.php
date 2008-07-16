@@ -14,17 +14,11 @@ require_once("cb_global.php");
 
 
 
-if(!isset($_SESSION['project'])){
-	return array();
-}
-
+$return = "";
 $language = "";
-if(isset($_SESSION['language'])) {
+if(isset($_SESSION['language']) && isset($_SESSION['project'])) {
 	$language =  $_SESSION['language'];
-}
-
-
-$query = "select DISTINCT
+	$query = "select DISTINCT
 		f.version,
 		f.project_id, 
 		IF(ISNULL(pct_complete),0,ROUND(pct_complete,1)) AS pct_complete
@@ -36,23 +30,22 @@ $query = "select DISTINCT
 		v.is_active = 1 
 		and v.project_id = '".addslashes($_SESSION['project'])."'";
 
-//print $query."\n";
+	$res = mysql_query($query,$dbh);
 
-$res = mysql_query($query,$dbh);
+	$return = array();
 
-$return = array();
-
-while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
-	$ret = Array();
-	$ret['version'] = $line['version'];
-	$ret['pct'] = $line['pct_complete'];
+	while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
+		$ret = Array();
+		$ret['version'] = $line['version'];
+		$ret['pct'] = $line['pct_complete'];
 	
-	if(isset($_SESSION['version']) and $line['version'] == $_SESSION['version']){
-		$ret['current'] = true;
+		if(isset($_SESSION['version']) and $line['version'] == $_SESSION['version']){
+			$ret['current'] = true;
+		}
+		$return[] = $ret;
 	}
-	$return[] = $ret;
 }
-
+//print $query."\n";
 print json_encode($return);
 
 ?>

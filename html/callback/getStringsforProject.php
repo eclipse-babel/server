@@ -10,7 +10,7 @@
  *    Paul Colton (Aptana)- initial API and implementation
  *    Eclipse Foundation
 *******************************************************************************/
-
+error_reporting('E_NONE'); ini_set("display_errors", false);
 require_once("cb_global.php");
 
 $project_id = $App->getHTTPParameter("proj", "POST");
@@ -44,6 +44,7 @@ switch($state){
 	break;
 	$query = "select 
 				strings.value as string,
+				strings.name as stringName,
 				strings.non_translatable,
 				translations.value as translation
 			  from 
@@ -66,6 +67,7 @@ switch($state){
 	break;
 	$query = "select 
 				strings.value as string,
+				strings.name as stringName,
 				strings.non_translatable,
 				translations.value as translation,
 				users.username as translator
@@ -97,13 +99,12 @@ switch($state){
 					strings.non_translatable,
 					strings.value as text,
 					strings.created_on as createdOn,
-					translations.value as translationString,
-					users.first_name as first,
-					users.last_name as last
+					IF(ISNULL(translations.value), '', translations.value) as translationString,
+					IF(ISNULL(users.first_name), 'Unknown', users.first_name) as first,
+					IF(ISNULL(users.last_name), 'Unknown', users.last_name) as last
 					from 
 					files,
 				  	strings
-				  	
 				  	left join translations on (
 				  		translations.language_id = '".addslashes($language)."'
 				  	  and

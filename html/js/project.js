@@ -22,19 +22,23 @@ YAHOO.projectManager = {
 				var domNode = document.getElementById('project-area');
 //				YAHOO.log(o.responseText);
 				domNode.innerHTML = "";
-				for(var i = 0; i < response.length; i++){
-					var proj = new project(response[i]['project']);
-					domNode.appendChild(proj.createHTML());
-					if(response[i]['current']){
-						YAHOO.projectManager.updateSelected(proj, domNode.scrollHeight);
-					}	
-				}
+				if(response){
+					for(var i = 0; i < response.length; i++){
+						var proj = new project(response[i]['project']);
+						domNode.appendChild(proj.createHTML());
+						if(response[i]['current']){
+							YAHOO.projectManager.updateSelected(proj, domNode.scrollHeight);
+						}	
+					}
 				
 	//			domNode.innerHTML = o.responseText;
 	//			YAHOO.util.Event.onAvailable("project-choices",setupSelectProjectCB);
 	
 				//start versions
-				YAHOO.versionManager.getAjaxVersions();
+					YAHOO.versionManager.getAjaxVersions();
+				} else{
+					domNode.innerHTML = "Please select a language to continue.";
+				}
 			},
 			failure: function(o) {
 				YAHOO.log('failed!');

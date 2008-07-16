@@ -32,14 +32,11 @@ YAHOO.versionManager = {
 						if(response[i]['current']){
 							YAHOO.versionManager.updateSelected(proj, domNode.scrollHeight);
 						}
-						
-						
 					}
-				}else{
-					domNode.innerHTML = "";
+					YAHOO.filesManager.getAjax();
+				} else{
+					domNode.innerHTML = "Please select a project to continue.";
 				}
-				
-				YAHOO.filesManager.getAjax();
 			},
 			failure: function(o) {
 				YAHOO.log('failed!');

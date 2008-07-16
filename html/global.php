@@ -64,16 +64,16 @@ extract($_SESSION);
 
 
 function InitPage($login) {
-	$page = $login;
+  $page = $login;
   $lastPage = GetSessionVar('s_pageName');
   $User = GetSessionVar('User');
   
   if (empty($GLOBALS['page']))
 	  $GLOBALS['page'] = '';
-		
-  if (($lastPage != $_SERVER['PHP_SELF']) AND ($lastPage != "login"))
-		SetSessionVar('s_pageLast',$lastPage);
-		SetSessionVar('s_pageName',$GLOBALS['page']);
+	
+  if(strpos($_SERVER['REQUEST_URI'], "login.php") == FALSE) {
+	SetSessionVar('s_pageLast', $_SERVER['REQUEST_URI']);
+  }
   
   $dbc = new DBConnection();
   global $dbh;
@@ -88,7 +88,6 @@ function InitPage($login) {
   		$Session = new Session();
 
   		if(!$Session->validate()) {
-    		SetSessionVar('s_pageLast', $GLOBALS['page']);
     		exitTo("login.php");
   		}
   		else {

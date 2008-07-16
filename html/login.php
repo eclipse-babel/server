@@ -49,7 +49,17 @@ if($SUBMIT == "Login") {
 			$Session = new Session();
 			$Session->create($User->userid, $REMEMBER);
 			SetSessionVar('User', $User);
-			exitTo("translate.php");
+			if(isset($_SESSION['s_pageLast'])) {
+				if($_SESSION['s_pageLast'] != "") {
+					exitTo($_SESSION['s_pageLast']);
+				}
+				else {
+					exitTo("translate.php");
+				}
+			}
+			else {
+				exitTo("translate.php");
+			}
 		}
 	}
 	else {

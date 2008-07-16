@@ -12,7 +12,10 @@
 *******************************************************************************/
 require_once("cb_global.php");
 
-$query = "select 
+$return = "";
+
+if(isset($_SESSION['language'])) {
+	$query = "select 
 			DISTINCT projects.*  
 		  from 
 		  	projects,
@@ -27,23 +30,23 @@ $query = "select
 		  ";
 
 
-$res = mysql_query($query,$dbh);
+	$res = mysql_query($query,$dbh);
 
-//$return = '<ul id="project-choices">';
+//	$return = '<ul id="project-choices">';
 
-while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
-	$ret = Array();
-	$ret['project'] = $line['project_id'];
-//	$ret['version'] = $line['version'];
-	if(isset($_SESSION['project']) and $line['project_id'] == $_SESSION['project']){
-		$ret['current'] = true;
+	while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
+		$ret = Array();
+		$ret['project'] = $line['project_id'];
+		//	$ret['version'] = $line['version'];
+		if(isset($_SESSION['project']) and $line['project_id'] == $_SESSION['project']){
+			$ret['current'] = true;
+		}
+		$return[] = $ret;
 	}
-	$return[] = $ret;
+	//	$return .= '<li><a href="project_id='.$line['project_id'].'">'.$line['project_id'].'</a>';
+
+	//$return .= "</ul>";
 }
-//	$return .= '<li><a href="project_id='.$line['project_id'].'">'.$line['project_id'].'</a>';
-
-//$return .= "</ul>";
-
 print json_encode($return);
 
 ?>

@@ -23,11 +23,6 @@ include("head.php");
 //$_SESSION['project'] = "";
 //$_SESSION['version'] = "";
 
-if(!isset($_SESSION['language']) && (isset($_GET['project']) || isset($_GET['version']) || isset($_GET['file']))) {
-	# someone bookmarked a file, but hasn't selected a language.  Ajax will have a fit
-	$_SESSION['language'] = "fr";
-}
-
 # Bug 221420 Allow bookmarking file/string/translation
 if(isset($_GET['project'])) {
 	$_SESSION['project'] = stripslashes($_GET['project']);

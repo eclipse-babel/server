@@ -99,9 +99,9 @@ switch($state){
 					strings.non_translatable,
 					strings.value as text,
 					strings.created_on as createdOn,
-					IF(ISNULL(translations.value), '', translations.value) as translationString,
-					IF(ISNULL(users.first_name), 'Unknown', users.first_name) as first,
-					IF(ISNULL(users.last_name), 'Unknown', users.last_name) as last
+					translations.value as translationString,
+					users.first_name as first,
+					users.last_name as last
 					from 
 					files,
 				  	strings

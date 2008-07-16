@@ -134,11 +134,11 @@ h4{
 }
 
 .side-component-small h4{
-	padding: 2.5px;
+	padding: 3px;
 }
 
 .side-component-small+.files h4{
-	padding: 0px;
+	padding: 1px;
 }
 
 .scrollable-area{

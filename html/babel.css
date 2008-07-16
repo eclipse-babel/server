@@ -133,6 +133,14 @@ h4{
 .side-component h4{
 }
 
+.side-component-small h4{
+	padding: 3px;
+}
+
+.side-component-small+.files h4{
+	padding: 0px;
+}
+
 .scrollable-area{
 	width: 100%;
 	height: 100px;

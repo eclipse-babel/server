@@ -134,7 +134,8 @@ h4{
 }
 
 .side-component-small h4{
-	padding: 2.5px;
+	padding-top: 3px;
+	padding-bottom: 2px;
 }
 
 .side-component-small+.files h4{

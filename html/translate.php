@@ -60,8 +60,8 @@ if(isset($_GET['string'])) {
 	<div id="files" class="side-component-small files">
 		<h4 id="files-selection">
 			Files
-			<input id="files-order-name" name="files-order" type="radio" checked>name order
-			<input id="files-order-completion" name="files-order" type="radio">completion order
+			<input id="files-order-name" name="files-order" type="radio" checked>in name order
+			<input id="files-order-completion" name="files-order" type="radio">in completion order
 		</h4>
 		<ul id="files-area" class="scrollable-area"></ul>
 	</div>

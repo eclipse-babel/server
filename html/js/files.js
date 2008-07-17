@@ -93,6 +93,7 @@ afile.prototype.clicked = function(e){
 	var target = YAHOO.util.Event.getTarget(e);
 	YAHOO.filesManager.updateSelected(this);
 	YAHOO.util.Connect.asyncRequest('POST', "callback/setCurrentFile.php", callback, "file="+this.filename);
+	document.getElementById('translation-form').innerHTML = "";
 }
 afile.prototype.createHTML = function(){
 	this.domElem = document.createElement("li");

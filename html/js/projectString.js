@@ -33,6 +33,13 @@ YAHOO.projectStringsManager = {
 			start:function(eventType, args){ 
 			},
 			success: function(o) {
+				var titleNode = document.getElementById('string-title');
+				var someString = "Translatable Strings in " + YAHOO.filesManager.getSelected().filename.substr(YAHOO.filesManager.getSelected().filename.lastIndexOf("/") + 1);
+					someString += ' <a href="?project=' + YAHOO.projectManager.getSelected().project;
+					someString += '&version=' + YAHOO.versionManager.getSelected().version;
+					someString += '&file=' + YAHOO.filesManager.getSelected().filename + '">[link to this file]</a>';
+				titleNode.innerHTML = someString;
+				
 				var domNode = document.getElementById('projecs-strings-area');
 				domNode.innerHTML = "";
 				var values = new Object();
@@ -57,7 +64,7 @@ YAHOO.projectStringsManager = {
 
 				
 				if(o.responseText){
-					var response = eval("("+o.responseText+")");					
+					var response = eval("("+o.responseText+")");			
 					for(var i = 0; i < response.length; i++){
 						var proj = new projectString(response[i]);
 						proj.createHTML(this.sp.tableDom);
@@ -135,12 +142,19 @@ YAHOO.projectStringsManager = {
 			domNode.scrollTop = scrollto_position;
 		}
 		
+		var titleNode = document.getElementById('translation-title');
+		var someString = "String Translation for " + this.selected.data['stringName'];
+			someString += ' <a href="?project=' + YAHOO.projectManager.getSelected().project;
+			someString += '&version=' + YAHOO.versionManager.getSelected().version;
+			someString += '&file=' + YAHOO.filesManager.getSelected().filename;
+			someString += '&string=' + this.selected.data['stringName'] + '">[link to this string]</a>';
+		titleNode.innerHTML = someString;
+		showTranslateStringForm(this.selected.data['stringId'],this.selected.domElem.rowIndex);
 	},
 	
 	updateStringTableCurrentTranslation: function(stringTableIndex,trans){
 		this.tableDom.rows[stringTableIndex].cells[1].innerHTML = trans;
-	}
-	
+	}	
 //$stringTableIndex	
 };
 
@@ -155,7 +169,6 @@ YAHOO.extend(projectString,selectable);
 }
 
 projectString.prototype.clicked = function(e){
-	showTranslateStringForm(this.data['stringId'],this.domElem.rowIndex);
 	YAHOO.projectStringsManager.updateSelected(this);
 }
 projectString.prototype.createHTML = function(tableDom){
@@ -172,6 +185,7 @@ projectString.prototype.createHTML = function(tableDom){
 	values.translation = "<div style='width: 100%; overflow: hidden;'>"+temp+"</div>";
 	values.translator = this.data['translator'] ? this.data['translator'] : '';
 	values.createdon = this.data['createdOn'];
+	values.stringname = this.data['stringname'];
 	
 	var lineDome = YAHOO.projectStringsManager.createHTML(values,tableDom);
 	this.domElem = lineDome;

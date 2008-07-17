@@ -148,8 +148,7 @@ while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
 		}
 		else {
 			$line['current'] = false;
-		}
-    	
+		} 
     	$line['translationString'] = htmlspecialchars(($line['translationString']));
     	$line['translator'] = htmlspecialchars(($line['first']." ".$line['last']));
     	if($line['non_translatable']){

@@ -177,12 +177,24 @@ h4{
 	background-color: SteelBlue;
 	font-weight: bold;
 }
+#string-area a {
+	font-size: 9pt;
+	color: white;
+	background-color: SteelBlue;
+	font-weight: normal;
+}
 #string-area ul.yui-nav li a{
 }
 #translation-area{
 	padding: 0px;
 	margin: 0px;
 	height: 215px;
+}
+#translation-area a {
+	font-size: 9pt;
+	color: white;
+	background-color: SteelBlue;
+	font-weight: normal;
 }
 	
 #string-area h4{

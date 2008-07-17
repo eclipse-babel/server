@@ -191,7 +191,7 @@ if(!$do_nothing) {
 $response['translationString'] = htmlspecialchars($translation);
 
 $response['translationArea'] = "<br /><br /><br />
-<center><b>Translated  $affected_rows  string  ". ($affected_rows > 1 || $affected_rows == 0 ? "s" : "" ) ." across all Babel projects.
+<center><b>Translated $affected_rows string". ($affected_rows > 1 || $affected_rows == 0 ? "s" : "" ) ." across all Babel projects.
 </b></center>";
 
 print json_encode($response);

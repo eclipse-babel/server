@@ -14,7 +14,9 @@
 if(!defined('BABEL_BASE_DIR')){
 	define('BABEL_BASE_DIR', "../");
 }
-define('USE_PHOENIX', 		true);
+if(!defined('USE_PHOENIX')) {
+	define('USE_PHOENIX', 		true);
+}
 define("COOKIE_REMEMBER",	"cBABEL");
 define("COOKIE_SESSION" ,	"sBABEL");
 

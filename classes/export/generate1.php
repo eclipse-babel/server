@@ -19,23 +19,19 @@
 /*
  * Globals
  */
-ob_start();  
 
+ob_start();
 
-if(defined('BABEL_BASE_DIR')){
-	require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
-}else{
+# Set this according to your local setup
+$base_out_dir = "/home/babel-working/";
+
+if(!defined('BABEL_BASE_DIR')){
     define('BABEL_BASE_DIR', "../../");
-	require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
-} 
-
-if( !function_exists('json_encode') ){
-	require("/home/data/httpd/babel.eclipse.org/html/json_encode.php");
-	function json_encode($encode){
- 		$jsons = new Services_JSON();
-		return $jsons->encode($encode);
-	}
 }
+define('USE_PHOENIX', 		false);
+require(BABEL_BASE_DIR . "html/global.php");
+InitPage("");
+
 
 if (!($ini = @parse_ini_file(BABEL_BASE_DIR . 'classes/base.conf'))) {
 	errorLog("Failed to find/read database conf file - aborting.");
@@ -46,10 +42,8 @@ $context = $ini['context'];
 if($context == "") {
 	$context = "staging";
 }
-global $context;
+global $dbh;
 
-
-$base_out_dir = "/home/babel-working/";
 
 if(!file_exists($base_out_dir)){
 	$base_out_dir = "";
@@ -79,16 +73,12 @@ $generated_timestamp = date("Ymdhis");
  * Get the data (plugins, files, translations) from the live database
  */
 
-$dbc = new DBConnection();
-global $dbh;
-$dbh = $dbc->connect();
-
 
 /*
  * Generate one update site pack per train
  */
 $site_xml = '';
-$train_result = mysql_query( 'SELECT DISTINCT train_id FROM release_train_projects' );
+$train_result = mysql_query( 'SELECT DISTINCT train_id FROM release_train_projects');
 while( ($train_row = mysql_fetch_assoc($train_result)) != null ) {
 	$train_id 	= $train_row['train_id'];
 	

@@ -17,13 +17,12 @@
 # sub-structure: ./XX/eclipse/plugins/ where XX is the iso code for the language
 # See: http://www.eclipse.org/babel/development/large_contributions.php
 
+# To run this, copy the file to the 'root' of html/ (where translate.php resides)
+# and set the project, version and indir
+
 
 header("Content-type: text/plain");
-if(!defined('BABEL_BASE_DIR')){
-    define('BABEL_BASE_DIR', "../../");
-}
-define('USE_PHOENIX', 		false);
-require(BABEL_BASE_DIR . "html/global.php");
+include("global.php");
 InitPage("");
 
 $User = new User();

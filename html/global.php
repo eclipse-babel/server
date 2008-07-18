@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2007 Eclipse Foundation and others.
+ * Copyright (c) 2007-2008 Eclipse Foundation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,6 +9,7 @@
  * Contributors:
  *    Paul Colton (Aptana)- initial API and implementation
  *    Eclipse Foundation
+ *    Scott Reynen scott at randomchaos com - toescapedunicode
 *******************************************************************************/
 if(!defined('BABEL_BASE_DIR')){
 	define('BABEL_BASE_DIR', "../");
@@ -159,5 +160,46 @@ function getLanguagebyID($id){
 	return $ret['name'];
 }
 
-
+/**
+ * Converts string to escaped unicode format
+ * Based on work by Scott Reynen - CQ 2498
+ *
+ * @param string $str
+ * @return string
+ * @since 2008-07-18
+ */
+function toescapedunicode($str) {
+	$unicode = array();       
+	$values = array();
+	$lookingFor = 1;
+       
+	for ($i = 0; $i < strlen( $str ); $i++ ) {
+		$thisValue = ord( $str[ $i ] );
+		if ( $thisValue < 128)
+			$unicode[] = $str[ $i ];
+		else {
+			if ( count( $values ) == 0 ) $lookingFor = ( $thisValue < 224 ) ? 2 : 3;               
+				$values[] = $thisValue;               
+			if ( count( $values ) == $lookingFor ) {
+				$number = ( $lookingFor == 3 ) ?
+					( ( $values[0] % 16 ) * 4096 ) + ( ( $values[1] % 64 ) * 64 ) + ( $values[2] % 64 ):
+					( ( $values[0] % 32 ) * 64 ) + ( $values[1] % 64 );
+				$number = dechex($number);
+				
+				if(strlen($number) == 3) {
+					$unicode[] = "\u0" . $number;
+				}
+				elseif(strlen($number) == 2) {
+					$unicode[] = "\u00" . $number;
+				}
+				else {
+					$unicode[] = "\u" . $number;
+				}
+				$values = array();
+				$lookingFor = 1;
+			}
+		}
+	}
+	return implode("",$unicode);
+}
 ?>

@@ -19,7 +19,11 @@
 
 
 header("Content-type: text/plain");
-include("global.php");
+if(!defined('BABEL_BASE_DIR')){
+    define('BABEL_BASE_DIR', "../../");
+}
+define('USE_PHOENIX', 		false);
+require(BABEL_BASE_DIR . "html/global.php");
 InitPage("");
 
 $User = new User();

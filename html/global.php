@@ -170,6 +170,7 @@ function getLanguagebyID($id){
  * @return string
  * @since 2008-07-18
  */
+if(!function_exists('toescapedunicode')) {
 function toescapedunicode($str) {
 	$unicode = array();       
 	$values = array();
@@ -203,5 +204,6 @@ function toescapedunicode($str) {
 		}
 	}
 	return implode("",$unicode);
+}
 }
 ?>

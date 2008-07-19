@@ -14,6 +14,7 @@ require_once("cb_global.php");
 
 $return = array();
 
+
 if(!isset($_SESSION['project']) or !isset($_SESSION['version'])){
 	return $return; 
 }
@@ -21,22 +22,6 @@ if(!isset($_SESSION['project']) or !isset($_SESSION['version'])){
 $language = "";
 if(isset($_SESSION['language'])) {
 		$language =  $_SESSION['language'];
-}
-
-$parameter = $App->getHTTPParameter("order", "POST");
-
-if ($parameter == "name" or $parameter == "completion") {
-	$_SESSION['filesOrder'] = $parameter;
-}
-
-if (!isset($_SESSION['filesOrder'])) {
-	$_SESSION['filesOrder'] = "name";
-}
-
-if ($_SESSION['filesOrder'] == "name") {
-	$order = "f.name";
-} else {
-	$order = "pct_complete";
 }
 
 $query = "SELECT 
@@ -53,7 +38,7 @@ WHERE
         AND v.project_id = '".addslashes($_SESSION['project'])."'
         AND f.version = '".addslashes($_SESSION['version'])."'
         GROUP BY f.name
-        ORDER BY ".$order;
+        ORDER BY pct_complete, f.name";
 
 # print $query."\n";
 

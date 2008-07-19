@@ -56,3 +56,55 @@ selectable.prototype.addEvents = function(){
 	YAHOO.util.Event.addListener(this.domElem,"mouseover",this.mouseOver,this,true);
 	YAHOO.util.Event.addListener(this.domElem,"mouseout",this.mouseOut,this,true);
 }
+
+function setupFilesOrder() {
+	YAHOO.util.Event.addListener("files-order-name", "click", filesOrderRadioButtonClicked);
+	YAHOO.util.Event.addListener("files-order-completion", "click", filesOrderRadioButtonClicked);
+}
+
+function filesOrderRadioButtonClicked() {
+	var callback = 
+	{ 
+		start:function(eventType, args){ 
+		},
+		success: function(o) {
+			var domNode = document.getElementById('files-area');
+			var response;
+			if(o.responseText){
+				response =  eval("("+o.responseText+")");
+			}
+			if(response){
+				domNode.innerHTML = "";
+
+				for(var i = 0; i < response.length; i++){
+					var proj = new afile(response[i]);
+					domNode.appendChild(proj.createHTML());
+					if(response[i]['current']){
+						YAHOO.filesManager.updateSelected(proj);
+					}
+						
+						
+				}
+			}else{
+				domNode.innerHTML = "";
+			}
+			YAHOO.projectStringsManager.getAjaxProjectStrings();
+		},
+		failure: function(o) {
+			YAHOO.log('failed!');
+		} 
+	}
+
+	var parameter;
+	if (this.id == "files-order-name") {
+		parameter = "order=name";
+	} else {
+		parameter = "order=completion";
+	}
+
+	var domNode = document.getElementById('files-area');
+	YAHOO.spinable.attach(domNode);
+	YAHOO.util.Connect.asyncRequest('GET', "callback/getFilesForProject.php", callback, parameter);
+}
+
+YAHOO.util.Event.onDOMReady(setupFilesOrder);

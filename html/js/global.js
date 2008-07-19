@@ -58,7 +58,10 @@ selectable.prototype.addEvents = function(){
 }
 
 function setupFilesOrder() {
+	var orderName = document.getElementById("files-order-name");
 	YAHOO.util.Event.addListener("files-order-name", "click", filesOrderRadioButtonClicked);
+
+	var orderCompletion = document.getElementById("files-order-completion");
 	YAHOO.util.Event.addListener("files-order-completion", "click", filesOrderRadioButtonClicked);
 }
 

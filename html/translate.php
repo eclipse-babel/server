@@ -36,15 +36,6 @@ if(isset($_GET['file'])) {
 if(isset($_GET['string'])) {
 	$_SESSION['string'] = htmlspecialchars($_GET['string']);
 }
-
-if ($_SESSION['filesOrder'] == 'name' or !isset($_SESSION['filesOrder'])) {
-	$filesOrderNameChecked = "checked";
-}
-
-if ($_SESSION['filesOrder'] == 'completion') {
-	$filesOrderCompletionChecked = "checked";
-}
-
 ?>
 
 <h1 id="page-message">Welcome to the Babel Project</h1>
@@ -67,11 +58,7 @@ if ($_SESSION['filesOrder'] == 'completion') {
 	</div>
 
 	<div id="files" class="side-component-small files">
-		<h4 id="files-selection">
-			Files
-			<input id="files-order-name" name="files-order" type="radio" <?= $filesOrderNameChecked ?>>ordered by name
-			<input id="files-order-completion" name="files-order" type="radio" <?= $filesOrderCompletionChecked ?>>ordered by completion
-		</h4>
+		<h4 id="files-selection">Files</h4>
 		<ul id="files-area" class="scrollable-area"></ul>
 	</div>
 
@@ -87,7 +74,7 @@ if ($_SESSION['filesOrder'] == 'completion') {
 
 	
 	<div id="string-area" class="yui-navset full-component">
-	<h2 id="string-title">Translatable Strings</h2>
+	<h2>Translatable Strings</h2>
 <!--
 	    <ul class="yui-nav"> 
         <li class="selected"><a href="#tab1"><em>Untranslated</em></a></li> 
@@ -113,7 +100,7 @@ if ($_SESSION['filesOrder'] == 'completion') {
 	
 	
 	<div id="translation-area" class="full-component">
-	   <h2 id="translation-title">String Translation</h2>
+	   <h2>String Translation</h2>
 	   <div id="translation-form-container"></div>
 	   <div class="clearing"></div>
 	</div>

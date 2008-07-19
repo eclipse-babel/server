@@ -68,7 +68,7 @@ function setupFilesOrder() {
 function filesOrderRadioButtonClicked() {
 	var callback = 
 	{ 
-		start:function(eventType, args){ 
+		start: function(eventType, args) { 
 		},
 		success: function(o) {
 			var domNode = document.getElementById('files-area');
@@ -76,19 +76,17 @@ function filesOrderRadioButtonClicked() {
 			if(o.responseText){
 				response =  eval("("+o.responseText+")");
 			}
-			if(response){
+			if (response) {
 				domNode.innerHTML = "";
 
-				for(var i = 0; i < response.length; i++){
+				for (var i = 0; i < response.length; i++) {
 					var proj = new afile(response[i]);
 					domNode.appendChild(proj.createHTML());
 					if(response[i]['current']){
 						YAHOO.filesManager.updateSelected(proj);
 					}
-						
-						
 				}
-			}else{
+			} else {
 				domNode.innerHTML = "";
 			}
 			YAHOO.projectStringsManager.getAjaxProjectStrings();

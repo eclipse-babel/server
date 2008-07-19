@@ -36,6 +36,15 @@ if(isset($_GET['file'])) {
 if(isset($_GET['string'])) {
 	$_SESSION['string'] = htmlspecialchars($_GET['string']);
 }
+
+if ($_SESSION['filesOrder'] == 'name' or !isset($_SESSION['filesOrder'])) {
+	$filesOrderNameChecked = "checked";
+}
+
+if ($_SESSION['filesOrder'] == 'completion') {
+	$filesOrderCompletionChecked = "checked";
+}
+
 ?>
 
 <h1 id="page-message">Welcome to the Babel Project</h1>
@@ -58,7 +67,11 @@ if(isset($_GET['string'])) {
 	</div>
 
 	<div id="files" class="side-component-small files">
-		<h4 id="files-selection">Files</h4>
+		<h4 id="files-selection">
+			Files
+			<input id="files-order-name" name="files-order" type="radio" <?= $filesOrderNameChecked ?>>ordered by name
+			<input id="files-order-completion" name="files-order" type="radio" <?= $filesOrderCompletionChecked ?>>ordered by completion
+		</h4>
 		<ul id="files-area" class="scrollable-area"></ul>
 	</div>
 

@@ -107,7 +107,7 @@ function filesOrderRadioButtonClicked() {
 
 	var domNode = document.getElementById('files-area');
 	YAHOO.spinable.attach(domNode);
-	YAHOO.util.Connect.asyncRequest('GET', "callback/getFilesForProject.php", callback, parameter);
+	YAHOO.util.Connect.asyncRequest('POST', "callback/getFilesForProject.php", callback, parameter);
 }
 
 YAHOO.util.Event.onDOMReady(setupFilesOrder);

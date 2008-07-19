@@ -23,7 +23,7 @@ if(isset($_SESSION['language'])) {
 		$language =  $_SESSION['language'];
 }
 
-$parameter = $App->getHTTPParameter("order", "GET");
+$parameter = $App->getHTTPParameter("order", "POST");
 
 if ($parameter == "name" or $parameter == "completion") {
 	$_SESSION['filesOrder'] = $parameter;

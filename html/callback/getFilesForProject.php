@@ -73,12 +73,6 @@ while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
 	$return[] = $ret;
 }
 
-$return = array();
-$ret = Array();
-$ret['name'] = "$parameter";
-$return[] = $ret;
-$ret['name'] = "$order";
-$return[] = $ret;
 print json_encode($return);
 
 ?>

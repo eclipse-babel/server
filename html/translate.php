@@ -37,11 +37,13 @@ if(isset($_GET['string'])) {
 	$_SESSION['string'] = htmlspecialchars($_GET['string']);
 }
 
-if ($_SESSION['filesOrder'] == 'name' or !isset($_SESSION['filesOrder'])) {
+$filesOrderNameChecked = "";
+if (!isset($_SESSION['filesOrder']) or $_SESSION['filesOrder'] == 'name') {
 	$filesOrderNameChecked = "checked";
 }
 
-if ($_SESSION['filesOrder'] == 'completion') {
+$filesOrderCompletionChecked = "";
+if (isset($_SESSION['filesOrder']) and $_SESSION['filesOrder'] == 'completion') {
 	$filesOrderCompletionChecked = "checked";
 }
 

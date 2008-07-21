@@ -18,7 +18,9 @@
 # See: http://www.eclipse.org/babel/development/large_contributions.php
 
 # To run this, copy the file to the 'root' of html/ (where translate.php resides)
-# and set the project, version and indir
+# and set the project, version and indir, then call the script from a browser, or wget
+
+# See convertiso.sh if the incoming files have various encodings.
 
 
 header("Content-type: text/plain");

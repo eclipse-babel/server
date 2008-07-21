@@ -34,7 +34,6 @@ function showTranslateStringForm(stringIdIn,stringTableIndex){
 
 function setupTranslatFormCB(){
 	YAHOO.util.Event.addListener("allversions","click",translateAll);
-	YAHOO.util.Event.addListener("onlysametrans","click",translateOnlySameTranslations);
 	YAHOO.util.Event.addListener("translation-form","submit",translationSumbitStop);	
 	YAHOO.util.Event.addListener("non-translatable-checkbox","click",notTranslatable);
 }
@@ -71,9 +70,6 @@ function translationClear(){
 
 function translateAll(e){
 	translationSumbit("all",document.getElementById('translation-form').stringTableIndex.value);
-}
-function translateOnlySameTranslations(e){
-	translationSumbit("onlysame",document.getElementById('translation-form').stringTableIndex.value)
 }
 
 function translationSumbitStop(e){

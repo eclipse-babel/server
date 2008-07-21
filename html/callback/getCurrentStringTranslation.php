@@ -154,8 +154,7 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 		<h4>Current Translation</h4>
 		<textarea style='display: inline; width: 320px; height: 150px;' name="translation"><?=(($line['translation_value']));?></textarea>
 		<br>
-		<button id="allversions" type="submit" name="translateAction" value="All Versions">All Versions</button>
-		<button id="onlysametrans" type="submit" name="translateAction" value="Only Version <?=$_SESSION['version']?>">Only Version <?=$_SESSION['version']?></button>
+		<button id="allversions" type="submit" name="translateAction" value="All Versions">Submit</button>
 	<?}else{?>
 		<h4>Non Translatable String</h4>
 		<br>

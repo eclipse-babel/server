@@ -38,7 +38,7 @@ if($LANGUAGE_ID == "All") {
 	$LANGUAGE_ID = "";
 }
 $LIMIT 		= $App->getHTTPParameter("limit");
-if($LIMIT == "" || $LIMIT <= 0 || $LIMIT > 1000) {
+if($LIMIT == "" || $LIMIT <= 0 || $LIMIT > 5000) {
 	$LIMIT = 200;
 }
 $LAYOUT 		= $App->getHTTPParameter("layout");

@@ -374,7 +374,7 @@ pass: password
 */
 
 insert into profiles set login_name = "test", cryptpassword = "", realname = "tester", disabledtext = false, mybugslink = 1, extern_id = 1, disable_mail = false;
-insert into users set userid = 1, username = "babel@eclipse.org",first_name="babel",last_name="fish",email="babel@eclipse.org",primary_language_id = "",password_hash = "HSD9a.ShTTdvo", is_committer = true;
+insert into users set userid = 1, username = "babel@eclipse.org",first_name="babel",last_name="fish",email="babel@eclipse.org",primary_language_id = "",password_hash = "HSD9a.ShTTdvo", is_committer = true,  updated_on = NOW(), updated_at='',created_on = NOW(), created_at='';
 insert into projects set project_id = 'eclipse', is_active = 1 ;
 insert into projects set project_id = 'europa', is_active = 1 ;
 insert into projects set project_id = 'birt', is_active = 1 ;

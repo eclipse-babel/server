@@ -33,6 +33,11 @@
   <td>&#160;</td><td>e.g. <a href="http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core.map?view=co">http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core.map?view=co</a></td>
 </tr>
 <tr>
+  <td>&#160;</td><td><b>NOTE: </b>If you're defining map files for a Release, you must use the download link to the CVS TAG of that release.  This is the pathrev=R3_4 parameter in this example:<br />
+  <a href="http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core.map?view=co&pathrev=R3_4">http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core.map?view=co&pathrev=R3_4</a>
+  </td>
+</tr>
+<tr>
   <td>File name: </td><td><input type="text" name="filename" value="<?= $FILENAME ?>" size="32" /></td>
   <td style='width:100px; color:red;'><?= $GLOBALS['g_ERRSTRS'][5] ?></td>
 </tr>

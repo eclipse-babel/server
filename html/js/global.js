@@ -121,7 +121,7 @@ function catchSelection() {
    	else if(document.selection && document.selection.createRange) {
 		sel = document.selection.createRange().text;
 		event.cancelBubble = true;
-		document.selection.clear();
+		document.selection.empty();
 	}
 	if(sel != "") {
 		if(document.getElementById('translation-hints')) {

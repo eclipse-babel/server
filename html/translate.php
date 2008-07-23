@@ -124,7 +124,10 @@ if (isset($_SESSION['filesOrder']) and $_SESSION['filesOrder'] == 'completion') 
 	
 </div>
 
-<script>YAHOO.languageManager.getAjaxLanguages();</script>
+<script language="javascript">
+	YAHOO.languageManager.getAjaxLanguages();
+</script>
+
 
 <?php
 	include("foot.php");

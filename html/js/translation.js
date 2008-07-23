@@ -30,6 +30,7 @@ function showTranslateStringForm(stringIdIn,stringTableIndex){
 		} 
 	} 
 	YAHOO.util.Connect.asyncRequest('POST', "callback/getCurrentStringTranslation.php", callback, "string_id="+stringIdIn+"&stringTableIndex="+stringTableIndex);
+	document.onmouseup = catchSelection
 }
 
 function setupTranslatFormCB(){

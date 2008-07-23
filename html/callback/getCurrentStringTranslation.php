@@ -141,9 +141,9 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 		<div style='overflow: auto; height: 80px;'>
 			<b><?= htmlspecialchars(nl2br($line['string_value']));?></b>
 		</div>
-		<h4>Externalized Token</h4>
-		<div style='overflow-x: hidden; overflow-y: auto; height: 80px;'>
-		<?= htmlspecialchars_decode(nl2br($line['token']));?>
+		<h4 id="translation-hints-title">Translation Hints</h4>
+		<div id="translation-hints" style='overflow-x: hidden; overflow-y: auto; height: 80px;'>
+		Select some English text above to find similar translations.
 		</div>
 		
 		<input id='non-translatable-checkbox' type=checkbox name="non_translatable_string" <?= $line['non_translatable'] ? 'checked' : '' ;?>>Non-Translatable

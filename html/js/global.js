@@ -109,3 +109,26 @@ function filesOrderRadioButtonClicked() {
 }
 
 YAHOO.util.Event.onDOMReady(setupFilesOrder);
+
+
+function catchSelection() {
+	var sel = "";
+   	if(window.getSelection) {
+   	    objSel = window.getSelection();
+   	    sel = objSel.toString();
+   	    objSel.removeAllRanges();
+   	} 
+   	else if(document.selection && document.selection.createRange) {
+		sel = document.selection.createRange().text;
+		event.cancelBubble = true;
+		document.selection.clear();
+	}
+	if(sel != "") {
+		if(document.getElementById('translation-hints')) {
+			var domNode = document.getElementById('translation-hints');
+			
+			domNode.innerHTML = "Please wait, looking for : <b>" + sel + "</b>";			
+			showTranslationHints(sel);
+		}
+	}
+}

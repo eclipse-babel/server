@@ -34,10 +34,22 @@ YAHOO.projectStringsManager = {
 			},
 			success: function(o) {
 				var titleNode = document.getElementById('string-title');
-				var someString = "Translatable Strings in " + YAHOO.filesManager.getSelected().filename.substr(YAHOO.filesManager.getSelected().filename.lastIndexOf("/") + 1);
-					someString += ' <a href="?project=' + YAHOO.projectManager.getSelected().project;
-					someString += '&version=' + YAHOO.versionManager.getSelected().version;
-					someString += '&file=' + YAHOO.filesManager.getSelected().filename + '">[link to this file]</a>';
+				var filename = YAHOO.filesManager.getSelected().filename;
+				if (filename.length > 135) {
+					filename = filename.substr(0, 65) + "(...)" + filename.substr(filename.length - 65);
+				}
+				var href = '<a href="?project=' + YAHOO.projectManager.getSelected().project;
+				href += '&version=' + YAHOO.versionManager.getSelected().version;
+				href += '&file=' + YAHOO.filesManager.getSelected().filename + '">';
+
+				var someString = 'Strings In File <span id="title-link">\"';
+				someString += href;
+				someString += filename;
+				someString += '</a>';
+				someString += '\" ';
+				someString += href;
+				someString += '[link to this file]';
+				someString += '</a>';
 				titleNode.innerHTML = someString;
 				
 				var domNode = document.getElementById('projecs-strings-area');
@@ -143,11 +155,23 @@ YAHOO.projectStringsManager = {
 		}
 		
 		var titleNode = document.getElementById('translation-title');
-		var someString = "String Translation for " + this.selected.data['stringName'];
-			someString += ' <a href="?project=' + YAHOO.projectManager.getSelected().project;
-			someString += '&version=' + YAHOO.versionManager.getSelected().version;
-			someString += '&file=' + YAHOO.filesManager.getSelected().filename;
-			someString += '&string=' + this.selected.data['stringName'] + '">[link to this string]</a>';
+		var keyname = this.selected.data['stringName']
+		if (keyname.length > 135) {
+			keyname = keyname.substr(0, 65) + "(...)" + keyname.substr(filename.length - 65);
+		}
+		var href = '<a href="?project=' + YAHOO.projectManager.getSelected().project;
+		href += '&version=' + YAHOO.versionManager.getSelected().version;
+		href += '&file=' + YAHOO.filesManager.getSelected().filename;
+		href += '&string=' + this.selected.data['stringName'] + '">';
+
+		var someString = 'Translation For Key <span id="title-link">\"';
+		someString += href;
+		someString += keyname;
+		someString += '</a>';
+		someString += '\" ';
+		someString += href;
+		someString += '[link to this key]';
+		someString += '</a>';
 		titleNode.innerHTML = someString;
 		showTranslateStringForm(this.selected.data['stringId'],this.selected.domElem.rowIndex);
 	},

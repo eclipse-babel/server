@@ -89,7 +89,7 @@ if (isset($_SESSION['filesOrder']) and $_SESSION['filesOrder'] == 'completion') 
 
 	
 	<div id="string-area" class="yui-navset full-component">
-	<h2 id="string-title">Translatable Strings</h2>
+	<h2 id="string-title">Strings In File</h2>
 <!--
 	    <ul class="yui-nav"> 
         <li class="selected"><a href="#tab1"><em>Untranslated</em></a></li> 
@@ -115,7 +115,7 @@ if (isset($_SESSION['filesOrder']) and $_SESSION['filesOrder'] == 'completion') 
 	
 	
 	<div id="translation-area" class="full-component">
-	   <h2 id="translation-title">String Translation</h2>
+	   <h2 id="translation-title">Translation For Key</h2>
 	   <div id="translation-form-container"></div>
 	   <div class="clearing"></div>
 	</div>

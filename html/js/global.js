@@ -116,12 +116,12 @@ function catchSelection() {
    	if(window.getSelection) {
    	    objSel = window.getSelection();
    	    sel = objSel.toString();
-   	    objSel.removeAllRanges();
+   	    // objSel.removeAllRanges();
    	} 
    	else if(document.selection && document.selection.createRange) {
 		sel = document.selection.createRange().text;
 		event.cancelBubble = true;
-		document.selection.empty();
+		// document.selection.empty();
 	}
 	if(sel != "") {
 		if(document.getElementById('translation-hints')) {

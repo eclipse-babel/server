@@ -47,7 +47,7 @@ INSERT INTO file_progress
 select f.file_id, l.language_id, IF(COUNT(s.string_id) > 0, COUNT(t.string_id)/COUNT(s.string_id)*100,100) AS translate_percent
 FROM files AS f
         INNER JOIN languages as l ON l.is_active = 1
-        LEFT JOIN strings as s ON (s.file_id = f.file_id AND s.is_active AND s.value <> '') 
+        LEFT JOIN strings as s ON (s.file_id = f.file_id AND s.is_active AND s.value <> '' AND s.non_translatable = 0) 
         LEFT JOIN translations AS t ON (s.string_id = t.string_id 
            AND t.language_id = l.language_id AND t.is_active = 1)
 WHERE f.is_active = 1 
@@ -83,13 +83,12 @@ GROUP BY f.file_id, l.language_id", $dbh);
 					       INNER JOIN files AS f 
 					           ON (f.project_id = v.project_id AND f.version = v.version AND f.is_active) 
 					       INNER JOIN strings AS s 
-					           ON (s.file_id = f.file_id AND s.is_active) 
+					           ON (s.file_id = f.file_id AND s.is_active AND s.value <> '' AND s.non_translatable = 0) 
 					       INNER JOIN languages AS l ON l.language_id = " . $myrow['language_id'] . "
 					       LEFT JOIN translations AS t 
 					          ON (t.string_id = s.string_id AND t.language_id = l.language_id AND t.is_active) 
 					       WHERE
-					         s.value <> \"\"
-					        AND v.project_id = '" . addslashes($myrow['project_id']) . "'
+					        v.project_id = '" . addslashes($myrow['project_id']) . "'
 					        AND v.version = '" . addslashes($myrow['version']) . "'
 					 )";
 		mysql_query($sql, $dbh);

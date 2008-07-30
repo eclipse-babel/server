@@ -120,7 +120,8 @@ function spin() {
 function copyEnglishString() {
 	var stringsInFileTable = document.getElementById('strings-in-file-table');
 	var stringTableIndex = document.getElementById('translation-form').stringTableIndex.value;
-	var englishString = stringsInFileTable.rows[stringTableIndex].cells[0].textContent;
+	var td = stringsInFileTable.rows[stringTableIndex].cells[0];
+	var englishString = (td.innerText != undefined) ? td.innerText : td.textContent;
 	var currentTranslation = document.getElementById('current-translation');
 	currentTranslation.value = currentTranslation.value + englishString;
 }

@@ -137,7 +137,10 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 	<input type="hidden" name="stringTableIndex" value="<?=$stringTableIndex;?>">
 
 	<div id="english-area" class="side-component">
-		<h4>English String</h4>
+		<h4>
+			English String
+			[<a id="copy-english-string-link">Copy</a>]
+		</h4>
 		<div style='overflow: auto; height: 80px;'>
 			<b><?= htmlspecialchars(nl2br($line['string_value']));?></b>
 		</div>
@@ -151,8 +154,12 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 	</div>
 	<div id="translation-textarea" class="side-component">
 	<?if($line['non_translatable'] == 0){?>
-		<h4>Current Translation</h4>
-		<textarea style='display: inline; width: 320px; height: 150px;' name="translation"><?=(($line['translation_value']));?></textarea>
+		<h4>
+			Current Translation
+			[<a id="reset-current-translation-link">Reset</a>]
+			[<a id="clear-current-translation-link">Clear</a>]
+		</h4>
+		<textarea id="current-translation" style='display: inline; width: 320px; height: 150px;' name="translation"><?=(($line['translation_value']));?></textarea>
 		<br>
 		<button id="allversions" type="submit" name="translateAction" value="All Versions">Submit</button>
 	<?}else{?>

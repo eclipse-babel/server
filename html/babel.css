@@ -178,9 +178,7 @@ h4{
 	background-color: SteelBlue;
 	font-weight: bold;
 }
-#title-link,
-#string-area a,
-#translation-area a {
+#title-link a{
 	font-size: 9pt;
 	color: white;
 	background-color: SteelBlue;

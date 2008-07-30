@@ -37,6 +37,9 @@ function setupTranslatFormCB(){
 	YAHOO.util.Event.addListener("allversions","click",translateAll);
 	YAHOO.util.Event.addListener("translation-form","submit",translationSumbitStop);	
 	YAHOO.util.Event.addListener("non-translatable-checkbox","click",notTranslatable);
+	YAHOO.util.Event.addListener("copy-english-string-link","click",copyEnglishString);
+	YAHOO.util.Event.addListener("reset-current-translation-link","click",resetCurrentTranslation);
+	YAHOO.util.Event.addListener("clear-current-translation-link","click",clearCurrentTranslation);
 }
 
 
@@ -112,4 +115,22 @@ function sub(it){
 function spin() {
 	var domNode = document.getElementById('translation-form');
 	YAHOO.spinable.attach(domNode);
+}
+
+function copyEnglishString() {
+	var stringsInFileTable = document.getElementById('strings-in-file-table');
+	var stringTableIndex = document.getElementById('translation-form').stringTableIndex.value;
+	var englishString = stringsInFileTable.rows[stringTableIndex].cells[0].textContent;
+	var currentTranslation = document.getElementById('current-translation');
+	currentTranslation.value = currentTranslation.value + englishString;
+}
+
+function resetCurrentTranslation() {
+	var currentTranslation = document.getElementById('current-translation');
+	currentTranslation.value = currentTranslation.defaultValue;
+}
+
+function clearCurrentTranslation() {
+	var currentTranslation = document.getElementById('current-translation');
+	currentTranslation.value = "";
 }

@@ -68,7 +68,8 @@ YAHOO.projectStringsManager = {
 
 				var ntDomNode = document.getElementById('not-translated');
 				this.sp.tableDom = document.createElement("table")
-				this.sp.tableDom.className = "translatable ";
+				this.sp.tableDom.id = "strings-in-file-table";
+				this.sp.tableDom.className = "translatable";
 				this.sp.tableDom.cellSpacing = 0;
 				this.sp.tableDom.width = "100%"
 				ntDomNode.innerHTML = "";

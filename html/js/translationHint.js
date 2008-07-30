@@ -19,7 +19,7 @@ function showTranslationHints(trString){
 			domNode.innerHTML = o.responseText;		
 			
 			var domNode = document.getElementById('translation-hints-title');
-			domNode.innerHTML = "Translation Hints [<a id=\"clear-btn\"href=\"javascript:void(0);\">clear</a>]";	
+			domNode.innerHTML = "Translation Hints [<a id=\"clear-btn\"href=\"javascript:void(0);\">Clear</a>]";	
 		},
 		failure: function(o) {
 			YAHOO.log('failed!');

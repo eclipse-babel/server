@@ -123,7 +123,8 @@ function copyEnglishString() {
 	var td = stringsInFileTable.rows[stringTableIndex].cells[0];
 	var englishString = (td.innerText != undefined) ? td.innerText : td.textContent;
 	var currentTranslation = document.getElementById('current-translation');
-	currentTranslation.value = currentTranslation.value + englishString;
+	if (currentTranslation != null)
+		currentTranslation.value = currentTranslation.value + englishString;
 }
 
 function resetCurrentTranslation() {

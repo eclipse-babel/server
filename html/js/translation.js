@@ -118,10 +118,6 @@ function spin() {
 }
 
 function copyEnglishString() {
-	var stringsInFileTable = document.getElementById('strings-in-file-table');
-	var stringTableIndex = document.getElementById('translation-form').stringTableIndex.value;
-	var td = stringsInFileTable.rows[stringTableIndex].cells[0];
-
 	// PHP's nl2br() function produced different output in IE and Firefox. Need to adjust accordingly.
 	var englishStringElement = document.getElementById('english-string')
 	var appName = navigator.appName;

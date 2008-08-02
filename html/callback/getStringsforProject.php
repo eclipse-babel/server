@@ -142,15 +142,15 @@ while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
     if(isset($stringids[$line['stringId']])){
  		  continue;
     }else{
-    	$line['text'] = htmlspecialchars(($line['text']));
+    	$line['text'] = nl2br(htmlspecialchars($line['text']));
         if(isset($string) && $line['stringName'] == $string){
 			$line['current'] = true;
 		}
 		else {
 			$line['current'] = false;
 		} 
-    	$line['translationString'] = htmlspecialchars(($line['translationString']));
-    	$line['translator'] = htmlspecialchars(($line['first']." ".$line['last']));
+    	$line['translationString'] = nl2br(htmlspecialchars($line['translationString']));
+    	$line['translator'] = nl2br(htmlspecialchars($line['first']." ".$line['last']));
     	if($line['non_translatable']){
     		$line['translationString'] = "<span style='font-style: italic;'>non-translatable string";
     		$line['nontranslatable'] = true;

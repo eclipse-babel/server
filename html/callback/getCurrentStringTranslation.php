@@ -142,7 +142,7 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 			[<a id="copy-english-string-link">Copy</a>]
 		</h4>
 		<div style='overflow: auto; height: 80px;'>
-			<b><?= htmlspecialchars(nl2br($line['string_value']));?></b>
+			<div id="english-string"><?= nl2br(htmlspecialchars($line['string_value'])); ?></div>
 		</div>
 		<h4 id="translation-hints-title">Translation Hints</h4>
 		<div id="translation-hints" style='overflow-x: hidden; overflow-y: auto; height: 80px;'>
@@ -187,7 +187,7 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 				while($line = mysql_fetch_array($res_history, MYSQL_ASSOC)){
 					print "<tr>";
 					print "<td width='40%'>";
-					print "<div>".htmlspecialchars($line['value'])."</div>";
+					print "<div>".nl2br(htmlspecialchars($line['value']))."</div>";
 					print "</td>";
 					print "<td width='20%'>";
 					print $line['first_name']." ".$line['last_name'];

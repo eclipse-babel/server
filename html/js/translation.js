@@ -121,7 +121,14 @@ function copyEnglishString() {
 	var stringsInFileTable = document.getElementById('strings-in-file-table');
 	var stringTableIndex = document.getElementById('translation-form').stringTableIndex.value;
 	var td = stringsInFileTable.rows[stringTableIndex].cells[0];
-	var englishString = (td.innerText != undefined) ? td.innerText : td.textContent;
+
+	// PHP's nl2br() function produced different output in IE and Firefox. Need to adjust accordingly.
+	var englishStringElement = document.getElementById('english-string')
+	var appName = navigator.appName;
+	if (appName == "Microsoft Internet Explorer")
+		englishString = englishStringElement.innerText.replace(/<BR>/g, "\r\n");
+	else
+		englishString = englishStringElement.textContent.replace(/<br>/g, "");
 	var currentTranslation = document.getElementById('current-translation');
 	if (currentTranslation != null)
 		currentTranslation.value = currentTranslation.value + englishString;

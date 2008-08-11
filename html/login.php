@@ -9,6 +9,7 @@
  * Contributors:
  *    Paul Colton (Aptana)- initial API and implementation
  *    Eclipse Foundation
+ *    IBM corporation (Matthew Mazaika) - bug 242915 
 *******************************************************************************/
 include("global.php");
 InitPage("");
@@ -43,6 +44,8 @@ if($SUBMIT == "Login") {
 			}else{
 				$GLOBALS['g_ERRSTRS'][0] = "Authentication failed.  Please verify your username and/or password are correct.";
 			}
+			// we couldn't authenticate, therefore we don't have a user anymore
+			$User = null;
 		}
 		else {
 			# create session
@@ -69,6 +72,8 @@ if($SUBMIT == "Login") {
 if($SUBMIT == "Logout") {
 	$Session = new Session();
 	$Session->destroy();
+	// we're logging out, therefore we don't have a user anymore
+	$User = null;
 	$GLOBALS['g_ERRSTRS'][0] = "You have successfully logged out.  You can login again using the form below.";
 }
 

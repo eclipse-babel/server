@@ -74,8 +74,9 @@ function InitPage($login) {
   if (empty($GLOBALS['page']))
 	  $GLOBALS['page'] = '';
 	
-  if(strpos($_SERVER['REQUEST_URI'], "login.php") == FALSE) {
-	SetSessionVar('s_pageLast', $_SERVER['REQUEST_URI']);
+  if((strpos($_SERVER['REQUEST_URI'], "login.php") == FALSE) &&
+	 (strpos($_SERVER['REQUEST_URI'], "callback") == FALSE)) {
+	  	SetSessionVar('s_pageLast', $_SERVER['REQUEST_URI']);
   }
   
   $dbc = new DBConnection();

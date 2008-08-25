@@ -35,6 +35,17 @@ function setupCB(){
 }
 
 function clearHints() {
+	if(window.getSelection) {
+   	    objSel = window.getSelection();
+   	    sel = objSel.toString();
+   	    objSel.removeAllRanges();
+   	} 
+   	else if(document.selection && document.selection.createRange) {
+		sel = document.selection.createRange().text;
+		event.cancelBubble = true;
+		document.selection.empty();
+	}
+
 	var domNode = document.getElementById('translation-hints');
 	domNode.innerHTML = "Select some English text above to find similar translations.";		
 		

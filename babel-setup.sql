@@ -185,7 +185,6 @@ CREATE TABLE `sessions` (
 -- Table structure for table `strings`
 --
 
-DROP TABLE IF EXISTS `strings`;
 CREATE TABLE `strings` (
   `string_id` int(10) unsigned NOT NULL auto_increment,
   `file_id` int(10) unsigned NOT NULL,
@@ -194,12 +193,13 @@ CREATE TABLE `strings` (
   `userid` int(10) unsigned NOT NULL,
   `created_on` datetime NOT NULL,
   `is_active` tinyint(1) unsigned default NULL,
+  `non_translatable` tinyint(4) default '0',
   PRIMARY KEY  (`string_id`),
   KEY `file_id` (`file_id`),
   KEY `userid` (`userid`),
   CONSTRAINT `strings_ibfk_1` FOREIGN KEY (`file_id`) REFERENCES `files` (`file_id`) ON UPDATE CASCADE,
   CONSTRAINT `strings_ibfk_2` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
 
 DELIMITER ;;

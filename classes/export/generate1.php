@@ -19,10 +19,10 @@
 ob_start();
 ini_set("memory_limit", "12M");
 define("BABEL_BASE_DIR", "../../");
-
-define("USE_PHOENIX", false);
-require(BABEL_BASE_DIR."html/global.php");
-InitPage("");
+require(BABEL_BASE_DIR."html/common_functions.php");
+require(BABEL_BASE_DIR."classes/system/dbconnection.class.php");
+$dbc = new DBConnection();
+$dbh = $dbc->connect();
 
 $work_dir = "/home/babel-working/";
 if (!($ini = @parse_ini_file(BABEL_BASE_DIR."classes/base.conf"))) {
@@ -58,7 +58,6 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 	exec("mkdir ${output_dir_for_train}features/");
 	exec("mkdir ${output_dir_for_train}plugins/");
 
-	# $language_result = mysql_query( 'SELECT * FROM languages WHERE languages.is_active' );
 	$language_result = mysql_query('SELECT * FROM languages WHERE languages.is_active');
 	while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
 		$language_name = $language_row['name'];

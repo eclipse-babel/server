@@ -9,7 +9,8 @@
  * Contributors:
  *    Eclipse Foundation - Initial API and implementation
  *    Motoki MORT mori-m@mxa.nes.nec.co.jp - patch, bug 227366
- *    Kit Lo (IBM) - patch, bug 217339, generate pseudo translations language packs 
+ *    Kit Lo (IBM) - patch, bug 217339, generate pseudo translations language packs
+ *    Kit Lo (IBM) - patch, bug 234430, need language packs by means of other than update site
  *******************************************************************************/
 
 /*
@@ -17,49 +18,63 @@
  */
 
 ob_start();
-ini_set("memory_limit", "12M");
+ini_set("memory_limit", "64M");
 define("BABEL_BASE_DIR", "../../");
-require(BABEL_BASE_DIR."html/common_functions.php");
-require(BABEL_BASE_DIR."classes/system/dbconnection.class.php");
+require(BABEL_BASE_DIR . "html/common_functions.php");
+require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
 $dbc = new DBConnection();
 $dbh = $dbc->connect();
 
 $work_dir = "/home/babel-working/";
-if (!($ini = @parse_ini_file(BABEL_BASE_DIR."classes/base.conf"))) {
+if (!($ini = @parse_ini_file(BABEL_BASE_DIR . "classes/base.conf"))) {
 	errorLog("Failed to find/read database conf file - aborting.");
 	exitTo("error.php?errNo=101300","error: 101300 - database conf can not be found");
 }
 $context = $ini['context'];
 
-$work_context_dir = $work_dir.$context."/";
-$tmp_dir = $work_context_dir."tmp/";
-$output_dir = $work_context_dir."output/";
+$work_context_dir = $work_dir . $context . "/";
+$tmp_dir = $work_context_dir . "tmp/";
+$babel_language_packs_dir = $work_context_dir . "babel_language_packs/";
+$output_dir = $work_context_dir . "output/";
 $source_files_dir = "source_files_for_generate/";
 
 $leader = ". . ";
 $timestamp = date("Ymdhis");
 
-exec("rm -rf $work_dir*");
-exec("mkdir $work_context_dir");
-exec("mkdir $output_dir");
+exec("rm -rf $work_dir");
+exec("mkdir -p $output_dir");
+
+/*
+ * Create language pack links file
+ */
+exec("mkdir -p $babel_language_packs_dir");
+$language_pack_links_file = fopen("${babel_language_packs_dir}index.html", "w");
+fwrite($language_pack_links_file, "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">" .
+	"\n<html>\n<head>\n<title>Babel Language Packs</title>" .
+	"\n<meta http-equiv=Content-Type content=\"text/html; charset=UTF-8\">\n</head>" .
+	"\n<body>\n\t<h1>Babel Language Packs</h1>" .
+	"\n\t<h2>Build ID: $timestamp</h2>");
 
 echo "Generating update site\n";
-$train_result = mysql_query('SELECT DISTINCT train_id FROM release_train_projects');
+$train_result = mysql_query("SELECT DISTINCT train_id FROM release_train_projects");
 while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 	$train_id = $train_row['train_id'];
 	$train_version = "3.4.0";
 	if (strcmp($train_id, "europa") == 0) {
 		$train_version = "3.3.0";
 	}
-	$site_xml = '';
+	$train_version_timestamp = "$train_version.v$timestamp";
+	$site_xml = "";
 
 	$output_dir_for_train = $output_dir . $train_row['train_id'] . "/";
 	exec("mkdir $output_dir_for_train");
 	exec("mkdir ${output_dir_for_train}features/");
 	exec("mkdir ${output_dir_for_train}plugins/");
 
-	$language_result = mysql_query('SELECT * FROM languages WHERE languages.is_active');
-	while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
+	fwrite($language_pack_links_file, "\n\t<h3>Release Train: $train_id</h3>\n\t<ul>");
+
+	$language_result = mysql_query("SELECT * FROM languages WHERE languages.is_active");
+	while (($language_row = mysql_fetch_assoc($language_result)) != null) {
 		$language_name = $language_row['name'];
 		$language_iso = $language_row['iso_code'];
 		$language_locale = $language_row['locale'];
@@ -71,6 +86,13 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 		if ($language_locale != null) {
 			$language_name = $language_locale . " " . $language_name;
 		}
+
+		$site_xml .= "\n\t<category-def name=\"Babel Language Packs in $language_name\" label=\"Babel Language Packs in $language_name\">";
+		$site_xml .= "\n\t\t<description>Babel Language Packs in $language_name</description>";
+		$site_xml .= "\n\t</category-def>";
+
+		fwrite($language_pack_links_file, "\n\t<h4>Language: $language_name</h4>\n\t<ul>");
+
 		echo "${leader}Generating language pack for $train_id - $language_name ($language_iso) (language_id=" . $language_id . ")\n";
 
 		/*
@@ -83,11 +105,6 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 				INNER JOIN release_train_projects as v ON (f.project_id = v.project_id AND f.version = v.version)
 				WHERE f.is_active
 				AND v.train_id = '" . $train_row['train_id'] . "'");
-
-			$index_file = fopen("${output_dir}BabelPseudoTranslationsIndex.html", "w");
-			fwrite($index_file, "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">\n<html>\n<head>\n<title>Babel Pseudo Translations Index</title>\n" .
-				"<meta http-equiv=Content-Type content=\"text/html; charset=UTF-8\">\n</head>\n<body>\n\t<h1>Babel Pseudo Translations Index</h1>\n" .
-				"\t<h2>" . $train_version . ".v" . $timestamp . "</h2>\n\t<ul>\n");
 		} else {
 			$file_result = mysql_query("SELECT DISTINCT f.project_id, f.version, f.file_id, f.name
 				FROM files AS f
@@ -100,6 +117,9 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 		}
 
 		$plugins = array();
+		$projects = array();
+		$project_versions = array();
+		$pseudo_translations_indexes = array();
 		while (($file_row = mysql_fetch_assoc($file_result)) != null) {
 			# save original filename
 			$file_row['origname'] = $file_row['name'];
@@ -135,7 +155,6 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 			} else {
 				exec("mkdir $tmp_dir");
 			}
-
 			/*
 			 * Generate each *.properties file
 			 */
@@ -158,23 +177,23 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 				 * Start writing to the file
 				 */
 				$outp = fopen($fullpath, "w");
-				fwrite($outp, "# Copyright by many contributors; see http://babel.eclipse.org/\n");
+				fwrite($outp, "# Copyright by many contributors; see http://babel.eclipse.org/");
 				if (strcmp($language_iso, "en_AA") == 0) {
 					$sql = "SELECT string_id, name, value FROM strings WHERE file_id = " . $properties_file['file_id'] .
 						" AND is_active AND non_translatable = 0";
 					$strings_result = mysql_query($sql);
 					while (($strings_row = mysql_fetch_assoc($strings_result)) != null) {
-						fwrite($outp, $strings_row['name'] . "=");
-						fwrite($outp, $properties_file['project_id'] . $strings_row['string_id'] . ":" . $strings_row['value']);
-						fwrite($outp, "\n");
+						fwrite($outp, "\n" . $strings_row['name'] . "=" . $properties_file['project_id'] . $strings_row['string_id'] .
+							":" . $strings_row['value']);
 
 						$value = htmlspecialchars($strings_row['value']);
 						if (strlen($value) > 100) {
 							$value = substr($value, 0, 100) . " ...";
 						}
-						fwrite($index_file, "\t\t<li><a href=\"http://babel.eclipse.org/babel/translate.php?project=" . $properties_file['project_id'] .
-							"&version=" . $properties_file['version'] . "&file=" . $properties_file['origname'] . "&string=" . $strings_row['name'] .
-							"\">" . $properties_file['project_id'] . $strings_row['string_id'] . "</a>&nbsp;" . $value . "</li>\n");
+						$pseudo_translations_indexes[$properties_file['project_id']][] = "\n\t\t<li><a href=\"http://babel.eclipse.org/babel/translate.php?project=" .
+						$properties_file['project_id'] . "&version=" . $properties_file['version'] . "&file=" .
+						$properties_file['origname'] . "&string=" . $strings_row['name'] . "\">" .
+						$properties_file['project_id'] . $strings_row['string_id'] . "</a>&nbsp;" . $value . "</li>";
 					}
 				} else {
 					$sql = "SELECT
@@ -189,7 +208,7 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 					$strings_result = mysql_query($sql);
 					while (($strings_row = mysql_fetch_assoc($strings_result)) != null) {
 						fwrite($outp, $strings_row['key'] . "=");
-						#echo "${leader1S}${leaderS}${leaderS}${leaderS}" . $strings_row['key'] . "=";
+						# echo "${leader1S}${leaderS}${leaderS}${leaderS}" . $strings_row['key'] . "=";
 						if ($strings_row['trans']) {
 							# json_encode returns the string with quotes fore and aft.  Need to strip them.
 							# $tr_string = preg_replace('/^"(.*)"$/', '${1}', json_encode($strings_row['trans']));
@@ -212,25 +231,25 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 			/*
 			 * Copy in the various legal files
 			 */
-			exec("cp ${source_files_dir}about.html ${tmp_dir}");
+			exec("cp ${source_files_dir}about.html $tmp_dir");
 			/*
 			 * Generate the META-INF/MANIFEST.MF file
 			 */
 			$parent_plugin_id = $plugin_name;
-			$fragment_id = "${parent_plugin_id}.nl_$language_iso";
-			$fragment_version = $train_version . ".v" . $timestamp;
-			$fragment_filename = $fragment_id . "_" . $fragment_version . ".jar";
+			$project_id = $properties_file['project_id'];
+			$fragment_id = "$parent_plugin_id.nl-$language_iso";
+			$fragment_filename = "${fragment_id}_$train_version_timestamp.jar";
 
 			$plugins[$plugin_name]['id'] = $fragment_id;
-			$plugins[$plugin_name]['version'] = $fragment_version;
+			$plugins[$plugin_name]['version'] = $train_version_timestamp;
 
 			exec("mkdir $tmp_dir/META-INF" );
 			$outp = fopen("$tmp_dir/META-INF/MANIFEST.MF", "w");
 			fwrite($outp, "Manifest-Version: 1.0\n");
 			fwrite($outp, "Bundle-Name: $parent_plugin_id $language_name NLS Support\n");
 			fwrite($outp, "Bundle-SymbolicName: $fragment_id ;singleton=true\n");
-			fwrite($outp, "Bundle-Version: $fragment_version\n");
-			fwrite($outp, "Bundle-Vendor: Eclipse Foundation Inc.\n");
+			fwrite($outp, "Bundle-Version: $train_version_timestamp\n");
+			fwrite($outp, "Bundle-Vendor: Eclipse.org\n");
 			fwrite($outp, "Fragment-Host: $parent_plugin_id\n");
 			fclose($outp);
 			/*
@@ -238,95 +257,156 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 			 */
 			system("cd $tmp_dir; jar cfM ${output_dir_for_train}plugins/$fragment_filename .");
 			echo "${leader}${leader}Completed  plug-in fragment $plugin_name\n";
-		}
-		/*
-		 * Clean and create the temporary directory
-		 */
-		if (file_exists($tmp_dir)) {
-			exec("rm -rf $tmp_dir; mkdir $tmp_dir");
-		} else {
-			exec("mkdir $tmp_dir");
-		}
-		/*
-		 * Create the feature.xml
-		 *
-		 * TODO <url><update label=... url=... and <url><discovery label=... url=... are not implemented
-		 *
-		 * <url>
-		 *   <update label="%updateSiteName" url="http://update.eclipse.org/updates/3.2" />
-		 *   <discovery label="%updateSiteName" url="http://update.eclipse.org/updates/3.2" />
-		 * </url>
-		 */
-		$feature_id = "org.eclipse.babel.nls.$language_iso";
-		$feature_version = $train_version . ".v" . $timestamp;
-		$feature_filename = $feature_id . "_" . $feature_version . ".jar";
 
-		$outp = fopen("$tmp_dir/feature.xml", "w");
-		fwrite($outp, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>
-<feature
-	id=\"$feature_id\"
-	label=\"Eclipse Language Pack for $language_name\"
-	image=\"eclipse_update_120.jpg\"
-	provider-name=\"Eclipse Foundation Inc.\"
-	version=\"$feature_version\">
-	<license url=\"license.html\">\n" . htmlspecialchars(file_get_contents("${source_files_dir}license.txt")) . "\t</license>
-	<description>Translations in $language_name for all Eclipse Projects</description>" );
-		foreach ($plugins as $plugin_name => $plugin_row) {
-			fwrite($outp, '
-	<plugin fragment="true" id="' .
-			$plugin_row['id'] . '" unpack="false" version="' .
-			$plugin_row['version'] . '"/>');
+			$projects[$project_id][] = $fragment_id;
+			$project_versions[$project_id] = $properties_file['version'];
 		}
-		fwrite($outp, '
-</feature>');
-		fclose($outp);
-		/*
-		 * Copy in the various legal files
-		 */
-		exec("cp ${source_files_dir}about.html ${tmp_dir}");
-		exec("cp ${source_files_dir}license.html ${tmp_dir}");
-		exec("cp ${source_files_dir}epl-v10.html ${tmp_dir}");
-		exec("cp ${source_files_dir}eclipse_update_120.jpg ${tmp_dir}");
-		/*
-		 * Copy in the Babel Pseudo Translations Index file
-		 */
-		if (strcmp($language_iso, "en_AA") == 0) {
-			fwrite($index_file, "\t</ul>\n</body>\n</html>");
-			fclose($index_file);
-			exec("cp ${output_dir}BabelPseudoTranslationsIndex.html ${tmp_dir}");
-			exec("rm ${output_dir}BabelPseudoTranslationsIndex.html");
+		foreach ($projects as $project_id => $fragment_ids) {
+			/*
+			 * Sort fragment names
+			 */
+			asort($fragment_ids);
+			/*
+			 * Create ${babel_language_packs_dir}tmp
+			 */
+			exec("mkdir -p ${babel_language_packs_dir}tmp/eclipse/features");
+			exec("mkdir -p ${babel_language_packs_dir}tmp/eclipse/plugins");
+			/*
+			 * Clean and create the temporary directory
+			 */
+			if (file_exists($tmp_dir)) {
+				exec("rm -rf $tmp_dir; mkdir $tmp_dir");
+			} else {
+				exec("mkdir $tmp_dir");
+			}
+			/*
+			 * Create the feature.xml
+			 *
+			 * TODO <url><update label=... url=... and <url><discovery label=... url=... are not implemented
+			 *
+			 * <url>
+			 *   <update label="%updateSiteName" url="http://update.eclipse.org/updates/3.2" />
+			 *   <discovery label="%updateSiteName" url="http://update.eclipse.org/updates/3.2" />
+			 * </url>
+			 */
+			$feature_id = "org.eclipse.babel.nls-$project_id-$language_iso";
+			$feature_version = "$train_version.v$timestamp";
+			$feature_filename = "${feature_id}_$train_version_timestamp.jar";
+
+			$project_version = $project_versions[$project_id];
+			$sql = "SELECT pct_complete
+				FROM project_progress
+				WHERE project_id = \"$project_id\"
+					AND version = \"$project_version\"
+					AND language_id = $language_id";
+			$project_pct_complete_result = mysql_query($sql);
+			$project_pct_complete = mysql_result($project_pct_complete_result, 0);
+			if (strcmp($language_iso, "en_AA") == 0) {
+				$project_pct_complete = 100;
+			}
+
+			$outp = fopen("$tmp_dir/feature.xml", "w");
+			fwrite($outp, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" .
+				"\n<feature" .
+				"\n\tid=\"$feature_id\"" .
+				"\n\tlabel=\"Babel Language Pack for $project_id in $language_name ($project_pct_complete%)\"" .
+				"\n\timage=\"eclipse_update_120.jpg\"" .
+				"\n\tprovider-name=\"%providerName\"" .
+				"\n\tversion=\"$train_version_timestamp\">" .
+				"\n\t<copyright>\n\t\t%copyright\n\t</copyright>" .
+				"\n\t<license url=\"%licenseURL\">\n\t\t%license\n\t</license>" .
+				"\n\t<description>Babel Language Pack for $project_id in $language_name</description>" );
+			foreach ($fragment_ids as $fragment_id) {
+				$jar_name = "${output_dir_for_train}plugins/${fragment_id}_$train_version_timestamp.jar";
+				$size = filesize($jar_name);
+				fwrite($outp, "\n\t<plugin fragment=\"true\" id=\"$fragment_id\" unpack=\"false\" " .
+					"version=\"$train_version_timestamp\" download-size=\"$size\" install-size=\"$size\" />");
+				/*
+				 * Copy the plugin to ${babel_language_packs_dir}tmp
+				 */
+				exec("cp ${output_dir_for_train}plugins/${fragment_id}_$train_version_timestamp.jar ${babel_language_packs_dir}tmp/eclipse/plugins");
+			}
+			fwrite($outp, "\n</feature>");
+			fclose($outp);
+			/*
+			 * Copy in the various legal files
+			 */
+			exec("cp ${source_files_dir}about.html $tmp_dir");
+			exec("cp ${source_files_dir}eclipse_update_120.jpg $tmp_dir");
+			exec("cp ${source_files_dir}epl-v10.html $tmp_dir");
+			exec("cp ${source_files_dir}feature.properties $tmp_dir");
+			exec("cp ${source_files_dir}license.html $tmp_dir");
+			/*
+			 * Copy in the Babel Pseudo Translations Index file
+			 */
+			if (strcmp($language_iso, "en_AA") == 0) {
+				$pseudo_translations_index_file = fopen("${output_dir}BabelPseudoTranslationsIndex-$project_id.html", "w");
+				fwrite($pseudo_translations_index_file, "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">" .
+					"\n<html>\n<head>\n<title>Babel Pseudo Translations Index for $project_id</title>" .
+					"\n<meta http-equiv=Content-Type content=\"text/html; charset=UTF-8\">\n</head>" .
+					"\n<body>\n\t<h1>Babel Pseudo Translations Index for $project_id</h1>" .
+					"\n\t<h2>Version: $train_version_timestamp</h2>\n\t<ul>");
+				foreach ($pseudo_translations_indexes[$project_id] as $index) {
+					fwrite($pseudo_translations_index_file, $index);
+				}
+				fwrite($pseudo_translations_index_file, "\n\t</ul>\n</body>\n</html>");
+				fclose($pseudo_translations_index_file);
+				exec("cp ${output_dir}BabelPseudoTranslationsIndex-$project_id.html $tmp_dir");
+				exec("rm ${output_dir}BabelPseudoTranslationsIndex-$project_id.html");
+			}
+			/*
+			 * Copy the feature to ${babel_language_packs_dir}tmp before jar'ing up
+			 */
+			exec("mkdir -p ${babel_language_packs_dir}tmp/eclipse/features/${fragment_id}_$train_version_timestamp");
+			exec("cd $tmp_dir; cp * ${babel_language_packs_dir}tmp/eclipse/features/${fragment_id}_$train_version_timestamp");
+			/*
+			 * Zip up language pack
+			 */
+			$language_pack_name = "BabelLanguagePack-$project_id-${language_iso}_$train_version_timestamp.zip";
+			exec("cd ${babel_language_packs_dir}tmp; zip -r $babel_language_packs_dir$language_pack_name eclipse");
+			/*
+			 * Clean up ${babel_language_packs_dir}tmp
+			 */
+			exec("rm -rf ${babel_language_packs_dir}tmp");
+			/*
+			 * Add project language pack link to language pack links file
+			 */
+			fwrite($language_pack_links_file, "\n\t<li><a href=\"$language_pack_name\">$language_pack_name</a></li>");
+			/*
+			 * Jar up this directory as the feature jar
+			 */
+			system("cd $tmp_dir; jar cfM ${output_dir_for_train}features/$feature_filename .");
+			/*
+			 * Register this feature with the site.xml
+			 */
+			$site_xml .= "\n\t<feature url=\"features/$feature_filename\" id=\"$feature_id\" version=\"$feature_version\">";
+			$site_xml .= "\n\t\t<category name=\"Babel Language Packs in $language_name\"/>";
+			$site_xml .= "\n\t</feature>";
+			echo "${leader}Completed language pack for $language_name ($language_iso)\n";
 		}
-		/*
-		 * Jar up this directory as the feature jar
-		 */
-		system("cd $tmp_dir; jar cfM ${output_dir_for_train}features/$feature_filename .");
-		/*
-		 * Register this feature with the site.xml
-		 */
-		$site_xml .= "	<feature url=\"features/$feature_filename\" id=\"$feature_id\" version=\"$feature_version\">
-		<category name=\"Language Packs\"/>
-	</feature>\n";
-		echo "${leader}Completed language pack for $language_name ($language_iso)\n";
+		fwrite($language_pack_links_file, "\n\t</ul>");
 	}
 	/*
 	 * <site mirrorsURL=... implemented in the weekly build process by sed'ing <site>
 	 */
 	$outp = fopen("${output_dir_for_train}site.xml", "w");
-	fwrite($outp, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<site>
-	<description url=\"http://babel.eclipse.org/\">
-		This update site contains user-contributed translations of the strings in all Eclipse projects.
-		Please see the http://babel.eclipse.org/ Babel project web pages for a full how-to-use explanation of
-		these translations as well as how you can contribute to the translations of this and future versions of Eclipse.
-	</description>
-	<category-def name=\"Language Packs\" label=\"Language Packs\">
-		<description>Language packs for all Eclipse projects</description>
-	</category-def>\n");
+	fwrite($outp, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" .
+		"\n<site>" .
+		"\n\t<description url=\"http://babel.eclipse.org/\">" .
+		"\n\t\tThis update site contains user-contributed translations of the strings in all Eclipse projects." .
+		"\n\t\tPlease see the http://babel.eclipse.org/ Babel project web pages for a full how-to-use explanation of" .
+		"\n\t\tthese translations as well as how you can contribute to the translations of this and future versions of Eclipse." .
+		"\n\t</description>");
 	fwrite($outp, $site_xml);
-	fwrite($outp, "</site>");
+	fwrite($outp, "\n</site>");
 	fclose($outp);
+
+	fwrite($language_pack_links_file, "\n\t</ul>");
 }
 echo "Completed generating update site\n";
+
+fwrite($language_pack_links_file, "\n</body>\n</html>");
+fclose($language_pack_links_file);
 
 /*
  2. what happens if the translation feature includes plug-in fragments for

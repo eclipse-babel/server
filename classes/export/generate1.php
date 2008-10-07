@@ -41,8 +41,11 @@ $source_files_dir = "source_files_for_generate/";
 $leader = ". . ";
 $timestamp = date("Ymdhis");
 
-exec("rm -rf $work_dir");
-exec("mkdir -p $output_dir");
+
+if($context != "staging" && $context != "live") {
+	exec("rm -rf $work_dir");
+	exec("mkdir -p $output_dir");
+}
 
 /*
  * Create language pack links file

@@ -42,10 +42,10 @@ $leader = ". . ";
 $timestamp = date("Ymdhis");
 
 
-if($context != "staging" && $context != "live") {
-	exec("rm -rf $work_dir");
-	exec("mkdir -p $output_dir");
-}
+exec("rm -rf ${work_dir}*");
+exec("mkdir -p $output_dir");
+
+
 
 /*
  * Create language pack links file

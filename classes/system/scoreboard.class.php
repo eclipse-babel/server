@@ -30,7 +30,7 @@ class Scoreboard {
 
 			# rebuilding the scoreboard takes time ... dump stuff to tmp
 			mysql_query("CREATE TEMPORARY TABLE _tmp_scoreboard LIKE scoreboard", $dbh);
-			$sql = "INSERT INTO _tmp_scoreboard SELECT NULL, 'LANGPR', CONCAT(b.name,IF(ISNULL(b.locale),'',CONCAT(' ', b.locale))), count(*) as StringCount from translations as a inner join languages as b on b.language_id = a.language_id where a.value <> '' and a.is_active = 1 group by a.language_id order by StringCount desc";
+			$sql = "INSERT INTO _tmp_scoreboard SELECT NULL, 'LANGPR', IF(ISNULL(b.locale),b.name,CONCAT(b.name, CONCAT(' (', CONCAT(b.locale, ')')))), count(*) as StringCount from translations as a inner join languages as b on b.language_id = a.language_id where a.value <> '' and a.is_active = 1 group by a.language_id order by StringCount desc";
 			mysql_query($sql, $dbh);
 			$sql = "INSERT INTO _tmp_scoreboard SELECT NULL, 'TOPTR', CONCAT(first_name, IF(ISNULL(last_name),'',CONCAT(' ', last_name))), count(translations.string_id) as cnt from translations inner join users on users.userid = translations.userid where is_active=1 group by first_name, last_name order by cnt desc limit 20";
 			mysql_query($sql, $dbh);

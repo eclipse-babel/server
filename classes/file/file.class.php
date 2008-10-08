@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2007 Eclipse Foundation and others.
+ * Copyright (c) 2007,2008 Eclipse Foundation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Eclipse Foundation - initial API and implementation
+ *    Antoine Toulmé - Bug 248917
 *******************************************************************************/
 require(BABEL_BASE_DIR . "classes/string/string.class.php");
 
@@ -19,6 +20,7 @@ class File {
   public $version		= '';
   public $name			= '';
   public $is_active 	= 0;
+  public $plugin_id = '';
 
 	
 	function save() {
@@ -44,6 +46,7 @@ class File {
 							project_id	= " . $App->returnQuotedString($App->sqlSanitize($this->project_id, $dbh)) . ", 
 							version		= " . $App->returnQuotedString($App->sqlSanitize($this->version, $dbh)) . ", 
 							name		= " . $App->returnQuotedString($App->sqlSanitize($this->name, $dbh)) . ",
+							plugin_id	= " . $App->returnQuotedString($App->sqlSanitize($this->plugin_id, $dbh)) . ",
 							is_active	= 1" . $where;
 			if(mysql_query($sql, $dbh)) {
 				if($this->file_id == 0) {

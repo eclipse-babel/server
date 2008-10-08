@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Eclipse Foundation - Initial API and implementation
+ *    Antoine Toulmé - Bug 248917
 *******************************************************************************/
 header("Content-type: text/plain");
 include("global.php");
@@ -59,12 +60,12 @@ while($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 
 		# plugin@org.eclipse.emf.query=v200802262150,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query
 		if(preg_match("/^(plugin|fragment)/", $line)) {
-			echo $html_spacer . "Processling line: " . $line . "\n";
+			echo $html_spacer . "Processing line: " . $line . "\n";
 			$aParts = split("=", $line);
 			$aElements = split("@", $aParts[0]);
-
+			$plugin_id = $aElements[1];
 			if($aElements[0] == "plugin") {
-				echo $html_spacer . $html_spacer . "Processling plugin: " . $aParts[1] . "\n";
+				echo $html_spacer . $html_spacer . "Processing plugin: " . $aParts[1] . "\n";
 				$aStuff = parseLocation($aParts[1]);
 				
 				$tagstring = "";
@@ -113,6 +114,7 @@ while($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 						$File->project_id 	= $myrow_maps['project_id'];
 						$File->version		= $myrow_maps['version'];
 						$File->name 		= $file_name;
+						$File->plugin_id	= $plugin_id;
 						if(!$File->save()) {
 							echo $html_spacer . $html_spacer . $html_spacer . $html_spacer . "***ERROR saving file: " . $file_name . "\n";
 						}

@@ -41,6 +41,7 @@ DROP TABLE IF EXISTS `files`;
 CREATE TABLE `files` (
   `file_id` int(10) unsigned NOT NULL auto_increment,
   `project_id` varchar(100) NOT NULL,
+  `plugin_id` varchar(100) NOT NULL,
   `version` varchar(64) NOT NULL,
   `name` text NOT NULL,
   `is_active` tinyint(3) unsigned NOT NULL default '1',

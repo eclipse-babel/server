@@ -53,7 +53,7 @@ $langs = mysql_query( "SELECT language_id FROM languages where languages.is_acti
 while( ($lang_row = mysql_fetch_assoc($langs)) != null ) {
 	$language_id = $lang_row['language_id'];
     echo "Investigating language " . $language_id;
-	$untranslated_strings = mysql_query( "SELECT * from strings where string_id not in(select string_id from translations where language_id=". $language_id .")" );
+	$untranslated_strings = mysql_query( "SELECT * from strings where is_active and string_id not in(select string_id from translations where language_id=". $language_id .")" );
     while ( ($string_row = mysql_fetch_assoc($untranslated_strings)) != null) {
 		$untranslated_value = $string_row['value'];
 		$untranslated_id = $string_row['string_id'];

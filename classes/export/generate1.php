@@ -11,6 +11,7 @@
  *    Motoki MORT mori-m@mxa.nes.nec.co.jp - patch, bug 227366
  *    Kit Lo (IBM) - patch, bug 217339, generate pseudo translations language packs
  *    Kit Lo (IBM) - patch, bug 234430, need language packs by means of other than update site
+ *    Kit Lo (IBM) - patch, bug 251536, newline char missing after copyright comment on first line
  *******************************************************************************/
 
 /*
@@ -210,7 +211,7 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 						AND translations.is_active";
 					$strings_result = mysql_query($sql);
 					while (($strings_row = mysql_fetch_assoc($strings_result)) != null) {
-						fwrite($outp, $strings_row['key'] . "=");
+						fwrite($outp, "\n" . $strings_row['key'] . "=");
 						# echo "${leader1S}${leaderS}${leaderS}${leaderS}" . $strings_row['key'] . "=";
 						if ($strings_row['trans']) {
 							# json_encode returns the string with quotes fore and aft.  Need to strip them.

@@ -12,6 +12,7 @@
  *    Kit Lo (IBM) - patch, bug 217339, generate pseudo translations language packs
  *    Kit Lo (IBM) - patch, bug 234430, need language packs by means of other than update site
  *    Kit Lo (IBM) - patch, bug 251536, newline char missing after copyright comment on first line
+ *    Kit Lo (IBM) - patch, bug 238580, language packs should not include strings that are marked "non-translatable"
  *******************************************************************************/
 
 /*
@@ -45,8 +46,6 @@ $timestamp = date("Ymdhis");
 $rm_command = "rm -rf $work_dir" . "*";
 exec($rm_command);
 exec("mkdir -p $output_dir");
-
-
 
 /*
  * Create language pack links file
@@ -206,8 +205,10 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 						translations.value AS trans
 						FROM strings, translations
 						WHERE strings.string_id = translations.string_id
-						AND translations.language_id = " . $language_id . "
 						AND strings.file_id = " . $properties_file['file_id'] . "
+						AND strings.is_active
+						AND strings.non_translatable = 0
+						AND translations.language_id = " . $language_id . "
 						AND translations.is_active";
 					$strings_result = mysql_query($sql);
 					while (($strings_row = mysql_fetch_assoc($strings_result)) != null) {

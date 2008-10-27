@@ -13,6 +13,7 @@
  *    Kit Lo (IBM) - patch, bug 234430, need language packs by means of other than update site
  *    Kit Lo (IBM) - patch, bug 251536, newline char missing after copyright comment on first line
  *    Kit Lo (IBM) - patch, bug 238580, language packs should not include strings that are marked "non-translatable"
+ *    Kit Lo (IBM) - patch, bug 252140, Illegal token characters in babel fragment names
  *******************************************************************************/
 
 /*
@@ -242,7 +243,7 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 			 */
 			$parent_plugin_id = $plugin_name;
 			$project_id = $properties_file['project_id'];
-			$fragment_id = "$parent_plugin_id.nl-$language_iso";
+			$fragment_id = "$parent_plugin_id.nl_$language_iso";
 			$fragment_filename = "${fragment_id}_$train_version_timestamp.jar";
 
 			$plugins[$plugin_name]['id'] = $fragment_id;
@@ -294,7 +295,7 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 			 *   <discovery label="%updateSiteName" url="http://update.eclipse.org/updates/3.2" />
 			 * </url>
 			 */
-			$feature_id = "org.eclipse.babel.nls-$project_id-$language_iso";
+			$feature_id = "org.eclipse.babel.nls_${project_id}_$language_iso";
 			$feature_version = "$train_version.v$timestamp";
 			$feature_filename = "${feature_id}_$train_version_timestamp.jar";
 

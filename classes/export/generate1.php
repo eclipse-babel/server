@@ -60,7 +60,7 @@ exec("mkdir -p $output_dir");
 exec("mkdir -p $babel_language_packs_dir");
 $language_pack_links_file = fopen("${babel_language_packs_dir}index.php", "w");
 fwrite($language_pack_links_file, "<?php\n\$pageTitle = \"Babel Language Packs\";\n");
-fwrite($language_pack_links_file, "<include \$_SERVER['DOCUMENT_ROOT'] . '/eclipse.org-common/themes/Phoenix/header.php';\n");
+fwrite($language_pack_links_file, "include \$_SERVER['DOCUMENT_ROOT'] . '/eclipse.org-common/themes/Phoenix/header.php';\n");
 fwrite($language_pack_links_file, "?>\n");
 fwrite($language_pack_links_file, "\n\t<h1>Babel Language Packs</h1>" .
 	"\n\t<h2>Build ID: $timestamp</h2>");

@@ -41,6 +41,12 @@ $babel_language_packs_dir = $work_context_dir . "babel_language_packs/";
 $output_dir = $work_context_dir . "output/";
 $source_files_dir = "source_files_for_generate/";
 
+# Language pack URL leader, to enable mirrors on download.eclipse.org
+$language_pack_leader = "";
+if($context == "live") {
+	$language_pack_leader = "http://www.eclipse.org/downloads/download.php?r=1&file=/technology/babel/babel_language_packs/";
+}
+
 $leader = ". . ";
 $timestamp = date("Ymdhis");
 
@@ -52,11 +58,11 @@ exec("mkdir -p $output_dir");
  * Create language pack links file
  */
 exec("mkdir -p $babel_language_packs_dir");
-$language_pack_links_file = fopen("${babel_language_packs_dir}index.html", "w");
-fwrite($language_pack_links_file, "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">" .
-	"\n<html>\n<head>\n<title>Babel Language Packs</title>" .
-	"\n<meta http-equiv=Content-Type content=\"text/html; charset=UTF-8\">\n</head>" .
-	"\n<body>\n\t<h1>Babel Language Packs</h1>" .
+$language_pack_links_file = fopen("${babel_language_packs_dir}index.php", "w");
+fwrite($language_pack_links_file, "<?php\n\$pageTitle = \"Babel Language Packs\";\n");
+fwrite($language_pack_links_file, "<include \$_SERVER['DOCUMENT_ROOT'] . '/eclipse.org-common/themes/Phoenix/header.php';\n");
+fwrite($language_pack_links_file, "?>\n");
+fwrite($language_pack_links_file, "\n\t<h1>Babel Language Packs</h1>" .
 	"\n\t<h2>Build ID: $timestamp</h2>");
 
 echo "Generating update site\n";
@@ -377,7 +383,7 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 			/*
 			 * Add project language pack link to language pack links file
 			 */
-			fwrite($language_pack_links_file, "\n\t<li><a href=\"$language_pack_name\">$language_pack_name</a></li>");
+			fwrite($language_pack_links_file, "\n\t<li><a href=\"${language_pack_leader}${language_pack_name}\">$language_pack_name</a></li>");
 			/*
 			 * Jar up this directory as the feature jar
 			 */

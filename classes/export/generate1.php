@@ -62,6 +62,7 @@ $language_pack_links_file = fopen("${babel_language_packs_dir}index.php", "w");
 fwrite($language_pack_links_file, "<?php\n\$pageTitle = \"Babel Language Packs\";\n");
 fwrite($language_pack_links_file, "include \$_SERVER['DOCUMENT_ROOT'] . '/eclipse.org-common/themes/Phoenix/header.php';\n");
 fwrite($language_pack_links_file, "?>\n");
+fwrite($language_pack_links_file, "<div id='maincontent'><div id='midcolumn'>\n");
 fwrite($language_pack_links_file, "\n\t<h1>Babel Language Packs</h1>" .
 	"\n\t<h2>Build ID: $timestamp</h2>");
 
@@ -361,7 +362,7 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 				foreach ($pseudo_translations_indexes[$project_id] as $index) {
 					fwrite($pseudo_translations_index_file, $index);
 				}
-				fwrite($pseudo_translations_index_file, "\n\t</ul>\n</body>\n</html>");
+				fwrite($pseudo_translations_index_file, "\n\t</ul>\n</div></div></body>\n</html>");
 				fclose($pseudo_translations_index_file);
 				exec("cp ${output_dir}BabelPseudoTranslationsIndex-$project_id.html $tmp_dir");
 				exec("rm ${output_dir}BabelPseudoTranslationsIndex-$project_id.html");

@@ -27,8 +27,7 @@ header("Content-type: text/plain");
 include("global.php");
 InitPage("");
 
-$User = new User();
-$User->loadFromID(40623);  // genie
+$User = getGenieUser();
 $headless = 1;
 
 

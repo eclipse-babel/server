@@ -17,8 +17,7 @@ InitPage("");
 $headless = 0;
 if(!isset($User)) {
 	echo "User not defined -- running headless.";
-	$User = new User();
-	$User->loadFromID(40623);  // genie
+	$User = getGenieUser();
 	$headless = 1;
 }
 

@@ -14,7 +14,9 @@
 /*
  * Globals
  */
-
+header("Content-type: text/plain");
+include("global.php");
+InitPage("");
 
 if(defined('BABEL_BASE_DIR')){
 	require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
@@ -42,7 +44,7 @@ if($context == "") {
 }
 global $context;
 
-$headlessUserId = 40623;
+$User = getGenieUser();
 
 $dbc = new DBConnection();
 global $dbh;
@@ -60,7 +62,7 @@ while( ($lang_row = mysql_fetch_assoc($langs)) != null ) {
 		$possible_translations = mysql_query( "SELECT t.value from strings As s inner join translations AS t on s.string_id = t.string_id where s.string_id != '" . $untranslated_id . "' and BINARY s.value = '" .$untranslated_value . "' and t.language_id = '" . $language_id . "' ");
        	if ($possible_translations and (($translation_row = mysql_fetch_assoc($possible_translations)) != null)) {
 			$translation = $translation_row['value'];
-           	$query = "INSERT INTO translations(string_id, language_id, value, userid, created_on) values('". addslashes($untranslated_id) ."','". addslashes($language_id) ."','" . addslashes($translation) . "', '". addslashes($headlessUserId) ."', NOW())";
+           	$query = "INSERT INTO translations(string_id, language_id, value, userid, created_on) values('". addslashes($untranslated_id) ."','". addslashes($language_id) ."','" . addslashes($translation) . "', '". addslashes($User->id) ."', NOW())";
            	echo $query . "\n";
 			mysql_query($query);
 		}

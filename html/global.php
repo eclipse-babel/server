@@ -207,4 +207,18 @@ function toescapedunicode($str) {
 	return implode("",$unicode);
 }
 }
+
+/**
+* Returns the genie user to be used for headless applications.
+* The user is found by looking for its id in the base.conf file.
+*/
+function getGenieUser() {
+  if (!($ini = @parse_ini_file(BABEL_BASE_DIR . 'classes/base.conf'))) {
+			errorLog("Failed to find/read conf file - aborting.");
+			exitTo("error.php?errNo=101300","error: 101300 - conf file can not be found");
+  }
+  $User = new User();
+  $User->loadFromID($ini['genie_id']);  // genie
+  return $User;
+}
 ?>

@@ -25,7 +25,6 @@ $PROJECT_ID = "";
 $VERSION	= "";
 
 if($PROJECT_VERSION != "") {
-
 	$items = explode("|", $PROJECT_VERSION);
 	$PROJECT_ID = $items[0];
 	$VERSION	= $items[1];
@@ -49,6 +48,7 @@ $FORMAT		= $App->getHTTPParameter("format");
 if($FORMAT == "rss") {
 	$incfile 		= "content/en_recent_rss.php";
 }
+$USERID		= $App->getHTTPParameter("userid");
 $SUBMIT 	= $App->getHTTPParameter("submit");
 
 $sql = "SELECT DISTINCT pv.project_id, pv.version FROM project_versions AS pv INNER JOIN map_files as m ON pv.project_id = m.project_id AND pv.version = m.version WHERE pv.is_active ORDER BY pv.project_id ASC, pv.version DESC";
@@ -71,6 +71,10 @@ if($VERSION != "") {
 	$where = $App->addAndIfNotNull($where) . "f.version = ";
 	$where .= $App->returnQuotedString($App->sqlSanitize($VERSION, $dbh));
 }
+if($USERID != "") {
+	$where = $App->addAndIfNotNull($where) . "u.userid = ";
+	$where .= $App->sqlSanitize($USERID, $dbh);
+}
 
 if($where != "") {
 	$where = " WHERE " . $where;
@@ -82,7 +86,8 @@ $sql = "SELECT
   t.value as translation, 
   IF(u.last_name <> '' AND u.first_name <> '', 
   	CONCAT(CONCAT(first_name, ' '), u.last_name), 
-  	IF(u.first_name <> '', u.first_name, u.last_name)) AS who, 
+  	IF(u.first_name <> '', u.first_name, u.last_name)) AS who,
+  u.userid, 
   t.created_on, l.iso_code as language,
   f.project_id, f.version, f.name
 FROM 
@@ -98,7 +103,5 @@ $rs_p_stat = mysql_query($sql, $dbh);
 include("head.php");
 include($incfile);
 include("foot.php");  
-
-
 
 ?>

@@ -36,8 +36,8 @@ li {
 				" -> " . $myrow['translation'] . 
 				" [" . $myrow['language'] . ": <a href='translate.php?project=" . $myrow['project_id'] . "&version=" . $myrow['version'] . "&file=" . $myrow['name'] . "&string=" . $myrow['string_key'] . "'>" .$myrow['string_key'] . "</a>] <b>" . 
 				$myrow['project_id'] . " " . 
-				$myrow['version'] . "</b> (" . 
-				$myrow['who'] . ")"; 
+				$myrow['version'] . "</b> 
+				(<a href='?userid=" . $myrow['userid'] . "'>" . $myrow['who'] . "</a>)"; 
 		echo "</li>";
 		
 		// $myrow['string_key'] . " " . 

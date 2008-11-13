@@ -188,7 +188,7 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 				 * Start writing to the file
 				 */
 				$outp = fopen($fullpath, "w");
-				fwrite($outp, "# Copyright by many contributors; see http://babel.eclipse.org/");
+				fwrite($outp, "# Copyright by many contributors; see http://babel.eclipse.org/\n");
 				if (strcmp($language_iso, "en_AA") == 0) {
 					$sql = "SELECT string_id, name, value FROM strings WHERE file_id = " . $properties_file['file_id'] .
 						" AND is_active AND non_translatable = 0";

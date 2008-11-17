@@ -160,6 +160,20 @@ while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
     }
 }
 
+$pagesize = 10;
+
+if(count($return) > $pagesize and $_GET['paged'] < count($return) ){
+	if(isset($_GET['paged'])){
+		$return = array_slice($return,$_GET['paged'],$pagesize);
+		$pg->paged = $_GET['paged']+$pagesize;
+		$return[] = $pg;
+	}else{
+		$return = array_slice($return,0,$pagesize);
+		$pg->paged = $pagesize;
+		$return[] = $pg;
+	}
+}
+
 print json_encode($return);
 exit();
 ?>

@@ -74,28 +74,50 @@ YAHOO.projectStringsManager = {
 				this.sp.tableDom.width = "100%"
 				ntDomNode.innerHTML = "";
 				ntDomNode.appendChild(this.sp.tableDom);
-
 				
 				if(o.responseText){
-					var response = eval("("+o.responseText+")");			
-					for(var i = 0; i < response.length; i++){
-						var proj = new projectString(response[i]);
-						proj.createHTML(this.sp.tableDom);
-						if(response[i]['current']){
-							YAHOO.projectStringsManager.updateSelected(proj, ntDomNode.scrollHeight);
-						}	
-						
-					}
+					YAHOO.projectStringsManager.createStringUI(o,this.sp);	
 				}
 			},
 			failure: function(o) {
 				YAHOO.log('failed!');
 			} 
 		} 
+		
 		//start spinner
 		var domNode = document.getElementById('not-translated');
 		YAHOO.spinable.attach(domNode);
 		YAHOO.util.Connect.asyncRequest('GET', "callback/getStringsforProject.php", callback, null);
+	},
+
+	createStringUI: function(o){
+		var response = eval("("+o.responseText+")");			
+		
+		var callback2 = 
+		{ 
+			sp : this,
+			start:function(eventType, args){ 
+			},
+			success: function(o) {
+				YAHOO.projectStringsManager.createStringUI(o);
+			}
+		}		
+		
+		if(response[response.length-1].paged > 0){
+			YAHOO.util.Connect.asyncRequest('GET', "callback/getStringsforProject.php?paged="+response[response.length-1].paged, callback2, null);
+		}
+		
+		for(var i = 0; i < response.length; i++){
+			if(response[i].paged > 0){
+				//do nothing
+			}else{
+				var proj = new projectString(response[i]);
+				proj.createHTML(this.tableDom);
+				if(response[i]['current']){
+					YAHOO.projectStringsManager.updateSelected(proj, ntDomNode.scrollHeight);
+				}
+			}
+		}
 	},
 		
 	createHTML : function(values,appenToDOm){

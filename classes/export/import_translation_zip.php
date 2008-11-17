@@ -27,7 +27,7 @@ header("Content-type: text/plain");
 include("global.php");
 InitPage("");
 
-$User = getGenieUser();
+
 $headless = 1;
 
 
@@ -37,11 +37,12 @@ require_once("json_encode.php");
 $pageTitle 		= "Babel - Import Translation archive";
 $pageKeywords 	= "import,properties,translation,language,nlpack,pack,eclipse,babel";
 
+$USER = getGenieUser();
 $PROJECT_ID = "eclipse";
 $VERSION	= "3.3.1";
 
 # TODO
-$indir = "/home/droy/Desktop/Babel stuff/Eclipse32translations";
+$indir = "/tmp/tmp-babel/import";
 chdir($indir);
 # sub-structure: ./XX/eclipse/plugins/ where XX is the iso code for the language
 exec('find . -type f', $lines);
@@ -142,7 +143,7 @@ foreach ($lines as $line) {
 								$SQL = "INSERT INTO translations (translation_id, string_id, language_id, version, value, possibly_incorrect, is_active, userid, created_on)
 								VALUES (
 									NULL, " . $myrow_string['string_id'] . ", 
-									" . $language_id . ", 0, '" . addslashes(unescape($tags[1])) . "', 0, 1, 13212, NOW()
+									" . $language_id . ", 0, '" . addslashes(unescape($tags[1])) . "', 0, 1, " . $USER . ", NOW()
 								)";
 								mysql_query($SQL, $dbh);
 								# echo $SQL;

@@ -160,7 +160,7 @@ while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
     }
 }
 
-$pagesize = 2;
+$pagesize = 50;
 
 if(count($return) > $pagesize and $_GET['paged'] < count($return) ){
 	if(isset($_GET['paged'])){

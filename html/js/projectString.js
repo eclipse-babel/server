@@ -92,6 +92,9 @@ YAHOO.projectStringsManager = {
 
 	createStringUI: function(o){
 		var response = eval("("+o.responseText+")");			
+		if(response.length == 0){
+			return 0;
+		}
 		
 		var callback2 = 
 		{ 

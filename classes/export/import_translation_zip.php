@@ -138,7 +138,11 @@ foreach ($lines as $line) {
 							WHERE a.is_active = 1 AND a.file_id = " . $file_id . " AND name = '" . $tags[0] . "'";
 							$rs_string = mysql_query($SQL, $dbh);
 							$myrow_string = mysql_fetch_assoc($rs_string);
-							if($myrow_string['string_id'] > 0 && $myrow_string['tr_string'] == "" && $tags[1] != "") {
+							if($myrow_string['string_id'] > 0  			# There is an English string 
+								 && $myrow_string['tr_string'] == "" 	# Without a translation  
+								 && $tags[1] != ""						# With a non-null English value
+								 && $tags[1] != $myrow_string['value']  # And the proposed translation is different from the English value
+								 ) {
 								echo "    Found string never translated to this value: " . $myrow_string['string_id'] . " value: " . $myrow_string['value'] . "\n";
 								$SQL = "UPDATE translations set is_active = 0 where string_id = " . $myrow_string['string_id'] . " and language_id = '" . $language_id . "'";
 								mysql_query($SQL, $dbh);

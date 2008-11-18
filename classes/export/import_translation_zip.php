@@ -16,6 +16,8 @@
 # run the import over later with little impact
 # sub-structure: ./XX/eclipse/plugins/ where XX is the iso code for the language
 # See: http://www.eclipse.org/babel/development/large_contributions.php
+# For instructions on how to import the files, see here:
+# http://wiki.eclipse.org/Babel_/_Large_Contribution_Import_Process
 
 # To run this, copy the file to the 'root' of html/ (where translate.php resides)
 # and set the project, version and indir, then call the script from a browser, or wget
@@ -37,7 +39,7 @@ require_once("json_encode.php");
 $pageTitle 		= "Babel - Import Translation archive";
 $pageKeywords 	= "import,properties,translation,language,nlpack,pack,eclipse,babel";
 
-$USER = getGenieUser();
+$USER = getGenieUser()->userid;
 $PROJECT_ID = "eclipse";
 $VERSION	= "3.3.1";
 

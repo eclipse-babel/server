@@ -4,7 +4,7 @@
 
 <div id="index-page">
 
-	<a href="https://bugs.eclipse.org/bugs/createaccount.cgi"><img src="http://dev.eclipse.org/large_icons/categories/preferences-desktop-peripherals.png">	<h2>A Bugzilla Account is all you need</h2></a>
+	<a href="https://bugs.eclipse.org/bugs/createaccount.cgi"><img src="<?php echo imageRoot() ?>/large_icons/categories/preferences-desktop-peripherals.png">	<h2>A Bugzilla Account is all you need</h2></a>
     <br style='clear: both;'>
 	<p>If you don't already have an Eclipse Bugzilla account then <a href="https://bugs.eclipse.org/bugs/createaccount.cgi">create one today</a>.  
 	It takes Babel a few minutes to receive your new Bugzilla account information. 
@@ -19,13 +19,13 @@
 	<?php 
 		if($GLOBALS['g_ERRSTRS'][0]){ 
 			?>
-			  <img style='margin-left: 70px;' src='http://dev.eclipse.org/small_icons/actions/process-stop.png'>
+			  <img style='margin-left: 70px;' src='<?php echo imageRoot() ?>/small_icons/actions/process-stop.png'>
 		      <div style='color: red; font-weight: bold; '><?=$GLOBALS['g_ERRSTRS'][0]?></div>
 		      <br style='clear: both;'>
 		    <?
 	    }else{
 			?>
-	    		<img style='margin-left: 70px;' src="http://dev.eclipse.org/small_icons/emblems/emblem-important.png">	<h2 style='font-size: 14px; margin-top: 0px; background-color: yellow;'>Use your Bugzilla login information</h2>
+	    		<img style='margin-left: 70px;' src="<?php echo imageRoot() ?>/small_icons/emblems/emblem-important.png">	<h2 style='font-size: 14px; margin-top: 0px; background-color: yellow;'>Use your Bugzilla login information</h2>
 		    	<br style='clear: both;'>
 		   <?
 	    }

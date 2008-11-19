@@ -59,6 +59,17 @@ if(isset($ini['context']))
 if($context == "") {
 	$context = "staging";
 }
+
+$image_root = "";
+# get the image root
+if(isset($ini['image_root'])) 
+        $image_root = $ini['image_root'];
+
+$genie_id = "";
+#get the genie id
+if(isset($ini['genie_id'])) 
+        $genie_id = $ini['genie_id'];
+        
 global $context;
 
 session_name(COOKIE_SESSION);
@@ -210,15 +221,20 @@ function toescapedunicode($str) {
 
 /**
 * Returns the genie user to be used for headless applications.
-* The user is found by looking for its id in the base.conf file.
+* The user is found by looking for genie_id in the base.conf file.
 */
 function getGenieUser() {
-  if (!($ini = @parse_ini_file(BABEL_BASE_DIR . 'classes/base.conf'))) {
-			errorLog("Failed to find/read conf file - aborting.");
-			exitTo("error.php?errNo=101300","error: 101300 - conf file can not be found");
-  }
   $User = new User();
-  $User->loadFromID($ini['genie_id']);  // genie
+  $User->loadFromID($genie_id); 
   return $User;
 }
+
+/**
+* Returns the folder in which the images may be found.
+* The folder may very well be an other server url.
+*/
+function imageRoot() {
+	return $image_root;
+}
+
 ?>

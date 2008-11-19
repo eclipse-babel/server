@@ -33,12 +33,25 @@ if(!is_dir("/tmp/tmp-babel")) {
 chdir("/tmp/tmp-babel")  || die("Cannot use working directory");
 
 
+$files = array();
+$sql = "SELECT * from files";
+$rs_files = mysql_query($sql, $dbh);
+while($myrow_file = mysql_fetch_assoc($rs_files)) {
+	$File = new File();
+	$File->project_id 	= $myrow_file['project_id'];
+	$File->version		= $myrow_file['version'];
+	$File->name 		= $myrow_file['name'];
+	$File->plugin_id	= $myrow_file['plugin_id'];
+	$File->file_id      = $myrow_file['file_id'];
+	$files[$File->file_id] = $File;
+}
 
 
 $sql = "SELECT * FROM map_files WHERE is_active = 1 ORDER BY RAND()";
 $rs_maps = mysql_query($sql, $dbh);
 while($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 	echo "Processing map file: " . $myrow_maps['filename'] . " in location: " . $myrow_maps['location'] . "\n";
+	
 	
 	$tmpdir = "/tmp/tmp-babel/" . $myrow_maps['project_id'];
 	if(is_dir($tmpdir)) {
@@ -109,11 +122,20 @@ while($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 						$file_name = trim(substr($out_line, 2)); 
 						echo $html_spacer . $html_spacer . $html_spacer . "Processing .properties file: " . $file_name . "\n";
 						
-						$File = new File();
-						$File->project_id 	= $myrow_maps['project_id'];
-						$File->version		= $myrow_maps['version'];
-						$File->name 		= $file_name;
-						$File->plugin_id	= $plugin_id;
+						$file_id = File->getFileID($file_name, $myrow_maps['project_id'], $myrow_maps['version']);
+						
+						if ($files[$file_id] != null) {
+							$File = $files[$file_id];
+							$File->isActive = 1;
+							unset($files[$file_id]);
+						} else {
+							$File = new File();
+							$File->project_id 	= $myrow_maps['project_id'];
+							$File->version		= $myrow_maps['version'];
+							$File->name 		= $file_name;
+							$File->plugin_id	= $plugin_id;
+							$File->isActive     = 1;
+						}
 						if(!$File->save()) {
 							echo $html_spacer . $html_spacer . $html_spacer . $html_spacer . "***ERROR saving file: " . $file_name . "\n";
 						}
@@ -135,6 +157,15 @@ while($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 		}
 	}
 }
+echo "Marking the remaining files as inactive\n";
+
+foreach ($files as $file) {
+	$file->isActive = 0;
+	if(!$file->save()) {
+		echo $html_spacer . $html_spacer . $html_spacer . $html_spacer . "***ERROR saving file: " . $file->name . "\n";
+	}
+}
+
 echo "Done.";
 
 if($headless) {

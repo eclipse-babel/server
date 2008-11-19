@@ -21,7 +21,7 @@ include("head.php");
 <h1 id="page-message">Welcome to the Babel Project</h1>
 <div id="index-page" style='width: 510px; padding-right: 190px;'>
 
-	<img src="http://dev.eclipse.org/large_icons/categories/preferences-desktop-peripherals.png"><h2>Become a Committer on the Babel Project</h2>
+	<img src="<?php echo imageRoot() ?>/large_icons/categories/preferences-desktop-peripherals.png"><h2>Become a Committer on the Babel Project</h2>
 	<br style='clear: both;'>
 	<p>The main goal of the Babel project is to involve you the community in making Eclipse projects available in any language.  
 	   To make this effort a success we need quality translators to help with the translation.

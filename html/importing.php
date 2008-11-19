@@ -27,7 +27,7 @@ include("head.php");
 	
 
 
-	<a href="https://bugs.eclipse.org/bugs/enter_bug_wizard.cgi"><img src="http://dev.eclipse.org/large_icons/apps/system-users.png"><h2>Eager Translators</h2></a>
+	<a href="https://bugs.eclipse.org/bugs/enter_bug_wizard.cgi"><img src="<?php echo imageRoot() ?>/large_icons/apps/system-users.png"><h2>Eager Translators</h2></a>
 	<br style='clear: both;'>
 	<p>
 	If Babel is missing an Eclipse project and you would like to help translate this project, follow the steps below to open a Bugzilla bug. 
@@ -42,7 +42,7 @@ include("head.php");
 		<li>Submit the bug. 
 	</ol> 
 
-	<a href="login.php"><img src="http://dev.eclipse.org/large_icons/apps/preferences-desktop-theme.png"><h2>Project Leads</h2></a>
+	<a href="login.php"><img src="<?php echo imageRoot() ?>/large_icons/apps/preferences-desktop-theme.png"><h2>Project Leads</h2></a>
 	<br style='clear: both;'>
 	<p>
 	If you are a project lead and your project is not included in Babel then follow the steps below.

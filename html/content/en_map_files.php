@@ -26,11 +26,11 @@
   <td style='width:100px; color:red;'><?= $GLOBALS['g_ERRSTRS'][4] ?></td>
 </tr>
 <tr>
-  <td><a href="http://dev.eclipse.org/viewcvs/index.cgi">ViewCVS</a> download URL to map file:</td><td><input type="text" name="location" value="<?= $LOCATION ?>" size="80" onchange="fnCheckUrl();" /></td>
+  <td><a href="<?php echo imageRoot() ?>/viewcvs/index.cgi">ViewCVS</a> download URL to map file:</td><td><input type="text" name="location" value="<?= $LOCATION ?>" size="80" onchange="fnCheckUrl();" /></td>
   <td style='width:100px; color:red;'><?= $GLOBALS['g_ERRSTRS'][2] ?></td>
 </tr>
 <tr>
-  <td>&#160;</td><td>e.g. <a href="http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core.map?view=co">http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core.map?view=co</a></td>
+  <td>&#160;</td><td>e.g. <a href="<?php echo imageRoot() ?>/viewcvs/index.cgi/org.eclipse.releng/maps/core.map?view=co">http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core.map?view=co</a></td>
 </tr>
 <tr>
   <td>&#160;</td><td><b>NOTE: </b>If you're defining map files for a Release, you must use the download link to the CVS TAG of that release.  This is the pathrev=R3_4 parameter in this example:<br />

@@ -110,6 +110,7 @@ YAHOO.projectStringsManager = {
 			YAHOO.util.Connect.asyncRequest('GET', "callback/getStringsforProject.php?paged="+response[response.length-1].paged, callback2, null);
 		}
 		
+		var ntDomNode = document.getElementById('not-translated');
 		for(var i = 0; i < response.length; i++){
 			if(response[i].paged > 0){
 				//do nothing

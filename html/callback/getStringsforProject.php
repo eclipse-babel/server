@@ -46,7 +46,8 @@ switch($state){
 				strings.value as string,
 				strings.name as stringName,
 				strings.non_translatable,
-				translations.value as translation
+				translations.value as translation,
+				translations.possibly_incorrect as fuzzy
 			  from 
 			  	strings,
 			  	files
@@ -70,6 +71,7 @@ switch($state){
 				strings.name as stringName,
 				strings.non_translatable,
 				translations.value as translation,
+				translations.possibly_incorrect as fuzzy,
 				users.username as translator
 				from 
 			  	strings,
@@ -100,6 +102,7 @@ switch($state){
 					strings.value as text,
 					strings.created_on as createdOn,
 					translations.value as translationString,
+					translations.possibly_incorrect as fuzzy,
 					users.first_name as first,
 					users.last_name as last
 					from 
@@ -154,7 +157,7 @@ while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
     	if($line['non_translatable']){
     		$line['translationString'] = "<span style='font-style: italic;'>non-translatable string";
     		$line['nontranslatable'] = true;
-    	}
+    	} 
 		$return[] = $line;
 		$stringids[$line['stringId']] = 1;
     }

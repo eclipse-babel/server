@@ -17,6 +17,7 @@ require_once("cb_global.php");
 
 $string_id = $App->getHTTPParameter("string_id", "POST");
 $translation = $App->getHTTPParameter("translation", "POST");
+$fuzzy_state = $App->getHTTPParameter("fuzzy", "POST");
 
 $language_id = $_SESSION["language"];
 $project_id = $_SESSION['project'];
@@ -54,6 +55,7 @@ if (empty($translation) || (trim($translation) == '')) {
 				  	language_id = '".addslashes($language_id)."',
 				  	value = '".addslashes($translation)."',
 				  	userid = '".addslashes($user_id)."',
+				  	possibly_incorrect = '".addslashes($fuzzy_state)."',
 				  	created_on = NOW()
 				  	";
 	$res = mysql_query($query,$dbh);
@@ -119,6 +121,7 @@ if (empty($translation) || (trim($translation) == '')) {
 						language_id = '".addslashes($row['language_id'])."' , 
 						value = '".addslashes($translation)."', 
   						userid = '".addslashes($user_id)."',
+  						possibly_incorrect = '".addslashes($fuzzy_state)."',
 				   		created_on  = NOW()
 					";
 			$res2 = mysql_query($query,$dbh);
@@ -153,6 +156,7 @@ if (empty($translation) || (trim($translation) == '')) {
 	 					string_id = '".addslashes($row['string_id'])."', 
 						language_id = '".addslashes($language)."' , 
 						value = '".addslashes($translation)."', 
+						possibly_incorrect = '".addslashes($fuzzy_state)."',
   						userid = '".addslashes($user_id)."',
 				   		created_on  = NOW()
 					";
@@ -165,26 +169,28 @@ if (empty($translation) || (trim($translation) == '')) {
 if(!$do_nothing) {
 	# Find all string_id's that have the same binary value as the one we're translating
 	# *and* have no translation yet, and update those too.
-	$sql = "SELECT s.string_id, COUNT(t.string_id) AS tr_count
-	FROM strings AS s 
-	LEFT JOIN translations AS t ON t.string_id = s.string_id AND t.language_id = '".addslashes($language_id)."'
-	WHERE BINARY s.value = (select value from strings where string_id = '".addslashes($string_id)."')  
-		AND s.is_active = 1 AND t.value IS NULL GROUP BY s.string_id HAVING tr_count = 0";
+	if(!$fuzzy_state) {
+		$sql = "SELECT s.string_id, COUNT(t.string_id) AS tr_count
+		FROM strings AS s 
+		LEFT JOIN translations AS t ON t.string_id = s.string_id AND t.language_id = '".addslashes($language_id)."'
+		WHERE BINARY s.value = (select value from strings where string_id = '".addslashes($string_id)."')  
+			AND s.is_active = 1 AND t.value IS NULL GROUP BY s.string_id HAVING tr_count = 0";
 
-	$res 		= mysql_query($sql, $dbh);
-	$str_count 	= mysql_affected_rows();
+		$res 		= mysql_query($sql, $dbh);
+		$str_count 	= mysql_affected_rows();
 	
-	while($myrow = mysql_fetch_assoc($res)) {
-		$sql = "insert into 
-					translations
-				  set
-				  	string_id = " . $myrow['string_id'] . ",
-				  	language_id = '".addslashes($language_id)."',
-				  	value = '".addslashes($translation)."',
-				  	userid = '".addslashes($user_id)."',
-				  	created_on = NOW()";
-		mysql_query($sql, $dbh);
-		$affected_rows += mysql_affected_rows();
+		while($myrow = mysql_fetch_assoc($res)) {
+			$sql = "insert into 
+						translations
+					  set
+				  		string_id = " . $myrow['string_id'] . ",
+					  	language_id = '".addslashes($language_id)."',
+					  	value = '".addslashes($translation)."',
+					  	userid = '".addslashes($user_id)."',
+					  	created_on = NOW()";
+			mysql_query($sql, $dbh);
+			$affected_rows += mysql_affected_rows();
+		}
 	}
 }
 

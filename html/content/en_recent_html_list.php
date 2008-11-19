@@ -18,6 +18,9 @@
 li {
 	padding-bottom: 5px;
 }
+img {
+	vertical-align: bottom;
+}
 </style>
 
 <?include 'en_recent_html_common.php' ?>
@@ -31,9 +34,15 @@ li {
 			$prev_date = substr($myrow['created_on'],0,10);
 			echo "<h2>$prev_date</h2>";
 		}
+		$fuzzy = "";
+		if($myrow['fuzzy'] == 1) {
+			$fuzzy = "<img src='images/fuzzy.png' /> ";
+		}
+		
 		echo "<li>" . 
 			substr($myrow['created_on'],11,5) . " " . $myrow['string_value'] . 
-				" -> " . $myrow['translation'] . 
+				" -> " . $myrow['translation'] .
+				$fuzzy .  
 				" [" . $myrow['language'] . ": <a href='translate.php?project=" . $myrow['project_id'] . "&version=" . $myrow['version'] . "&file=" . $myrow['name'] . "&string=" . $myrow['string_key'] . "'>" .$myrow['string_key'] . "</a>] <b>" . 
 				$myrow['project_id'] . " " . 
 				$myrow['version'] . "</b> 

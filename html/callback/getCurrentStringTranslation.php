@@ -30,6 +30,7 @@ $query = "select
 			strings.non_translatable,
 			strings.value as string_value,
 			translations.value as translation_value,
+			translations.possibly_incorrect as fuzzy,
 			files.name,
 			strings.name as token,
 			max(translations.version)
@@ -149,8 +150,7 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 		Select some English text above to find similar translations.
 		</div>
 		
-		<input id='non-translatable-checkbox' type=checkbox name="non_translatable_string" <?= $line['non_translatable'] ? 'checked' : '' ;?>>Non-Translatable
-		
+		<input id='non-translatable-checkbox' type=checkbox name="non_translatable_string" <?= $line['non_translatable'] ? 'checked' : '' ;?>>Non-Translatable		
 	</div>
 	<div id="translation-textarea" class="side-component">
 	<?if($line['non_translatable'] == 0){?>
@@ -159,9 +159,13 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 			[<a id="reset-current-translation-link">Reset</a>]
 			[<a id="clear-current-translation-link">Clear</a>]
 		</h4>
+		
 		<textarea id="current-translation" style='display: inline; width: 320px; height: 150px;' name="translation"><?=(($line['translation_value']));?></textarea>
-		<br>
+		<br />
+		<input id='fuzzy' type=checkbox name="fuzzy_checkbox" <?= $line['fuzzy'] ? 'checked' : '' ;?>> Translation is possibly incorrect 
+		<br />
 		<button id="allversions" type="submit" name="translateAction" value="All Versions">Submit</button>
+		
 	<?}else{?>
 		<h4>Non Translatable String</h4>
 		<br>
@@ -178,16 +182,20 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 		
 		<table>
 		<?php
-			$query = "select value,first_name,last_name,translations.created_on from translations,users where string_id = '".addslashes($line['string_id'])."' and language_id = '".addslashes($language)."' and translations.userid = users.userid order by translations.created_on desc";
+			$query = "select value,first_name,last_name,translations.created_on, possibly_incorrect as fuzzy from translations,users where string_id = '".addslashes($line['string_id'])."' and language_id = '".addslashes($language)."' and translations.userid = users.userid order by translations.created_on desc";
 			$res_history = mysql_query($query,$dbh);
 			
 			if(!mysql_num_rows($res_history)){
 				print "No history.";
 			}else{		
 				while($line = mysql_fetch_array($res_history, MYSQL_ASSOC)){
+					$fuzzy = "";
+					if($line['fuzzy'] == 1) {
+						$fuzzy = "<img src='images/fuzzy.png' />";
+					}
 					print "<tr>";
 					print "<td width='40%'>";
-					print "<div>".nl2br(htmlspecialchars($line['value']))."</div>";
+					print "<div>$fuzzy".nl2br(htmlspecialchars($line['value']))."</div>";
 					print "</td>";
 					print "<td width='20%'>";
 					print $line['first_name']." ".$line['last_name'];

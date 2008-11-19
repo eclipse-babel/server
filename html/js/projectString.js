@@ -204,7 +204,13 @@ YAHOO.projectStringsManager = {
 	
 	updateStringTableCurrentTranslation: function(stringTableIndex,trans){
 		this.tableDom.rows[stringTableIndex].cells[1].innerHTML = trans;
-	}	
+	},
+
+	updateStringTableFuzzy: function(stringTableIndex, fuzzy){
+		if(fuzzy == 1) {
+			this.tableDom.rows[stringTableIndex].cells[1].innerHTML = '<img src="images/fuzzy.png" />' + this.tableDom.rows[stringTableIndex].cells[1].innerHTML;
+		}
+	},
 //$stringTableIndex	
 };
 
@@ -232,10 +238,16 @@ projectString.prototype.createHTML = function(tableDom){
 	values.string = "<div style='width: 100%; overflow: hidden;'>"+temp+"</div>";
 	
 	temp = this.data['translationString'] ? this.data['translationString'] : ''
+	
+	if(this.data['fuzzy'] == 1 && this.data['nontranslatable'] != 1) {
+		temp = "<img src='images/fuzzy.png' title='Possibly incorrect' />" + temp;
+	}
+	
 	values.translation = "<div style='width: 100%; overflow: hidden;'>"+temp+"</div>";
 	values.translator = this.data['translator'] ? this.data['translator'] : '';
 	values.createdon = this.data['createdOn'];
 	values.stringname = this.data['stringname'];
+	values.fuzzy = this.data['fuzzy']
 	
 	var lineDome = YAHOO.projectStringsManager.createHTML(values,tableDom);
 	this.domElem = lineDome;

@@ -33,11 +33,17 @@ $LANGUAGE_ID= $App->getHTTPParameter("language_id");
 if($LANGUAGE_ID == "") {
 	$LANGUAGE_ID = $_SESSION["language"];
 }
+
+$FUZZY		= $App->getHTTPParameter("fuzzy");
+if($FUZZY == "" || $FUZZY != 1) {
+	$FUZZY = 0;
+}
+
 if($LANGUAGE_ID == "All") {
 	$LANGUAGE_ID = "";
 }
 $LIMIT 		= $App->getHTTPParameter("limit");
-if($LIMIT == "" || $LIMIT <= 0 || $LIMIT > 5000) {
+if($LIMIT == "" || $LIMIT <= 0 || $LIMIT > 20000) {
 	$LIMIT = 200;
 }
 $LAYOUT 		= $App->getHTTPParameter("layout");
@@ -75,6 +81,9 @@ if($USERID != "") {
 	$where = $App->addAndIfNotNull($where) . "u.userid = ";
 	$where .= $App->sqlSanitize($USERID, $dbh);
 }
+if($FUZZY == 1) {
+	$where = $App->addAndIfNotNull($where) . "t.possibly_incorrect = 1 ";
+}
 
 if($where != "") {
 	$where = " WHERE " . $where;
@@ -83,7 +92,8 @@ if($where != "") {
 
 $sql = "SELECT 
   s.name AS string_key, s.value as string_value, 
-  t.value as translation, 
+  t.value as translation,
+  t.possibly_incorrect as fuzzy, 
   IF(u.last_name <> '' AND u.first_name <> '', 
   	CONCAT(CONCAT(first_name, ' '), u.last_name), 
   	IF(u.first_name <> '', u.first_name, u.last_name)) AS who,

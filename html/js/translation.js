@@ -83,6 +83,7 @@ function translationSumbitStop(e){
 function translationSumbit(allornot,translationIndex){
 	var target = document.getElementById('translation-form');
 	var tr_value = target.translation.value;
+	var fuzzy_value = (target.fuzzy_checkbox.checked ? 1 : 0);
 	
 	var callback = 
 	{ 
@@ -91,6 +92,7 @@ function translationSumbit(allornot,translationIndex){
 		success: function(o) {
 			var response = eval("("+o.responseText+")");			
 			YAHOO.projectStringsManager.updateStringTableCurrentTranslation(translationIndex, response.translationString);
+			YAHOO.projectStringsManager.updateStringTableFuzzy(translationIndex, fuzzy_value);
 			target.innerHTML = response.translationArea;
 		},
 		failure: function(o) {
@@ -99,9 +101,9 @@ function translationSumbit(allornot,translationIndex){
 	} 
 	
 	YAHOO.tranlsation.posted = true;
-	
 	var post = "string_id="+target.string_id.value+
 			   "&translation="+sub(tr_value)+
+			   "&fuzzy="+fuzzy_value+
 			   "&translate_action="+allornot;
 	spin();
 	var request = YAHOO.util.Connect.asyncRequest('POST', "callback/setStringTranslation.php", callback, post);

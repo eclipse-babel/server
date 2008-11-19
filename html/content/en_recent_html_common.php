@@ -34,10 +34,13 @@
    <option value="1000">1000</option>
    <option value="2000">2000</option>
    <option value="5000">5000</option>
+   <option value="10000">10000</option>
+   <option value="20000">20000</option>
 </select> translations</td></tr>
 <tr><td>Layout <select name="layout">
    <option value="list" <?= $LAYOUT == "list" ? "selected='selected'" : "" ?>>list</option>
    <option value="table" <?= $LAYOUT == "table" ? "selected='selected'" : "" ?>>table</option>
 </select></td>
+<td><input type="checkbox" name="fuzzy" <?= $FUZZY ? "checked" : "" ?> value="1" /> Show Possibly Incorrect only</td>
  </tr>
  <tr><td colspan="4"><input type="submit" value="Apply filter" /></td></tr></table></form>

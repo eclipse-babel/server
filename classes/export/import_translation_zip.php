@@ -32,6 +32,14 @@ InitPage("");
 
 $headless = 1;
 
+# See http://wiki.eclipse.org/Babel_/_Large_Contribution_Import_Process
+#
+# !!  IMPORTANT !!
+# Set to 1 unless the translations were authored (and tested/reviewed in context) by professionals
+# This doesn't mean all incoming translations will be fuzzy --
+# only those that are 'replacing' a non-fuzzy one
+$fuzzy = 1;
+
 
 require(BABEL_BASE_DIR . "classes/file/file.class.php");
 require_once("json_encode.php");
@@ -130,26 +138,39 @@ foreach ($lines as $line) {
 							# echo "Doing " . $tags[0] . " with value " . $tags[1] . " Unescaped: " . unescape($tags[1]);
 							
 							# Get the matching string name
-							$SQL = "SELECT a.string_id, a.value, b.value as tr_string
-							FROM strings as a
-							left join translations as b on (b.string_id = a.string_id
-	    					and b.language_id = $language_id
-	    					and b.value = '" . addslashes(unescape($tags[1])) . "')
-							WHERE a.is_active = 1 AND a.file_id = " . $file_id . " AND name = '" . $tags[0] . "'";
+							$SQL = "SELECT s.string_id, s.value, tr.value as tr_last, tr.possibly_incorrect as tr_last_fuzzy, trv.value as ever_tr_value
+							FROM strings as s
+							left join translations as tr on (s.string_id = tr.string_id
+	    					and tr.language_id = $language_id
+	    					and tr.is_active)
+	    					left join translations as trv on (s.string_id = trv.string_id
+	    					and trv.language_id = $language_id
+	    					and trv.value = '" . addslashes(unescape($tags[1])) . "')
+							WHERE s.is_active = 1 AND s.non_translatable <> 1 AND s.file_id = " . $file_id . " AND s.name = '" . $tags[0] . "'";
 							$rs_string = mysql_query($SQL, $dbh);
 							$myrow_string = mysql_fetch_assoc($rs_string);
-							if($myrow_string['string_id'] > 0  			# There is an English string 
-								 && $myrow_string['tr_string'] == "" 	# Without a translation  
-								 && $tags[1] != ""						# With a non-null English value
-								 && $tags[1] != $myrow_string['value']  # And the proposed translation is different from the English value
+							if($myrow_string['string_id'] > 0  				# There is an English string   
+								 && $tags[1] != ""							# With a non-null English value
+								 && $myrow_string['ever_tr_value'] == ""	# That's never been translated to this incoming value
+								 && $tags[1] != $myrow_string['value']  	# And the proposed translation is different from the English value
 								 ) {
+								$insert_as_fuzzy = 0;
+								if($myrow_string['tr_last'] != "" && $fuzzy == 1 && $myrow_string['tr_last_fuzzy'] == 0) {
+									# This incoming translation is replacing an existing value that is *not* marked as fuzzy
+									# And the $fuzzy == 1, so we may be replacing a known good value !!
+									$insert_as_fuzzy = 1;
+								}
+								else {
+									## Nothing. Insert as non-fuzzy.
+									## If this is replacing a fuzzy value, then that's a good thing
+								}
 								echo "    Found string never translated to this value: " . $myrow_string['string_id'] . " value: " . $myrow_string['value'] . "\n";
 								$SQL = "UPDATE translations set is_active = 0 where string_id = " . $myrow_string['string_id'] . " and language_id = '" . $language_id . "'";
 								mysql_query($SQL, $dbh);
 								$SQL = "INSERT INTO translations (translation_id, string_id, language_id, version, value, possibly_incorrect, is_active, userid, created_on)
 								VALUES (
 									NULL, " . $myrow_string['string_id'] . ", 
-									" . $language_id . ", 0, '" . addslashes(unescape($tags[1])) . "', 0, 1, " . $USER . ", NOW()
+									" . $language_id . ", 0, '" . addslashes(unescape($tags[1])) . "', $insert_as_fuzzy, 1, " . $USER . ", NOW()
 								)";
 								mysql_query($SQL, $dbh);
 								# echo $SQL;

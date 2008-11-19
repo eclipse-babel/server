@@ -25,6 +25,9 @@
 # See convertiso.sh if the incoming files have various encodings.
 
 
+error_reporting(E_ALL); ini_set("display_errors", true);
+
+
 header("Content-type: text/plain");
 include("global.php");
 InitPage("");

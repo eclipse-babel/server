@@ -382,7 +382,7 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 			/*
 			 * Add project language pack link to language pack links file
 			 */
-			fwrite($language_pack_links_file, "\n\t<li><a href=\"${language_pack_leader}${language_pack_name}\">$language_pack_name</a></li>");
+			fwrite($language_pack_links_file, "\n\t<li><a href=\"${language_pack_leader}${language_pack_name}\">$language_pack_name ($project_pct_complete%)</a></li>");
 			/*
 			 * Jar up this directory as the feature jar
 			 */

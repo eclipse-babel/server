@@ -224,6 +224,7 @@ function toescapedunicode($str) {
 * The user is found by looking for genie_id in the base.conf file.
 */
 function getGenieUser() {
+  global $genie_id;
   $User = new User();
   $User->loadFromID($genie_id); 
   return $User;
@@ -234,6 +235,7 @@ function getGenieUser() {
 * The folder may very well be an other server url.
 */
 function imageRoot() {
+	global $image_root;
 	return $image_root;
 }
 

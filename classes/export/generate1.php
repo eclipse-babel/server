@@ -188,7 +188,7 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 				 * Start writing to the file
 				 */
 				$outp = fopen($fullpath, "w");
-				fwrite($outp, "# Copyright by many contributors; see http://babel.eclipse.org/\n");
+				fwrite($outp, "# Copyright by many contributors; see http://babel.eclipse.org/");
 				if (strcmp($language_iso, "en_AA") == 0) {
 					$sql = "SELECT string_id, name, value FROM strings WHERE file_id = " . $properties_file['file_id'] .
 						" AND is_active AND non_translatable = 0";
@@ -232,7 +232,6 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 						} else {
 							fwrite($outp, $strings_row['orig']);
 						}
-						fwrite($outp, "\n");
 					}
 				}
 				/*
@@ -303,7 +302,6 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 			 * </url>
 			 */
 			$feature_id = "org.eclipse.babel.nls_${project_id}_$language_iso";
-			$feature_version = "$train_version.v$timestamp";
 			$feature_filename = "${feature_id}_$train_version_timestamp.jar";
 
 			$project_version = $project_versions[$project_id];
@@ -370,8 +368,8 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 			/*
 			 * Copy the feature to ${babel_language_packs_dir}tmp before jar'ing up
 			 */
-			exec("mkdir -p ${babel_language_packs_dir}tmp/eclipse/features/${fragment_id}_$train_version_timestamp");
-			exec("cd $tmp_dir; cp * ${babel_language_packs_dir}tmp/eclipse/features/${fragment_id}_$train_version_timestamp");
+			exec("mkdir -p ${babel_language_packs_dir}tmp/eclipse/features/${feature_id}_$train_version_timestamp");
+			exec("cd $tmp_dir; cp * ${babel_language_packs_dir}tmp/eclipse/features/${feature_id}_$train_version_timestamp");
 			/*
 			 * Zip up language pack
 			 */
@@ -392,7 +390,7 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 			/*
 			 * Register this feature with the site.xml
 			 */
-			$site_xml .= "\n\t<feature url=\"features/$feature_filename\" id=\"$feature_id\" version=\"$feature_version\">";
+			$site_xml .= "\n\t<feature url=\"features/$feature_filename\" id=\"$feature_id\" version=\"$train_version_timestamp\">";
 			$site_xml .= "\n\t\t<category name=\"Babel Language Packs in $language_name\"/>";
 			$site_xml .= "\n\t</feature>";
 			echo "${leader}Completed language pack for $language_name ($language_iso)\n";

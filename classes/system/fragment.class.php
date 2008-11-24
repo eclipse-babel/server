@@ -157,7 +157,7 @@ class Fragment {
 	}
 	
 	function fragment_id() {
-		return $this->plugin_id .".nl_". $language->iso;
+		return $this->plugin_id .".nl_". $this->language->iso;
 	}
 	
 	function associated_projects() {

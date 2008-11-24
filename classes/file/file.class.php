@@ -190,7 +190,7 @@ class File {
 	*/
 	function appendLangCode($filename = null) {
 		if (!$filename) {
-			$filename = findFragmentRelativePath();
+			$filename = $this->findFragmentRelativePath();
 		}
 		if (preg_match( "/^(.*)\.properties$/", $filename, $matches)) {
 			$filename = $matches[1] . '_' . $language_iso . '.properties';

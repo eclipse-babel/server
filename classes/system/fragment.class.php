@@ -164,7 +164,7 @@ class Fragment {
 	function associated_projects() {
 		$projects = array();
 		foreach($this->files as $file) {
-			$projects[] = new Project($file->project_id, $file->project_version);
+			$projects[] = new Project($file->project_id, $file->version);
 		}	
 		return array_unique($projects);
 	}

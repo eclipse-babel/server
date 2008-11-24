@@ -99,7 +99,7 @@ class Feature {
 		if (!$output_dir) {
 			$output_dir = $this->output_dir;
 		}
-		$cmd = "rm -Rf $output_dir/eclipse/features/* ; rm -Rf $output_dir/eclipse/plugins/* ; mkdir -p $output_dir/eclipse/features/ ; mkdir $output_dir/eclipse/plugins/";
+		$cmd = "rm -Rf $output_dir/eclipse/features/* ; rm -Rf $output_dir/eclipse/plugins/* ; mkdir -p $output_dir/eclipse/features/ ; mkdir -p $output_dir/eclipse/plugins/";
 		system($cmd, $retval);
 		if (!$retval) {
 			echo "### ERROR during the execution of: $cmd";

@@ -10,7 +10,6 @@
  *    Antoine Toulme, Intalio Inc. bug 248845: Refactoring generate1.php into different files with a functional approach
 *******************************************************************************/
 
-define("BABEL_BASE_DIR", "../../");
 require(BABEL_BASE_DIR . "classes/system/project.class.php"); 
 require(BABEL_BASE_DIR . "classes/file/file.class.php"); 
 
@@ -102,8 +101,8 @@ class Fragment {
 		exec("cp ${LEGAL_FILES_DIR}about.html $fragment_root");
 		$this->generate_manifest($fragment_root);
 		foreach($this->files as $file) {
-			$fullpath = $fragment_root . $file->appendLangCode();
-			$this->generate_properties_file($fullpath, $this->strings4PropertiesFile($this->language, $file));
+			$fullpath = $fragment_root . $file->appendLangCode($language->iso);
+			$this->generate_properties_file($fullpath, $file->strings4PropertiesFile($this->language));
 		}
 		$this->jar($fragment_root, $output_dir);
 	}

@@ -10,11 +10,7 @@
  *    Antoine Toulme, Intalio Inc. bug 248845: Refactoring generate1.php into different files with a functional approach
 *******************************************************************************/
 
-define("BABEL_BASE_DIR", "../../");
 require(BABEL_BASE_DIR . "classes/system/fragment.class.php"); 
-
-// constants
-define("LEGAL_FILES_DIR", BABEL_BASE_DIR . "classes/export/source_files_for_generate/");
 
 class Feature {
 	public $language;

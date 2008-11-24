@@ -10,12 +10,8 @@
  *    Eclipse Foundation - initial API and implementation
  *    Antoine Toulmé - Bug 248917
 *******************************************************************************/
-define("BABEL_BASE_DIR", "../../");
 require(BABEL_BASE_DIR . "classes/system/language.class.php"); 
 require(BABEL_BASE_DIR . "classes/system/release_train.class.php"); 
-
-// constants
-define("LEGAL_FILES_DIR", BABEL_BASE_DIR . "classes/export/source_files_for_generate/");
 
 require(BABEL_BASE_DIR . "classes/string/string.class.php");
 
@@ -188,7 +184,7 @@ class File {
 	/*
 	 * Convert the filename to *_lang.properties, e.g., foo_fr.properties
 	*/
-	function appendLangCode($filename = null) {
+	function appendLangCode($language_iso, $filename = null) {
 		if (!$filename) {
 			$filename = $this->findFragmentRelativePath();
 		}

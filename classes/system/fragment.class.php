@@ -85,7 +85,7 @@ class Fragment {
 		exec("mkdir $fragment_root/META-INF" );
 		$outp = fopen("$fragment_root/META-INF/MANIFEST.MF", "w");
 		fwrite($outp, "Manifest-Version: 1.0\n");
-		fwrite($outp, "Bundle-Name: $plugin_id $this->language->name NLS Support\n");
+		fwrite($outp, "Bundle-Name: $this->plugin_id $this->language->name NLS Support\n");
 		fwrite($outp, "Bundle-SymbolicName: $fragment_id ;singleton=true\n");
 		fwrite($outp, "Bundle-Version: $this->train->version_$this->train->timestamp\n");
 		fwrite($outp, "Bundle-Vendor: Eclipse.org\n");

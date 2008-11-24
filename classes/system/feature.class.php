@@ -11,13 +11,10 @@
 *******************************************************************************/
 
 define("BABEL_BASE_DIR", "../../");
-require(BABEL_BASE_DIR . "classes/system/language.class.php"); 
-require(BABEL_BASE_DIR . "classes/system/release_train.class.php"); 
 require(BABEL_BASE_DIR . "classes/system/fragment.class.php"); 
-require(BABEL_BASE_DIR . "classes/system/project.class.php"); 
 
 // constants
-define("LEGAL_FILES_DIR" BABEL_BASE_DIR . "classes/export/source_files_for_generate/");
+define("LEGAL_FILES_DIR", BABEL_BASE_DIR . "classes/export/source_files_for_generate/");
 
 class Feature {
 	public $language;
@@ -30,9 +27,12 @@ class Feature {
 	/**
 	 * default constructor
 	 */ 
-	function Feature($language, $train, $tmp_dir, $output_dir, $fragments = Fragment->select($language, $train)) {
+	function Feature($language, $train, $tmp_dir, $output_dir, $fragments = null) {
 		$this->language = $language;
 		$this->train = $train;
+		if (!$fragments) {
+			$fragments = Fragment::select($language, $train);
+		}
 		$this->fragments = $fragments;
 		$this->output_dir = $output_dir;
 		$this->tmp_dir = $tmp_dir;
@@ -95,7 +95,10 @@ class Feature {
 	/*
 	 * Cleans the $output_dir/eclipse/features/ and $output_dir/eclipse/plugins folders.
 	 */
-	function cleanupOutput($output_dir = $this->output_dir) {
+	function cleanupOutput($output_dir = null) {
+		if (!$output_dir) {
+			$output_dir = $this->output_dir;
+		}
 		$cmd = "rm -Rf $output_dir/eclipse/features/* ; rm -Rf $output_dir/eclipse/plugins/* ; mkdir -p $output_dir/eclipse/features/ ; mkdir $output_dir/eclipse/plugins/";
 		system($cmd, $retval);
 		if (!$retval) {
@@ -106,7 +109,10 @@ class Feature {
 	/**
 	 * Copies the legal files and generates the feature.xml file in the feature folder.
 	 */
-	function generate($dir = "$this->output_dir/eclipse/features/$this->feature_id") {
+	function generate($dir = null) {
+		if (!$dir) {
+			$dir = "$this->output_dir/eclipse/features/$this->feature_id";
+		}
 		exec("mkdir -p $dir");
 		copyLegalFiles($dir);
 		generateFeatureXml($dir);
@@ -115,7 +121,13 @@ class Feature {
 	/**
 	 * Generates a fragment.
 	 */
-	function generateFragment($fragment, $tmp_dir = this->$tmp_dir, $output_dir = $this->output_dir) {
+	function generateFragment($fragment, $tmp_dir = null, $output_dir = null) {
+		if (!$tmp_dir) {
+			$tmp_dir = $this->tmp_dir;
+		}
+		if (!$output_dir) {
+			$output_dir = $this->output_dir;
+		}
 		$fragment->generateFragment($tmp_dir, "$output_dir/eclipse/plugins/");
 	}
 
@@ -169,7 +181,13 @@ class Feature {
 	 * Jars the feature into an output folder.
 	 * This function is only used when defining features for a site, not for a normal feature creation
 	 */ 
-	function jar($dir = "$this->output_dir/eclipse/features/$this->feature_id", $output_dir = $this->output_dir) {
+	function jar($dir = null, $output_dir = null) {
+		if (!$dir) {
+			$dir = "$this->output_dir/eclipse/features/$this->feature_id";
+		}
+		if (!$output_dir) {
+			$output_dir = $this->output_dir;
+		}
 		$feature_filename = filename() . ".jar";
 		internalJar($dir, "$output_dir/$feature_filename");
 	}
@@ -185,7 +203,11 @@ class Feature {
 	/**
 	 * Zips the feature as a zip to a destination folder.
 	 */
-	function zip($destination, $output_dir = $this->output_dir) {
+	function zip($destination, $output_dir = null) {
+		if (!$output_dir) {
+			$output_dir = $this->output_dir;
+		}
+		 
 		$filename = filename() . ".zip";
 		$cmd = "cd ${output_dir}; zip -r $filename eclipse ; mv $filename $destination";
 		system($cmd, $retval);

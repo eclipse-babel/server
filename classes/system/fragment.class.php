@@ -11,12 +11,11 @@
 *******************************************************************************/
 
 define("BABEL_BASE_DIR", "../../");
-require(BABEL_BASE_DIR . "classes/system/language.class.php"); 
-require(BABEL_BASE_DIR . "classes/system/release_train.class.php"); 
 require(BABEL_BASE_DIR . "classes/system/project.class.php"); 
+require(BABEL_BASE_DIR . "classes/file/file.class.php"); 
 
 // constants
-define("LEGAL_FILES_DIR" BABEL_BASE_DIR . "classes/export/source_files_for_generate/");
+define("LEGAL_FILES_DIR", BABEL_BASE_DIR . "classes/export/source_files_for_generate/");
 
 class Fragment {
 	public $files;

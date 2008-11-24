@@ -15,7 +15,7 @@ require(BABEL_BASE_DIR . "classes/system/language.class.php");
 require(BABEL_BASE_DIR . "classes/system/release_train.class.php"); 
 
 // constants
-define("LEGAL_FILES_DIR" BABEL_BASE_DIR . "classes/export/source_files_for_generate/");
+define("LEGAL_FILES_DIR", BABEL_BASE_DIR . "classes/export/source_files_for_generate/");
 
 require(BABEL_BASE_DIR . "classes/string/string.class.php");
 
@@ -188,7 +188,10 @@ class File {
 	/*
 	 * Convert the filename to *_lang.properties, e.g., foo_fr.properties
 	*/
-	function appendLangCode($filename = findFragmentRelativePath()) {
+	function appendLangCode($filename = null) {
+		if (!$filename) {
+			$filename = findFragmentRelativePath();
+		}
 		if (preg_match( "/^(.*)\.properties$/", $filename, $matches)) {
 			$filename = $matches[1] . '_' . $language_iso . '.properties';
 		}
@@ -206,6 +209,7 @@ class File {
 			$strings_result = mysql_query($sql);
 			while (($strings_row = mysql_fetch_assoc($strings_result)) != null) {
 				$result[$strings_row['name']] = $this->project_id . $strings_row['string_id'] . ":" . $strings_row['value'];
+			}
 		} else {
 			$sql = "SELECT
 				strings.name AS 'key', 

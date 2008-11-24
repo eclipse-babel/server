@@ -40,14 +40,14 @@ class Language {
 	* A constructor expecting an associative array as its unique parameter
 	*/
 	static function fromRow($row) {
-		$this->Language($row['name'], $row['iso_code'], $row['locale'], $row['language_id']);
+		return new Language($row['name'], $row['iso_code'], $row['locale'], $row['language_id']);
 	}
   
 	static function all() {
 		$langs = array();
 		$language_result = mysql_query("SELECT * FROM languages WHERE languages.is_active");
 		while (($language_row = mysql_fetch_assoc($language_result)) != null) {
-			$langs[] = fromRow($language_row);
+			$langs[] = Language::fromRow($language_row);
 		}
 		return $langs;
 	}

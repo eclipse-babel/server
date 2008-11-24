@@ -10,6 +10,13 @@
  *    Eclipse Foundation - initial API and implementation
  *    Antoine Toulmé - Bug 248917
 *******************************************************************************/
+define("BABEL_BASE_DIR", "../../");
+require(BABEL_BASE_DIR . "classes/system/language.class.php"); 
+require(BABEL_BASE_DIR . "classes/system/release_train.class.php"); 
+
+// constants
+define("LEGAL_FILES_DIR" BABEL_BASE_DIR . "classes/export/source_files_for_generate/");
+
 require(BABEL_BASE_DIR . "classes/string/string.class.php");
 
 class File {
@@ -47,7 +54,7 @@ class File {
 							version		= " . $App->returnQuotedString($App->sqlSanitize($this->version, $dbh)) . ", 
 							name		= " . $App->returnQuotedString($App->sqlSanitize($this->name, $dbh)) . ",
 							plugin_id	= " . $App->returnQuotedString($App->sqlSanitize($this->plugin_id, $dbh)) . ",
-							is_active	= 1" . $where;
+							is_active	= " . $this->isActive . $where;
 			if(mysql_query($sql, $dbh)) {
 				if($this->file_id == 0) {
 					$this->file_id = mysql_insert_id($dbh);
@@ -68,7 +75,7 @@ class File {
 	}
 	
 	function getFileID($_name, $_project_id, $_version) {
-		$rValue = 0;
+		$rValue = -1;
 		if($this->name != "" && $this->project_id != "" && $_version != "") {
 			global $App, $dbh;
 
@@ -159,6 +166,64 @@ class File {
 			}
 		}
 		return $rValue;
+	}
+	
+	/**
+	 * Returns the fragment relative path.
+	 */
+	function findFragmentRelativePath() {
+		# strip useless CVS structure before the plugin name (bug 221675 c14):
+		$pattern = '/^([a-zA-Z0-9\/_-])+\/([a-zA-Z0-9_-]+)\.([a-zA-Z0-9_-]+)(.*)\.properties$/i';
+		$replace = '${2}.${3}${4}.properties';
+		$path = preg_replace($pattern, $replace, $this->name);
+		
+		# strip source folder (bug 221675) (org.eclipse.plugin/source_folder/org/eclipse/plugin)
+		$pattern = '/^([a-zA-Z0-9_-]+)\.([a-zA-Z0-9_-]+)\.([a-zA-Z0-9\._-]+)(.*)\/(\1)([\.\/])(\2)([\.\/])(.*)\.properties$/i';
+		$replace = '${1}.${2}.${3}/${5}${6}${7}${8}${9}.properties';
+		$path = preg_replace($pattern, $replace, $path);
+		
+		return $path;
+	}
+	
+	/*
+	 * Convert the filename to *_lang.properties, e.g., foo_fr.properties
+	*/
+	function appendLangCode($filename = findFragmentRelativePath()) {
+		if (preg_match( "/^(.*)\.properties$/", $filename, $matches)) {
+			$filename = $matches[1] . '_' . $language_iso . '.properties';
+		}
+		return $filename;
+	}
+	
+	/**
+	 * returns a hash that contains a mapping from the translation keys to the translation values.
+	 */
+	function strings4PropertiesFile($language) {
+		$result = array();
+		if (strcmp($language->iso, "en_AA") == 0) {
+			$sql = "SELECT string_id, name, value FROM strings WHERE file_id = " . $this->file_id .
+			" AND is_active AND non_translatable = 0";
+			$strings_result = mysql_query($sql);
+			while (($strings_row = mysql_fetch_assoc($strings_result)) != null) {
+				$result[$strings_row['name']] = $this->project_id . $strings_row['string_id'] . ":" . $strings_row['value'];
+		} else {
+			$sql = "SELECT
+				strings.name AS 'key', 
+				strings.value AS orig, 
+				translations.value AS trans
+				FROM strings, translations
+				WHERE strings.string_id = translations.string_id
+				AND strings.file_id = " . $this->file_id . "
+				AND strings.is_active
+				AND strings.non_translatable = 0
+				AND translations.language_id = " . $language->id . "
+				AND translations.is_active";
+			$strings_result = mysql_query($sql);
+			while (($strings_row = mysql_fetch_assoc($strings_result)) != null) {
+				$result[$strings_row['key']] = $strings_row['trans'];
+			}
+		}
+		return $result;
 	}
 }
 ?>

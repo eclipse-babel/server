@@ -1,0 +1,54 @@
+<?php
+/*******************************************************************************
+ * Copyright (c) 2007-2008 Eclipse Foundation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Antoine Toulme, Intalio Inc. bug 248845: Refactoring generate1.php into different files with a functional approach
+*******************************************************************************/
+
+class Language {
+  
+	public $name                = '';
+	public $iso                 = '';
+	public $locale              = '';
+	public $id                  = '';
+  
+	/**
+	* Default constructor
+	*/
+	function Language($name = '', $iso= '', $locale = '', $id = '') {
+		$this->name   = $name;
+		$this->iso    = $iso;
+		$this->locale = $locale;
+		$this->id     = $id;
+    
+		if (strcmp($iso, "en") == 0) {
+			$this->iso = "en_AA";
+			$this->name = "Pseudo Translations";
+		}
+    
+		if ($locale != null) {
+			$this->name = $this->locale . " " . $this->language_name;
+		}
+	}
+  
+	/**
+	* A constructor expecting an associative array as its unique parameter
+	*/
+	function Language($row) {
+		$this->Language($row['name'], $row['iso_code'], $row['locale'], $row['language_id']);
+	}
+  
+	static function all() {
+		$langs = array();
+		$language_result = mysql_query("SELECT * FROM languages WHERE languages.is_active");
+		while (($language_row = mysql_fetch_assoc($language_result)) != null) {
+			$langs[] = new Language($language_row);
+		}
+		return $langs;
+	}
+}

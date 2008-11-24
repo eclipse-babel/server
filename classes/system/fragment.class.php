@@ -60,11 +60,11 @@ class Fragment {
 		$plugins = array();
 		while (($file_row = mysql_fetch_assoc($file_result)) != null) {
 			$f = new File();
-			$f->file_id = file_row['file_id'];
-			$f->name = file_row['name'];
-			$f->plugin_id = file_row['plugin_id'];
-			$f->project_id = file_row['project_id'];
-			$f->version = file_row['version'];
+			$f->file_id = $file_row['file_id'];
+			$f->name = $file_row['name'];
+			$f->plugin_id = $file_row['plugin_id'];
+			$f->project_id = $file_row['project_id'];
+			$f->version = $file_row['version'];
 			$plugins[$file_row['plugin_id']][] = $file_row;
 		}
 		

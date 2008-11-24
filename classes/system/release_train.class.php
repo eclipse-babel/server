@@ -14,7 +14,7 @@ class ReleaseTrain {
 
 	public $id = '';
 	public $version = '';
-	public $timestamp = date("Ymdhis");
+	public $timestamp = '';
 	
 	/**
 	* Default constructor for now.
@@ -25,6 +25,7 @@ class ReleaseTrain {
 		if (strcmp($id, "europa") == 0) {
 			$this->version = "3.3.0";
 		}
+		$this->timestamp = date("Ymdhis");
 	}
 	
 	static function all() {

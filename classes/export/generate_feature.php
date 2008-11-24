@@ -39,7 +39,7 @@ $features_dir = $work_context_dir . "features/";
 exec("rm -rf $work_context_dir*");
 exec("mkdir -p $output_dir");
 
-foreach($ReleaseTrain::all() as $train) {
+foreach(ReleaseTrain::all() as $train) {
 	$output_dir_for_train = "$output_dir/$train->id/";
 	foreach(Language::all() as $lang) {
 		$feature = new Feature($lang, $train, $tmp_dir, $output_dir_for_train);

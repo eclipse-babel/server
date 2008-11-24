@@ -113,7 +113,7 @@ class Fragment {
      *
      */
 	function generate_properties_file($filepath, $keys2values) {
-		preg_match("/^((.*)\/)?(.+?)$/", $fullpath, $matches);
+		preg_match("/^((.*)\/)?(.+?)$/", $filepath, $matches);
 		exec("mkdir -p \"" . $matches[1] . "\"");
 		$outp = fopen($filepath, "w");
 		fwrite($outp, "# Copyright by many contributors; see http://babel.eclipse.org/\n");
@@ -146,7 +146,7 @@ class Fragment {
 	
 	
 	function jar($dir, $output_dir) {
-		$jar_name = ${output_dir}/fragment_filename();
+		$jar_name = $output_dir . "/" . $this->fragment_filename();
 		$this->internalJar($dir, $jar_name);
 		$this->filesize = filesize($jar_name);
 	}

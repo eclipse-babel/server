@@ -152,7 +152,7 @@ class Fragment {
 	}
 	
 	function fragment_filename() {
-		$fragment_filename = $this->fragment_id() ."_". $train->version ."_". $train->timestamp .".jar";
+		$fragment_filename = $this->fragment_id() ."_". $this->train->version ."_". $this->train->timestamp .".jar";
 		return $fragment_filename;
 	}
 	

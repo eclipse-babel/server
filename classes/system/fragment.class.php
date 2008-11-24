@@ -101,7 +101,7 @@ class Fragment {
 		exec("cp ${LEGAL_FILES_DIR}about.html $fragment_root");
 		$this->generate_manifest($fragment_root);
 		foreach($this->files as $file) {
-			$fullpath = $fragment_root . $file->appendLangCode($language->iso);
+			$fullpath = $fragment_root . $file->appendLangCode($this->language->iso);
 			$this->generate_properties_file($fullpath, $file->strings4PropertiesFile($this->language));
 		}
 		$this->jar($fragment_root, $output_dir);
@@ -152,7 +152,7 @@ class Fragment {
 	}
 	
 	function fragment_filename() {
-		$fragment_filename = "fragment_id()_$train->version_$train->timestamp.jar";
+		$fragment_filename = fragment_id() ."_". $train->version ."_". $train->timestamp .".jar";
 		return $fragment_filename;
 	}
 	

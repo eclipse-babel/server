@@ -98,7 +98,7 @@ class Fragment {
 		} else {
 			exec("mkdir -p $fragment_root");
 		}
-		exec("cp ${LEGAL_FILES_DIR}about.html $fragment_root");
+		exec("cp ". LEGAL_FILES_DIR. "about.html $fragment_root");
 		$this->generate_manifest($fragment_root);
 		foreach($this->files as $file) {
 			$fullpath = $fragment_root . $file->appendLangCode($this->language->iso);

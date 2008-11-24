@@ -70,11 +70,11 @@ class Feature {
 	 * Copies all the necessary legal files in the destination folder specified.
 	 */
 	function copyLegalFiles($dir) {
-		exec("cp ${LEGAL_FILES_DIR}about.html $dir");
-		exec("cp ${LEGAL_FILES_DIR}eclipse_update_120.jpg $dir");
-		exec("cp ${LEGAL_FILES_DIR}epl-v10.html $dir");
-		exec("cp ${LEGAL_FILES_DIR}feature.properties $dir");
-		exec("cp ${LEGAL_FILES_DIR}license.html $dir");
+		exec("cp ". LEGAL_FILES_DIR. "about.html $dir");
+		exec("cp ". LEGAL_FILES_DIR. "eclipse_update_120.jpg $dir");
+		exec("cp ". LEGAL_FILES_DIR. "epl-v10.html $dir");
+		exec("cp ". LEGAL_FILES_DIR. "feature.properties $dir");
+		exec("cp ". LEGAL_FILES_DIR. "license.html $dir");
 	}
 	
 	/**

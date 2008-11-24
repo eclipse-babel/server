@@ -64,10 +64,12 @@ fwrite($language_pack_links_file, "include \$_SERVER['DOCUMENT_ROOT'] . '/eclips
 fwrite($language_pack_links_file, "?>\n");
 fwrite($language_pack_links_file, "<div id='maincontent'><div id='midcolumn'>\n");
 fwrite($language_pack_links_file, "\n\t<h1>Babel Language Packs</h1>" .
-	"\n\t<h2>Build ID: $timestamp</h2>");
+	"\n\t<h2>Build ID: $timestamp</h2>" .
+	"\n\t<p>The following language packs are based on the community translations entered into the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a>, and may not be complete or entirely accurate.  If you find missing or incorrect translations, please use the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a> to update them." .   
+	"\n\tAll downloads are provided under the terms and conditions of the <a href='http://www.eclipse.org/legal/epl/notice.php'>Eclipse Foundation Software User Agreement</a> unless otherwise specified.</p>");
 
 echo "Generating update site\n";
-$train_result = mysql_query("SELECT DISTINCT train_id FROM release_train_projects");
+$train_result = mysql_query("SELECT DISTINCT train_id FROM release_train_projects ORDER BY train_id DESC");
 while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 	$train_id = $train_row['train_id'];
 	$train_version = "3.4.0";
@@ -84,7 +86,7 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 
 	fwrite($language_pack_links_file, "\n\t<h3>Release Train: $train_id</h3>\n\t<ul>");
 
-	$language_result = mysql_query("SELECT * FROM languages WHERE languages.is_active");
+	$language_result = mysql_query("SELECT language_id, iso_code, locale, name, is_active, IF(language_id = 1,1,0) AS sorthack FROM languages ORDER BY sorthack, name ASC");
 	while (($language_row = mysql_fetch_assoc($language_result)) != null) {
 		$language_name = $language_row['name'];
 		$language_iso = $language_row['iso_code'];

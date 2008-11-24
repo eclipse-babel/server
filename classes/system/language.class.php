@@ -32,7 +32,7 @@ class Language {
 		}
     
 		if ($locale != null) {
-			$this->name = $this->locale . " " . $this->language_name;
+			$this->name = $this->locale . " " . $this->name;
 		}
 	}
   

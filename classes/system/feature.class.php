@@ -36,7 +36,7 @@ class Feature {
 		$this->fragments = $fragments;
 		$this->output_dir = $output_dir;
 		$this->tmp_dir = $tmp_dir;
-		$projects = associated_projects();
+		$projects = $this->associated_projects();
 		if (count($projects) == 1) {
 			$this->feature_id = "org.eclipse.babel.nls_$projects[0]->id_$language->iso";
 		} else {
@@ -85,11 +85,11 @@ class Feature {
 	 * Generates the fragments and the feature.
 	 */
 	function generateAll() {
-		cleanupOutput();
+		$this->cleanupOutput();
 		foreach($this->fragments as $fragment) {
-			generateFragment($fragment);
+			$this->generateFragment($fragment);
 		}
-		generate();
+		$this->generate();
 	}
 	
 	/*
@@ -114,8 +114,8 @@ class Feature {
 			$dir = "$this->output_dir/eclipse/features/$this->feature_id";
 		}
 		exec("mkdir -p $dir");
-		copyLegalFiles($dir);
-		generateFeatureXml($dir);
+		$this->copyLegalFiles($dir);
+		$this->generateFeatureXml($dir);
 	}
 	
 	/**
@@ -160,7 +160,7 @@ class Feature {
 	 */
 	function associated_projects() {
 		$projects = array();
-		foreach($fragments as $fragment) {
+		foreach($this->fragments as $fragment) {
 			$projects[] = $fragment->associated_projects();
 		}
 		return array_unique($projects);
@@ -189,7 +189,7 @@ class Feature {
 			$output_dir = $this->output_dir;
 		}
 		$feature_filename = filename() . ".jar";
-		internalJar($dir, "$output_dir/$feature_filename");
+		$this->internalJar($dir, "$output_dir/$feature_filename");
 	}
 	
 	/*

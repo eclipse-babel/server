@@ -65,7 +65,7 @@ class Fragment {
 			$f->plugin_id = $file_row['plugin_id'];
 			$f->project_id = $file_row['project_id'];
 			$f->version = $file_row['version'];
-			$plugins[$file_row['plugin_id']][] = $file_row;
+			$plugins[$file_row['plugin_id']][] = $f;
 		}
 		
 		$fragments = array();

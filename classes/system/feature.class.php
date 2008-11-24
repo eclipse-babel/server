@@ -167,7 +167,7 @@ class Feature {
 	 */
 	function internalJar($dir, $output) {
 		$cmd = "cd $dir; jar cfM $output .";
-		system($cmd, $retval);
+		$retval = system($cmd);
 		if (!$retval) {
 			echo "### ERROR during the execution of: $cmd";
 		}

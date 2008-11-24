@@ -152,12 +152,12 @@ class Fragment {
 	}
 	
 	function fragment_filename() {
-		$fragment_filename = fragment_id() ."_". $train->version ."_". $train->timestamp .".jar";
+		$fragment_filename = $this->fragment_id() ."_". $train->version ."_". $train->timestamp .".jar";
 		return $fragment_filename;
 	}
 	
 	function fragment_id() {
-		return "$this->plugin_id.nl_$language->iso";
+		return $this->plugin_id .".nl_". $language->iso;
 	}
 	
 	function associated_projects() {

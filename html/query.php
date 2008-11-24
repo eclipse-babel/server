@@ -12,8 +12,10 @@
 
 header("Content-type: text/plain");
 include("global.php");
+InitPage("");
 
 global $App, $dbh;
+
 
 $value = $_GET['string'];
 $nl = $_GET['nl'];

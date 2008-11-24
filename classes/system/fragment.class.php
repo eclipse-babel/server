@@ -100,12 +100,12 @@ class Fragment {
 			exec("mkdir -p $fragment_root");
 		}
 		exec("cp ${LEGAL_FILES_DIR}about.html $fragment_root");
-		generate_manifest($fragment_root);
+		$this->generate_manifest($fragment_root);
 		foreach($this->files as $file) {
 			$fullpath = $fragment_root . $file->appendLangCode();
-			generate_properties_file($fullpath, strings4PropertiesFile($this->language, $file));
+			$this->generate_properties_file($fullpath, strings4PropertiesFile($this->language, $file));
 		}
-		jar($fragment_root, $output_dir);
+		$this->jar($fragment_root, $output_dir);
 	}
 	
 	/*
@@ -148,7 +148,7 @@ class Fragment {
 	
 	function jar($dir, $output_dir) {
 		$jar_name = ${output_dir}/fragment_filename();
-		internalJar($dir, $jar_name);
+		$this->internalJar($dir, $jar_name);
 		$this->filesize = filesize($jar_name);
 	}
 	

@@ -103,7 +103,7 @@ class Fragment {
 		$this->generate_manifest($fragment_root);
 		foreach($this->files as $file) {
 			$fullpath = $fragment_root . $file->appendLangCode();
-			$this->generate_properties_file($fullpath, strings4PropertiesFile($this->language, $file));
+			$this->generate_properties_file($fullpath, $this->strings4PropertiesFile($this->language, $file));
 		}
 		$this->jar($fragment_root, $output_dir);
 	}

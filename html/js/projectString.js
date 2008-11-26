@@ -10,8 +10,6 @@
  *    Eclipse Foundation
 *******************************************************************************/
 
-alert('11');
-
 YAHOO.projectStringsManager = {
 	trCounter : 0,
 	

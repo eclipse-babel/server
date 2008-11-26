@@ -10,6 +10,8 @@
  *    Eclipse Foundation
 *******************************************************************************/
 
+alert('11');
+
 YAHOO.projectStringsManager = {
 	trCounter : 0,
 	
@@ -211,7 +213,7 @@ YAHOO.projectStringsManager = {
 		if(fuzzy == 1) {
 			this.tableDom.rows[stringTableIndex].cells[1].innerHTML = '<img src="images/fuzzy.png" />' + this.tableDom.rows[stringTableIndex].cells[1].innerHTML;
 		}
-	},
+	}
 //$stringTableIndex	
 };
 

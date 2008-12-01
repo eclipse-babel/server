@@ -39,23 +39,24 @@ class Fragment {
 		 * Determine which plug-ins need to be in this language pack.
 		 */
 		if (strcmp($language->iso, "en_AA") == 0) {
-			$file_result = mysql_query("SELECT DISTINCT f.project_id, f.version, f.file_id, f.name, f.plugin_id
+			$sql = "SELECT DISTINCT f.project_id, f.version, f.file_id, f.name, f.plugin_id
 				FROM files AS f
 				INNER JOIN strings AS s ON f.file_id = s.file_id
 				INNER JOIN release_train_projects as v ON (f.project_id = v.project_id AND f.version = v.version)
 				WHERE f.is_active
-				AND v.train_id = '" . $train->id . "'");
+				AND v.train_id = '" . $train->id . "'";
 		} else {
-			$file_result = mysql_query("SELECT DISTINCT f.project_id, f.version, f.file_id, f.name, f.plugin_id
+			$sql = "SELECT DISTINCT f.project_id, f.version, f.file_id, f.name, f.plugin_id
 				FROM files AS f
 				INNER JOIN strings AS s ON f.file_id = s.file_id
 				INNER JOIN translations AS t ON (s.string_id = t.string_id AND t.is_active)
 				INNER JOIN release_train_projects as v ON (f.project_id = v.project_id AND f.version = v.version)
 				WHERE t.language_id = " . $language->id . "
 				AND f.is_active
-				AND v.train_id = '" . $train->id . "'");
+				AND v.train_id = '" . $train->id . "'";
 		}
-		
+		$file_result = mysql_query($sql);
+		echo $sql;
 		$plugins = array();
 		while (($file_row = mysql_fetch_assoc($file_result)) != null) {
 			$f = new File();
@@ -66,7 +67,6 @@ class Fragment {
 			$f->version = $file_row['version'];
 			$plugins[$file_row['plugin_id']][] = $f;
 		}
-		
 		$fragments = array();
 		foreach($plugins as $plugin_id => $files) {
 			$fragment = new Fragment($plugin_id, $files, $language, $train);

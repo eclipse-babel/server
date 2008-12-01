@@ -48,7 +48,7 @@ class Feature {
 		if (strcmp($this->language->iso, "en_AA") == 0) {
 			return 100;
 		}
-		foreach(associated_projects() as $project) {
+		foreach($this->associated_projects() as $project) {
 			$sql = "SELECT pct_complete
 				FROM project_progress
 				WHERE project_id = \"$project->id\"
@@ -95,10 +95,16 @@ class Feature {
 		if (!$output_dir) {
 			$output_dir = $this->output_dir;
 		}
-		$cmd = "rm -Rf $output_dir/eclipse/features/* ; rm -Rf $output_dir/eclipse/plugins/* ; mkdir -p $output_dir/eclipse/features/ ; mkdir -p $output_dir/eclipse/plugins/";
-		system($cmd, $retval);
-		if (!$retval) {
-			echo "### ERROR during the execution of: $cmd";
+		$instructions = array("rm -Rf $output_dir/eclipse/features/", 
+				"rm -Rf $output_dir/eclipse/plugins/",
+				"mkdir -p $output_dir/eclipse/features/",
+				"mkdir -p $output_dir/eclipse/plugins/");
+		foreach ($instructions as $cmd) {
+			$retval = system($cmd, $return_code);
+			if ($return_code != 0) {
+				echo "### ERROR during the execution of: $cmd\n";
+				echo $retval . "\n";
+			}
 		}
 	}
 
@@ -131,21 +137,21 @@ class Feature {
 	 * Generates the feature.xml file in the designated folder.
 	 */
 	function generateFeatureXml($dir) {
-		$project_toStr = join(",", associated_projects());
+		$project_toStr = join(",", $this->associated_projects());
 		$outp = fopen("$dir/feature.xml", "w");
 			fwrite($outp, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" .
-				"\n<feature id=\"$this->feature_id\"" .
-				"\n\tlabel=\"Babel Language Pack for $project_toStr in $this->language->name (pct_complete())\"" .
+				"\n<feature id=\"" . $this->feature_id . "\"" .
+				"\n\tlabel=\"Babel Language Pack for $project_toStr in " . $this->language->name . " (" . $this->pct_complete() . ")\"" .
 				"\n\timage=\"eclipse_update_120.jpg\"" .
 				"\n\tprovider-name=\"%providerName\"" .
-				"\n\tversion=\"$this->train->version_$this->train->timestamp\">" .
+				"\n\tversion=\"" . $this->train->version . "_" . $this->train->timestamp. "\">" .
 				"\n\t<copyright>\n\t\t%copyright\n\t</copyright>" .
 				"\n\t<license url=\"%licenseURL\">\n\t\t%license\n\t</license>" .
-				"\n\t<description>Babel Language Pack for $project_toStr in $this->language->name</description>" );
+				"\n\t<description>Babel Language Pack for $project_toStr in " . $this->language->name . "</description>" );
 				
 		foreach ($this->fragments as $fragment) {
-			fwrite($outp, "\n\t<plugin fragment=\"true\" id=\"$fragment->fragment_id()\" unpack=\"false\" " .
-				"version=\"$train->version_$train->timestamp\" download-size=\"$fragment->filesize\" install-size=\"$fragment->filesize\" />");
+			fwrite($outp, "\n\t<plugin fragment=\"true\" id=\"" . $fragment->fragment_id(). "\" unpack=\"false\" " .
+				"version=\"". $train->version. "_" . $train->timestamp . "\" download-size=\"" . $fragment->filesize. "\" install-size=\"" . $fragment->filesize . "\" />");
 		}
 		fwrite($outp, "\n</feature>");
 		fclose($outp);
@@ -179,12 +185,12 @@ class Feature {
 	 */ 
 	function jar($dir = null, $output_dir = null) {
 		if (!$dir) {
-			$dir = "$this->output_dir/eclipse/features/$this->feature_id";
+			$dir = $this->output_dir ."/eclipse/features/". $this->feature_id;
 		}
 		if (!$output_dir) {
 			$output_dir = $this->output_dir;
 		}
-		$feature_filename = filename() . ".jar";
+		$feature_filename = $this->filename() . ".jar";
 		$this->internalJar($dir, "$output_dir/$feature_filename");
 	}
 	
@@ -193,7 +199,7 @@ class Feature {
 	 * and the train information.
 	 */
 	function filename() {
-		return "$this->feature_id_$this->train->version_$this->train->timestamp";
+		return $this->feature_id ."_". $this->train->version ."_". $this->train->timestamp;
 	}
 	
 	/**
@@ -203,14 +209,18 @@ class Feature {
 		if (!$output_dir) {
 			$output_dir = $this->output_dir;
 		}
-		 
-		$filename = filename() . ".zip";
-		$cmd = "cd ${output_dir}; zip -r $filename eclipse ; mv $filename $destination";
-		system($cmd, $retval);
-		if (!$retval) {
-			echo "### ERROR during the execution of: $cmd";
-		}
+		$filename = $this->filename() . ".zip";
+		$instructions = array(
+						"cd $output_dir ; zip -r -q $filename eclipse", 
+						"cd $output_dir ; mv $filename $destination");
 		
+		foreach ($instructions as $cmd) {
+			$retval = system($cmd, $return_code);
+			if ($return_code != 0) {
+				echo "### ERROR during the execution of: $cmd";
+				echo "\n$return_code $retval";
+			}
+		}
 		return "$destination/$filename";
 	}
 }

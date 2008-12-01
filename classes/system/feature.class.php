@@ -151,7 +151,7 @@ class Feature {
 				
 		foreach ($this->fragments as $fragment) {
 			fwrite($outp, "\n\t<plugin fragment=\"true\" id=\"" . $fragment->fragment_id(). "\" unpack=\"false\" " .
-				"version=\"". $train->version. "_" . $train->timestamp . "\" download-size=\"" . $fragment->filesize. "\" install-size=\"" . $fragment->filesize . "\" />");
+				"version=\"". $this->train->version. "_" . $this->train->timestamp . "\" download-size=\"" . $fragment->filesize. "\" install-size=\"" . $fragment->filesize . "\" />");
 		}
 		fwrite($outp, "\n</feature>");
 		fclose($outp);

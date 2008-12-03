@@ -58,7 +58,6 @@ foreach(ReleaseTrain::all() as $train) {
 		// output the creation of the feature notification
 		echo "Feature created here: $featureZip\n";
 		$features[] = $feature;
-		break; // added here for debug
 	}
 	$site = fopen("$output_dir_for_train/eclipse/site.xml", "w");
 	$head = <<<HEAD

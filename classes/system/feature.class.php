@@ -189,16 +189,19 @@ class Feature {
 	/**
 	 * Jars the feature into an output folder.
 	 * This function is only used when defining features for a site, not for a normal feature creation
+	 * Once the feature is jarred, its folder is removed.
 	 */ 
 	function jar($dir = null, $output_dir = null) {
 		if (!$dir) {
-			$dir = $this->output_dir ."/eclipse/features/". $this->feature_id;
+			$dir = $this->output_dir ."/eclipse/features/";
 		}
 		if (!$output_dir) {
 			$output_dir = $this->output_dir;
 		}
 		$feature_filename = $this->filename() . ".jar";
-		$this->internalJar($dir, "$output_dir/$feature_filename");
+		$this->internalJar($dir, "$output_dir/eclipse/features/$feature_filename");
+		// delete the folder of the feature
+		system("rm -Rf \"$output_dir/eclipse/features/". $this->feature_id . "\"");
 	}
 	
 	/*

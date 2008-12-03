@@ -56,7 +56,6 @@ class Fragment {
 				AND v.train_id = '" . $train->id . "'";
 		}
 		$file_result = mysql_query($sql);
-		echo $sql;
 		$plugins = array();
 		while (($file_row = mysql_fetch_assoc($file_result)) != null) {
 			$f = new File();
@@ -80,13 +79,13 @@ class Fragment {
 	 * Generates a manifest file in its META-INF folder in the $fragment_root directory.
 	 */
 	function generate_manifest($fragment_root) {
-		$fragment_id = "$this->plugin_id.nl_$this->language->iso";
+		$fragment_id = $this->plugin_id .".nl._". $this->language->iso;
 		exec("mkdir $fragment_root/META-INF" );
 		$outp = fopen("$fragment_root/META-INF/MANIFEST.MF", "w");
 		fwrite($outp, "Manifest-Version: 1.0\n");
-		fwrite($outp, "Bundle-Name: $this->plugin_id $this->language->name NLS Support\n");
+		fwrite($outp, "Bundle-Name: ".$this->plugin_id." ".$this->language->name." NLS Support\n");
 		fwrite($outp, "Bundle-SymbolicName: $fragment_id ;singleton=true\n");
-		fwrite($outp, "Bundle-Version: $this->train->version_$this->train->timestamp\n");
+		fwrite($outp, "Bundle-Version: ". $this->train->version ."_". $this->train->timestamp . "\n");
 		fwrite($outp, "Bundle-Vendor: Eclipse.org\n");
 		fwrite($outp, "Fragment-Host: $this->plugin_id\n");
 		fclose($outp);
@@ -138,9 +137,10 @@ class Fragment {
 	 */
 	function internalJar($dir, $output) {
 		$cmd = "cd $dir; jar cfM $output .";
-		$retval = system($cmd);
-		if (!$retval) {
-			echo "### ERROR during the execution of: $cmd";
+		$retval = system($cmd, $return_code);
+		if ($return_code != 0) {
+			echo "### ERROR during the execution of: $cmd\n";
+			echo "$retval\n";
 		}
 	}
 	
@@ -163,8 +163,8 @@ class Fragment {
 	function associated_projects() {
 		$projects = array();
 		foreach($this->files as $file) {
-			$projects[] = new Project($file->project_id, $file->version);
+			$projects[$file->project_id] = new Project($file->project_id, $file->version);
 		}	
-		return array_unique($projects);
+		return array_values($projects);
 	}
 }

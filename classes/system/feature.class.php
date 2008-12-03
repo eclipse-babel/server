@@ -34,9 +34,9 @@ class Feature {
 		$this->tmp_dir = $tmp_dir;
 		$projects = $this->associated_projects();
 		if (count($projects) == 1) {
-			$this->feature_id = "org.eclipse.babel.nls_$projects[0]->id_$language->iso";
+			$this->feature_id = "org.eclipse.babel.nls_". $projects[0]->id ."_". $language->iso;
 		} else {
-			$this->feature_id = "org.eclipse.babel.nls_$language->iso";
+			$this->feature_id = "org.eclipse.babel.nls_".$language->iso;
 		}
 	}
 	
@@ -51,16 +51,22 @@ class Feature {
 		foreach($this->associated_projects() as $project) {
 			$sql = "SELECT pct_complete
 				FROM project_progress
-				WHERE project_id = \"$project->id\"
-					AND version = \"$project->version\"
-					AND language_id = $this->language->id";
+				WHERE project_id = \"". $project->id ."\"
+					AND version = \"". $project->version ."\"
+					AND language_id = " . $this->language->id;
 			$project_pct_complete_result = mysql_query($sql);
-			$project_pct_complete = mysql_result($project_pct_complete_result, 0);
-			if (!isSet($pct)) {
-				$pct = $project_pct_complete;
+			if ($project_pct_complete_result and 
+				(($project_pct_complete = mysql_fetch_assoc($project_pct_complete_result)) != null)) {
+				if (!isSet($pct)) {
+					$pct = $project_pct_complete;
+				} else {
+					// there might be some better way to do the average.
+					$pct = ($pct + $project_pct_complete)/2;
+				}
 			} else {
-				// there might be some better way to do the average.
-				$pct = $pct + $project_pct_complete/2;
+				// for now we assume the project is not translated at all. 
+				// We should maybe return some fixed value equivalent to "unknown"
+				$pct = $pct/2;
 			}
 		}
 		return $pct;
@@ -113,7 +119,7 @@ class Feature {
 	 */
 	function generate($dir = null) {
 		if (!$dir) {
-			$dir = "$this->output_dir/eclipse/features/$this->feature_id";
+			$dir = $this->output_dir."/eclipse/features/".$this->feature_id;
 		}
 		exec("mkdir -p $dir");
 		$this->copyLegalFiles($dir);
@@ -173,9 +179,10 @@ class Feature {
 	 */
 	function internalJar($dir, $output) {
 		$cmd = "cd $dir; jar cfM $output .";
-		$retval = system($cmd);
-		if (!$retval) {
-			echo "### ERROR during the execution of: $cmd";
+		$retval = system($cmd, $return_code);
+		if ($return_code != 0) {
+			echo "### ERROR during the execution of: $cmd\n";
+			echo "$retval\n";
 		}
 	}
 	

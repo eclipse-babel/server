@@ -23,7 +23,7 @@ require(BABEL_BASE_DIR . "classes/system/feature.class.php");
 $dbc = new DBConnection();
 $dbh = $dbc->connect();
 
-$work_dir = "/tmp/babel-working/";
+$work_dir = "/home/babel-working/";
 if (!($ini = @parse_ini_file(BABEL_BASE_DIR . "classes/base.conf"))) {
 	errorLog("Failed to find/read database conf file - aborting.");
 	exitTo("error.php?errNo=101300","error: 101300 - database conf can not be found");
@@ -40,13 +40,21 @@ exec("rm -rf $work_context_dir*");
 exec("mkdir -p $output_dir");
 exec("mkdir -p $features_dir");
 
+//iterate over all the release trains
 foreach(ReleaseTrain::all() as $train) {
+	// create a dedicated folder for each of them
 	exec("mkdir -p $features_dir/$train->id");
+	// create the output folder for temporary artifacts
 	$output_dir_for_train = "$output_dir/$train->id/";
+	// iterate over each language
 	foreach(Language::all() as $lang) {
+		// create a new feature object
 		$feature = new Feature($lang, $train, $tmp_dir, $output_dir_for_train);
+		// make it generate itself
 		$feature->generateAll();
+		// now zip it directly
 		$featureZip = $feature->zip("$features_dir/$train->id");
+		// output the creation of the feature notification
 		echo "Feature created here: $featureZip\n";
 	}
 }

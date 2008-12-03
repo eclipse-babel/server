@@ -74,12 +74,13 @@ HEAD;
 	foreach($features as $f) {
 		$language_name = $f->language->name;
 		$filename = $f->filename();
+		$version = $train->version ."_". $train->timestamp;
 		$feature_text = <<<FEATURE_TEXT
 <category-def name="Babel Language Packs in $language_name" label="Babel Language Packs in $language_name">
 	<description>Babel Language Packs in Pseudo Translations</description>
 </category-def>
 
-<feature url="features/$filename.jar" id="$filename" version="$f->version">
+<feature url="features/$filename.jar" id="$filename" version="$version">
 	<category name="Babel Language Packs in $language_name"/>
 </feature>
 FEATURE_TEXT;

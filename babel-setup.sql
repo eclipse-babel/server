@@ -391,7 +391,6 @@ insert into projects set project_id = 'webtools', is_active = 1 ;
 
 INSERT INTO `languages` VALUES (1,'en',NULL,'English',1),
 (2,'fr',NULL,'French',1),
-(3,'ja',NULL,'Japanese',1),
 (4,'de',NULL,'German',1),
 (5,'es',NULL,'Spanish',1),
 (7,'it',NULL,'Italian',1),

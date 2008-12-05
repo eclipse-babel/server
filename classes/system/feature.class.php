@@ -66,7 +66,11 @@ class Feature {
 			} else {
 				// for now we assume the project is not translated at all. 
 				// We should maybe return some fixed value equivalent to "unknown"
-				$pct = $pct/2;
+				if (!isSet($pct)) {
+					$pct = 0;
+				} else {
+					$pct = $pct/2;
+				}
 			}
 		}
 		return $pct;
@@ -169,7 +173,7 @@ class Feature {
 	function associated_projects() {
 		$projects = array();
 		foreach($this->fragments as $fragment) {
-			$projects[] = $fragment->associated_projects();
+			$projects = $projects + $fragment->associated_projects();
 		}
 		return array_unique($projects);
 	}

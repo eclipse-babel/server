@@ -38,7 +38,7 @@ $sites_dir = $work_context_dir . "sites/";
 
 exec("rm -rf $work_context_dir*");
 exec("mkdir -p $output_dir");
-exec("mkdir -p $features_dir");
+exec("mkdir -p $sites_dir");
 
 
 //iterate over all the release trains
@@ -55,8 +55,6 @@ foreach(ReleaseTrain::all() as $train) {
 		// make it generate itself
 		$feature->generateAll();
 		$feature->jar();
-		// output the creation of the feature notification
-		echo "Feature created here: $featureZip\n";
 		$features[] = $feature;
 	}
 	$site = fopen("$output_dir_for_train/eclipse/site.xml", "w");

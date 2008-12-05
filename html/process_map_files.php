@@ -52,8 +52,7 @@ $rs_maps = mysql_query($sql, $dbh);
 while($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 	echo "Processing map file: " . $myrow_maps['filename'] . " in location: " . $myrow_maps['location'] . "\n";
 	
-	
-	$tmpdir = "/tmp/tmp-babel/" . $myrow_maps['project_id'];
+	$tmpdir = "/tmp/tmp-babel/" . str_replace(" ", "_", $myrow_maps['project_id']);
 	if(is_dir($tmpdir)) {
 		# zap the directory to make sure CVS versions don't overlap
 		exec("rm -rf " . $tmpdir);

@@ -70,9 +70,9 @@ class File {
 		return $rValue;
 	}
 	
-	function getFileID($_name, $_project_id, $_version) {
+	static function getFileID($_name, $_project_id, $_version) {
 		$rValue = -1;
-		if($this->name != "" && $this->project_id != "" && $_version != "") {
+		if($_name != "" && $_project_id != "" && $_version != "") {
 			global $App, $dbh;
 
 			$sql = "SELECT file_id

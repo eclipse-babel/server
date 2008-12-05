@@ -121,7 +121,7 @@ while($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 						$file_name = trim(substr($out_line, 2)); 
 						echo $html_spacer . $html_spacer . $html_spacer . "Processing .properties file: " . $file_name . "\n";
 						
-						$file_id = File->getFileID($file_name, $myrow_maps['project_id'], $myrow_maps['version']);
+						$file_id = File::getFileID($file_name, $myrow_maps['project_id'], $myrow_maps['version']);
 						
 						if ($files[$file_id] != null) {
 							$File = $files[$file_id];

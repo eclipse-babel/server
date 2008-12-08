@@ -58,10 +58,10 @@ class Feature {
 			if ($project_pct_complete_result and 
 				(($project_pct_complete = mysql_fetch_assoc($project_pct_complete_result)) != null)) {
 				if (!isSet($pct)) {
-					$pct = $project_pct_complete;
+					$pct = $project_pct_complete['pct_complete'];
 				} else {
 					// there might be some better way to do the average.
-					$pct = ($pct + $project_pct_complete)/2;
+					$pct = ($pct + $project_pct_complete['pct_complete'])/2;
 				}
 			} else {
 				// for now we assume the project is not translated at all. 
@@ -147,7 +147,12 @@ class Feature {
 	 * Generates the feature.xml file in the designated folder.
 	 */
 	function generateFeatureXml($dir) {
-		$project_toStr = join(",", $this->associated_projects());
+		$project_toStr = "";
+		$projects_string_array = array();
+		foreach($this->associated_projects() as $proj) {
+			$projects_string_array[] = $proj->id;
+		}
+		$project_toStr = join(", ", $projects_string_array);
 		$outp = fopen("$dir/feature.xml", "w");
 			fwrite($outp, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" .
 				"\n<feature id=\"" . $this->feature_id . "\"" .
@@ -173,9 +178,11 @@ class Feature {
 	function associated_projects() {
 		$projects = array();
 		foreach($this->fragments as $fragment) {
-			$projects = $projects + $fragment->associated_projects();
+			foreach($fragment->associated_projects() as $proj) {
+				$projects[$proj->id . "_" . $proj->version] = $proj;
+			}
 		}
-		return array_unique($projects);
+		return array_values($projects);
 	}
 	
 	/*

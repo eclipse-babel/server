@@ -69,10 +69,11 @@ foreach(ReleaseTrain::all() as $train) {
 </description>
 HEAD;
 	fwrite($site, $head);
+	$version = $train->version ."_". $train->timestamp;
 	foreach($features as $f) {
 		$language_name = $f->language->name;
 		$filename = $f->filename();
-		$version = $train->version ."_". $train->timestamp;
+		
 		$feature_text = <<<FEATURE_TEXT
 <category-def name="Babel Language Packs in $language_name" label="Babel Language Packs in $language_name">
 	<description>Babel Language Packs in Pseudo Translations</description>
@@ -85,7 +86,7 @@ FEATURE_TEXT;
 		fwrite($site, $feature_text);
 	}
 	fclose($site);
-	exit();
+	exec("mv $output_dir_for_train/eclipse $sites_dir/" . $train->id . "_" . $train->timestamp);
 }
 
 

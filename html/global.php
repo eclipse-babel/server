@@ -69,6 +69,11 @@ $genie_id = "";
 #get the genie id
 if(isset($ini['genie_id'])) 
         $genie_id = $ini['genie_id'];
+
+$syncup_id = "";
+#get the syncup id
+if(isset($ini['syncup_id'])) 
+        $genie_id = $ini['syncup_id'];
         
 global $context;
 
@@ -227,6 +232,16 @@ function getGenieUser() {
   global $genie_id;
   $User = new User();
   $User->loadFromID($genie_id); 
+  return $User;
+}
+/**
+* Returns the syncup user to be used for headless applications.
+* The user is found by looking for syncup_id in the base.conf file.
+*/
+function getSyncupUser() {
+  global $syncup_id;
+  $User = new User();
+  $User->loadFromID($syncup_id); 
   return $User;
 }
 

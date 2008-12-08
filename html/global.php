@@ -73,7 +73,7 @@ if(isset($ini['genie_id']))
 $syncup_id = "";
 #get the syncup id
 if(isset($ini['syncup_id'])) 
-        $genie_id = $ini['syncup_id'];
+        $syncup_id = $ini['syncup_id'];
         
 global $context;
 

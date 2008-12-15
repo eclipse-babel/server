@@ -138,6 +138,9 @@ foreach ($lines as $line) {
 						if(count($tags) > 1) {
 							$tags[0] = trim($tags[0]);
 							$tags[1] = trim($tags[1]);
+							$tags[1] = str_replace("\:", ":", $tags[1]);
+							$tags[1] = str_replace("\=", "=", $tags[1]);
+							$tags[1] = str_replace("\ ", " ", $tags[1]);
 							# echo "Doing " . $tags[0] . " with value " . $tags[1] . " Unescaped: " . unescape($tags[1]);
 							
 							# Get the matching string name

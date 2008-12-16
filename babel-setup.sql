@@ -420,7 +420,7 @@ insert into languages set iso_code = 'es_CA', name = "Spanish-Catalonian";
 insert into languages values (null, "et_EE", "Estonia", "Estonian", 1);
 insert into languages values (null, "en_CA", "English", "Canadian", 1);
 insert into languages values (null, "en_AU", "English", "Australian", 1);
-insert into languages values (null, "mn", "Mongolian", "", 1);
+insert into languages values (null, "mn", "", "Mongolian", 1);
 
 
 insert into project_versions set project_id = "eclipse", version = "3.4", is_active = 1;

@@ -416,7 +416,7 @@ INSERT INTO `languages` VALUES (1,'en',NULL,'English',1),
 insert into languages set iso_code = 'hi', name = "Hindi";
 insert into languages set iso_code = 'ro', name = "Romanian";
 insert into languages set iso_code = 'uk', name = "Ukrainian";
-insert into languages set iso_code = 'es_CA', name = "Spanish-Catalonian";
+insert into languages set iso_code = 'ca_ES', name = "Spanish-Catalonian";
 insert into languages values (null, "et_EE", "Estonia", "Estonian", 1);
 insert into languages values (null, "en_CA", "English", "Canadian", 1);
 insert into languages values (null, "en_AU", "English", "Australian", 1);

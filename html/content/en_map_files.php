@@ -26,6 +26,27 @@
   <td style='width:100px; color:red;'><?= $GLOBALS['g_ERRSTRS'][4] ?></td>
 </tr>
 <tr>
+  <td>Release Train</td><td><select name="train_id">
+  <?php
+	while($myrow = mysql_fetch_assoc($rs_train_list)) {
+		$selected = "";
+		if($myrow['train_id'] == $TRAIN_ID) {
+			$selected = 'selected="selected"';
+		}
+		echo "<option value='" . $myrow['train_id'] . "' $selected>" . $myrow['train_id'] . "</option>";
+	}
+ ?>
+</select></td>
+  <td></td>
+</tr>
+<tr>
+	<td></td><td>Babel builds one update site per Train.  Even if your project does not participate in the actual train, please pick the Train that your project is targetting.</td>
+</tr>
+<tr>
+	<td>&#160;</td><td></td>
+</tr>
+
+<tr>
   <td><a href="<?php echo imageRoot() ?>/viewcvs/index.cgi">ViewCVS</a> download URL to map file:</td><td><input type="text" name="location" value="<?= $LOCATION ?>" size="80" onchange="fnCheckUrl();" /></td>
   <td style='width:100px; color:red;'><?= $GLOBALS['g_ERRSTRS'][2] ?></td>
 </tr>
@@ -74,12 +95,26 @@
 			document.form1.version.options[0].text 		= "unspecified";
 			document.form1.version.options[0].value 	= "unspecified";
 		}
+		
 		fnUpdateFileList();
 	}
 	
 	function fnUpdateFileList() {
 		source = "map_files.php?submit=showfiles&project_id=" + document.form1.project_id.value + "&version=" + document.form1.version.options[document.form1.version.selectedIndex].value;
 		document.getElementById("fileShow").src = source;
+		fnSetTrain();
+	}
+	
+	function fnSetTrain() {
+		<?# Update train according to selected project/version  ?>
+		if(typeof(project_trains[document.form1.project_id.value][document.form1.version.options[document.form1.version.selectedIndex].value]) != "undefined") {
+			for(i = 0; i < document.form1.train_id.length; i++) {
+				document.form1.train_id.options[i].selected = "";
+				if(document.form1.train_id.options[i].value == project_trains[document.form1.project_id.value][document.form1.version.options[document.form1.version.selectedIndex].value]) {
+					document.form1.train_id.options[i].selected = "selected";
+				}
+			}
+		}
 	}
 	
 	function fnCheckUrl() {
@@ -120,7 +155,32 @@
 	echo "];";
  ?>
  
-   fnSetVersionList();
-   document.form1.submit.disabled = "disabled";
+
+	var project_trains = new Array();
+	
+<?php
+	$prev_project = "";
+	$count = 0;
+	while($myrow = mysql_fetch_assoc($rs_train_project_list)) {
+		if($prev_project != $myrow['project_id']) {
+			if($count > 0) {
+				echo "};
+";
+			}
+			echo "project_trains['" . $myrow['project_id'] . "'] = {";
+			$count = 0;
+		}
+		if($count > 0) {
+			echo ",";
+		}
+		echo "'" . $myrow['version'] . "' : '" . $myrow['train_id'] . "'";
+		$count++;
+		$prev_project = $myrow['project_id'];
+	}
+	echo "};";
+ ?>
+	fnSetVersionList();
+  
+	document.form1.submit.disabled = "disabled";
  
  </script>

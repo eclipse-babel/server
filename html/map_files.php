@@ -33,6 +33,7 @@ $incfile 		= "content/en_map_files.php";
 
 $PROJECT_ID = $App->getHTTPParameter("project_id");
 $VERSION	= $App->getHTTPParameter("version");
+$TRAIN_ID 	= $App->getHTTPParameter("train_id");
 $LOCATION	= $App->getHTTPParameter("location");
 $FILENAME	= $App->getHTTPParameter("filename");
 $SUBMIT 	= $App->getHTTPParameter("submit");
@@ -48,6 +49,17 @@ if($SUBMIT == "Save") {
 		mysql_query($sql, $dbh);
 		$LOCATION = "";
 		$FILENAME = "";
+		
+		# Save the project/train association
+		$sql = "DELETE FROM release_train_projects WHERE project_id = "
+			. $App->returnQuotedString($App->sqlSanitize($PROJECT_ID, $dbh)) 
+			. " AND version = " . $App->returnQuotedString($App->sqlSanitize($VERSION, $dbh));
+		mysql_query($sql, $dbh);
+		$sql = "INSERT INTO release_train_projects SET project_id = "
+			. $App->returnQuotedString($App->sqlSanitize($PROJECT_ID, $dbh)) 
+			. ", version = " . $App->returnQuotedString($App->sqlSanitize($VERSION, $dbh))
+			. ", train_id = " . $App->returnQuotedString($App->sqlSanitize($TRAIN_ID, $dbh));
+		mysql_query($sql, $dbh);
 	}
 	else {
 		$GLOBALS['g_ERRSTRS'][0] = "Project, version and URL cannot be empty.";  
@@ -74,8 +86,15 @@ else {
 	$sql = "SELECT project_id FROM projects WHERE is_active = 1 ORDER BY project_id";
 	$rs_project_list = mysql_query($sql, $dbh);
 	
-	$sql = "SELECT project_id, version FROM project_versions WHERE is_active = 1 ORDER BY project_id ASC, version DESC";
+	$sql = "SELECT project_id, version FROM project_versions WHERE is_active = 1 and version != 'undefined' ORDER BY project_id ASC, version DESC";
 	$rs_version_list = mysql_query($sql, $dbh);
+
+	$sql = "SELECT DISTINCT train_id FROM release_train_projects ORDER BY train_id ASC";
+	$rs_train_list = mysql_query($sql, $dbh);
+	
+	$sql = "SELECT train_id, project_id, version FROM release_train_projects ORDER BY project_id, version ASC";
+	$rs_train_project_list = mysql_query($sql, $dbh);
+	
 	include("head.php");
 	include($incfile);
 	include("foot.php");  

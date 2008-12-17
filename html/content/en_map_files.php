@@ -1,11 +1,26 @@
 <div id="maincontent">
+<div id="rightcolumn">
+		<div class="sideitem">
+			<h6>Committer checklist</h6>
+			<ul>
+				<li>Externalize strings to .properties files</li>
+				<br />
+				<li>Maintain your map files on the Babel server (this page) with every release</li>
+				<br />
+				<li>Tell your community about Babel, how to help translate, link to the <a href="http://www.eclipse.org/babel/downloads.php">Babel download page</a></li>
+				<br />
+				<li>Optionally download the Babel fragments for your project and repackage them on your own download site</li>
+			</ul>
+		</div>
+</div>
+
 <div id="midcolumn">
 
 <h1><?= $pageTitle ?></h1>
 <p>Use this form to define the map files for your project. The map files are read nightly, and any .properties files (except build.properties) contained in the plugins they reference will be parsed and imported into Babel, allowing the community to translate the externalized strings.</p>  
 <p>This page is only accessible by Eclipse committers.</p>
 <form name="form1" method="post">
-<table cellspacing=4 cellpadding=0 border=0 width="950">
+<table cellspacing=4 cellpadding=0 border=0>
 <tr><td></td><td colspan=2 style="color:red;"><?= $GLOBALS['g_ERRSTRS'][0] ?></td></tr>
 <tr>
   <td>Project:</td><td><select name="project_id" onchange="fnSetVersionList();">
@@ -65,14 +80,11 @@
 
 <tr>
   <td></td><td><input type="submit" name="submit" value="Save" style="font-size:14px;" /></td></tr>
-  <tr>
-	<td colspan="2"><iframe id="fileShow" name="somefiles" width="100%" height="200"
+</table>
+<iframe id="fileShow" name="somefiles" width="950" height="200"
 		  style="border: 1px black solid"
 		  src="">
 		</iframe>
-	</td>
-  </tr>
-</table>
 </form>
 <script language="javascript">
 	function fnSetVersionList() {

@@ -17,19 +17,13 @@
 ob_start();
 ini_set("memory_limit", "64M");
 define("BABEL_BASE_DIR", "../../");
-require(BABEL_BASE_DIR . "html/common_functions.php");
+require(BABEL_BASE_DIR . "html/common_functions.php"); // $context is defined in this file
 require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
 require(BABEL_BASE_DIR . "classes/system/feature.class.php");
 $dbc = new DBConnection();
 $dbh = $dbc->connect();
 
 $work_dir = "/home/babel-working/";
-if (!($ini = @parse_ini_file(BABEL_BASE_DIR . "classes/base.conf"))) {
-	errorLog("Failed to find/read database conf file - aborting.");
-	exitTo("error.php?errNo=101300","error: 101300 - database conf can not be found");
-}
-
-$context = $ini['context'];
 
 $work_context_dir = $work_dir . $context . "_feature/";
 $tmp_dir = $work_context_dir . "tmp/";

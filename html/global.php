@@ -20,6 +20,7 @@ if(!defined('USE_PHOENIX')) {
 define("COOKIE_REMEMBER",	"cBABEL");
 define("COOKIE_SESSION" ,	"sBABEL");
 
+require('common_functions.php');
 # Load up Phoenix classes
 global $App;
 if(USE_PHOENIX) {
@@ -46,36 +47,7 @@ require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
 require(BABEL_BASE_DIR . "classes/system/event_log.class.php");
 require_once(BABEL_BASE_DIR . "classes/system/user.class.php");
 
-# get context
-if (!($ini = @parse_ini_file(BABEL_BASE_DIR . 'classes/base.conf'))) {
-	errorLog("Failed to find/read database conf file - aborting.");
-	exitTo("error.php?errNo=101300","error: 101300 - database conf can not be found");
-}
 
-$context = "";
-if(isset($ini['context'])) 
-	$context = $ini['context'];
-
-if($context == "") {
-	$context = "staging";
-}
-
-$image_root = "";
-# get the image root
-if(isset($ini['image_root'])) 
-        $image_root = $ini['image_root'];
-
-$genie_id = "";
-#get the genie id
-if(isset($ini['genie_id'])) 
-        $genie_id = $ini['genie_id'];
-
-$syncup_id = "";
-#get the syncup id
-if(isset($ini['syncup_id'])) 
-        $syncup_id = $ini['syncup_id'];
-        
-global $context;
 
 session_name(COOKIE_SESSION);
 session_start();
@@ -130,128 +102,6 @@ function InitPage($login) {
   $GLOBALS['DEBUG']      = "";
 }
 
-function errorLog($str) {
-	
-}
 
-function exitTo() {
-  # TODO: sqlClose();
-  if (func_num_args() == 1) {
-    $url = func_get_arg(0);
-    header("Location: $url");
-    exit;
-  }
-  else if (func_num_args() == 2) {
-    $url  = func_get_arg(0);
-    $arg1 = func_get_arg(1);
-    SetSessionVar("errStr",$arg1);
-    header("Location: $url");
-    exit;
-  }
-  else if (func_num_args() == 3) {
-    $url  = func_get_arg(0);
-    $arg1 = func_get_arg(1);
-    $arg2 = func_get_arg(2);
-    SetSessionVar($arg1,$arg2);
-    header("Location: $url");
-    exit;
-  }
-}
-function GetSessionVar($varName) {
-  if (isset($_SESSION[$varName]))
-    return $_SESSION[$varName];
-  return 0;
-}
-
-function SetSessionVar($varName,$varVal) {
-  global $_SESSION;
-
-  $GLOBALS[$varName]  = $varVal;
-  $_SESSION[$varName] = $varVal;
-  return $varVal;
-}
-
-function getLanguagebyID($id){
-	global $dbh;
-	$query = "select name from languages where language_id = '".addslashes($id)."' limit 1";
-	$res = mysql_query($query,$dbh);
-	$ret = mysql_fetch_array($res, MYSQL_ASSOC);
-	return $ret['name'];
-}
-
-/**
- * Converts string to escaped unicode format
- * Based on work by Scott Reynen - CQ 2498
- *
- * @param string $str
- * @return string
- * @since 2008-07-18
- */
-if(!function_exists('toescapedunicode')) {
-function toescapedunicode($str) {
-	$unicode = array();       
-	$values = array();
-	$lookingFor = 1;
-       
-	for ($i = 0; $i < strlen( $str ); $i++ ) {
-		$thisValue = ord( $str[ $i ] );
-		if ( $thisValue < 128)
-			$unicode[] = $str[ $i ];
-		else {
-			if ( count( $values ) == 0 ) $lookingFor = ( $thisValue < 224 ) ? 2 : 3;               
-				$values[] = $thisValue;               
-			if ( count( $values ) == $lookingFor ) {
-				$number = ( $lookingFor == 3 ) ?
-					( ( $values[0] % 16 ) * 4096 ) + ( ( $values[1] % 64 ) * 64 ) + ( $values[2] % 64 ):
-					( ( $values[0] % 32 ) * 64 ) + ( $values[1] % 64 );
-				$number = dechex($number);
-				
-				if(strlen($number) == 3) {
-					$unicode[] = "\u0" . $number;
-				}
-				elseif(strlen($number) == 2) {
-					$unicode[] = "\u00" . $number;
-				}
-				else {
-					$unicode[] = "\u" . $number;
-				}
-				$values = array();
-				$lookingFor = 1;
-			}
-		}
-	}
-	return implode("",$unicode);
-}
-}
-
-/**
-* Returns the genie user to be used for headless applications.
-* The user is found by looking for genie_id in the base.conf file.
-*/
-function getGenieUser() {
-  global $genie_id;
-  $User = new User();
-  $User->loadFromID($genie_id); 
-  return $User;
-}
-/**
-* Returns the syncup user to be used for headless applications.
-* The user is found by looking for syncup_id in the base.conf file.
-*/
-function getSyncupUser() {
-  global $syncup_id;
-  $User = new User();
-  $User->loadFromID($syncup_id); 
-  return $User;
-}
-
-/**
-* Returns the folder in which the images may be found.
-* The folder may very well be an other server url.
-*/
-function imageRoot() {
-	global $image_root;
-	return $image_root;
-}
 
 ?>

@@ -10,8 +10,10 @@
  *    Antoine Toulme, Intalio Inc. bug 248845: Refactoring generate1.php into different files with a functional approach
 *******************************************************************************/
 
-require(BABEL_BASE_DIR . "classes/system/project.class.php"); 
-require(BABEL_BASE_DIR . "classes/file/file.class.php"); 
+require_once(BABEL_BASE_DIR . "classes/system/project.class.php"); 
+require_once(BABEL_BASE_DIR . "classes/file/file.class.php"); 
+
+require_once(BABEL_BASE_DIR . "html/common_functions.php");
 
 // constants
 define("LEGAL_FILES_DIR", BABEL_BASE_DIR . "classes/export/source_files_for_generate/");
@@ -132,22 +134,10 @@ class Fragment {
 		fclose($outp);
 	}
 	
-	/*
-	 * jars the content of a directory $dir, places it in a file named $output
-	 */
-	function internalJar($dir, $output) {
-		$cmd = "cd $dir; jar cfM $output .";
-		$retval = system($cmd, $return_code);
-		if ($return_code != 0) {
-			echo "### ERROR during the execution of: $cmd\n";
-			echo "$retval\n";
-		}
-	}
-	
 	
 	function jar($dir, $output_dir) {
 		$jar_name = $output_dir . "/" . $this->fragment_filename();
-		$this->internalJar($dir, $jar_name);
+		internalJar($dir, $jar_name);
 		$this->filesize = filesize($jar_name);
 	}
 	

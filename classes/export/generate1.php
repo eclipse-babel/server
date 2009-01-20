@@ -20,7 +20,7 @@
 /*
  * Documentation: http://wiki.eclipse.org/Babel_/_Server_Tool_Specification#Outputs
  */
-define("METADATA_GENERATOR_LOCATION", "/home/babel-working/eclipse"); // you might want to read this value from a config file. Not sure yet.
+define("METADATA_GENERATOR_LOCATION", "/home/genie/eclipse"); // you might want to read this value from a config file. Not sure yet.
 
 ob_start();
 ini_set("memory_limit", "64M");
@@ -419,7 +419,7 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 	fwrite($language_pack_links_file, "\n\t</ul>");
 	
 	// now generate the metadata and add the non-greedy tags
-	system(BABEL_BASE_DIR . "classes/export/runMetadata.sh ". METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
+	system("sh " . BABEL_BASE_DIR . "classes/export/runMetadata.sh ". METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
 	sytem("xsltproc -o ${output_dir_for_train}site.xml " . BABEL_BASE_DIR . "content.xsl ${output_dir_for_train}site.xml");
 }
 echo "Completed generating update site\n";

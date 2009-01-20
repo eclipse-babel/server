@@ -417,9 +417,9 @@ insert into languages set iso_code = 'hi', name = "Hindi";
 insert into languages set iso_code = 'ro', name = "Romanian";
 insert into languages set iso_code = 'uk', name = "Ukrainian";
 insert into languages set iso_code = 'ca', name = "Catalan";
-insert into languages values (null, "et_EE", "Estonia", "Estonian", 1);
-insert into languages values (null, "en_CA", "English", "Canadian", 1);
-insert into languages values (null, "en_AU", "English", "Australian", 1);
+insert into languages values (null, "et", "", "Estonian", 1);
+insert into languages values (null, "en_CA", "Canadian", "English", 1);
+insert into languages values (null, "en_AU", "Australian", "English", 1);
 insert into languages values (null, "mn", "", "Mongolian", 1);
 
 

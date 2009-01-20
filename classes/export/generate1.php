@@ -14,11 +14,13 @@
  *    Kit Lo (IBM) - patch, bug 251536, newline char missing after copyright comment on first line
  *    Kit Lo (IBM) - patch, bug 238580, language packs should not include strings that are marked "non-translatable"
  *    Kit Lo (IBM) - patch, bug 252140, Illegal token characters in babel fragment names
+ *    Antoine Toulme (Intalio, Inc) - patch, bug 256430, Fragments with no host jeopardize Eclipse installation
  *******************************************************************************/
 
 /*
  * Documentation: http://wiki.eclipse.org/Babel_/_Server_Tool_Specification#Outputs
  */
+define("METADATA_GENERATOR_LOCATION", "/home/babel-working/eclipse"); // you might want to read this value from a config file. Not sure yet.
 
 ob_start();
 ini_set("memory_limit", "64M");
@@ -415,6 +417,10 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 	fclose($outp);
 
 	fwrite($language_pack_links_file, "\n\t</ul>");
+	
+	// now generate the metadata and add the non-greedy tags
+	system(BABEL_BASE_DIR . "classes/export/runMetadata.sh ". METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
+	sytem("xsltproc -o ${output_dir_for_train}site.xml " . BABEL_BASE_DIR . "content.xsl ${output_dir_for_train}site.xml");
 }
 echo "Completed generating update site\n";
 

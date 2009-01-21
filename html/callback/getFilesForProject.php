@@ -49,7 +49,8 @@ FROM
         LEFT JOIN file_progress as p ON p.file_id = f.file_id
           AND p.language_id = '" . addslashes($language) . "'
 WHERE
-        v.is_active = 1 
+        v.is_active = 1
+        AND f.is_active = 1
         AND v.project_id = '".addslashes($_SESSION['project'])."'
         AND f.version = '".addslashes($_SESSION['version'])."'
         GROUP BY f.name

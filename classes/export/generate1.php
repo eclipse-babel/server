@@ -22,7 +22,6 @@
  */
 define("METADATA_GENERATOR_LOCATION", "/home/genie/eclipse"); // you might want to read this value from a config file. Not sure yet.
 
-ob_start();
 ini_set("memory_limit", "64M");
 define("BABEL_BASE_DIR", "../../");
 require(BABEL_BASE_DIR . "html/common_functions.php");
@@ -422,8 +421,8 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 	
 	system("sh " . BABEL_BASE_DIR . "classes/export/runMetadata.sh ". 
 	   METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
-	sytem("xsltproc -o ${output_dir_for_train}site.xml ".
-	       BABEL_BASE_DIR . "classes/export/content.xsl ${output_dir_for_train}site.xml");
+	sytem("xsltproc -o ${output_dir_for_train}content.xml ".
+           dirname(__FILE__) . "/content.xsl ${output_dir_for_train}content.xml");
 }
 echo "Completed generating update site\n";
 

@@ -417,10 +417,10 @@ insert into languages set iso_code = 'hi', name = "Hindi";
 insert into languages set iso_code = 'ro', name = "Romanian";
 insert into languages set iso_code = 'uk', name = "Ukrainian";
 insert into languages set iso_code = 'ca', name = "Catalan";
-insert into languages values (null, "et", "", "Estonian", 1);
+insert into languages values (null, "et", null, "Estonian", 1);
 insert into languages values (null, "en_CA", "Canadian", "English", 1);
 insert into languages values (null, "en_AU", "Australian", "English", 1);
-insert into languages values (null, "mn", "", "Mongolian", 1);
+insert into languages values (null, "mn", null, "Mongolian", 1);
 
 
 insert into project_versions set project_id = "eclipse", version = "3.4", is_active = 1;

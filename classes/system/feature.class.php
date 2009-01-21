@@ -10,7 +10,7 @@
  *    Antoine Toulme, Intalio Inc. bug 248845: Refactoring generate1.php into different files with a functional approach
 *******************************************************************************/
 
-require(BABEL_BASE_DIR . "classes/system/fragment.class.php"); 
+require_once(BABEL_BASE_DIR . "classes/system/fragment.class.php"); 
 
 class Feature {
 	public $language;
@@ -73,6 +73,10 @@ class Feature {
 				}
 			}
 		}
+		
+		if (!isSet($pct)) {
+			return 0;
+		}
 		return $pct;
 	}
 	
@@ -101,14 +105,18 @@ class Feature {
 	/*
 	 * Cleans the $output_dir/eclipse/features/ and $output_dir/eclipse/plugins folders.
 	 */
-	function cleanupOutput($output_dir = null) {
+	function cleanupOutput($output_dir = null, $create_eclipse_structure = true) {
 		if (!$output_dir) {
 			$output_dir = $this->output_dir;
 		}
-		$instructions = array("rm -Rf $output_dir/eclipse/features/", 
-				"rm -Rf $output_dir/eclipse/plugins/",
-				"mkdir -p $output_dir/eclipse/features/",
-				"mkdir -p $output_dir/eclipse/plugins/");
+		if ($create_eclipse_structure) {
+			$instructions = array("rm -Rf $output_dir/eclipse/features/", 
+					"rm -Rf $output_dir/eclipse/plugins/",
+					"mkdir -p $output_dir/eclipse/features/",
+					"mkdir -p $output_dir/eclipse/plugins/");
+		} else {
+			$instructions = array("rm -Rf $output_dir/*");
+		}
 		foreach ($instructions as $cmd) {
 			$retval = system($cmd, $return_code);
 			if ($return_code != 0) {
@@ -243,5 +251,57 @@ class Feature {
 			}
 		}
 		return "$destination/$filename";
+	}
+	
+	// Following functions help dealing with CSV files.
+	
+	/**
+	 * Zips the feature as a zip to a destination folder.
+	 */
+	function zipAsCSV($destination, $output_dir = null) {
+		if (!$output_dir) {
+			$output_dir = $this->output_dir;
+		}
+		$filename = $this->filename() . ".zip";
+		$instructions = array(
+						"zip -r -q $filename $output_dir/* -d $output_dir/$filename",
+						"mkdir -p $destination", 
+						"cd $output_dir ; mv $filename $destination");
+		
+		foreach ($instructions as $cmd) {
+			$retval = system($cmd, $return_code);
+			if ($return_code != 0) {
+				echo "### ERROR during the execution of: $cmd";
+				echo "\n$return_code $retval";
+			}
+		}
+		return "$destination/$filename";
+	}
+	
+	function generateAsCSV() {
+		$this->cleanupOutput(null, false);
+		$filename = $this->filename() . ".csv";
+		$language = $this->language->id;
+		$train = $this->train->id;
+		$sql = <<<SQL
+			SELECT s.name, s.value, s.string_id
+			FROM files AS f
+			INNER JOIN strings AS s ON f.file_id = s.file_id
+			INNER JOIN release_train_projects as v ON (f.project_id = v.project_id AND f.version = v.version)
+			WHERE f.is_active
+			AND s.non_translatable <> 1
+			AND v.train_id = '$train'
+SQL;
+		$result = mysql_query($sql);
+		$f = fopen("$this->output_dir/" . $this->filename() . ".csv", "w");
+		while (($row = mysql_fetch_assoc($result)) != null) {
+		    $value_row = mysql_fetch_assoc(mysql_query("SELECT value from translations where string_id = " . $row['string_id'] . " and language_id = " . $language));
+			$value = '';
+			if ($value_row != null) {
+				$value = $value_row['value'];
+            }
+            fputcsv($f, array($row['name'], $row['value'], $value));
+		}
+		fclose($f);
 	}
 }

@@ -421,7 +421,7 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 	
 	system("sh " . BABEL_BASE_DIR . "classes/export/runMetadata.sh ". 
 	   METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
-	sytem("xsltproc -o ${output_dir_for_train}content.xml ".
+	system("xsltproc -o ${output_dir_for_train}content.xml ".
            dirname(__FILE__) . "/content.xsl ${output_dir_for_train}content.xml");
 }
 echo "Completed generating update site\n";

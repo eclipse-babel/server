@@ -419,14 +419,11 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 	fwrite($language_pack_links_file, "\n\t</ul>");
 	
 	// now generate the metadata and add the non-greedy tags
-	$output = array();
-	exec("sh " . BABEL_BASE_DIR . "classes/export/runMetadata.sh ". 
-	   METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ", $output);
-	print_r($output);
-	$output = array();
+	
+	system("sh " . BABEL_BASE_DIR . "classes/export/runMetadata.sh ". 
+	   METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
 	sytem("xsltproc -o ${output_dir_for_train}site.xml ".
-	       BABEL_BASE_DIR . "classes/export/content.xsl ${output_dir_for_train}site.xml", $output);
-	print_r($output);
+	       BABEL_BASE_DIR . "classes/export/content.xsl ${output_dir_for_train}site.xml");
 }
 echo "Completed generating update site\n";
 

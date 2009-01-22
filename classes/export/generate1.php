@@ -15,6 +15,7 @@
  *    Kit Lo (IBM) - patch, bug 238580, language packs should not include strings that are marked "non-translatable"
  *    Kit Lo (IBM) - patch, bug 252140, Illegal token characters in babel fragment names
  *    Antoine Toulme (Intalio, Inc) - patch, bug 256430, Fragments with no host jeopardize Eclipse installation
+ *    Kit Lo (IBM) - patch, bug 261739, Inconsistent use of language names
  *******************************************************************************/
 
 /*
@@ -87,18 +88,14 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 
 	fwrite($language_pack_links_file, "\n\t<h3>Release Train: $train_id</h3>\n\t<ul>");
 
-	$language_result = mysql_query("SELECT language_id, iso_code, locale, name, is_active, IF(language_id = 1,1,0) AS sorthack FROM languages ORDER BY sorthack, name ASC");
+	$language_result = mysql_query("SELECT language_id, iso_code, IF(locale <> '', CONCAT(CONCAT(CONCAT(name, ' ('), locale), ')'), name) as name, is_active, IF(language_id = 1,1,0) AS sorthack FROM languages ORDER BY sorthack, name ASC");
 	while (($language_row = mysql_fetch_assoc($language_result)) != null) {
 		$language_name = $language_row['name'];
 		$language_iso = $language_row['iso_code'];
-		$language_locale = $language_row['locale'];
 		$language_id = $language_row['language_id'];
 		if (strcmp($language_iso, "en") == 0) {
 			$language_iso = "en_AA";
 			$language_name = "Pseudo Translations";
-		}
-		if ($language_locale != null) {
-			$language_name = $language_locale . " " . $language_name;
 		}
 
 		$site_xml .= "\n\t<category-def name=\"Babel Language Packs in $language_name\" label=\"Babel Language Packs in $language_name\">";

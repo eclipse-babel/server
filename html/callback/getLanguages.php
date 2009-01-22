@@ -9,21 +9,20 @@
  * Contributors:
  *    Paul Colton (Aptana)- initial API and implementation
  *    Eclipse Foundation
+ *    Kit Lo (IBM) - patch, bug 261739, Inconsistent use of language names
 *******************************************************************************/
 
 require_once("cb_global.php");
 
 
 
-$query = "select * from languages where is_active = 1 and language_id != 1 order by name";
-
+$query = "SELECT language_id, IF(locale <> '', CONCAT(CONCAT(CONCAT(name, ' ('), locale), ')'), name) as name FROM languages WHERE is_active AND iso_code != 'en' ORDER BY name";
 $res = mysql_query($query,$dbh);
 
 
 $return = Array();
 
 while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
-//	$return .= "<li><a href='?language_id=".$line['language_id']."'>".$line['iso_code']. " - ". $line['name']. "</a>";
     if(isset($_SESSION['language']) and $line['language_id'] == $_SESSION['language']){
     	$line['current'] = true;
     }

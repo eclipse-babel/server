@@ -8,6 +8,7 @@
  * Contributors:
  *    Paul Colton (Aptana)- initial API and implementation
  *    Eclipse Foundation
+ *    Kit Lo (IBM) - patch, bug 261739, Inconsistent use of language names
 *******************************************************************************/
 
 YAHOO.languageManager = {
@@ -102,10 +103,7 @@ language.prototype.createHTML = function(){
 	this.domElem = document.createElement("li");
 	this.domElem.innerHTML = this.name;
 	if(this.locale){
-		this.domElem.innerHTML += this.locale;
-	}
-	if(this.iso){
-		this.domElem.innerHTML += "("+this.iso+")";
+		this.domElem.innerHTML += " ("+this.locale+")";
 	}
 	this.addEvents();
 	

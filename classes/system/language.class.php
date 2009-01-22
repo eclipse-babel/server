@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Antoine Toulme, Intalio Inc. bug 248845: Refactoring generate1.php into different files with a functional approach
+ *    Kit Lo (IBM) - patch, bug 261739, Inconsistent use of language names
 *******************************************************************************/
 
 class Language {
@@ -32,7 +33,7 @@ class Language {
 		}
     
 		if ($locale != null) {
-			$this->name = $this->locale . " " . $this->name;
+			$this->name = $this->name . " (" . $this->locale . ")";
 		}
 	}
   

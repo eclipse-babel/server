@@ -15,13 +15,13 @@ include("global.php");
 InitPage("");
 
 global $User;
-global $App, $dbh;
+global $dbh;
 
 $pageTitle 		= "Babel - Translation statistics";
 $pageKeywords 	= "";
 $incfile 		= "content/en_stats.php";
 
-$PROJECT_VERSION = $App->getHTTPParameter("project_version");
+$PROJECT_VERSION = getHTTPParameter("project_version");
 $PROJECT_ID = "";
 $VERSION	= "";
 
@@ -31,8 +31,8 @@ if($PROJECT_VERSION != "") {
 	$PROJECT_ID = $items[0];
 	$VERSION	= $items[1];
 }
-$LANGUAGE_ID= $App->getHTTPParameter("language_id");
-$SUBMIT 	= $App->getHTTPParameter("submit");
+$LANGUAGE_ID= getHTTPParameter("language_id");
+$SUBMIT 	= getHTTPParameter("submit");
 
 $sql = "SELECT DISTINCT pv.project_id, pv.version FROM project_versions AS pv INNER JOIN map_files as m ON pv.project_id = m.project_id AND pv.version = m.version WHERE pv.is_active ORDER BY pv.project_id ASC, pv.version DESC";
 $rs_p_list = mysql_query($sql, $dbh);
@@ -44,16 +44,16 @@ $rs_l_list = mysql_query($sql, $dbh);
 $where = "";
 
 if($PROJECT_ID != "") {
-	$where = $App->addAndIfNotNull($where) . " p.project_id = ";
-	$where .= $App->returnQuotedString($App->sqlSanitize($PROJECT_ID, $dbh));
+	$where = addAndIfNotNull($where) . " p.project_id = ";
+	$where .= returnQuotedString(sqlSanitize($PROJECT_ID, $dbh));
 }
 if($LANGUAGE_ID != "") {
-	$where = $App->addAndIfNotNull($where) . " l.language_id = ";
-	$where .= $App->returnQuotedString($App->sqlSanitize($LANGUAGE_ID, $dbh));
+	$where = addAndIfNotNull($where) . " l.language_id = ";
+	$where .= returnQuotedString(sqlSanitize($LANGUAGE_ID, $dbh));
 }
 if($VERSION != "") {
-	$where = $App->addAndIfNotNull($where) . "p.version = ";
-	$where .= $App->returnQuotedString($App->sqlSanitize($VERSION, $dbh));
+	$where = addAndIfNotNull($where) . "p.version = ";
+	$where .= returnQuotedString(sqlSanitize($VERSION, $dbh));
 }
 
 if($where != "") {

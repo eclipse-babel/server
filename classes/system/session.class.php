@@ -39,10 +39,10 @@ class Session {
 	
 	function load($_gid) {
 		$rValue = false;
-		global $App, $dbh;
-		$_gid = $App->sqlSanitize($_gid, $dbh);
+		global $dbh;
+		$_gid = sqlSanitize($_gid, $dbh);
 		
-		$sql = "SELECT id, userid, gid, subnet, updated_at FROM sessions WHERE gid = " . $App->returnQuotedString($_gid);
+		$sql = "SELECT id, userid, gid, subnet, updated_at FROM sessions WHERE gid = " . returnQuotedString($_gid);
 		
 		$result = mysql_query($sql, $dbh);
 		if($result && mysql_num_rows($result) > 0) {
@@ -62,10 +62,10 @@ class Session {
 	}
 	
 	function touch() {
-		global $App, $dbh;
-		$_gid = $App->sqlSanitize($this->_gid, $dbh);
+		global $dbh;
+		$_gid = sqlSanitize($this->_gid, $dbh);
 		
-		$sql = "UPDATE sessions SET updated_at = NOW() WHERE gid = " . $App->returnQuotedString($_gid);
+		$sql = "UPDATE sessions SET updated_at = NOW() WHERE gid = " . returnQuotedString($_gid);
 		
 		mysql_query($sql, $dbh);
 	}
@@ -73,7 +73,7 @@ class Session {
 	function destroy() {
 		$cookie = (isset($_COOKIE[COOKIE_REMEMBER]) ? $_COOKIE[COOKIE_REMEMBER] : "");
 		if($cookie != "" && $this->load($cookie)) {
-			global $App, $dbh;
+			global $dbh;
 			$sql = "DELETE FROM sessions WHERE userid = " . $this->_userid;
 			mysql_query($sql, $dbh);
 		}
@@ -82,11 +82,11 @@ class Session {
 	}
 	
 	function create($_userid, $_remember) {
-		global $dbh, $App;
-		$this->_userid 	= $App->sqlSanitize($_userid, $dbh);
+		global $dbh;
+		$this->_userid 	= sqlSanitize($_userid, $dbh);
 		$this->_gid 	= $this->guidNbr();
 		$this->_subnet 	= $this->getSubnet();
-		$this->_updated_at = $App->getCURDATE();
+		$this->_updated_at = getCURDATE();
 
 		$sql = "INSERT INTO sessions (
 				id,
@@ -96,8 +96,8 @@ class Session {
 				updated_at) VALUES (
 				NULL,
 				" . $this->_userid . ",
-				" . $App->returnQuotedString($this->_gid) . ",
-				" . $App->returnQuotedString($this->_subnet) . ",
+				" . returnQuotedString($this->_gid) . ",
+				" . returnQuotedString($this->_subnet) . ",
 				NOW())";
 		mysql_query($sql, $dbh);
 		$cookieTime = 0;
@@ -112,12 +112,12 @@ class Session {
 	function maintenance() {
 		# Delete sessions older than 14 days
 		# and sessions where the same subnet,user has different gids
-		global $dbh, $App;
+		global $dbh;
 		$sql = "DELETE FROM sessions 
 				WHERE updated_at < DATE_SUB(NOW(), INTERVAL 14 DAY) 
 					OR (userid = " . $this->_userid . "
-						AND subnet = " . $App->returnQuotedString($this->getSubnet()) . "
-						AND gid <> " . $App->returnQuotedString($this->_gid) . ")";
+						AND subnet = " . returnQuotedString($this->getSubnet()) . "
+						AND gid <> " . returnQuotedString($this->_gid) . ")";
 		mysql_query($sql, $dbh);
 	}
 		

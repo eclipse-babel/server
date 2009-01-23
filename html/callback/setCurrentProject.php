@@ -13,6 +13,6 @@
 
 require_once("cb_global.php");
 
-$_SESSION['project'] = $App->getHTTPParameter("project", "POST");
+$_SESSION['project'] = getHTTPParameter("project", "POST");
 
 ?>

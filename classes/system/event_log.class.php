@@ -43,7 +43,7 @@ class EventLog {
 	 */
 	function add() {
 		$rValue = "";
-		global $User, $App, $dbh;
+		global $User, $dbh;
 		
 		# remove anything after a space
 		$has_space = strpos($this->action, ' ');
@@ -54,11 +54,11 @@ class EventLog {
 		if($this->table_name != "" && $this->key_name != "" && $this->key_value != "" && $this->action != "") {
 			$sql = "INSERT INTO event_log SET
 					event_id = NULL,
-					table_name = " 	. $App->returnQuotedString($App->sqlSanitize($this->table_name, $dbh)) . ",
-					key_name = " 	. $App->returnQuotedString($App->sqlSanitize($this->key_name, $dbh)) . ",
-					key_value = " 	. $App->returnQuotedString($App->sqlSanitize($this->key_value, $dbh)) . ",
-					action = " 		. $App->returnQuotedString($App->sqlSanitize($this->action, $dbh)) . ",
-					userid = " 		. $App->sqlSanitize($User->userid, $dbh) . ",
+					table_name = " 	. returnQuotedString(sqlSanitize($this->table_name, $dbh)) . ",
+					key_name = " 	. returnQuotedString(sqlSanitize($this->key_name, $dbh)) . ",
+					key_value = " 	. returnQuotedString(sqlSanitize($this->key_value, $dbh)) . ",
+					action = " 		. returnQuotedString(sqlSanitize($this->action, $dbh)) . ",
+					userid = " 		. sqlSanitize($User->userid, $dbh) . ",
 					created_on = NOW()";
 
 			mysql_query($sql, $dbh);

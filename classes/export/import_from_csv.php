@@ -44,7 +44,7 @@ require_once(BABEL_BASE_DIR . "html/common_functions.php");
 require_once(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
 require_once(BABEL_BASE_DIR . "classes/system/feature.class.php");
 require_once(BABEL_BASE_DIR . "classes/system/user.class.php");
-$App 	= new App();
+
 $dbc = new DBConnection();
 $dbh = $dbc->connect();
 

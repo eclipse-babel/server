@@ -13,7 +13,7 @@
 
 require_once("cb_global.php");
 
-$_SESSION['file'] = $App->getHTTPParameter("file", "POST");
+$_SESSION['file'] = getHTTPParameter("file", "POST");
 
 //print_r($_SESSION);
 

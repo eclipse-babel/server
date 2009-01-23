@@ -13,8 +13,8 @@
 
 require_once("cb_global.php");
 
-$string_id = $App->getHTTPParameter("string_id", "POST");
-$stringTableIndex = $App->getHTTPParameter("stringTableIndex", "POST");
+$string_id = getHTTPParameter("string_id", "POST");
+$stringTableIndex = getHTTPParameter("stringTableIndex", "POST");
 
 if(isset($_SESSION['language']) and isset($_SESSION['version']) and isset($_SESSION['project'])){
 	$language = $_SESSION['language'];

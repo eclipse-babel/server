@@ -32,10 +32,10 @@ class User {
 		if($email != "" && $password != "") {
 			if (eregi('^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z.]{2,5}$', $email)) {
 				
-				global $App, $dbh;
+				global $dbh;
 				
-				$email 		= $App->sqlSanitize($email, $dbh);
-				$password 	= $App->sqlSanitize($password, $dbh);
+				$email 		= sqlSanitize($email, $dbh);
+				$password 	= sqlSanitize($password, $dbh);
 	
 				// since MySQL ENCRYPT is not supported on windows we have to move encryption
 				// from the database layer out to the application layer
@@ -98,9 +98,9 @@ class User {
 	function loadFromID($_userid) {
 		$rValue = false;
 		if($_userid != "") {
-			global $App, $dbh;
+			global $dbh;
 			
-			$_userid	= $App->sqlSanitize($_userid, $dbh);
+			$_userid	= sqlSanitize($_userid, $dbh);
 
 			$sql = "SELECT *
 				FROM 

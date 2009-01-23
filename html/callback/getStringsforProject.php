@@ -13,14 +13,14 @@
 error_reporting('E_NONE'); ini_set("display_errors", false);
 require_once("cb_global.php");
 
-$project_id = $App->getHTTPParameter("proj", "POST");
-$version = $App->getHTTPParameter("version", "POST");
+$project_id = getHTTPParameter("proj", "POST");
+$version = getHTTPParameter("version", "POST");
 
 //THE 3 VALID STATES
 //	UNSTRANSLATED (DEFUALT)
 //	FLAGGED (FLAGGED INCORRECT IN DATABASE)
 //	AWAITING (TRANSLATED BUT NO RAITINGS YET)
-$state = $App->getHTTPParameter("state", "POST"); 
+$state = getHTTPParameter("state", "POST"); 
 
 if(!isset($proj_post)){
 	if(isset($_SESSION['project']))

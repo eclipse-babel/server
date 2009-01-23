@@ -14,7 +14,7 @@ include("global.php");
 InitPage("");
 
 global $User;
-global $App, $dbh;
+global $dbh;
 
 if(!isset($User->userid)) {
 	exitTo("importing.php");
@@ -31,20 +31,20 @@ $pageTitle 		= "Babel - Define Map Files";
 $pageKeywords 	= "";
 $incfile 		= "content/en_map_files.php";
 
-$PROJECT_ID = $App->getHTTPParameter("project_id");
-$VERSION	= $App->getHTTPParameter("version");
-$TRAIN_ID 	= $App->getHTTPParameter("train_id");
-$LOCATION	= $App->getHTTPParameter("location");
-$FILENAME	= $App->getHTTPParameter("filename");
-$SUBMIT 	= $App->getHTTPParameter("submit");
+$PROJECT_ID = getHTTPParameter("project_id");
+$VERSION	= getHTTPParameter("version");
+$TRAIN_ID 	= getHTTPParameter("train_id");
+$LOCATION	= getHTTPParameter("location");
+$FILENAME	= getHTTPParameter("filename");
+$SUBMIT 	= getHTTPParameter("submit");
 
 if($SUBMIT == "Save") {
 	if($PROJECT_ID != "" && $VERSION != "" && $LOCATION != "") {
 		$sql = "INSERT INTO map_files VALUES ("
-			. $App->returnQuotedString($App->sqlSanitize($PROJECT_ID, $dbh))
-			. "," . $App->returnQuotedString($App->sqlSanitize($VERSION, $dbh))
-			. "," . $App->returnQuotedString($App->sqlSanitize($FILENAME, $dbh))
-			. "," . $App->returnQuotedString($App->sqlSanitize($LOCATION, $dbh))
+			. returnQuotedString(sqlSanitize($PROJECT_ID, $dbh))
+			. "," . returnQuotedString(sqlSanitize($VERSION, $dbh))
+			. "," . returnQuotedString(sqlSanitize($FILENAME, $dbh))
+			. "," . returnQuotedString(sqlSanitize($LOCATION, $dbh))
 			. ", 1)";
 		mysql_query($sql, $dbh);
 		$LOCATION = "";
@@ -52,13 +52,13 @@ if($SUBMIT == "Save") {
 		
 		# Save the project/train association
 		$sql = "DELETE FROM release_train_projects WHERE project_id = "
-			. $App->returnQuotedString($App->sqlSanitize($PROJECT_ID, $dbh)) 
-			. " AND version = " . $App->returnQuotedString($App->sqlSanitize($VERSION, $dbh));
+			. returnQuotedString(sqlSanitize($PROJECT_ID, $dbh)) 
+			. " AND version = " . returnQuotedString(sqlSanitize($VERSION, $dbh));
 		mysql_query($sql, $dbh);
 		$sql = "INSERT INTO release_train_projects SET project_id = "
-			. $App->returnQuotedString($App->sqlSanitize($PROJECT_ID, $dbh)) 
-			. ", version = " . $App->returnQuotedString($App->sqlSanitize($VERSION, $dbh))
-			. ", train_id = " . $App->returnQuotedString($App->sqlSanitize($TRAIN_ID, $dbh));
+			. returnQuotedString(sqlSanitize($PROJECT_ID, $dbh)) 
+			. ", version = " . returnQuotedString(sqlSanitize($VERSION, $dbh))
+			. ", train_id = " . returnQuotedString(sqlSanitize($TRAIN_ID, $dbh));
 		mysql_query($sql, $dbh);
 	}
 	else {
@@ -68,17 +68,17 @@ if($SUBMIT == "Save") {
 if($SUBMIT == "delete") {
 	$SUBMIT = "showfiles";
 	$sql = "DELETE FROM map_files WHERE  
-	project_id = " . $App->returnQuotedString($App->sqlSanitize($PROJECT_ID, $dbh)) . "
-	AND version = " . $App->returnQuotedString($App->sqlSanitize($VERSION, $dbh)) . "
-	AND filename = ". $App->returnQuotedString($App->sqlSanitize($FILENAME, $dbh)) . " LIMIT 1";
+	project_id = " . returnQuotedString(sqlSanitize($PROJECT_ID, $dbh)) . "
+	AND version = " . returnQuotedString(sqlSanitize($VERSION, $dbh)) . "
+	AND filename = ". returnQuotedString(sqlSanitize($FILENAME, $dbh)) . " LIMIT 1";
 	mysql_query($sql, $dbh);
 }
 
 if($SUBMIT == "showfiles") {
 	$incfile 	= "content/en_map_files_show.php";
 	$sql = "SELECT project_id, version, filename, location FROM map_files WHERE is_active = 1 
-	AND project_id = " . $App->returnQuotedString($App->sqlSanitize($PROJECT_ID, $dbh)) . "
-	AND version = " . $App->returnQuotedString($App->sqlSanitize($VERSION, $dbh));
+	AND project_id = " . returnQuotedString(sqlSanitize($PROJECT_ID, $dbh)) . "
+	AND version = " . returnQuotedString(sqlSanitize($VERSION, $dbh));
 	$rs_map_file_list = mysql_query($sql, $dbh);
 	include($incfile);
 }

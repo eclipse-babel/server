@@ -25,7 +25,7 @@ if(!isset($User)) {
 require(BABEL_BASE_DIR . "classes/file/file.class.php");
 $html_spacer = "  ";
 
-global $App, $dbh;
+global $dbh;
 
 if(!is_dir("/tmp/tmp-babel")) {
 	mkdir("/tmp/tmp-babel") || die("Cannot create a working directory");

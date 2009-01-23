@@ -15,9 +15,9 @@
 require_once("cb_global.php");
 
 
-$string_id = $App->getHTTPParameter("string_id", "POST");
-$translation = $App->getHTTPParameter("translation", "POST");
-$fuzzy_state = $App->getHTTPParameter("fuzzy", "POST");
+$string_id = getHTTPParameter("string_id", "POST");
+$translation = getHTTPParameter("translation", "POST");
+$fuzzy_state = getHTTPParameter("fuzzy", "POST");
 
 $language_id = $_SESSION["language"];
 $project_id = $_SESSION['project'];

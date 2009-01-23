@@ -15,13 +15,13 @@ include("global.php");
 InitPage("");
 
 global $User;
-global $App, $dbh;
+global $dbh;
 
 $pageTitle 		= "Babel - Recent Translations";
 $pageKeywords 	= "";
 $incfile 		= "content/en_recent_html_list.php";
 
-$PROJECT_VERSION = $App->getHTTPParameter("project_version");
+$PROJECT_VERSION = getHTTPParameter("project_version");
 $PROJECT_ID = "";
 $VERSION	= "";
 
@@ -30,12 +30,12 @@ if($PROJECT_VERSION != "") {
 	$PROJECT_ID = $items[0];
 	$VERSION	= $items[1];
 }
-$LANGUAGE_ID= $App->getHTTPParameter("language_id");
+$LANGUAGE_ID= getHTTPParameter("language_id");
 if($LANGUAGE_ID == "") {
 	$LANGUAGE_ID = $_SESSION["language"];
 }
 
-$FUZZY		= $App->getHTTPParameter("fuzzy");
+$FUZZY		= getHTTPParameter("fuzzy");
 if($FUZZY == "" || $FUZZY != 1) {
 	$FUZZY = 0;
 }
@@ -43,20 +43,20 @@ if($FUZZY == "" || $FUZZY != 1) {
 if($LANGUAGE_ID == "All") {
 	$LANGUAGE_ID = "";
 }
-$LIMIT 		= $App->getHTTPParameter("limit");
+$LIMIT 		= getHTTPParameter("limit");
 if($LIMIT == "" || $LIMIT <= 0 || $LIMIT > 20000) {
 	$LIMIT = 200;
 }
-$LAYOUT 		= $App->getHTTPParameter("layout");
+$LAYOUT 		= getHTTPParameter("layout");
 if($LAYOUT == "list" || $LAYOUT == "table") {
 	$incfile = "content/en_recent_html_" . $LAYOUT . ".php";
 }
-$FORMAT		= $App->getHTTPParameter("format");
+$FORMAT		= getHTTPParameter("format");
 if($FORMAT == "rss") {
 	$incfile 		= "content/en_recent_rss.php";
 }
-$USERID		= $App->getHTTPParameter("userid");
-$SUBMIT 	= $App->getHTTPParameter("submit");
+$USERID		= getHTTPParameter("userid");
+$SUBMIT 	= getHTTPParameter("submit");
 
 $sql = "SELECT DISTINCT pv.project_id, pv.version FROM project_versions AS pv INNER JOIN map_files as m ON pv.project_id = m.project_id AND pv.version = m.version WHERE pv.is_active ORDER BY pv.project_id ASC, pv.version DESC";
 $rs_p_list = mysql_query($sql, $dbh);
@@ -67,23 +67,23 @@ $rs_l_list = mysql_query($sql, $dbh);
 $where = " t.is_active ";
 
 if($PROJECT_ID != "") {
-	$where = $App->addAndIfNotNull($where) . " f.project_id = ";
-	$where .= $App->returnQuotedString($App->sqlSanitize($PROJECT_ID, $dbh));
+	$where = addAndIfNotNull($where) . " f.project_id = ";
+	$where .= returnQuotedString(sqlSanitize($PROJECT_ID, $dbh));
 }
 if($LANGUAGE_ID != "") {
-	$where = $App->addAndIfNotNull($where) . " t.language_id = ";
-	$where .= $App->returnQuotedString($App->sqlSanitize($LANGUAGE_ID, $dbh));
+	$where = addAndIfNotNull($where) . " t.language_id = ";
+	$where .= returnQuotedString(sqlSanitize($LANGUAGE_ID, $dbh));
 }
 if($VERSION != "") {
-	$where = $App->addAndIfNotNull($where) . "f.version = ";
-	$where .= $App->returnQuotedString($App->sqlSanitize($VERSION, $dbh));
+	$where = addAndIfNotNull($where) . "f.version = ";
+	$where .= returnQuotedString(sqlSanitize($VERSION, $dbh));
 }
 if($USERID != "") {
-	$where = $App->addAndIfNotNull($where) . "u.userid = ";
-	$where .= $App->sqlSanitize($USERID, $dbh);
+	$where = addAndIfNotNull($where) . "u.userid = ";
+	$where .= sqlSanitize($USERID, $dbh);
 }
 if($FUZZY == 1) {
-	$where = $App->addAndIfNotNull($where) . "t.possibly_incorrect = 1 ";
+	$where = addAndIfNotNull($where) . "t.possibly_incorrect = 1 ";
 }
 
 if($where != "") {

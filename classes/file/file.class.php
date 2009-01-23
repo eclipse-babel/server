@@ -29,7 +29,7 @@ class File {
 	function save() {
 		$rValue = false;
 		if($this->name != "" && $this->project_id != "" && $this->version != "") {
-			global $App, $dbh;
+			global $dbh;
 
 			if($this->file_id == 0) {
 				$this->file_id = $this->getFileID($this->name, $this->project_id, $this->version);
@@ -39,18 +39,18 @@ class File {
 			$where = "";
 			if($this->file_id > 0) {
 				$sql = "UPDATE";
-				$where = " WHERE file_id = " . $App->sqlSanitize($this->file_id, $dbh);
+				$where = " WHERE file_id = " . sqlSanitize($this->file_id, $dbh);
 			}
 			
 			$Event = new EventLog("files", "file_id", $this->file_id, $sql);
 			
 			$sql .= " files 
-						SET file_id 	= " . $App->sqlSanitize($this->file_id, $dbh) . ",
-							project_id	= " . $App->returnQuotedString($App->sqlSanitize($this->project_id, $dbh)) . ", 
-							version		= " . $App->returnQuotedString($App->sqlSanitize($this->version, $dbh)) . ", 
-							name		= " . $App->returnQuotedString($App->sqlSanitize($this->name, $dbh)) . ",
-							plugin_id	= " . $App->returnQuotedString($App->sqlSanitize($this->plugin_id, $dbh)) . ",
-							is_active	= " . $this->isActive . $where;
+						SET file_id 	= " . sqlSanitize($this->file_id, $dbh) . ",
+							project_id	= " . returnQuotedString(sqlSanitize($this->project_id, $dbh)) . ", 
+							version		= " . returnQuotedString(sqlSanitize($this->version, $dbh)) . ", 
+							name		= " . returnQuotedString(sqlSanitize($this->name, $dbh)) . ",
+							plugin_id	= " . returnQuotedString(sqlSanitize($this->plugin_id, $dbh)) . ",
+							is_active	= " . isActive . $where;
 			if(mysql_query($sql, $dbh)) {
 				if($this->file_id == 0) {
 					$this->file_id = mysql_insert_id($dbh);
@@ -73,14 +73,14 @@ class File {
 	static function getFileID($_name, $_project_id, $_version) {
 		$rValue = -1;
 		if($_name != "" && $_project_id != "" && $_version != "") {
-			global $App, $dbh;
+			global $dbh;
 
 			$sql = "SELECT file_id
 				FROM 
 					files 
-				WHERE name = " . $App->returnQuotedString($App->sqlSanitize($_name, $dbh)) . "
-					AND project_id = " . $App->returnQuotedString($App->sqlSanitize($_project_id, $dbh)) . "	
-					AND version = '" . $App->sqlSanitize($_version, $dbh) . "'";
+				WHERE name = " . returnQuotedString(sqlSanitize($_name, $dbh)) . "
+					AND project_id = " . returnQuotedString(sqlSanitize($_project_id, $dbh)) . "	
+					AND version = '" . sqlSanitize($_version, $dbh) . "'";
 
 			$result = mysql_query($sql, $dbh);
 			if($result && mysql_num_rows($result) > 0) {
@@ -95,7 +95,7 @@ class File {
 		$rValue = "";
 		if($_content != "") {
 			
-			global $User, $App;
+			global $User;
 			
 			# step 1 - import existing strings.  $String->save() will deal with merges
 			$previous_line 	= "";
@@ -134,7 +134,7 @@ class File {
 							$String->name 		= $tags[0];
 							$String->value 		= $tags[1];
 							$String->userid 	= $User->userid;
-							$String->created_on = $App->getCURDATE();
+							$String->created_on = getCURDATE();
 							$String->is_active 	= 1;
 							$String->save();
 						}

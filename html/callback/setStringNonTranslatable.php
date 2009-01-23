@@ -1,8 +1,8 @@
 <?php
 require_once("cb_global.php");
 
-$string_id = $App->getHTTPParameter("string_id", "POST");
-$checked_state = $App->getHTTPParameter("check", "POST");
+$string_id = getHTTPParameter("string_id", "POST");
+$checked_state = getHTTPParameter("check", "POST");
 
 $query = "select value from strings where string_id = '".addslashes($string_id)."'";
 $res = mysql_query($query,$dbh);

@@ -14,34 +14,12 @@
 if(!defined('BABEL_BASE_DIR')){
 	define('BABEL_BASE_DIR', "../");
 }
-if(!defined('USE_PHOENIX')) {
-	define('USE_PHOENIX', 		true);
-}
+
 define("COOKIE_REMEMBER",	"cBABEL");
 define("COOKIE_SESSION" ,	"sBABEL");
 
 require('common_functions.php');
-# Load up Phoenix classes
-global $App;
-if(USE_PHOENIX) {
-	require_once(BABEL_BASE_DIR . 'html/eclipse.org-common/system/app.class.php');
-	require_once(BABEL_BASE_DIR . "html/eclipse.org-common/system/nav.class.php");
-	require_once(BABEL_BASE_DIR . "html/eclipse.org-common/system/menu.class.php");
-	$App 	= new App();
-	$Nav	= new Nav();
-	$Menu 	= new Menu();
-	$MenuItemList = array();
-	$MenuItemList[0] = new MenuItem("Home", "./", "_self", 0);
-	$MenuItemList[1] = new MenuItem("For committers", "map_files.php", "_self", 0);
-	$MenuItemList[2] = new MenuItem("Recent Translations", "recent.php", "_self", 0);
-	$MenuItemList[3] = new MenuItem("About Babel", "http://www.eclipse.org/babel", "_self", 0);
-	$Menu->setMenuItemList($MenuItemList);
-	
-	# set Phoenix defaults to prevent errors. These can be overridden on the page.
-	$pageTitle		= "";
-	$pageAuthor		= "";
-	$pageKeywords	= "";
-}
+
 $GLOBALS['g_LOADTIME'] = microtime();
 require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
 require(BABEL_BASE_DIR . "classes/system/event_log.class.php");

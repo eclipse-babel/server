@@ -30,10 +30,10 @@ require(BABEL_BASE_DIR . "classes/file/file.class.php");
 $pageTitle 		= "Babel - Import file";
 $pageKeywords 	= "import,properties,translation,language,nlpack,pack,eclipse,babel";
 
-$FILE_ID 	= $App->getHTTPParameter("file_id");
-$PROJECT_ID = $App->getHTTPParameter("project_id");
-$FULLPATH 	= $App->getHTTPParameter("fullpath");
-$SUBMIT 	= $App->getHTTPParameter("submit");
+$FILE_ID 	= getHTTPParameter("file_id");
+$PROJECT_ID = getHTTPParameter("project_id");
+$FULLPATH 	= getHTTPParameter("fullpath");
+$SUBMIT 	= getHTTPParameter("submit");
 $strings  	= "";
 
 if($SUBMIT == "Import") {
@@ -64,7 +64,7 @@ if($SUBMIT == "Import") {
 				}
 			}
 			$filename = $_FILES['name']['name'];
-			$fullpath = $App->getHTTPParameter("fullpath", "POST");
+			$fullpath = getHTTPParameter("fullpath", "POST");
 			
 			if(!get_magic_quotes_gpc()){
 				$filename = addslashes($filename);

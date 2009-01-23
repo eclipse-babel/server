@@ -14,7 +14,7 @@ header("Content-type: text/plain");
 include("global.php");
 InitPage("");
 
-global $App, $dbh;
+global $dbh;
 
 
 $value = $_GET['string'];

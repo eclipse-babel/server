@@ -13,6 +13,6 @@
 
 require_once("cb_global.php");
 
-$_SESSION['language'] = $App->getHTTPParameter("lang", "POST");
+$_SESSION['language'] = getHTTPParameter("lang", "POST");
 
 ?>

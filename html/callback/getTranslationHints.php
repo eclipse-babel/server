@@ -13,7 +13,7 @@ require_once("cb_global.php");
 
 $return = array();
 
-$tr_string = $App->getHTTPParameter("tr_string", "POST");
+$tr_string = getHTTPParameter("tr_string", "POST");
 
 if(isset($_SESSION['language']) and isset($_SESSION['version']) and isset($_SESSION['project'])){
 	$language = $_SESSION['language'];

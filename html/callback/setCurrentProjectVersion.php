@@ -13,5 +13,5 @@
 
 require_once("cb_global.php");
 
-$_SESSION['version'] = $App->getHTTPParameter("version", "POST");
+$_SESSION['version'] = getHTTPParameter("version", "POST");
 ?>

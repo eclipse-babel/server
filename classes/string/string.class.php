@@ -24,7 +24,7 @@ class String {
 	function save() {
 		$rValue = false;
 		if($this->file_id != 0 && $this->name != "" && $this->userid > 0) {
-			global $App, $dbh;
+			global $dbh;
 
 			$String = $this->getStringFromName($this->file_id, $this->name);
 			if($String->value != $this->value || $String->is_active != $this->is_active) {
@@ -36,19 +36,19 @@ class String {
 					$this->is_active = 1;
 					$sql = "UPDATE";
 					$created_on = "created_on";
-					$where = " WHERE string_id = " . $App->sqlSanitize($this->string_id, $dbh);
+					$where = " WHERE string_id = " . sqlSanitize($this->string_id, $dbh);
 					$Event = new EventLog("strings", "string_id:old_value", $this->string_id . ":" . $String->value, "UPDATE");
 					$Event->add();
 				}
 				
 				$sql .= " strings 
-							SET string_id 	= " . $App->sqlSanitize($this->string_id, $dbh) . ",
-								file_id		= " . $App->sqlSanitize($this->file_id, $dbh) . ", 
-								name		= " . $App->returnQuotedString($App->sqlSanitize($this->name, $dbh)) . ",
-								value		= " . $App->returnQuotedString($App->sqlSanitize($this->value, $dbh)) . ",
-								userid		= " . $App->returnQuotedString($App->sqlSanitize($this->userid, $dbh)) . ",
+							SET string_id 	= " . sqlSanitize($this->string_id, $dbh) . ",
+								file_id		= " . sqlSanitize($this->file_id, $dbh) . ", 
+								name		= " . returnQuotedString(sqlSanitize($this->name, $dbh)) . ",
+								value		= " . returnQuotedString(sqlSanitize($this->value, $dbh)) . ",
+								userid		= " . returnQuotedString(sqlSanitize($this->userid, $dbh)) . ",
 								created_on	= " . $created_on . ",
-								is_active	= " . $App->sqlSanitize($this->is_active, $dbh) . $where;
+								is_active	= " . sqlSanitize($this->is_active, $dbh) . $where;
 				if(mysql_query($sql, $dbh)) {
 					if($this->string_id == 0) {
 						$this->string_id = mysql_insert_id($dbh);
@@ -77,14 +77,14 @@ class String {
 	function getStringFromName($_file_id, $_name) {
 		$rValue = new String();
 		if($_file_id > 0 && $_name != "") {
-			global $App, $dbh;
+			global $dbh;
 
 		# Bug 236454 - string token needs to be case sensitive
 		$sql = "SELECT *
 				FROM 
 					strings
-				WHERE file_id = " . $App->sqlSanitize($_file_id, $dbh) . "
-					AND BINARY(name) = " . $App->returnQuotedString($App->sqlSanitize($_name, $dbh));	
+				WHERE file_id = " . sqlSanitize($_file_id, $dbh) . "
+					AND BINARY(name) = " . returnQuotedString(sqlSanitize($_name, $dbh));	
 
 			$result = mysql_query($sql, $dbh);
 			if($result && mysql_num_rows($result) > 0) {
@@ -112,12 +112,12 @@ class String {
 	function getActiveStrings($_file_id) {
 		$rValue = Array();
 		if($_file_id > 0) {
-			global $App, $dbh;
+			global $dbh;
 
 			$sql = "SELECT *
 				FROM 
 					strings
-				WHERE file_id = " . $App->sqlSanitize($_file_id, $dbh) . "
+				WHERE file_id = " . sqlSanitize($_file_id, $dbh) . "
 					AND is_active = 1";	
 
 			$result = mysql_query($sql, $dbh);
@@ -145,10 +145,10 @@ class String {
 	function deactivate($_string_id) {
 		$rValue = 0;
 		if($_string_id > 0) {
-			global $App, $dbh;
+			global $dbh;
 
 			$sql = "UPDATE strings 
-					SET is_active = 0 WHERE string_id = " . $App->sqlSanitize($_string_id, $dbh);	
+					SET is_active = 0 WHERE string_id = " . sqlSanitize($_string_id, $dbh);	
 
 			$rValue = mysql_query($sql, $dbh);
 			

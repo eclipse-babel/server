@@ -20,10 +20,10 @@ require_once(BABEL_BASE_DIR . "classes/system/session.class.php");
 $pageTitle 		= "Contribute Translations to Babel";
 $pageKeywords 	= "translation,language,nlpack,pack,eclipse,babel";
 
-$USERNAME 	= $App->getHTTPParameter("username", "POST");
-$PASSWORD 	= $App->getHTTPParameter("password", "POST");
-$REMEMBER 	= $App->getHTTPParameter("remember", "POST");
-$SUBMIT 	= $App->getHTTPParameter("submit");
+$USERNAME 	= getHTTPParameter("username", "POST");
+$PASSWORD 	= getHTTPParameter("password", "POST");
+$REMEMBER 	= getHTTPParameter("remember", "POST");
+$SUBMIT 	= getHTTPParameter("submit");
 
 if(!isset($_SESSION['login_failed_attempts'])){
 	$_SESSION['login_failed_attempts'] = array();

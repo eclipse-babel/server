@@ -14,7 +14,6 @@
  * Documentation: http://wiki.eclipse.org/Babel_/_Server_Tool_Specification#Outputs
  */
 
-ob_start();
 ini_set("memory_limit", "64M");
 define("BABEL_BASE_DIR", "../../");
 require(BABEL_BASE_DIR . "html/common_functions.php"); // $context is defined in this file

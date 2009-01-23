@@ -36,7 +36,7 @@ HELP;
 
 error_reporting(E_ALL); ini_set("display_errors", true);
 
-ob_start();
+
 ini_set("memory_limit", "256M");
 define("BABEL_BASE_DIR", "../../");
 require_once(BABEL_BASE_DIR . 'html/eclipse.org-common/system/app.class.php');

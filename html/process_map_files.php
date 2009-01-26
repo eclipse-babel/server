@@ -22,7 +22,7 @@ if(!isset($User)) {
 }
 
 
-require(BABEL_BASE_DIR . "classes/file/file.class.php");
+require(dirname(__FILE__) . "/../classes/file/file.class.php");
 $html_spacer = "  ";
 
 global $dbh;

@@ -11,9 +11,6 @@
  *    Eclipse Foundation
  *    Scott Reynen scott at randomchaos com - toescapedunicode
 *******************************************************************************/
-if(!defined('BABEL_BASE_DIR')){
-	define('BABEL_BASE_DIR', "../");
-}
 
 define("COOKIE_REMEMBER",	"cBABEL");
 define("COOKIE_SESSION" ,	"sBABEL");
@@ -21,9 +18,9 @@ define("COOKIE_SESSION" ,	"sBABEL");
 require('common_functions.php');
 
 $GLOBALS['g_LOADTIME'] = microtime();
-require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
-require(BABEL_BASE_DIR . "classes/system/event_log.class.php");
-require_once(BABEL_BASE_DIR . "classes/system/user.class.php");
+require(dirname(__FILE__) . "/../classes/system/dbconnection.class.php");
+require(dirname(__FILE__) . "/../classes/system/event_log.class.php");
+require_once(dirname(__FILE__) . "/../classes/system/user.class.php");
 
 
 
@@ -54,7 +51,7 @@ function InitPage($login) {
   
   	if(isset($_COOKIE[COOKIE_REMEMBER])) {
   		# Try to fetch username from session
-  		require_once(BABEL_BASE_DIR . "classes/system/session.class.php");
+  		require_once(dirname(__FILE__) . "/../classes/system/session.class.php");
   		$Session = new Session();
 
   		if(!$Session->validate()) {

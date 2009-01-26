@@ -15,10 +15,9 @@ ini_set('display_errors', '1');
 // This script exports all the translations for each language as a CSV file.
 
 ini_set("memory_limit", "256M");
-define("BABEL_BASE_DIR", "../../");
-require(BABEL_BASE_DIR . "html/common_functions.php");
-require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
-require(BABEL_BASE_DIR . "classes/system/feature.class.php");
+require(dirname(__FILE__) . "/../../html/common_functions.php");
+require(dirname(__FILE__) . "/../../classes/system/dbconnection.class.php");
+require(dirname(__FILE__) . "/../system/feature.class.php");
 $dbc = new DBConnection();
 $dbh = $dbc->connect();
 

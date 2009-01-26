@@ -15,7 +15,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
-require_once(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
+require_once(dirname(__FILE__) . "/../classes/system/dbconnection.class.php");
 	
-DBConnection::connect(BABEL_BASE_DIR . 'spec/test.ini');
+DBConnection::connect(dirname(__FILE__) . '/test.ini');
 ?>

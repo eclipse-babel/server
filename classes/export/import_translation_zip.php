@@ -44,7 +44,7 @@ $headless = 1;
 $fuzzy = 1;
 
 
-require(BABEL_BASE_DIR . "classes/file/file.class.php");
+require(dirname(__FILE__) . "/../file/file.class.php");
 require_once("json_encode.php");
 
 $pageTitle 		= "Babel - Import Translation archive";

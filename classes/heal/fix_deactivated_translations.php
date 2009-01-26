@@ -15,8 +15,7 @@
 
 ini_set('memory_limit', '512M');
 
-define('BABEL_BASE_DIR', "../../");
-require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
+require(dirname(__FILE__) . "/../system/dbconnection.class.php");
 $dbc = new DBConnection();
 $dbh = $dbc->connect();
 

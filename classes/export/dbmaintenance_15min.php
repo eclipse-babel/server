@@ -16,10 +16,9 @@
 	 * It is run every 15 minutes
 	 */
 
-	define('BABEL_BASE_DIR', "../../");
-	require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
+	require(dirname(__FILE__) . "../system/dbconnection.class.php");
 	
-	if (!($ini = @parse_ini_file(BABEL_BASE_DIR . 'classes/base.conf'))) {
+	if (!($ini = @parse_ini_file(dirname(__FILE__) . '../base.conf'))) {
 		errorLog("Failed to find/read database conf file - aborting.");
 		exitTo("error.php?errNo=101300","error: 101300 - database conf can not be found");
 	}
@@ -35,7 +34,7 @@
 	# refresh the scoreboard -- not every 15 minutes!
 	$forceRefresh = strcasecmp(getenv("FORCE_BABEL_REFRESH"), "true");
 	if(rand(1, 100) < 6 || $forceRefresh) {
-		require_once(BABEL_BASE_DIR . "classes/system/scoreboard.class.php");
+		require_once(dirname(__FILE__) . "../system/scoreboard.class.php");
 		$sb = new Scoreboard();
 		$sb->refresh();
 		

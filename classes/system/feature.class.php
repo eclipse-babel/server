@@ -10,7 +10,7 @@
  *    Antoine Toulme, Intalio Inc. bug 248845: Refactoring generate1.php into different files with a functional approach
 *******************************************************************************/
 
-require_once(BABEL_BASE_DIR . "classes/system/fragment.class.php"); 
+require_once(dirname(__FILE__) . "/fragment.class.php"); 
 
 class Feature {
 	public $language;

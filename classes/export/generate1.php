@@ -24,18 +24,14 @@
 define("METADATA_GENERATOR_LOCATION", "/home/genie/eclipse"); // you might want to read this value from a config file. Not sure yet.
 
 ini_set("memory_limit", "64M");
-define("BABEL_BASE_DIR", "../../");
-require(BABEL_BASE_DIR . "html/common_functions.php");
-require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
+require(dirname(__FILE__) . "/../../html/common_functions.php");
+require(dirname(__FILE__) . "/../system/dbconnection.class.php");
 $dbc = new DBConnection();
 $dbh = $dbc->connect();
 
 $work_dir = "/home/babel-working/";
-if (!($ini = @parse_ini_file(BABEL_BASE_DIR . "classes/base.conf"))) {
-	errorLog("Failed to find/read database conf file - aborting.");
-	exitTo("error.php?errNo=101300","error: 101300 - database conf can not be found");
-}
-$context = $ini['context'];
+
+global $context;
 
 $work_context_dir = $work_dir . $context . "/";
 $tmp_dir = $work_context_dir . "tmp/";
@@ -416,7 +412,7 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 	
 	// now generate the metadata and add the non-greedy tags
 	
-	system("sh " . BABEL_BASE_DIR . "classes/export/runMetadata.sh ". 
+	system("sh " . dirname(__FILE__) . "/runMetadata.sh ". 
 	   METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
 	system("xsltproc -o ${output_dir_for_train}content.xml ".
            dirname(__FILE__) . "/content.xsl ${output_dir_for_train}content.xml");

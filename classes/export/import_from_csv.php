@@ -38,12 +38,11 @@ error_reporting(E_ALL); ini_set("display_errors", true);
 
 
 ini_set("memory_limit", "256M");
-define("BABEL_BASE_DIR", "../../");
-require_once(BABEL_BASE_DIR . 'html/eclipse.org-common/system/app.class.php');
-require_once(BABEL_BASE_DIR . "html/common_functions.php");
-require_once(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
-require_once(BABEL_BASE_DIR . "classes/system/feature.class.php");
-require_once(BABEL_BASE_DIR . "classes/system/user.class.php");
+require_once(dirname(__FILE__) . '/../../html/eclipse.org-common/system/app.class.php');
+require_once(dirname(__FILE__) . "/../../html/common_functions.php");
+require_once(dirname(__FILE__) . "/../system/dbconnection.class.php");
+require_once(dirname(__FILE__) . "/../system/feature.class.php");
+require_once(dirname(__FILE__) . "/../system/user.class.php");
 
 $dbc = new DBConnection();
 $dbh = $dbc->connect();

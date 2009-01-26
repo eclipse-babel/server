@@ -18,12 +18,8 @@ header("Content-type: text/plain");
 include("global.php");
 InitPage("");
 
-if(defined('BABEL_BASE_DIR')){
-	require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
-}else{
-    define('BABEL_BASE_DIR', "../../");
-    require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
-} 
+require(dirname(__FILE__) . "/../system/dbconnection.class.php");
+require(dirname(__FILE__) . "/../html/common_functions.php");
 
 if( !function_exists('json_encode') ){
 	require("/home/data/httpd/babel.eclipse.org/html/json_encode.php");
@@ -33,16 +29,10 @@ if( !function_exists('json_encode') ){
 	}
 }
 
-if (!($ini = @parse_ini_file(BABEL_BASE_DIR . 'classes/base.conf'))) {
-	errorLog("Failed to find/read database conf file - aborting.");
-	exitTo("error.php?errNo=101300","error: 101300 - database conf can not be found");
-}
-  
-$context = $ini['context'];
+global $context;
 if($context == "") {
 	$context = "staging";
 }
-global $context;
 
 $User = getSyncupUser();
 

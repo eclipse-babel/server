@@ -10,13 +10,13 @@
  *    Antoine Toulme, Intalio Inc. bug 248845: Refactoring generate1.php into different files with a functional approach
 *******************************************************************************/
 
-require_once(BABEL_BASE_DIR . "classes/system/project.class.php"); 
-require_once(BABEL_BASE_DIR . "classes/file/file.class.php"); 
+require_once(dirname(__FILE__) . "/project.class.php"); 
+require_once(dirname(__FILE__) . "/../file/file.class.php"); 
 
-require_once(BABEL_BASE_DIR . "html/common_functions.php");
+require_once(dirname(__FILE__) . "/../../html/common_functions.php");
 
 // constants
-define("LEGAL_FILES_DIR", BABEL_BASE_DIR . "classes/export/source_files_for_generate/");
+define("LEGAL_FILES_DIR", dirname(__FILE__) . "/../export/source_files_for_generate/");
 
 class Fragment {
 	public $files;

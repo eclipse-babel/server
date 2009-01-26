@@ -10,10 +10,8 @@
  *    Antoine Toulme, Intalio Inc.
 *******************************************************************************/
 
-define('BABEL_BASE_DIR', "../../");
-
 require("../spec_helper.php");
-require(BABEL_BASE_DIR . "classes/system/addons_management.php");
+require(dirname(__FILE__) . "/../../classes/system/addons_management.php");
 
 
 

@@ -10,10 +10,10 @@
  *    Eclipse Foundation - initial API and implementation
  *    Antoine Toulmé - Bug 248917
 *******************************************************************************/
-require(BABEL_BASE_DIR . "classes/system/language.class.php"); 
-require(BABEL_BASE_DIR . "classes/system/release_train.class.php"); 
+require(dirname(__FILE__) . "/../system/language.class.php"); 
+require(dirname(__FILE__) . "/../system/release_train.class.php"); 
 
-require(BABEL_BASE_DIR . "classes/string/string.class.php");
+require(dirname(__FILE__) . "/../string/string.class.php");
 
 class File {
   public $errStrs;

@@ -24,7 +24,7 @@ class AddonsManagement {
     function AddonsManagement($addon = null, $ini_file_path = null) {
         if (!isSet($addon)) {
             if (!isSet($ini_file_path)) {
-                $ini_file_path = BABEL_BASE_DIR . 'classes/base.conf';
+                $ini_file_path = dirname(__FILE__) . '/../base.conf';
             }
             if (!($ini = @parse_ini_file($ini_file_path)) || !isSet($ini['addons'])) {
                 error_log("Failed to find/read conf file - aborting.");
@@ -40,7 +40,7 @@ class AddonsManagement {
      * Loads the addon, register the hooks for html functions.
      */
     public function load_html_functions() {
-        require_once(BABEL_BASE_DIR . "addons/" . $this->addon . "/html_functions.php");
+        require_once(dirname(__FILE__) . "/../../addons/" . $this->addon . "/html_functions.php");
         __register($this);
     }
     
@@ -48,7 +48,7 @@ class AddonsManagement {
      * Loads the addon, register the hooks for backend functions.
      */
     public function load_backend_functions() {
-        require_once(BABEL_BASE_DIR . "addons/" . $this->addon . "/backend_functions.php");
+        require_once(dirname(__FILE__) . "/../../addons/" . $this->addon . "/backend_functions.php");
         __register($this);
     }
     

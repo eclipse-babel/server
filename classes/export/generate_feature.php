@@ -15,10 +15,9 @@
  */
 
 ini_set("memory_limit", "64M");
-define("BABEL_BASE_DIR", "../../");
-require(BABEL_BASE_DIR . "html/common_functions.php"); // $context is defined in this file
-require(BABEL_BASE_DIR . "classes/system/dbconnection.class.php");
-require(BABEL_BASE_DIR . "classes/system/feature.class.php");
+require(dirname(__FILE__) . "/../../html/common_functions.php"); // $context is defined in this file
+require(dirname(__FILE__) . "/../system/dbconnection.class.php");
+require(dirname(__FILE__) . "/../system/feature.class.php");
 $dbc = new DBConnection();
 $dbh = $dbc->connect();
 

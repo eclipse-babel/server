@@ -129,19 +129,10 @@
 		}
 	}
 	
-	function fnCheckUrl() {
-		if(!document.form1.location.value.match(/view=co/)) {
-			alert("The ViewCVS URL must contain view=co");
-			document.form1.submit.disabled = "disabled";
-		}
-		else {
-			document.form1.submit.disabled = "";
-
-			var re = /\/([A-Za-z0-9_-]+\.map)/;
-			var match = re.exec(document.form1.location.value)
-			document.form1.filename.value = match[1];
-		}
-	}
+<?php
+global $addon;
+echo $addon->callHook('validate_map_file_url');
+?>
 
 	var versions = new Array();
 	

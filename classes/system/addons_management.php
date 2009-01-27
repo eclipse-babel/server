@@ -21,19 +21,23 @@ class AddonsManagement {
      * You can directly pass the addon name, or have it be consumed
      * from a properties file as a separate location, under the key "addon".
      */
-    function AddonsManagement($addon = null, $ini_file_path = null) {
+    function AddonsManagement($addon = null) {
         if (!isSet($addon)) {
             if (!isSet($ini_file_path)) {
-                $ini_file_path = dirname(__FILE__) . '/../base.conf';
+                $ini_file_path = dirname(__FILE__) . '/../../addons/addons.conf';
             }
-            if (!($ini = @parse_ini_file($ini_file_path)) || !isSet($ini['addons'])) {
-                error_log("Failed to find/read conf file - aborting.");
-                exitTo("error.php?errNo=101300","error: 101300 - conf can not be found");
+            
+            if (($ini = @parse_ini_file($ini_file_path)) && isSet($ini['addons'])) {
+                $addon = $ini['addons'];
             }
-            $addon = $ini['addons'];
+            if (!isSet($addon)) {
+                $addon = $_ENV['BABEL_ADDONS'];
+            }
+            if (!isSet($addon)) {
+                exitTo();
+            }
         }
         $this->addon = $addon;
-        debug_backtrace();
     }
     
     /**
@@ -41,7 +45,7 @@ class AddonsManagement {
      */
     public function load_html_functions() {
         require_once(dirname(__FILE__) . "/../../addons/" . $this->addon . "/html_functions.php");
-        __register($this);
+        __register_html($this);
     }
     
     /**
@@ -49,7 +53,7 @@ class AddonsManagement {
      */
     public function load_backend_functions() {
         require_once(dirname(__FILE__) . "/../../addons/" . $this->addon . "/backend_functions.php");
-        __register($this);
+        __register_backend($this);
     }
     
     /**
@@ -65,6 +69,13 @@ class AddonsManagement {
      */ 
     public function hook($hook_key) {
         return $this->hooks[$hook_key];
+    }
+    
+    /**
+     * Executes the function associated with the hook and returns the result
+     */ 
+    public function callHook($hook_key, $args = null) {
+        return call_user_func_array($this->hook($hook_key), $args);
     }
 }
 

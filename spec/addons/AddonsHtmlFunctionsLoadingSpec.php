@@ -33,7 +33,6 @@ class DescribeAddonsHtmlFunctionsLoading extends PHPSpec_Context {
     public function itShouldProvideAWayToValidateTheUrlOfAMapFile() {
         $this->spec($this->addon->hook("validate_map_file_url"))->shouldNot->beNull();
         $this->spec(call_user_func($this->addon->hook("validate_map_file_url")))->should->beTrue();
-        
     }
     
     

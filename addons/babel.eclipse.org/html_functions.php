@@ -11,7 +11,7 @@
 *******************************************************************************/
 
 // Use a class to define the hooks to avoid bugs with already defined functions.
-class Reference {
+class BabelEclipseOrg {
     /**
      * Returns the root path to the images.
      * May be a distant server or a local folder.
@@ -20,19 +20,29 @@ class Reference {
         return "http://dev.eclipse.org";
     }
     
-    /**
-     * Returns a string representing a JS function named fnCheckUrl that
-     * is called to check on the integrity of the url of the map file.
-     */
     function validateMapFileUrl($url) {
-        return "function fnCheckUrl() {}";
+        return <<<JS
+        function fnCheckUrl() {
+            if(!document.form1.location.value.match(/view=co/)) {
+               alert("The ViewCVS URL must contain view=co");
+                document.form1.submit.disabled = "disabled";
+            }
+            else {
+                document.form1.submit.disabled = "";
+
+                var re = /\/([A-Za-z0-9_-]+\.map)/;
+                var match = re.exec(document.form1.location.value)
+                document.form1.filename.value = match[1];
+            }
+        }
+JS;
     }
 
 }
 
 function __register_html($addon) {
-    $addon->register('image_root', array('Reference', '_imageRoot'));
-    $addon->register('validate_map_file_url', array('Reference', 'validateMapFileUrl'));
+    $addon->register('image_root', array('BabelEclipseOrg', '_imageRoot'));
+    $addon->register('validate_map_file_url', array('BabelEclipseOrg', 'validateMapFileUrl'));
 }
 
 ?>

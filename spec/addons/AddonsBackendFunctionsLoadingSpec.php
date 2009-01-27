@@ -11,8 +11,8 @@
 *******************************************************************************/
 
 require("../spec_helper.php");
-require(dirname(__FILE__) . "/../../classes/system/addons_management.php");
-
+require_once(dirname(__FILE__) . "/../../classes/system/addons_management.php");
+require_once(dirname(__FILE__) . "/../../classes/system/user.class.php");
 
 
 class DescribeAddonsBackendFunctionsLoading extends PHPSpec_Context {
@@ -26,7 +26,10 @@ class DescribeAddonsBackendFunctionsLoading extends PHPSpec_Context {
     
     public function itShouldHaveAddedAHookForUserAuthentication() {
         $this->spec($this->addon->hook("user_authentication"))->shouldNot->beNull();
-        call_user_func($this->addon->hook("user_authentication"), "babel@babel.eclipse.org", "somepassword");
+        $user = new User();
+        $user->load("babel@babel.eclipse.org", "somepassword");
+        $this->spec($user->userid > 0)->should->beTrue();
+        echo $user->userid;
     }
     
 }

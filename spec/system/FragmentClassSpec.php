@@ -10,21 +10,15 @@
  *    Antoine Toulme, Intalio Inc.
 *******************************************************************************/
 
-// Use a class to define the hooks to avoid bugs with already defined functions.
-class Reference {
-    /*
-     * Authenticate a user.
-     * Returns the User object if the user is found, or false
-     */
-    function authenticate($User, $email, $password) {
-        $User->userid = 5;
+define('BABEL_BASE_DIR', "../../");
+
+require("../spec_helper.php");
+require (BABEL_BASE_DIR . "classes/system/fragment.class.php");
+
+class DescribeFragmentClass extends PHPSpec_Context {
+
+	public function before() {
     }
 }
-
-function __register_backend($addon) {
-    $addon->register('user_authentication', array('Reference', 'authenticate'));
-}
-
-
 
 ?>

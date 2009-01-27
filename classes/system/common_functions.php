@@ -71,4 +71,40 @@
         
         return $_String;
     }
+    
+    function exitTo() {
+        # TODO: sqlClose();
+        if (func_num_args() == 1) {
+            $url = func_get_arg(0);
+            header("Location: $url");
+            exit;
+        } else if (func_num_args() == 2) {
+            $url  = func_get_arg(0);
+            $arg1 = func_get_arg(1);
+            SetSessionVar("errStr",$arg1);
+            header("Location: $url");
+            exit;
+        } else if (func_num_args() == 3) {
+            $url  = func_get_arg(0);
+             $arg1 = func_get_arg(1);
+            $arg2 = func_get_arg(2);
+            SetSessionVar($arg1,$arg2);
+            header("Location: $url");
+            exit;
+        }
+    }
+    
+    function GetSessionVar($varName) {
+        if (isset($_SESSION[$varName]))
+            return $_SESSION[$varName];
+        return 0;
+    }
+
+    function SetSessionVar($varName,$varVal) {
+        global $_SESSION;
+
+        $GLOBALS[$varName]  = $varVal;
+        $_SESSION[$varName] = $varVal;
+        return $varVal;
+    }
 ?>

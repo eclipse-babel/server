@@ -12,24 +12,25 @@
 
 require("../spec_helper.php");
 require_once(dirname(__FILE__) . "/../../classes/system/addons_management.php");
+
+global $addon;
+$addon = new AddonsManagement('reference');
+$addon->load_backend_functions();
+// load user after we have explicitly loaded the reference.
 require_once(dirname(__FILE__) . "/../../classes/system/user.class.php");
 
-
 class DescribeAddonsBackendFunctionsLoading extends PHPSpec_Context {
-
-    private $addon;
     
     public function before() {
-        $this->addon = new AddonsManagement('reference');
-        $this->addon->load_backend_functions();
+        
     }
     
     public function itShouldHaveAddedAHookForUserAuthentication() {
-        $this->spec($this->addon->hook("user_authentication"))->shouldNot->beNull();
+        global $addon;
+        $this->spec($addon->hook("user_authentication"))->shouldNot->beNull();
         $user = new User();
         $user->load("babel@babel.eclipse.org", "somepassword");
         $this->spec($user->userid > 0)->should->beTrue();
-        echo $user->userid;
     }
     
 }

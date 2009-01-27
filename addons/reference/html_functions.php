@@ -30,9 +30,12 @@ class Reference {
 
 }
 
-function __register_html($addon) {
+function __register_html_ref($addon) {
     $addon->register('image_root', array('Reference', '_imageRoot'));
     $addon->register('validate_map_file_url', array('Reference', 'validateMapFileUrl'));
 }
+
+global $register_function_html;
+$register_function_html = '__register_html_ref';
 
 ?>

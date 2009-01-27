@@ -10,8 +10,10 @@
  *    Antoine Toulme, Intalio Inc.
 *******************************************************************************/
 
+require (dirname(__FILE__) . "/../backend_functions.php");
+
 // Use a class to define the hooks to avoid bugs with already defined functions.
-class BabelEclipseOrg_backend {
+class BabelEclipseOrg_backend_staging {
     /*
      * Authenticate a user.
      * Adds data to the user object passed in argument if authenticated.
@@ -67,11 +69,11 @@ class BabelEclipseOrg_backend {
     }
 }
 
-function __register_backend($addon) {
-    $addon->register('user_authentication', array('BabelEclipseOrg_backend', 'authenticate'));
+function __register_backend_staging($addon) {
+    $addon->register('user_authentication', array('BabelEclipseOrg_backend_staging', 'authenticate'));
 }
 
 global $register_function_backend;
-$register_function_backend = '__register_backend';
+$register_function_backend = '__register_backend_staging';
 
 ?>

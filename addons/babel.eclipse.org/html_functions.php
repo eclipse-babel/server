@@ -45,4 +45,6 @@ function __register_html($addon) {
     $addon->register('validate_map_file_url', array('BabelEclipseOrg', 'validateMapFileUrl'));
 }
 
+global $register_function_html;
+$register_function_html = '__register_html';
 ?>

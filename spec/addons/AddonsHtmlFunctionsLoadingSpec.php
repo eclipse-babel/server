@@ -14,25 +14,26 @@
 require("../spec_helper.php");
 require(dirname(__FILE__) . "/../../classes/system/addons_management.php");
 
-
+global $addon;
+$addon = new AddonsManagement('reference');
+$addon->load_html_functions();
 
 class DescribeAddonsHtmlFunctionsLoading extends PHPSpec_Context {
 
-    private $addon;
-    
     public function before() {
-        $this->addon = new AddonsManagement('reference');
-        $this->addon->load_html_functions();
+        
     }
     
     public function itShouldHaveAddedAHookForImageRoot() {
-        $this->spec($this->addon->hook("image_root"))->shouldNot->beNull();
-        $this->spec(call_user_func($this->addon->hook("image_root")))->should->equal("http://dev.eclipse.org");
+        global $addon;
+        $this->spec($addon->hook("image_root"))->shouldNot->beNull();
+        $this->spec(call_user_func($addon->hook("image_root")))->should->equal("http://dev.eclipse.org");
     }
     
     public function itShouldProvideAWayToValidateTheUrlOfAMapFile() {
-        $this->spec($this->addon->hook("validate_map_file_url"))->shouldNot->beNull();
-        $this->spec(call_user_func($this->addon->hook("validate_map_file_url")))->should->beTrue();
+        global $addon;
+        $this->spec($addon->hook("validate_map_file_url"))->shouldNot->beNull();
+        $this->spec(call_user_func($addon->hook("validate_map_file_url")))->should->beTrue();
     }
     
     

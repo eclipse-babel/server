@@ -44,16 +44,22 @@ class AddonsManagement {
      * Loads the addon, register the hooks for html functions.
      */
     public function load_html_functions() {
-        require_once(dirname(__FILE__) . "/../../addons/" . $this->addon . "/html_functions.php");
-        __register_html($this);
+        global $register_function_html;
+        if (!function_exists($register_function_html)) {
+            require(dirname(__FILE__) . "/../../addons/" . $this->addon . "/html_functions.php");
+            call_user_func($register_function_html, $this);
+        }
     }
     
     /**
      * Loads the addon, register the hooks for backend functions.
      */
     public function load_backend_functions() {
-        require_once(dirname(__FILE__) . "/../../addons/" . $this->addon . "/backend_functions.php");
-        __register_backend($this);
+        global $register_function_backend;
+        if (!function_exists($register_function_backend)) {
+            require(dirname(__FILE__) . "/../../addons/" . $this->addon . "/backend_functions.php");
+            call_user_func($register_function_backend, $this);
+        }
     }
     
     /**
@@ -82,6 +88,7 @@ class AddonsManagement {
 /*
  * The default addon instance, to use in the product.
  */
+global $addon;
 $addon = new AddonsManagement();
 
 ?>

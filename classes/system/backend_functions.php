@@ -15,6 +15,7 @@ require_once(dirname(__FILE__) . "/../../classes/system/common_functions.php");
 
 // load the backend addon functions.
 require_once(dirname(__FILE__) . "/../../classes/system/addons_management.php");
+global $addon;
 $addon->load_backend_functions();
 
 require_once(dirname(__FILE__) . "/../../classes/system/user.class.php");

@@ -15,11 +15,17 @@ require (dirname(__FILE__) . "/../html_functions.php");
 // Use a class to define the hooks to avoid bugs with already defined functions.
 class BabelEclipseOrgStaging extends BabelEclipseOrg {
 
+    function head() {
+        BabelEclipseOrg::head();
+        echo "<h1 style='color: red'>This is the staging area. Don't do any serious translation work here!</h1><br/>";
+    }
 }
 
 function __register_html_staging($addon) {
     $addon->register('image_root', array('BabelEclipseOrgStaging', '_imageRoot'));
     $addon->register('validate_map_file_url', array('BabelEclipseOrgStaging', 'validateMapFileUrl'));
+    $addon->register('head', array('BabelEclipseOrgStaging', 'head'));
+    $addon->register('footer', array('BabelEclipseOrgStaging', 'footer'));
 }
 
 global $register_function_html;

@@ -111,8 +111,9 @@ $where
 ORDER BY t.created_on desc 
 LIMIT $LIMIT";
 $rs_p_stat = mysql_query($sql, $dbh);
-include("head.php");
+global $addon;
+$addon->callHook("head");
 include($incfile);
-include("foot.php");  
+$addon->callHook("footer");
 
 ?>

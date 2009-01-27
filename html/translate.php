@@ -16,7 +16,8 @@ InitPage("login");
 $pageTitle 		= "Babel Project";
 $pageKeywords 	= "translation,language,nlpack,pack,eclipse,babel";
 
-include("head.php");
+global $addon;
+$addon->callHook("head");
 
 
 //$_SESSION['language'] = "";
@@ -130,5 +131,6 @@ if (isset($_SESSION['filesOrder']) and $_SESSION['filesOrder'] == 'completion') 
 
 
 <?php
-	include("foot.php");
+	global $addon;
+    $addon->callHook("footer");
 ?>

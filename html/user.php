@@ -16,7 +16,8 @@ InitPage("login");
 $pageTitle 		= "Babel Project";
 $pageKeywords 	= "translation,language,nlpack,pack,eclipse,babel";
 
-include("head.php");
+global $addon;
+$addon->callHook("head");
 
 ?>
 
@@ -40,5 +41,6 @@ include("head.php");
 
 </div>
 <?php
-	include("foot.php");
+	global $addon;
+    $addon->callHook("footer");
 ?>

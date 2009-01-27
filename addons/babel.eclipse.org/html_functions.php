@@ -37,12 +37,28 @@ class BabelEclipseOrg {
         }
 JS;
     }
+    
+    /**
+     * Outputs the head of the html page.
+     */
+    function head() {
+        include(dirname(__FILE__) . "/html/head.php");
+    }
+    
+    /**
+     * Outputs the footer of the html page.
+     */
+    function footer() {
+        include(dirname(__FILE__) . "/html/foot.php");
+    }
 
 }
 
 function __register_html($addon) {
     $addon->register('image_root', array('BabelEclipseOrg', '_imageRoot'));
     $addon->register('validate_map_file_url', array('BabelEclipseOrg', 'validateMapFileUrl'));
+    $addon->register('head', array('BabelEclipseOrg', 'head'));
+    $addon->register('footer', array('BabelEclipseOrg', 'footer'));
 }
 
 global $register_function_html;

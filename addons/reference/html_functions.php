@@ -28,11 +28,24 @@ class Reference {
         return "function fnCheckUrl() {}";
     }
 
+    /**
+     * Outputs the head of the html page.
+     */
+    function head() {
+    }
+    
+    /**
+     * Outputs the footer of the html page.
+     */
+    function footer() {
+    }
 }
 
 function __register_html_ref($addon) {
     $addon->register('image_root', array('Reference', '_imageRoot'));
     $addon->register('validate_map_file_url', array('Reference', 'validateMapFileUrl'));
+    $addon->register('head', array('Reference', 'head'));
+    $addon->register('footer', array('Reference', 'footer'));
 }
 
 global $register_function_html;

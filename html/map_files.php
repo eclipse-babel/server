@@ -95,9 +95,10 @@ else {
 	$sql = "SELECT train_id, project_id, version FROM release_train_projects ORDER BY project_id, version ASC";
 	$rs_train_project_list = mysql_query($sql, $dbh);
 	
-	include("head.php");
+	global $addon;
+    $addon->callHook("head");
 	include($incfile);
-	include("foot.php");  
+    $addon->callHook("footer");
 }
 
 

@@ -15,7 +15,7 @@
 define("COOKIE_REMEMBER",	"cBABEL");
 define("COOKIE_SESSION" ,	"sBABEL");
 
-require('html_functions.php');
+require(dirname(__FILE__) . '/html_functions.php');
 
 $GLOBALS['g_LOADTIME'] = microtime();
 require(dirname(__FILE__) . "/../classes/system/dbconnection.class.php");

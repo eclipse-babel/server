@@ -17,7 +17,8 @@ InitPage("");
 $pageTitle 		= "Babel Project - Eclipse translation";
 $pageKeywords 	= "translation,language,nlpack,pack,eclipse,babel,english,french,german,chinese,japanese,spanish,arabic,hebrew,hungarian,polish,italian,russian,dutch,finnish,greek,norwegian,sweedish,turkish";
 
-include("head.php");
+global $addon;
+$addon->callHook("head");
 
 ?>
 <h1 id="page-message">Supported languages</h1>
@@ -47,5 +48,6 @@ echo $row;
 contact us</a> if the language you need is missing.</p>
 
 <?php
-	include("foot.php");
+	global $addon;
+    $addon->callHook("footer");
 ?>

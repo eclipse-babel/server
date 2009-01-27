@@ -76,10 +76,12 @@ if($SUBMIT == "Import") {
 		}
 }
 
-include("head.php");
+global $addon;
+$addon->callHook("head");
 
 include("content/en_import.php");
 
-include("foot.php");  
+global $addon;
+$addon->callHook("footer"); 
 
 ?>

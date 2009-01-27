@@ -63,8 +63,9 @@ if($where != "") {
 $sql = "SELECT p.project_id, p.version, l.name, l.locale, p.pct_complete FROM project_progress AS p INNER JOIN languages AS l ON l.language_id = p.language_id $where ORDER BY p.pct_complete DESC, p.project_id, p.version, l.name";
 $rs_p_stat = mysql_query($sql, $dbh);
 
-include("head.php");
+global $addon;
+$addon->callHook("head");
 include($incfile);
-include("foot.php");  
+$addon->callHook("footer");
 
 ?>

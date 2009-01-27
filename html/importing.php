@@ -16,7 +16,8 @@ InitPage("");
 $pageTitle 		= "Babel Project";
 $pageKeywords 	= "translation,language,nlpack,pack,eclipse,babel";
 
-include("head.php");
+global $addon;
+$addon->callHook("head");
 
 
 
@@ -58,5 +59,6 @@ include("head.php");
 <script>YAHOO.languageManager.getAjaxLanguages();</script>
 
 <?php
-	include("foot.php");
+	global $addon;
+    $addon->callHook("footer");
 ?>

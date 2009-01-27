@@ -80,9 +80,11 @@ if($SUBMIT == "Logout") {
 # TODO: finish the intro text
 
 
-include("head.php");
+global $addon;
+$addon->callHook("head");
 
 include("content/en_login.php");
 
-include("foot.php");  
+global $addon;
+$addon->callHook("footer");
 ?>

@@ -12,6 +12,7 @@
  *    Matthew Mazaika <mmazaik  us.ibm.com> - bug 242011
 *******************************************************************************/
 
+require_once(dirname(__FILE__) . "/backend_functions.php");
 
 class User {
   public $errStrs;

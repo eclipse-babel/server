@@ -9,6 +9,8 @@
  * Contributors:
  *    Eclipse Foundation - Initial API and implementation
  *    Antoine Toulmé - Bug 248917
+ *    Motorola  - Change SVN map file format to follow SVN PDE
+ *    Gustavo de Paula - Bug 261252
 *******************************************************************************/
 header("Content-type: text/plain");
 include("global.php");
@@ -176,7 +178,7 @@ function parseLocation($in_string) {
 	# v_832,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,
 	# v20080204,:pserver:anonymous@dev.eclipse.org:/cvsroot/birt,,source/org.eclipse.birt.report.designer.core
 	# v200802262150,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query
-	# SVN,trunk,http://dev.eclipse.org/svnroot/stp,,org.eclipse.stp.bpmn/trunk/org.eclipse.stp.bpmn
+	# SVN,tags/1.0M5,http://dev.eclipse.org/svnroot/dsdp/org.eclipse.mtj,,features/org.eclipse.mtj
 	# svn://dev.eclipse.org/svnroot/stp/org.eclipse.stp.bpmn/trunk/
 	
 	$aTheseElements = array();
@@ -192,11 +194,15 @@ function parseLocation($in_string) {
 			$aTheseElements['cvsroot'] = $location_part;
 		}
 		# SVNROOT
-		# SVN,trunk,http://dev.eclipse.org/svnroot/stp,,org.eclipse.stp.bpmn/trunk/org.eclipse.stp.bpmn
-		# maps to: svn://dev.eclipse.org/svnroot/stp/org.eclipse.stp.bpmn/trunk/
+		# SVN,<tagPath>[:revision],<svnRepositoryURL>,<preTagPath>,<postTagPath>
+		# maps to: svn://<svnRepositoryURL>/<preTagPath>/<tagPath>/<postTagPath>
 		if(preg_match("/^(http|svn):\/\//", $location_part)) {
 			$location_part = str_replace("http", "svn", $location_part);
-			$aTheseElements['svnroot'] = $location_part . "/" . $aLocation[4];
+            if ($aLocation[3] == ' ' || $aLocation[3] == '') {
+                $aTheseElements['svnroot'] = $location_part . "/" . $aLocation[1] . "/" . $aLocation[4];
+            } else {
+                $aTheseElements['svnroot'] = $location_part . "/" . $aLocation[3] . "/" . $aLocation[1] . "/" . $aLocation[4];         
+            }
 		}
 	}
 	

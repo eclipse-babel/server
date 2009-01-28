@@ -40,7 +40,7 @@ echo "Connection established, ready to begin; The syncup user id is $User->useri
 $langs = mysql_query( "SELECT language_id FROM languages where languages.is_active" );
 while( ($lang_row = mysql_fetch_assoc($langs)) != null ) {
 	$language_id = $lang_row['language_id'];
-    echo "Investigating language " . $language_id;
+    echo "Investigating language " . $language_id . "\n\n";
 	$untranslated_strings = mysql_query( "SELECT * from strings where is_active and value <> '' and string_id not in(select string_id from translations where language_id=". $language_id .")" );
     while ( ($string_row = mysql_fetch_assoc($untranslated_strings)) != null) {
 		$untranslated_value = $string_row['value'];
@@ -49,7 +49,7 @@ while( ($lang_row = mysql_fetch_assoc($langs)) != null ) {
        	if ($possible_translations and (($translation_row = mysql_fetch_assoc($possible_translations)) != null)) {
 			$translation = $translation_row['value'];
            	$query = "INSERT INTO translations(string_id, language_id, value, userid, created_on, possibly_incorrect) values('". addslashes($untranslated_id) ."','". addslashes($language_id) ."','" . addslashes($translation) . "', '". addslashes($User->userid) ."', NOW(), 1)";
-           	echo $query . "\n";
+           	echo "\tTranslating ". addslashes($untranslated_id) ." with: " . addslashes($translation) . "\n";
 			mysql_query($query);
 		}
     }

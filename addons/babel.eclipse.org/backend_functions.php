@@ -65,10 +65,31 @@ class BabelEclipseOrg_backend {
             $GLOBALS['g_ERRSTRS'][1] = mysql_error();
         }
     }
+    
+    /**
+     * Returns a user that is specialized in running the syncup script.
+     */
+    function syncupUser() {
+        $User = new User();
+        $User->loadFromID(57110);
+        return $User;
+    }
+    
+    /**
+     * Returns the genie user that represents the headless admin for most operations,
+     * like importing a zip of translations.
+     */
+    function genieUser() {
+        $User = new User();
+        $User->loadFromID(40623);
+        return $User;
+    }
 }
 
 function __register_backend($addon) {
     $addon->register('user_authentication', array('BabelEclipseOrg_backend', 'authenticate'));
+    $addon->register('syncup_user', array('BabelEclipseOrg_backend', 'syncupUser'));
+    $addon->register('genie_user', array('BabelEclipseOrg_backend', 'genieUser'));
 }
 
 global $register_function_backend;

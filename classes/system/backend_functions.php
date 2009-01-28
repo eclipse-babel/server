@@ -68,23 +68,19 @@ function toescapedunicode($str) {
 
 /**
 * Returns the genie user to be used for headless applications.
-* The user is found by looking for genie_id in the base.conf file.
+* The user is found by using a hook.
 */
 function getGenieUser() {
-  global $genie_id;
-  $User = new User();
-  $User->loadFromID($genie_id); 
-  return $User;
+  global $addon;
+  return $addon->callHook('genie_user');
 }
 /**
 * Returns the syncup user to be used for headless applications.
 * The user is found by looking for syncup_id in the base.conf file.
 */
 function getSyncupUser() {
-  global $syncup_id;
-  $User = new User();
-  $User->loadFromID($syncup_id); 
-  return $User;
+  global $addon;
+  return $addon->callHook('syncup_user');
 }
 
 /*

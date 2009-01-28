@@ -19,10 +19,29 @@ class Reference_backend {
     function authenticate($User, $email, $password) {
         $User->userid = 5;
     }
+    
+    /**
+     * Returns a user that is specialized in running the syncup script.
+     */
+    function syncupUser() {
+        $User = new User();
+        $User->loadFromID(1);
+    }
+    
+    /**
+     * Returns the genie user that represents the headless admin for most operations,
+     * like importing a zip of translations.
+     */
+    function genieUser() {
+        $User = new User();
+        $User->loadFromID(1);
+    }
 }
 
 function __register_backend_ref($addon) {
     $addon->register('user_authentication', array('Reference_backend', 'authenticate'));
+    $addon->register('syncup_user', array('Reference_backend', 'syncupUser'));
+    $addon->register('genie_user', array('Reference_backend', 'genieUser'));
 }
 
 global $register_function_backend;

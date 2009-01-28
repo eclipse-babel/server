@@ -11,15 +11,16 @@
  *    Antoine Toulme - Initial contribution.
 *******************************************************************************/
 
-/*
- * Globals
- */
-header("Content-type: text/plain");
-include("global.php");
-InitPage("");
+ini_set("memory_limit", "64M");
+
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 
 require(dirname(__FILE__) . "/../system/dbconnection.class.php");
-require(dirname(__FILE__) . "/../html/common_functions.php");
+$dbc = new DBConnection();
+$dbh = $dbc->connect();
+
+require(dirname(__FILE__) . "/../system/backend_functions.php");
 
 if( !function_exists('json_encode') ){
 	require("/home/data/httpd/babel.eclipse.org/html/json_encode.php");
@@ -29,18 +30,13 @@ if( !function_exists('json_encode') ){
 	}
 }
 
-global $context;
-if($context == "") {
-	$context = "staging";
-}
-
 $User = getSyncupUser();
 
 $dbc = new DBConnection();
 global $dbh;
 $dbh = $dbc->connect();
 
-echo "Connection established, ready to begin";
+echo "Connection established, ready to begin; The syncup user id is $User->userid \n";
 $langs = mysql_query( "SELECT language_id FROM languages where languages.is_active" );
 while( ($lang_row = mysql_fetch_assoc($langs)) != null ) {
 	$language_id = $lang_row['language_id'];

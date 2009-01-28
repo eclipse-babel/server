@@ -70,7 +70,7 @@ class BabelEclipseOrg_backend_staging {
 }
 
 function __register_backend_staging($addon) {
-    $addon->register('user_authentication', array('BabelEclipseOrg_backend_staging', 'authenticate'));
+    __register_backend($addon);
 }
 
 global $register_function_backend;

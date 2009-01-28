@@ -22,10 +22,8 @@ class BabelEclipseOrgStaging extends BabelEclipseOrg {
 }
 
 function __register_html_staging($addon) {
-    $addon->register('image_root', array('BabelEclipseOrgStaging', '_imageRoot'));
-    $addon->register('validate_map_file_url', array('BabelEclipseOrgStaging', 'validateMapFileUrl'));
+    __register_html($addon);
     $addon->register('head', array('BabelEclipseOrgStaging', 'head'));
-    $addon->register('footer', array('BabelEclipseOrgStaging', 'footer'));
 }
 
 global $register_function_html;

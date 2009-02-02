@@ -31,6 +31,7 @@ $addon->callHook("head");
 		  <a href="http://www.eclipse.org/babel/downloads.php"><img src="<?php echo imageRoot() ?>/large_icons/apps/internet-web-browser.png"><h2>Eclipse Speaks your Language</h2></a>
 	      <br style='clear: both;'>
 		  <p><a href="http://www.eclipse.org/babel/downloads.php">Download a language pack</a> in one of many different languages.</p>
+		  <p><a href="languages.php">Languages</a> supported by Babel</p>.
 	         
 		  <a href="translate.php"><img src="<?php echo imageRoot() ?>/large_icons/apps/accessories-text-editor.png"><h2>Help Translate Eclipse</h2></a>
 	      <br style='clear: both;'>

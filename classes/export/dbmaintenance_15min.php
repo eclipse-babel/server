@@ -16,7 +16,7 @@
 	 * It is run every 15 minutes
 	 */
 
-	require_once(dirname(__FILE__)) . "/../system/backend_functions.php");
+	require_once(dirname(__FILE__) . "/../system/backend_functions.php");
 	global $addon;
 	$context = $addon->callHook('context');
 	

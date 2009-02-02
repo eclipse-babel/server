@@ -123,7 +123,7 @@ class BabelEclipseOrg_backend {
 	 * Returns the name of the directory Babel should use to work in.
 	 */
 	function babel_working() {
-		return "/tmp/babel-working/";
+		return "/home/babel-working/";
 	}
 }
 
@@ -132,7 +132,7 @@ function __register_backend($addon) {
     $addon->register('syncup_user', array('BabelEclipseOrg_backend', 'syncupUser'));
     $addon->register('genie_user', array('BabelEclipseOrg_backend', 'genieUser'));
     $addon->register('context', array('BabelEclipseOrg_backend', 'context'));
-	$addon->register('db_params', array('BabelEclipseOrg_backend', 'db_parameters'));
+	$addon->register('db_params', array('BabelEclipseOrg_backend', 'db_params'));
 	$addon->register('error_log', array('BabelEclipseOrg_backend', 'error_log'));
 	$addon->register('babel_working', array('BabelEclipseOrg_backend', 'babel_working'));
 }

@@ -13,7 +13,7 @@
 require_once(dirname(__FILE__) . "/project.class.php"); 
 require_once(dirname(__FILE__) . "/../file/file.class.php"); 
 
-require_once(dirname(__FILE__) . "/../../html/common_functions.php");
+require_once(dirname(__FILE__) . "/backend_functions.php");
 
 // constants
 define("LEGAL_FILES_DIR", dirname(__FILE__) . "/../export/source_files_for_generate/");

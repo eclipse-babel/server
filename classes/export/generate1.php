@@ -24,20 +24,21 @@
 define("METADATA_GENERATOR_LOCATION", "/home/genie/eclipse"); // you might want to read this value from a config file. Not sure yet.
 
 ini_set("memory_limit", "64M");
-require(dirname(__FILE__) . "/../../html/common_functions.php");
+require(dirname(__FILE__) . "/../system/backend_functions.php");
 require(dirname(__FILE__) . "/../system/dbconnection.class.php");
 $dbc = new DBConnection();
 $dbh = $dbc->connect();
 
-$work_dir = "/home/babel-working/";
+$work_dir = $addon->callHook('babel_working');
 
-global $context;
+global $addon;
+$context = $addon->callHook('context');
 
 $work_context_dir = $work_dir . $context . "/";
 $tmp_dir = $work_context_dir . "tmp/";
 $babel_language_packs_dir = $work_context_dir . "babel_language_packs/";
 $output_dir = $work_context_dir . "output/";
-$source_files_dir = "source_files_for_generate/";
+$source_files_dir = dirname(__FILE__) . "/source_files_for_generate/";
 
 # Language pack URL leader, to enable mirrors on download.eclipse.org
 $language_pack_leader = "";

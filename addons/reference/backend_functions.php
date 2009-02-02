@@ -36,12 +36,48 @@ class Reference_backend {
         $User = new User();
         $User->loadFromID(1);
     }
+
+	/**
+	 * Returns the name of the current context, one of live, staging or dev.
+	 */
+    function context() {
+        return "reference";
+	}
+	
+	/**
+	 * Returns a hash of the parameters.
+	 */
+	function db_params() {
+		return array('db_read_host' => '',
+					 'db_read_user' => '',
+					 'db_read_pass' => '', 
+					 'db_read_name' => '');
+	}
+	
+	/**
+	 * Deals with error messages.
+	 */
+	function error_log() {
+		$args = func_get_args();
+		error_log($args);
+	}
+	
+	/**
+	 * Returns the name of the directory Babel should use to work in.
+	 */
+	function babel_working() {
+		return "/home/babel-working/";
+	}
 }
 
 function __register_backend_ref($addon) {
     $addon->register('user_authentication', array('Reference_backend', 'authenticate'));
     $addon->register('syncup_user', array('Reference_backend', 'syncupUser'));
     $addon->register('genie_user', array('Reference_backend', 'genieUser'));
+	$addon->register('context', array('Reference_backend', 'context'));
+	$addon->register('db_params', array('Reference_backend', 'db_parameters'));
+	$addon->register('error_log', array('Reference_backend', 'error_log'));
+	$addon->register('babel_working', array('Reference_backend', 'babel_working'));
 }
 
 global $register_function_backend;

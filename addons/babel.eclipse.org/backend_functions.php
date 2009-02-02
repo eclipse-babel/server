@@ -12,6 +12,7 @@
 
 // Use a class to define the hooks to avoid bugs with already defined functions.
 class BabelEclipseOrg_backend {
+	
     /*
      * Authenticate a user.
      * Adds data to the user object passed in argument if authenticated.
@@ -84,12 +85,56 @@ class BabelEclipseOrg_backend {
         $User->loadFromID(40623);
         return $User;
     }
+
+	/**
+	 * Returns the name of the current context, one of live, staging or dev.
+	 */
+    function context() {
+        $ini = @parse_ini_file(dirname(__FILE__) . '/base.conf');
+		if (!$ini) {
+			die("Could not read the configuration file " . dirname(__FILE__) . "/base.conf");
+		}
+		return $ini["context"];
+	}
+	
+	/**
+	 * Returns a hash of the parameters.
+	 */
+	function db_params() {
+		$ini = @parse_ini_file(dirname(__FILE__) . '/base.conf');
+		if (!$ini) {
+			die("Could not read the configuration file " . dirname(__FILE__) . "/base.conf");
+		}
+		return array('db_read_host' => $ini['db_read_host'],
+					 'db_read_user' => $ini['db_read_user'],
+					 'db_read_pass' => $ini['db_read_pass'], 
+					 'db_read_name' => $ini['db_read_name']);
+	}
+
+	/**
+	 * Deals with error messages.
+	 */
+	function error_log() {
+		$args = func_get_args();
+		error_log($args);
+	}
+	
+	/**
+	 * Returns the name of the directory Babel should use to work in.
+	 */
+	function babel_working() {
+		return "/tmp/babel-working/";
+	}
 }
 
 function __register_backend($addon) {
     $addon->register('user_authentication', array('BabelEclipseOrg_backend', 'authenticate'));
     $addon->register('syncup_user', array('BabelEclipseOrg_backend', 'syncupUser'));
     $addon->register('genie_user', array('BabelEclipseOrg_backend', 'genieUser'));
+    $addon->register('context', array('BabelEclipseOrg_backend', 'context'));
+	$addon->register('db_params', array('BabelEclipseOrg_backend', 'db_parameters'));
+	$addon->register('error_log', array('BabelEclipseOrg_backend', 'error_log'));
+	$addon->register('babel_working', array('BabelEclipseOrg_backend', 'babel_working'));
 }
 
 global $register_function_backend;

@@ -16,14 +16,13 @@
 	 * It is run every 15 minutes
 	 */
 
-	require(dirname(__FILE__) . "../system/dbconnection.class.php");
+	require_once(dirname(__FILE__)) . "/../system/backend_functions.php");
+	global $addon;
+	$context = $addon->callHook('context');
 	
-	if (!($ini = @parse_ini_file(dirname(__FILE__) . '../base.conf'))) {
-		errorLog("Failed to find/read database conf file - aborting.");
-		exitTo("error.php?errNo=101300","error: 101300 - database conf can not be found");
-	}
+	require(dirname(__FILE__) . "../system/dbconnection.class.php");
 	  
-	$context = $ini['context'];
+	
 	if($context == "") {
 		$context = "staging";
 	}

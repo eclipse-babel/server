@@ -11,14 +11,14 @@
  *    Scott Reynen scott at randomchaos com - toescapedunicode
 *******************************************************************************/
 
-require_once(dirname(__FILE__) . "/../../classes/system/common_functions.php");
+require_once(dirname(__FILE__) . "/common_functions.php");
 
 // load the backend addon functions.
-require_once(dirname(__FILE__) . "/../../classes/system/addons_management.php");
+require_once(dirname(__FILE__) . "/addons_management.php");
 global $addon;
 $addon->load_backend_functions();
 
-require_once(dirname(__FILE__) . "/../../classes/system/user.class.php");
+require_once(dirname(__FILE__) . "/user.class.php");
 // some methods reused accross the backend.
 
 /**
@@ -93,6 +93,12 @@ function internalJar($dir, $output) {
         echo "### ERROR during the execution of: $cmd\n";
         echo "$retval\n";
     }
+}
+
+function errorLog() {
+	global $addon;
+	$args = func_get_args();
+	$addon->callHook('error_log', $args);
 }
 
 ?>

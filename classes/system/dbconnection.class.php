@@ -1,5 +1,6 @@
 <?php
 
+require_once(dirname(__FILE__) . "/backend_functions.php");
 class DBConnection {
 
 	#*****************************************************************************
@@ -18,23 +19,16 @@ class DBConnection {
 	function connect()
 	{
 		static $dbh;
-		if (!($ini = @parse_ini_file(dirname(__FILE__) . '/../base.conf'))) {
-			errorLog("Failed to find/read database conf file - aborting.");
-			exitTo("error.php?errNo=101300","error: 101300 - database conf can not be found");
-  		}
+		global $addon;
+		$db_params = $addon->callHook('db_params');
   
-		if (!mysql_connect($ini['db_read_host'],$ini['db_read_user'],$ini['db_read_pass'])) {
+		$dbh = mysql_connect($db_params['db_read_host'],$db_params['db_read_user'],$db_params['db_read_pass']);
+		if (!$dbh) {
 			errorLog("Failed attempt to connect to server - aborting.");
 			exitTo("/error.php?errNo=101301","error: 101301 - data server can not be found");
 		}
 
-		$dbh = mysql_connect($ini['db_read_host'],$ini['db_read_user'],$ini['db_read_pass']);
-	
-		if (!$dbh) {
-    		errorLog("Failed attempt to connect to server - aborting.");
-    		exitTo("/error.php?errNo=101301","error: 101301 - data server can not be found");
-		}
-    	$database = $ini['db_read_name'];
+    	$database = $db_params['db_read_name'];
 		if (isset($database)) {
 			if (!mysql_select_db($database)) {
 				errorLog("Failed attempt to open database: $database - aborting \n\t" . mysql_error());

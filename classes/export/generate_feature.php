@@ -15,13 +15,18 @@
  */
 
 ini_set("memory_limit", "64M");
-require(dirname(__FILE__) . "/../../html/common_functions.php"); // $context is defined in this file
+require(dirname(__FILE__) . "/../system/backend_functions.php");
+
+global $addon;
+$context = $addon->callHook('context');
+
 require(dirname(__FILE__) . "/../system/dbconnection.class.php");
 require(dirname(__FILE__) . "/../system/feature.class.php");
 $dbc = new DBConnection();
 $dbh = $dbc->connect();
 
-$work_dir = "/home/babel-working/";
+
+$work_dir = $addon->callHook('babel_working');
 
 $work_context_dir = $work_dir . $context . "_feature/";
 $tmp_dir = $work_context_dir . "tmp/";

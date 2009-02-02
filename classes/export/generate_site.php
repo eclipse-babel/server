@@ -15,15 +15,16 @@
  */
 
 ini_set("memory_limit", "64M");
-require(dirname(__FILE__) . "/../../html/common_functions.php");
+require(dirname(__FILE__) . "/../system/backend_functions.php");
+
+global $addon;
+$context = $addon->callHook('context');
+$work_dir = $addon->callHook('babel_working');
+
 require(dirname(__FILE__) . "/../system/dbconnection.class.php");
 require(dirname(__FILE__) . "/../system/feature.class.php");
 $dbc = new DBConnection();
 $dbh = $dbc->connect();
-
-$work_dir = "/tmp/babel-working/";
-
-global $context;
 
 $work_context_dir = $work_dir . $context . "_site/";
 $tmp_dir = $work_context_dir . "tmp/";

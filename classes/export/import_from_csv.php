@@ -38,8 +38,7 @@ error_reporting(E_ALL); ini_set("display_errors", true);
 
 
 ini_set("memory_limit", "256M");
-require_once(dirname(__FILE__) . '/../../html/eclipse.org-common/system/app.class.php');
-require_once(dirname(__FILE__) . "/../../html/common_functions.php");
+require_once(dirname(__FILE__) . "/../system/backend_functions.php");
 require_once(dirname(__FILE__) . "/../system/dbconnection.class.php");
 require_once(dirname(__FILE__) . "/../system/feature.class.php");
 require_once(dirname(__FILE__) . "/../system/user.class.php");

@@ -20,7 +20,7 @@
 	global $addon;
 	$context = $addon->callHook('context');
 	
-	require(dirname(__FILE__) . "../system/dbconnection.class.php");
+	require(dirname(__FILE__) . "/../system/dbconnection.class.php");
 	  
 	
 	if($context == "") {

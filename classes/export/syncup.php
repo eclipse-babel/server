@@ -20,7 +20,7 @@ require(dirname(__FILE__) . "/../system/dbconnection.class.php");
 $dbc = new DBConnection();
 $dbh = $dbc->connect();
 
-require(dirname(__FILE__) . "/../system/backend_functions.php");
+require_once(dirname(__FILE__) . "/../system/backend_functions.php");
 
 if( !function_exists('json_encode') ){
 	require("/home/data/httpd/babel.eclipse.org/html/json_encode.php");

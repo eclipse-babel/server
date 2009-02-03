@@ -33,7 +33,7 @@
 	# refresh the scoreboard -- not every 15 minutes!
 	$forceRefresh = strcasecmp(getenv("FORCE_BABEL_REFRESH"), "true");
 	if(rand(1, 100) < 6 || $forceRefresh) {
-		require_once(dirname(__FILE__) . "../system/scoreboard.class.php");
+		require_once(dirname(__FILE__) . "/../system/scoreboard.class.php");
 		$sb = new Scoreboard();
 		$sb->refresh();
 		

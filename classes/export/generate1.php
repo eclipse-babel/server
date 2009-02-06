@@ -417,7 +417,7 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 	   METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
 	system("xsltproc -o ${output_dir_for_train}content.xml ".
            dirname(__FILE__) . "/content.xsl ${output_dir_for_train}content.xml");
-    system("cd ${output_dir_for_train} ; jar -fc content.jar artifacts.xml content.xml");
+    system("cd ${output_dir_for_train} ; jar -fc content.jar artifacts.xml content.xml ; rm site.xml");
 }
 echo "Completed generating update site\n";
 

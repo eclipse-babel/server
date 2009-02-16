@@ -65,6 +65,7 @@ while($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 	$h = fopen($myrow_maps['location'], "rb");
 	$file_contents = stream_get_contents($h);
 	fclose($h);
+	$file_contents = ereg_replace("\r\n?", "\n", $file_contents);
 	$aLines = split("\n", $file_contents);
 	
 	

@@ -50,7 +50,7 @@ class File {
 							version		= " . returnQuotedString(sqlSanitize($this->version, $dbh)) . ", 
 							name		= " . returnQuotedString(sqlSanitize($this->name, $dbh)) . ",
 							plugin_id	= " . returnQuotedString(sqlSanitize($this->plugin_id, $dbh)) . ",
-							is_active	= " . isActive . $where;
+							is_active	= " . $this->is_active . $where;
 			if(mysql_query($sql, $dbh)) {
 				if($this->file_id == 0) {
 					$this->file_id = mysql_insert_id($dbh);

@@ -55,7 +55,10 @@
   <td></td>
 </tr>
 <tr>
-	<td></td><td>Babel builds one update site per Train.  Even if your project does not participate in the actual train, please pick the Train that your project is targetting.</td>
+	<td>&#160;</td><td>Babel builds one update site per Train.  Even if your project does not participate in the actual train, please pick the Train that your project is targetting.</td>
+</tr>
+<tr>
+	<td>&#160;</td><td><b>NOTE: </b>The Release Train applies to all map files for the selected Project Release Version.</td>
 </tr>
 <tr>
 	<td>&#160;</td><td></td>

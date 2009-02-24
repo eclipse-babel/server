@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Eclipse Foundation - Initial API and implementation
+ *    Kit Lo (IBM) - patch, bug 266010, Map file table does not show release train and file name info
 *******************************************************************************/
 include("global.php");
 
@@ -76,9 +77,11 @@ if($SUBMIT == "delete") {
 
 if($SUBMIT == "showfiles") {
 	$incfile 	= "content/en_map_files_show.php";
-	$sql = "SELECT project_id, version, filename, location FROM map_files WHERE is_active = 1 
-	AND project_id = " . returnQuotedString(sqlSanitize($PROJECT_ID, $dbh)) . "
-	AND version = " . returnQuotedString(sqlSanitize($VERSION, $dbh));
+	$sql = "SELECT m.project_id, m.version, r.train_id, m.location, m.filename FROM map_files m
+	LEFT JOIN release_train_projects r ON m.project_id = r.project_id AND m.version = r.version
+	WHERE m.is_active = 1 
+	AND m.project_id = " . returnQuotedString(sqlSanitize($PROJECT_ID, $dbh)) . "
+	AND m.version = " . returnQuotedString(sqlSanitize($VERSION, $dbh));
 	$rs_map_file_list = mysql_query($sql, $dbh);
 	include($incfile);
 }

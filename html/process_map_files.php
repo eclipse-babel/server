@@ -128,7 +128,7 @@ while($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 						
 						if ($files[$file_id] != null) {
 							$File = $files[$file_id];
-							$File->isActive = 1;
+							$File->is_active = 1;
 							unset($files[$file_id]);
 						} else {
 							$File = new File();
@@ -136,7 +136,7 @@ while($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 							$File->version		= $myrow_maps['version'];
 							$File->name 		= $file_name;
 							$File->plugin_id	= $plugin_id;
-							$File->isActive     = 1;
+							$File->is_active     = 1;
 						}
 						if(!$File->save()) {
 							echo $html_spacer . $html_spacer . $html_spacer . $html_spacer . "***ERROR saving file: " . $file_name . "\n";
@@ -162,7 +162,7 @@ while($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 echo "Marking the remaining files as inactive\n";
 
 foreach ($files as $file) {
-	$file->isActive = 0;
+	$file->is_active = 0;
 	if(!$file->save()) {
 		echo $html_spacer . $html_spacer . $html_spacer . $html_spacer . "***ERROR saving file: " . $file->name . "\n";
 	}

@@ -9,6 +9,7 @@
  * Contributors:
  *    Eclipse Foundation - initial API and implementation
  *    Antoine Toulmé - Bug 248917
+ *    Kit Lo (IBM) - patch, bug 266250, Map file processor not running properly on live server
 *******************************************************************************/
 require(dirname(__FILE__) . "/../system/language.class.php"); 
 require(dirname(__FILE__) . "/../system/release_train.class.php"); 
@@ -71,7 +72,7 @@ class File {
 	}
 	
 	static function getFileID($_name, $_project_id, $_version) {
-		$rValue = -1;
+		$rValue = 0;
 		if($_name != "" && $_project_id != "" && $_version != "") {
 			global $dbh;
 

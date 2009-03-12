@@ -11,6 +11,7 @@
  *    Antoine Toulmé - Bug 248917
  *    Motorola  - Change SVN map file format to follow SVN PDE
  *    Gustavo de Paula - Bug 261252
+ *    Kit Lo (IBM) - patch, bug 266250, Map file processor not running properly on live server
 *******************************************************************************/
 header("Content-type: text/plain");
 include("global.php");
@@ -72,15 +73,23 @@ while($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 	foreach ($aLines as $line) {
 		$line = trim($line);
 
+		# $line looks something like this:
 		# plugin@org.eclipse.emf.query=v200802262150,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query
+		# plugin@org.eclipse.equinox.frameworkadmin=CVS,tag=R34x_v20080910,cvsRoot=:pserver:anonymous@dev.eclipse.org:/cvsroot/rt,path=org.eclipse.equinox/p2/bundles/org.eclipse.equinox.frameworkadmin
 		if(preg_match("/^(plugin|fragment)/", $line)) {
 			echo $html_spacer . "Processing line: " . $line . "\n";
 			$aParts = split("=", $line);
 			$aElements = split("@", $aParts[0]);
 			$plugin_id = $aElements[1];
 			if($aElements[0] == "plugin") {
-				echo $html_spacer . $html_spacer . "Processing plugin: " . $aParts[1] . "\n";
-				$aStuff = parseLocation($aParts[1]);
+				$plugin = $aParts[1];
+				if($aParts[1] == "CVS,tag") {
+					$tagPart = split(",", $aParts[2]);
+					$cvsRootPart = split(",", $aParts[3]);
+					$plugin = $tagPart[0] . "," . $cvsRootPart[0] . "," . $aParts[4];
+				}
+				echo $html_spacer . $html_spacer . "Processing plugin: " . $plugin . "\n";
+				$aStuff = parseLocation($plugin);
 				
 				$tagstring = "";
 				if(isset($aStuff['tag'])) {

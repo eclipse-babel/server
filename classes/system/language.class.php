@@ -9,6 +9,7 @@
  * Contributors:
  *    Antoine Toulme, Intalio Inc. bug 248845: Refactoring generate1.php into different files with a functional approach
  *    Kit Lo (IBM) - patch, bug 261739, Inconsistent use of language names
+ *    Kit Lo (IBM) - Beautify Babel Supported Languages table
 *******************************************************************************/
 
 class Language {
@@ -46,7 +47,7 @@ class Language {
   
 	static function all() {
 		$langs = array();
-		$language_result = mysql_query("SELECT * FROM languages WHERE languages.is_active");
+		$language_result = mysql_query("SELECT * FROM languages WHERE languages.is_active ORDER BY name, locale");
 		while (($language_row = mysql_fetch_assoc($language_result)) != null) {
 			$langs[] = Language::fromRow($language_row);
 		}

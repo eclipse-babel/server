@@ -72,7 +72,10 @@ echo "Generating update site\n";
 $train_result = mysql_query("SELECT DISTINCT train_id FROM release_train_projects ORDER BY train_id DESC");
 while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 	$train_id = $train_row['train_id'];
-	$train_version = "3.4.0";
+	$train_version = "3.5.0";
+	if (strcmp($train_id, "ganymede") == 0) {
+		$train_version = "3.4.0";
+	}
 	if (strcmp($train_id, "europa") == 0) {
 		$train_version = "3.3.0";
 	}

@@ -28,7 +28,7 @@ if(isset($_SESSION['language']) && isset($_SESSION['project'])) {
 		LEFT JOIN project_progress AS p ON (p.project_id = v.project_id AND p.version = v.version and p.language_id = " . addslashes($language) . ")
 	where 
 		v.is_active = 1
-		f.version != 'unspecified'
+		and f.version != 'unspecified'
 		and v.project_id = '".addslashes($_SESSION['project'])."'
 	order by
 		f.version desc";

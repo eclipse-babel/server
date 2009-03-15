@@ -89,7 +89,7 @@ else {
 	$sql = "SELECT project_id FROM projects WHERE is_active = 1 ORDER BY project_id";
 	$rs_project_list = mysql_query($sql, $dbh);
 	
-	$sql = "SELECT project_id, version FROM project_versions WHERE is_active = 1 and version != 'undefined' ORDER BY project_id ASC, version DESC";
+	$sql = "SELECT project_id, version FROM project_versions WHERE is_active = 1 and version != 'unspecified' ORDER BY project_id ASC, version DESC";
 	$rs_version_list = mysql_query($sql, $dbh);
 
 	$sql = "SELECT DISTINCT train_id FROM release_train_projects ORDER BY train_id ASC";

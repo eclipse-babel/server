@@ -13,7 +13,9 @@
 		<td>" . $train_id . "</td>
 		<td><a href='" . $myrow['location'] . "' target='new'>" . $myrow['location'] . "</a></td>
 		<td>" . $myrow['filename'] . "</td>
-		<td><a onclick=\"javascript:return fnConfirm();\" href='map_files.php?submit=delete&project_id=" . $PROJECT_ID . "&version=" . $VERSION . "&filename=" . $myrow['filename'] . "'><img border=0 src='<?php echo imageRoot() ?>/small_icons/actions/process-stop.png'></a></td></tr>";
+		<td><a onclick=\"javascript:return fnConfirm();\" href='map_files.php?submit=delete&project_id=" . $PROJECT_ID . "&version=" . $VERSION . "&filename=" . $myrow['filename'] . "'><img border=0 src='";
+		echo imageRoot();
+		echo "/small_icons/actions/process-stop.png'></a></td></tr>";
 	}
 ?>
 </table>

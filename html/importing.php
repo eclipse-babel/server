@@ -39,7 +39,7 @@ $addon->callHook("head");
 		<li>Follow the instructions and find the project you want included in Babel.
 		<li>Leave a comment that politely asks the project leads to import their project into Babel. 
 			<br>Example:<p>"The Babel project aims to help Eclipse projects get translated into new languages.  Your project is not currently integrated with Babel.
-			Please follow these instructions: http://babel.eclipse.org/importing.php"
+			Please follow these instructions: http://babel.eclipse.org/babel/importing.php"
 		<li>Submit the bug. 
 	</ol> 
 

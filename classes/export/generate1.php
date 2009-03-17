@@ -59,30 +59,51 @@ exec("mkdir -p $output_dir");
  */
 exec("mkdir -p $babel_language_packs_dir");
 $language_pack_links_file = fopen("${babel_language_packs_dir}index.php", "w");
-fwrite($language_pack_links_file, "<?php\n\$pageTitle = \"Babel Language Packs\";\n");
-fwrite($language_pack_links_file, "include \$_SERVER['DOCUMENT_ROOT'] . '/eclipse.org-common/themes/Phoenix/header.php';\n");
-fwrite($language_pack_links_file, "?>\n");
-fwrite($language_pack_links_file, "<div id='maincontent'><div id='midcolumn'>\n");
+fwrite($language_pack_links_file, "<?php\n\$pageTitle = \"Babel Language Packs\";");
+fwrite($language_pack_links_file, "\ninclude \$_SERVER['DOCUMENT_ROOT'] . '/eclipse.org-common/themes/Phoenix/header.php';");
+fwrite($language_pack_links_file, "\n?>");
+fwrite($language_pack_links_file, "\n\t<div id='maincontent'>");
+fwrite($language_pack_links_file, "\n\t<div id='midcolumn'>");
+fwrite($language_pack_links_file, "\n\t<style>");
+fwrite($language_pack_links_file, "\n\t\th3 {");
+fwrite($language_pack_links_file, "\n\t\t\tbackground-color: SteelBlue;");
+fwrite($language_pack_links_file, "\n\t\t\tcolor: white;");
+fwrite($language_pack_links_file, "\n\t\t}");
+fwrite($language_pack_links_file, "\n");
+fwrite($language_pack_links_file, "\n\t\th4 {");
+fwrite($language_pack_links_file, "\n\t\t\tbackground-color: LightSteelBlue;");
+fwrite($language_pack_links_file, "\n\t\t}");
+fwrite($language_pack_links_file, "\n\t</style>");
 fwrite($language_pack_links_file, "\n\t<h1>Babel Language Packs</h1>" .
 	"\n\t<h2>Build ID: $timestamp</h2>" .
 	"\n\t<p>The following language packs are based on the community translations entered into the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a>, and may not be complete or entirely accurate.  If you find missing or incorrect translations, please use the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a> to update them." .   
 	"\n\tAll downloads are provided under the terms and conditions of the <a href='http://www.eclipse.org/legal/epl/notice.php'>Eclipse Foundation Software User Agreement</a> unless otherwise specified.</p>");
 
 echo "Generating update site\n";
-$train_result = mysql_query("SELECT DISTINCT train_id FROM release_train_projects ORDER BY train_id DESC");
-while (($train_row = mysql_fetch_assoc($train_result)) != null) {
-	$train_id = $train_row['train_id'];
-	$train_version = "3.5.0";
-	if (strcmp($train_id, "ganymede") == 0) {
-		$train_version = "3.4.0";
-	}
-	if (strcmp($train_id, "europa") == 0) {
-		$train_version = "3.3.0";
-	}
+
+# There is no easy way to sort "galileo", "ganymede", and "europa" in the correct order we want without
+# modifying the release_train_projects table.
+#
+# Here is a temporary fix to display train versions in most recent release order until we have a permanent solution. 
+
+$train_result = array("galileo" => "3.5.0", "ganymede" => "3.4.0", "europa" => "3.3.0");
+foreach ($train_result as $train_id => $train_version) {
+
+#$train_result = mysql_query("SELECT DISTINCT train_id FROM release_train_projects ORDER BY train_id DESC");
+#while (($train_row = mysql_fetch_assoc($train_result)) != null) {
+#	$train_id = $train_row['train_id'];
+#	$train_version = "3.5.0";
+#	if (strcmp($train_id, "ganymede") == 0) {
+#		$train_version = "3.4.0";
+#	}
+#	if (strcmp($train_id, "europa") == 0) {
+#		$train_version = "3.3.0";
+#	}
+
 	$train_version_timestamp = "$train_version.v$timestamp";
 	$site_xml = "";
 
-	$output_dir_for_train = $output_dir . $train_row['train_id'] . "/";
+	$output_dir_for_train = $output_dir . $train_id . "/";
 	exec("mkdir $output_dir_for_train");
 	exec("mkdir ${output_dir_for_train}features/");
 	exec("mkdir ${output_dir_for_train}plugins/");
@@ -99,12 +120,6 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 			$language_name = "Pseudo Translations";
 		}
 
-		$site_xml .= "\n\t<category-def name=\"Babel Language Packs in $language_name\" label=\"Babel Language Packs in $language_name\">";
-		$site_xml .= "\n\t\t<description>Babel Language Packs in $language_name</description>";
-		$site_xml .= "\n\t</category-def>";
-
-		fwrite($language_pack_links_file, "\n\t<h4>Language: $language_name</h4>\n\t<ul>");
-
 		echo "${leader}Generating language pack for $train_id - $language_name ($language_iso) (language_id=" . $language_id . ")\n";
 
 		/*
@@ -116,7 +131,7 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 				INNER JOIN strings AS s ON f.file_id = s.file_id
 				INNER JOIN release_train_projects as v ON (f.project_id = v.project_id AND f.version = v.version)
 				WHERE f.is_active
-				AND v.train_id = '" . $train_row['train_id'] . "'");
+				AND v.train_id = '" . $train_id . "'");
 		} else {
 			$file_result = mysql_query("SELECT DISTINCT f.project_id, f.version, f.file_id, f.name
 				FROM files AS f
@@ -125,7 +140,7 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 				INNER JOIN release_train_projects as v ON (f.project_id = v.project_id AND f.version = v.version)
 				WHERE t.language_id = " . $language_id . "
 				AND f.is_active
-				AND v.train_id = '" . $train_row['train_id'] . "'");
+				AND v.train_id = '" . $train_id . "'");
 		}
 
 		$plugins = array();
@@ -307,7 +322,15 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 			$projects[$project_id][] = $fragment_id;
 			$project_versions[$project_id] = $properties_file['version'];
 		}
+		if (sizeof($projects) > 0) {
+			$site_xml .= "\n\t<category-def name=\"Babel Language Packs in $language_name\" label=\"Babel Language Packs in $language_name\">";
+			$site_xml .= "\n\t\t<description>Babel Language Packs in $language_name</description>";
+			$site_xml .= "\n\t</category-def>";
+
+			fwrite($language_pack_links_file, "\n\t\t<h4>Language: $language_name</h4>");
+		}
 		foreach ($projects as $project_id => $fragment_ids) {
+			fwrite($language_pack_links_file, "\n\t\t<ul>");
 			/*
 			 * Sort fragment names
 			 */
@@ -416,7 +439,7 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 			/*
 			 * Add project language pack link to language pack links file
 			 */
-			fwrite($language_pack_links_file, "\n\t<li><a href=\"${language_pack_leader}${language_pack_name}\">$language_pack_name ($project_pct_complete%)</a></li>");
+			fwrite($language_pack_links_file, "\n\t\t\t<li><a href=\"${language_pack_leader}${language_pack_name}\">$language_pack_name ($project_pct_complete%)</a></li>");
 			/*
 			 * Jar up this directory as the feature jar
 			 */
@@ -428,8 +451,9 @@ while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 			$site_xml .= "\n\t\t<category name=\"Babel Language Packs in $language_name\"/>";
 			$site_xml .= "\n\t</feature>";
 			echo "${leader}Completed language pack for $language_name ($language_iso)\n";
+
+			fwrite($language_pack_links_file, "\n\t\t</ul>");
 		}
-		fwrite($language_pack_links_file, "\n\t</ul>");
 	}
 	/*
 	 * <site mirrorsURL=... implemented in the weekly build process by sed'ing <site>

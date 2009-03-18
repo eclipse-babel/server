@@ -34,7 +34,7 @@ $addon->callHook("head");
 	If Babel is missing an Eclipse project and you would like to help translate this project, follow the steps below to open a Bugzilla bug. 
 	Opening a bug is the first step in encourage the project to participate in Babel by letting them know translators are out there and willing to help.
 	</p>
-	<ol style='margin-left: 20px; margin-top: 0px;'>
+	<ol>
 		<li><a target="_blank" href="https://bugs.eclipse.org/bugs/enter_bug_wizard.cgi">Click here</a> to start the process of opening a bug on Eclipse Bugzilla system.
 		<li>Follow the instructions and find the project you want included in Babel.
 		<li>Leave a comment that politely asks the project leads to import their project into Babel. 
@@ -48,7 +48,7 @@ $addon->callHook("head");
 	<p>
 	If you are a project lead and your project is not included in Babel then follow the steps below.
 	</p>
-	<ol style='margin-left: 20px; margin-top: 0px;'>
+	<ol>
 		<li><a href="login.php">Log into Babel</a>.
 		<li>Click on the 'FOR COMMITTERS' link at the top left hand corner of the web page.
 		<li>Follow the instructions on that page, good luck!

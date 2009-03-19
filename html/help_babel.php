@@ -9,6 +9,10 @@
  * Contributors:
  *    Eclipse Foundation - Initial API and implementation
 *******************************************************************************/
+
+# Note: the style attribute for the ol tag below was causing a truncation in IE.
+# I removed the attribute. The layout is still acceptable. Future modifications to this file should be tested in IE also.
+
 include("global.php");
 
 $pageTitle 		= "Babel Project - Eclipse translation";
@@ -18,11 +22,6 @@ global $addon;
 $addon->callHook("head");
 
 ?>
-
-<!--  	
-	Note: the style attribute for the ol tag below was causing a truncation in IE.
-	I removed the attribute. The layout is still acceptable. Future modifications to this file should be tested in IE also.
--->
 
 <h1 id="page-message">Welcome to the Babel Project</h1>
 <div id="index-page" style='width: 510px; padding-right: 190px;'>

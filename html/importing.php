@@ -34,6 +34,8 @@ $addon->callHook("head");
 	If Babel is missing an Eclipse project and you would like to help translate this project, follow the steps below to open a Bugzilla bug. 
 	Opening a bug is the first step in encourage the project to participate in Babel by letting them know translators are out there and willing to help.
 	</p>
+	# Note: the style attribute for the ol tag here and below was causing a truncation in IE.
+	#       I removed the attribute. The layout is still acceptable. Future modifications to this file should be tested in IE also.
 	<ol>
 		<li><a target="_blank" href="https://bugs.eclipse.org/bugs/enter_bug_wizard.cgi">Click here</a> to start the process of opening a bug on Eclipse Bugzilla system.
 		<li>Follow the instructions and find the project you want included in Babel.

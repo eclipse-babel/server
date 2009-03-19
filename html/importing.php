@@ -19,10 +19,12 @@ $pageKeywords 	= "translation,language,nlpack,pack,eclipse,babel";
 global $addon;
 $addon->callHook("head");
 
-	# Note: the style attribute for the ol tag below was causing a truncation in IE.
-	# I removed the attribute. The layout is still acceptable. Future modifications to this file should be tested in IE also.
-
 ?>
+
+<!--  	
+	Note: the style attribute for the ol tag below was causing a truncation in IE.
+	I removed the attribute. The layout is still acceptable. Future modifications to this file should be tested in IE also.
+-->
 
 <h1 id="page-message">Help Getting Projects into Babel</h1>
 <div id="index-page">

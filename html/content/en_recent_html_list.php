@@ -53,4 +53,4 @@ img {
 	}
  ?>
  </ul>
- <?= $rowcount ?> row<?= $rowcount > 1 || $rowcount == 0 ? "s" : "" ?> found.</td>
+ <?= $rowcount ?> row<?= $rowcount > 1 || $rowcount == 0 ? "s" : "" ?> found</td>

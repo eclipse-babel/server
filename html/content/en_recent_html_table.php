@@ -63,7 +63,7 @@
 	}
  ?>
  <tr class="foot">
- 	<td colspan="<?= $i ?>"> <?= $rowcount ?> row<?= $rowcount > 1 || $rowcount == 0 ? "s" : "" ?> found.</td>
+ 	<td colspan="<?= $i ?>"> <?= $rowcount ?> row<?= $rowcount > 1 || $rowcount == 0 ? "s" : "" ?> found</td>
  </tr>
  </table>
  

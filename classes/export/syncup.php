@@ -42,7 +42,14 @@ while( ($lang_row = mysql_fetch_assoc($langs)) != null ) {
 	$language_id = $lang_row['language_id'];
     echo "Investigating language " . $language_id . "\n\n";
 	$untranslated_strings = mysql_query( "SELECT * from strings where is_active and value <> '' and string_id not in(select string_id from translations where language_id=". $language_id .")" );
+	$count = 0;
     while ( ($string_row = mysql_fetch_assoc($untranslated_strings)) != null) {
+    	$count++;
+    	
+    	if($count % 100 == 0) {
+    		echo "Processed " . $count . " strings...\n";
+    	}
+    	
 		$untranslated_value = $string_row['value'];
 		$untranslated_id = $string_row['string_id'];
 		$possible_translations = mysql_query( "SELECT t.value from strings As s inner join translations AS t on s.string_id = t.string_id where s.string_id != '" . $untranslated_id . "' and BINARY s.value = '" .$untranslated_value . "' and t.language_id = '" . $language_id . "' ");

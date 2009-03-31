@@ -49,6 +49,32 @@ CREATE TABLE `files` (
   KEY `project_id` (`project_id`),
   CONSTRAINT `files_ibfk_1` FOREIGN KEY (`project_id`,`version`) REFERENCES `project_versions` (`project_id`,`version`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+SET @OLD_SQL_MODE=@@SQL_MODE;
+DELIMITER ;;
+/*!50003 SET SESSION SQL_MODE="" */;;
+DROP TRIGGER IF EXISTS `upd_is_active`;;
+
+/* This trigger will recursively update the is_active status of the strings of a file */   
+CREATE TRIGGER `upd_is_active` AFTER UPDATE ON `files` FOR EACH ROW BEGIN
+  UPDATE strings set is_active = NEW.is_active WHERE strings.file_id = NEW.file_id;
+  
+  /* update project_progress table to indicate this proj/lang/vers stats are stale */
+  /* don't know if record is there or not, so do both an insert and an update */
+  /* This portion of the trigger is similar to what is in the translations table */ 
+  UPDATE IGNORE project_progress SET is_stale = 1 where project_id = @PROJECT
+   AND version = @VERSION;
+
+  INSERT IGNORE INTO project_progress SET is_stale = 1, project_id = @PROJECT,
+   version = @VERSION;
+  
+END;
+;;
+DELIMITER ;
+/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;
+
+
 --
 -- Table structure for table `languages`
 --
@@ -213,7 +239,15 @@ CREATE TRIGGER `upd_string` AFTER UPDATE ON `strings` FOR EACH ROW
 ;;
 DELIMITER ;
 
-
+--
+-- Table structure for table `sys_values`
+--
+DROP TABLE IF EXISTS `sys_values`;
+CREATE TABLE `sys_values` (
+  `itemid` char(6) NOT NULL,
+  `value` text,
+  PRIMARY KEY  (`itemid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `translation_archives`
@@ -304,6 +338,7 @@ CREATE TRIGGER `ins_version` BEFORE INSERT ON `translations` FOR EACH ROW BEGIN
 
   /* update project_progress table to indicate this proj/lang/vers stats are stale */
   /* don't know if record is there or not, so do both an insert and an update */
+  /* This portion of the trigger is similar to what is in the files table */
   UPDATE IGNORE project_progress SET is_stale = 1 where project_id = @PROJECT
    AND version = @VERSION 
    AND language_id = NEW.language_id;
@@ -523,3 +558,6 @@ truncate table scoreboard;
 INSERT INTO scoreboard SELECT NULL, "LANGPR", CONCAT(b.name,IF(ISNULL(b.locale),"",CONCAT(" ", b.locale))), count(*) as StringCount from translations as a inner join languages as b on b.language_id = a.language_id where a.value <> '' and a.is_active = 1 group by a.language_id order by StringCount desc;
 INSERT INTO scoreboard SELECT NULL, "TOPTR", CONCAT(first_name, IF(ISNULL(last_name),"",CONCAT(" ", last_name))), count(translations.string_id) as cnt from translations inner join users on users.userid = translations.userid where is_active=1 group by first_name, last_name order by cnt desc limit 20;
 INSERT INTO scoreboard SELECT NULL, "LASGEN", "Scoreboard Last Generated", MAX(translation_id) FROM translations;
+
+/* create a holding record for the MOTD */
+INSERT INTO sys_values VALUES ("MOTD", NULL);

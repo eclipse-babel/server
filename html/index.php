@@ -18,13 +18,13 @@ $pageKeywords 	= "translation,language,nlpack,pack,eclipse,babel,english,french,
 
 global $addon;
 $addon->callHook("head");
-
 ?>
 <h1 id="page-message">Welcome to the Babel Project</h1>
+<? include("fragments/motd.php");?>
 <div id="index-page" style='width: 510px; padding-right: 190px;'>
 	  <div style='float: right;height: 290px; border: 0px solid red;'>
 	      <? include("fragments/language_progress.php");?>
-		  <? include("fragments/top_translators.php");?>
+		  <? include("fragments/top_translators.php");?>	  
 	  </div>
 
 	  <div style='float: left;border: 0px solid red;'>

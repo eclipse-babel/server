@@ -51,6 +51,7 @@ if (isset($_SESSION['filesOrder']) and $_SESSION['filesOrder'] == 'completion') 
 ?>
 
 <h1 id="page-message">Welcome to the Babel Project</h1>
+<? include("fragments/motd.php");?>
 <div id="contentArea">
 
 	<h2>Languages / Projects / Versions / Files</h2>

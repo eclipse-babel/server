@@ -1092,6 +1092,16 @@ h4{
 	text-decoration: underline;
 }
 
+#motd {
+	position: relative;
+	width: 700px;
+	margin: 10px auto 10px auto;
+	border: 1px solid darkred;
+	background-color: LightGoldenRodYellow;
+	padding: 3px;
+	}
+
+
 #trans-progress-area{
 	position: absolute;
 	left: auto;

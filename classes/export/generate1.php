@@ -17,6 +17,7 @@
  *    Antoine Toulme (Intalio, Inc) - patch, bug 256430, Fragments with no host jeopardize Eclipse installation
  *    Kit Lo (IBM) - patch, bug 261739, Inconsistent use of language names
  *    Sean Flanigan (Red Hat) - patch, bug 261584, wrong output folder
+ *    Kit Lo (IBM) - patch, bug 270456, Unable to use Babel PTT to verify PDE in the eclipse SDK
  *******************************************************************************/
 
 /*
@@ -243,8 +244,17 @@ foreach ($train_result as $train_id => $train_version) {
 						" AND is_active AND non_translatable = 0";
 					$strings_result = mysql_query($sql);
 					while (($strings_row = mysql_fetch_assoc($strings_result)) != null) {
-						fwrite($outp, "\n" . $strings_row['name'] . "=" . $properties_file['project_id'] . $strings_row['string_id'] .
-							":" . $strings_row['value']);
+						/* Check for value starting with form tag (bug 270456) */
+						if (preg_match("/^(<form>)(.*)/i", $strings_row['value'], $matches)) {
+							$pattern = "/^(<form>)(.*)/i";
+							$replace = "$1" . "<p>" . $properties_file['project_id'] . $strings_row['string_id'] . ":" . "</p>" . "$2";
+							$strings_row['value'] = preg_replace($pattern, $replace, $strings_row['value']);
+							$outp_line = "\n" . $strings_row['name'] . "=" . $strings_row['value'];
+						} else {
+						        $outp_line = "\n" . $strings_row['name'] . "=" . $properties_file['project_id'] . $strings_row['string_id'] .
+								":" . $strings_row['value'];
+						}
+						fwrite($outp, $outp_line);
 
 						$value = htmlspecialchars($strings_row['value']);
 						if (strlen($value) > 100) {

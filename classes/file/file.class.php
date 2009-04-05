@@ -10,6 +10,7 @@
  *    Eclipse Foundation - initial API and implementation
  *    Antoine Toulmé - Bug 248917
  *    Kit Lo (IBM) - patch, bug 266250, Map file processor not running properly on live server
+ *    Kit Lo (IBM) - patch, bug 258749, Keep spaces at the end of value string
 *******************************************************************************/
 require(dirname(__FILE__) . "/../system/language.class.php"); 
 require(dirname(__FILE__) . "/../system/release_train.class.php"); 
@@ -119,14 +120,15 @@ class File {
 							$previous_line 	= "";
 						}
 
-						$tags = explode("=", trim($line), 2);
+						$tags = explode("=", $line, 2);
 						if(count($tags) > 1) {
 							if($rValue != "") {
 								$rValue .= ",";
 							}
 							$tags[0] = trim($tags[0]);
-							# Bug 235553 - don't trim the space at the end of a line!						
-							$tags[1] = trim($tags[1]);
+							# Bug 235553 - don't trim the space at the end of a line!
+							# Bug 258749 - use ltrim() to remove spaces at the beginning of value string
+							$tags[1] = ltrim($tags[1]);
 							
 							$rValue .= $tags[0];
 							

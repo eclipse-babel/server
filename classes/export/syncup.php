@@ -52,7 +52,18 @@ while( ($lang_row = mysql_fetch_assoc($langs)) != null ) {
     	
 		$untranslated_value = $string_row['value'];
 		$untranslated_id = $string_row['string_id'];
-		$possible_translations = mysql_query( "SELECT t.value from strings As s inner join translations AS t on s.string_id = t.string_id where s.string_id != '" . $untranslated_id . "' and BINARY s.value = '" .$untranslated_value . "' and t.language_id = '" . $language_id . "' ");
+		
+		# This query split in two for added performance.
+		# See bug 270485
+		$string_ids = "";
+		$rs = mysql_query( "SELECT s.string_id FROM strings AS s WHERE BINARY s.value = '" . addslashes($untranslated_value) . "'");
+		while ( ($row = mysql_fetch_assoc($rs)) != null) {
+			if(length($string_ids) > 0) {
+				$string_ids .= ",";
+			}
+			$string_ids .= $row['string_id'];
+		}
+		$possible_translations = mysql_query( "SELECT t.value from strings As s inner join translations AS t on s.string_id = t.string_id where s.string_id IN ($string_ids) and t.language_id = '" . $language_id . "' and t.is_active ");
        	if ($possible_translations and (($translation_row = mysql_fetch_assoc($possible_translations)) != null)) {
 			$translation = $translation_row['value'];
            	$query = "INSERT INTO translations(string_id, language_id, value, userid, created_on, possibly_incorrect) values('". addslashes($untranslated_id) ."','". addslashes($language_id) ."','" . addslashes($translation) . "', '". addslashes($User->userid) ."', NOW(), 1)";

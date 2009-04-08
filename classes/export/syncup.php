@@ -58,7 +58,7 @@ while( ($lang_row = mysql_fetch_assoc($langs)) != null ) {
 		$string_ids = "";
 		$rs = mysql_query( "SELECT s.string_id FROM strings AS s WHERE BINARY s.value = '" . addslashes($untranslated_value) . "'");
 		while ( ($row = mysql_fetch_assoc($rs)) != null) {
-			if(length($string_ids) > 0) {
+			if(strlen($string_ids) > 0) {
 				$string_ids .= ",";
 			}
 			$string_ids .= $row['string_id'];

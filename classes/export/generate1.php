@@ -112,6 +112,11 @@ foreach ($train_result as $train_id => $train_version) {
 	fwrite($language_pack_links_file, "\n\t<h3>Release Train: $train_id</h3>\n\t<ul>");
 
 	$language_result = mysql_query("SELECT language_id, iso_code, IF(locale <> '', CONCAT(CONCAT(CONCAT(name, ' ('), locale), ')'), name) as name, is_active, IF(language_id = 1,1,0) AS sorthack FROM languages ORDER BY sorthack, name ASC");
+	if($language_result === FALSE) {
+		# we may have lost the database connection.with our shell-outs
+		# bug 271685
+		$dbh = $dbc->connect();
+	}
 	while (($language_row = mysql_fetch_assoc($language_result)) != null) {
 		$language_name = $language_row['name'];
 		$language_iso = $language_row['iso_code'];

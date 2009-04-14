@@ -47,7 +47,7 @@ while( ($lang_row = mysql_fetch_assoc($langs)) != null ) {
     	$count++;
     	
     	if($count % 100 == 0) {
-    		echo "Processed " . $count . " strings...\n";
+    		echo "Processed " . $count . " strings (language_id=$language_id)... \n";
     	}
     	
 		$untranslated_value = $string_row['value'];
@@ -56,7 +56,8 @@ while( ($lang_row = mysql_fetch_assoc($langs)) != null ) {
 		# This query split in two for added performance.
 		# See bug 270485
 		$string_ids = "";
-		$rs = mysql_query( "SELECT s.string_id FROM strings AS s WHERE BINARY s.value = '" . addslashes($untranslated_value) . "'");
+		# BINARY the lookup value instead of the field to support an index
+		$rs = mysql_query( "SELECT s.string_id FROM strings AS s WHERE s.value = BINARY '" . addslashes($untranslated_value) . "'");
 		while ( ($row = mysql_fetch_assoc($rs)) != null) {
 			if(strlen($string_ids) > 0) {
 				$string_ids .= ",";

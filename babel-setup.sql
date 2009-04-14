@@ -228,6 +228,7 @@ CREATE TABLE `strings` (
   CONSTRAINT `strings_ibfk_2` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE INDEX idx_value ON strings(value(40));
 
 DELIMITER ;;
 CREATE TRIGGER `upd_string` AFTER UPDATE ON `strings` FOR EACH ROW 

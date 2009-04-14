@@ -84,7 +84,7 @@ class String {
 				FROM 
 					strings
 				WHERE file_id = " . sqlSanitize($_file_id, $dbh) . "
-					AND BINARY(name) = " . returnQuotedString(sqlSanitize($_name, $dbh));	
+					AND name = BINARY " . returnQuotedString(sqlSanitize($_name, $dbh));	
 
 			$result = mysql_query($sql, $dbh);
 			if($result && mysql_num_rows($result) > 0) {

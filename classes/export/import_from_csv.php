@@ -69,7 +69,7 @@ $language_id = $lrow['language_id'];
 $handle = fopen($csv_file, "r");
 while (($data = fgetcsv($handle)) !== FALSE) {
 	$sql = <<<SQL
-SELECT s.string_id FROM files AS f INNER JOIN strings AS s ON f.file_id = s.file_id INNER JOIN release_train_projects as v ON (f.project_id = v.project_id AND f.version = v.version) WHERE f.is_active AND s.non_translatable <> 1 AND s.name = '$data[0]' AND BINARY s.value = '$data[1]' AND v.train_id = '$release_train_id'
+SELECT s.string_id FROM files AS f INNER JOIN strings AS s ON f.file_id = s.file_id INNER JOIN release_train_projects as v ON (f.project_id = v.project_id AND f.version = v.version) WHERE f.is_active AND s.non_translatable <> 1 AND s.name = '$data[0]' AND s.value = BINARY '$data[1]' AND v.train_id = '$release_train_id'
 
 SQL;
     $values = mysql_query($sql);

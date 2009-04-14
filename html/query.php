@@ -35,7 +35,7 @@ $possible_translations = mysql_query(
 	"SELECT t.value 
 		from strings As s inner join translations AS t on s.string_id = t.string_id
 					inner join languages As l on l.language_id = t.language_id
-					where BINARY s.value = '" . addslashes($value) . "' 
+					where s.value = BINARY '" . addslashes($value) . "' 
 					and l.iso_code = '" . addslashes($nl) . "' ");
 		
 if ($possible_translations and (($translation_row = mysql_fetch_assoc($possible_translations)) != null)) {

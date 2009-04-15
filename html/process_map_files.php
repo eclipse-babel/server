@@ -11,7 +11,8 @@
  *    Antoine Toulmé - Bug 248917
  *    Motorola  - Change SVN map file format to follow SVN PDE
  *    Gustavo de Paula - Bug 261252
- *    Kit Lo (IBM) - patch, bug 266250, Map file processor not running properly on live server
+ *    Kit Lo (IBM) - Bug 266250, Map file processor not running properly on live server
+ *    Kit Lo (IBM) - Bug 272176, Support "bundle" element type in map file
 *******************************************************************************/
 header("Content-type: text/plain");
 include("global.php");
@@ -74,14 +75,19 @@ while($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 		$line = trim($line);
 
 		# $line looks something like this:
+		# See http://help.eclipse.org/help33/index.jsp?topic=/org.eclipse.pde.doc.user/guide/tasks/pde_fetch_phase.htm for more info
 		# plugin@org.eclipse.emf.query=v200802262150,:pserver:anonymous@dev.eclipse.org:/cvsroot/modeling,,org.eclipse.emf/org.eclipse.emf.query/plugins/org.eclipse.emf.query
 		# plugin@org.eclipse.equinox.frameworkadmin=CVS,tag=R34x_v20080910,cvsRoot=:pserver:anonymous@dev.eclipse.org:/cvsroot/rt,path=org.eclipse.equinox/p2/bundles/org.eclipse.equinox.frameworkadmin
-		if(preg_match("/^(plugin|fragment)/", $line)) {
+		# bundle@org.eclipse.wst.xml.xpath.ui=v200902122100,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,sourceediting/plugins/org.eclipse.wst.xml.xpath.ui
+		
+		# Bug 272176 - Support "bundle" element type in map file
+		if(preg_match("/^(plugin|bundle)/", $line)) {
 			echo $html_spacer . "Processing line: " . $line . "\n";
 			$aParts = split("=", $line);
 			$aElements = split("@", $aParts[0]);
 			$plugin_id = $aElements[1];
-			if($aElements[0] == "plugin") {
+			# Bug 272176 - Support "bundle" element type in map file
+			if($aElements[0] == "plugin" || $aElements[0] == "bundle") {
 				$plugin = $aParts[1];
 				if($aParts[1] == "CVS,tag") {
 					$tagPart = split(",", $aParts[2]);

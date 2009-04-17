@@ -8,7 +8,6 @@
  *
  * Contributors:
  *    Eclipse Foundation - initial API and implementation
- *    Kit Lo (IBM) - 272661 - Pseudo translations change " to ', breaking link texts
 *******************************************************************************/
 
 class String {
@@ -41,14 +40,12 @@ class String {
 					$Event = new EventLog("strings", "string_id:old_value", $this->string_id . ":" . $String->value, "UPDATE");
 					$Event->add();
 				}
-
-                # Bug 272661 - Pseudo translations change " to ', breaking link texts
-                # Use new returnSmartQuotedString function for value string which does not replace " with '.
+				
 				$sql .= " strings 
 							SET string_id 	= " . sqlSanitize($this->string_id, $dbh) . ",
 								file_id		= " . sqlSanitize($this->file_id, $dbh) . ", 
 								name		= " . returnQuotedString(sqlSanitize($this->name, $dbh)) . ",
-								value		= " . returnSmartQuotedString(sqlSanitize($this->value, $dbh)) . ",
+								value		= " . returnQuotedString(sqlSanitize($this->value, $dbh)) . ",
 								userid		= " . returnQuotedString(sqlSanitize($this->userid, $dbh)) . ",
 								created_on	= " . $created_on . ",
 								is_active	= " . sqlSanitize($this->is_active, $dbh) . $where;

@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Antoine Toulme, Intalio Inc. 217488: Remove Phoenix as a requirement for Babel server
+ *    Kit Lo (IBM) - 272661 - Pseudo translations change " to ', breaking link texts
 *******************************************************************************/
 
     /**
@@ -32,6 +33,26 @@
         $_String = str_replace('"', "'", $_String);
     
         return "\"" . $_String . "\"";
+    }
+
+    # Bug 272661 - Pseudo translations change " to ', breaking link texts
+    # Use new returnSmartQuotedString function for value string which does not replace " with '.
+    function returnSmartQuotedString($_String) {
+        # Accept: String - String to be quoted
+        # return: string - Quoted String
+        #
+        # If the input string contains double quote, a single quoted string will be returned.
+        #
+
+        # Note: Use the === operator for testing the return value of the strpos function
+        # because the double quote could be at the 0th position.
+        if (strpos($_String, '"') === false) {
+          $_value = "'" . $_String . "'";
+        } else {
+          $_value = '"' . $_String . '"';
+        }
+
+        return $_value;
     }
 
     function getCURDATE() {

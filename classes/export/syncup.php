@@ -46,7 +46,7 @@ while( ($lang_row = mysql_fetch_assoc($langs)) != null ) {
     while ( ($string_row = mysql_fetch_assoc($untranslated_strings)) != null) {
     	$count++;
     	
-    	if($count % 100 == 0) {
+    	if($count % 10000 == 0) {
     		echo "Processed " . $count . " strings (language_id=$language_id)... \n";
     	}
     	

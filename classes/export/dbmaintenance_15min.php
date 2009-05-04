@@ -32,7 +32,7 @@
 
 	# refresh the scoreboard -- not every 15 minutes!
 	$forceRefresh = strcasecmp(getenv("FORCE_BABEL_REFRESH"), "true");
-	if(rand(1, 100) < 6 || $forceRefresh) {
+	if(rand(1, 100) < 25 || $forceRefresh) {
 		require_once(dirname(__FILE__) . "/../system/scoreboard.class.php");
 		$sb = new Scoreboard();
 		$sb->refresh();
@@ -40,9 +40,8 @@
 		# Refresh file progress
 		# This only needs to happen once in a while too.
 		# See also: babel-setup.sql
-		mysql_query("DELETE FROM file_progress", $dbh);
 		mysql_query("
-INSERT INTO file_progress
+INSERT IGNORE INTO file_progress
 select f.file_id, l.language_id, IF(COUNT(s.string_id) > 0, COUNT(t.string_id)/COUNT(s.string_id)*100,100) AS translate_percent
 FROM files AS f
         INNER JOIN languages as l ON l.is_active = 1

@@ -491,11 +491,15 @@ foreach ($train_result as $train_id => $train_version) {
 	
 	// now generate the metadata and add the non-greedy tags
 	
+	/*
+	 * Leaving this out of generate1 to avoid p2 breakage
+	 * 
 	system("sh " . dirname(__FILE__) . "/runMetadata.sh ". 
 	   METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
 	system("xsltproc -o ${output_dir_for_train}content.xml ".
            dirname(__FILE__) . "/content.xsl ${output_dir_for_train}content.xml");
     system("cd ${output_dir_for_train} ; jar -fc content.jar content.xml ; jar -fc artifacts.jar artifacts.xml ; rm site.xml");
+    */
 }
 echo "Completed generating update site\n";
 

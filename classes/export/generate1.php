@@ -25,7 +25,7 @@
  */
 define("METADATA_GENERATOR_LOCATION", "/home/genie/eclipse"); // you might want to read this value from a config file. Not sure yet.
 
-ini_set("memory_limit", "64M");
+ini_set("memory_limit", "512M");
 require(dirname(__FILE__) . "/../system/backend_functions.php");
 require(dirname(__FILE__) . "/../system/dbconnection.class.php");
 $dbc = new DBConnection();

@@ -28,8 +28,30 @@ define("METADATA_GENERATOR_LOCATION", "/home/genie/eclipse"); // you might want 
 ini_set("memory_limit", "512M");
 require(dirname(__FILE__) . "/../system/backend_functions.php");
 require(dirname(__FILE__) . "/../system/dbconnection.class.php");
+
+# There is no easy way to sort "galileo", "ganymede", and "europa" in the correct order we want without
+# modifying the release_train_projects table.
+#
+# Here is a temporary fix to display train versions in most recent release order until we have a permanent solution. 
+$train_result = array("galileo" => "3.5.0", "ganymede" => "3.4.0", "europa" => "3.3.0");
+
+# Command-line parameter for the release train
+# bug 272958
+$argv_train = "";
+if(isset($argv[1])) {
+	$argv_train = $argv[1];
+	if(array_key_exists($argv_train, $train_result)) {
+		# Picked a valid train .. remove all others
+		foreach ($train_result as $train_id => $train_version) {
+			if($train_id != $argv_train) {
+				unset($train_result[$train_id]);
+			}
+		}
+	}
+}
+
+
 $dbc = new DBConnection();
-$dbh = $dbc->connect();
 
 $work_dir = $addon->callHook('babel_working');
 
@@ -42,12 +64,6 @@ $babel_language_packs_dir = $work_context_dir . "babel_language_packs/";
 $output_dir = $work_context_dir . "output/";
 $source_files_dir = dirname(__FILE__) . "/source_files_for_generate/";
 
-# Language pack URL leader, to enable mirrors on download.eclipse.org
-$language_pack_leader = "";
-if($context == "live") {
-	$language_pack_leader = "http://www.eclipse.org/downloads/download.php?r=1&file=/technology/babel/babel_language_packs/";
-}
-
 $leader = ". . ";
 $timestamp = date("Ymdhis");
 
@@ -55,41 +71,16 @@ $rm_command = "rm -rf $work_dir" . "*";
 exec($rm_command);
 exec("mkdir -p $output_dir");
 
-/*
- * Create language pack links file
- */
-exec("mkdir -p $babel_language_packs_dir");
-$language_pack_links_file = fopen("${babel_language_packs_dir}index.php", "w");
-fwrite($language_pack_links_file, "<?php\n\$pageTitle = \"Babel Language Packs\";");
-fwrite($language_pack_links_file, "\ninclude \$_SERVER['DOCUMENT_ROOT'] . '/eclipse.org-common/themes/Phoenix/header.php';");
-fwrite($language_pack_links_file, "\n?>");
-fwrite($language_pack_links_file, "\n\t<div id='maincontent'>");
-fwrite($language_pack_links_file, "\n\t<div id='midcolumn'>");
-fwrite($language_pack_links_file, "\n\t<style>");
-fwrite($language_pack_links_file, "\n\t\th3 {");
-fwrite($language_pack_links_file, "\n\t\t\tbackground-color: SteelBlue;");
-fwrite($language_pack_links_file, "\n\t\t\tcolor: white;");
-fwrite($language_pack_links_file, "\n\t\t}");
-fwrite($language_pack_links_file, "\n");
-fwrite($language_pack_links_file, "\n\t\th4 {");
-fwrite($language_pack_links_file, "\n\t\t\tbackground-color: LightSteelBlue;");
-fwrite($language_pack_links_file, "\n\t\t}");
-fwrite($language_pack_links_file, "\n\t</style>");
-fwrite($language_pack_links_file, "\n\t<h1>Babel Language Packs</h1>" .
-	"\n\t<h2>Build ID: $timestamp</h2>" .
-	"\n\t<p>The following language packs are based on the community translations entered into the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a>, and may not be complete or entirely accurate.  If you find missing or incorrect translations, please use the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a> to update them." .   
-	"\n\tAll downloads are provided under the terms and conditions of the <a href='http://www.eclipse.org/legal/epl/notice.php'>Eclipse Foundation Software User Agreement</a> unless otherwise specified.</p>");
 
-echo "Generating update site\n";
-
-# There is no easy way to sort "galileo", "ganymede", and "europa" in the correct order we want without
-# modifying the release_train_projects table.
-#
-# Here is a temporary fix to display train versions in most recent release order until we have a permanent solution. 
-
-$train_result = array("galileo" => "3.5.0", "ganymede" => "3.4.0", "europa" => "3.3.0");
+echo "Requested builds: ";
 foreach ($train_result as $train_id => $train_version) {
+	echo $train_id . " ";
+}
+echo "\n";
 
+# Loop through the trains
+foreach ($train_result as $train_id => $train_version) {
+	
 #$train_result = mysql_query("SELECT DISTINCT train_id FROM release_train_projects ORDER BY train_id DESC");
 #while (($train_row = mysql_fetch_assoc($train_result)) != null) {
 #	$train_id = $train_row['train_id'];
@@ -101,6 +92,36 @@ foreach ($train_result as $train_id => $train_version) {
 #		$train_version = "3.3.0";
 #	}
 
+	echo "Generating update site for: $train_id\n";
+	$dbh = $dbc->connect();
+	
+	/*
+	 * Create language pack links file
+	 */
+	exec("mkdir -p $babel_language_packs_dir");
+	$language_pack_links_file = fopen("${babel_language_packs_dir}${train_id}.php", "w");
+	fwrite($language_pack_links_file, "<?php\n\$pageTitle = \"Babel Language Packs for ${train_id}\";");
+	fwrite($language_pack_links_file, "\ninclude \$_SERVER['DOCUMENT_ROOT'] . '/eclipse.org-common/themes/Phoenix/header.php';");
+	fwrite($language_pack_links_file, "\n\$language_pack_leader = \"\";");
+	fwrite($language_pack_links_file, "\n?>");
+	fwrite($language_pack_links_file, "\n\t<div id='maincontent'>");
+	fwrite($language_pack_links_file, "\n\t<div id='midcolumn'>");
+	fwrite($language_pack_links_file, "\n\t<style>");
+	fwrite($language_pack_links_file, "\n\t\th3 {");
+	fwrite($language_pack_links_file, "\n\t\t\tbackground-color: SteelBlue;");
+	fwrite($language_pack_links_file, "\n\t\t\tcolor: white;");
+	fwrite($language_pack_links_file, "\n\t\t}");
+	fwrite($language_pack_links_file, "\n");
+	fwrite($language_pack_links_file, "\n\t\th4 {");
+	fwrite($language_pack_links_file, "\n\t\t\tbackground-color: LightSteelBlue;");
+	fwrite($language_pack_links_file, "\n\t\t}");
+	fwrite($language_pack_links_file, "\n\t</style>");
+	fwrite($language_pack_links_file, "\n\t<h1>Babel Language Packs for ${train_id}</h1>" .
+		"\n\t<h2>Build ID: $timestamp</h2>" .
+		"\n\t<p>The following language packs are based on the community translations entered into the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a>, and may not be complete or entirely accurate.  If you find missing or incorrect translations, please use the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a> to update them." .   
+		"\n\tAll downloads are provided under the terms and conditions of the <a href='http://www.eclipse.org/legal/epl/notice.php'>Eclipse Foundation Software User Agreement</a> unless otherwise specified.</p>");
+	
+	
 	$train_version_timestamp = "$train_version.v$timestamp";
 	$site_xml = "";
 
@@ -456,7 +477,7 @@ foreach ($train_result as $train_id => $train_version) {
 			/*
 			 * Add project language pack link to language pack links file
 			 */
-			fwrite($language_pack_links_file, "\n\t\t\t<li><a href=\"${language_pack_leader}${language_pack_name}\">$language_pack_name ($project_pct_complete%)</a></li>");
+			fwrite($language_pack_links_file, "\n\t\t\t<li><a href=\"<?= \$language_pack_leader ?>${language_pack_name}\">$language_pack_name ($project_pct_complete%)</a></li>");
 			/*
 			 * Jar up this directory as the feature jar
 			 */
@@ -489,6 +510,12 @@ foreach ($train_result as $train_id => $train_version) {
 
 	fwrite($language_pack_links_file, "\n\t</ul>");
 	
+	fwrite($language_pack_links_file, "\n</body>\n</html>");
+	fclose($language_pack_links_file);
+	
+	
+	$dbh = $dbc->disconnect();
+	
 	// now generate the metadata and add the non-greedy tags
 	
 	/*
@@ -503,8 +530,6 @@ foreach ($train_result as $train_id => $train_version) {
 }
 echo "Completed generating update site\n";
 
-fwrite($language_pack_links_file, "\n</body>\n</html>");
-fclose($language_pack_links_file);
 
 /*
  2. what happens if the translation feature includes plug-in fragments for

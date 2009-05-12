@@ -37,9 +37,13 @@ $train_result = array("galileo" => "3.5.0", "ganymede" => "3.4.0", "europa" => "
 
 # Command-line parameter for the release train
 # bug 272958
+# b: build id
+# t: (optional: train id) 
+
+$options = getopt("b:t:");
 $argv_train = "";
-if(isset($argv[1])) {
-	$argv_train = $argv[1];
+if(isset($options['t'])) {
+	$argv_train = $options['t'];
 	if(array_key_exists($argv_train, $train_result)) {
 		# Picked a valid train .. remove all others
 		foreach ($train_result as $train_id => $train_version) {
@@ -49,6 +53,16 @@ if(isset($argv[1])) {
 		}
 	}
 }
+
+$buildid = "";
+if(!isset($options['b'])) {
+	usage();
+	exit();
+}
+else {
+	$buildid = $options['b'];
+}
+
 
 
 $dbc = new DBConnection();
@@ -100,24 +114,12 @@ foreach ($train_result as $train_id => $train_version) {
 	 */
 	exec("mkdir -p $babel_language_packs_dir");
 	$language_pack_links_file = fopen("${babel_language_packs_dir}${train_id}.php", "w");
-	fwrite($language_pack_links_file, "<?php\n\$pageTitle = \"Babel Language Packs for ${train_id}\";");
-	fwrite($language_pack_links_file, "\ninclude \$_SERVER['DOCUMENT_ROOT'] . '/eclipse.org-common/themes/Phoenix/header.php';");
-	fwrite($language_pack_links_file, "\n\$language_pack_leader = \"\";");
-	fwrite($language_pack_links_file, "\n?>");
-	fwrite($language_pack_links_file, "\n\t<div id='maincontent'>");
-	fwrite($language_pack_links_file, "\n\t<div id='midcolumn'>");
-	fwrite($language_pack_links_file, "\n\t<style>");
-	fwrite($language_pack_links_file, "\n\t\th3 {");
-	fwrite($language_pack_links_file, "\n\t\t\tbackground-color: SteelBlue;");
-	fwrite($language_pack_links_file, "\n\t\t\tcolor: white;");
-	fwrite($language_pack_links_file, "\n\t\t}");
-	fwrite($language_pack_links_file, "\n");
-	fwrite($language_pack_links_file, "\n\t\th4 {");
-	fwrite($language_pack_links_file, "\n\t\t\tbackground-color: LightSteelBlue;");
-	fwrite($language_pack_links_file, "\n\t\t}");
-	fwrite($language_pack_links_file, "\n\t</style>");
+	fwrite($language_pack_links_file, "<?php\n");
+	# copy page_header.html here 
+	$header = file_get_contents("${source_files_dir}page_header.html");
+	fwrite($language_pack_links_file, $header);
 	fwrite($language_pack_links_file, "\n\t<h1>Babel Language Packs for ${train_id}</h1>" .
-		"\n\t<h2>Build ID: $timestamp</h2>" .
+		"\n\t<h2>Build ID: $buildid</h2>" .
 		"\n\t<p>The following language packs are based on the community translations entered into the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a>, and may not be complete or entirely accurate.  If you find missing or incorrect translations, please use the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a> to update them." .   
 		"\n\tAll downloads are provided under the terms and conditions of the <a href='http://www.eclipse.org/legal/epl/notice.php'>Eclipse Foundation Software User Agreement</a> unless otherwise specified.</p>");
 	
@@ -547,4 +549,13 @@ echo "Completed generating update site\n";
 
 $alloutput = fopen($output_dir."langpack_output_".date("m_d_Y"), "w");
 fwrite($alloutput,ob_get_contents());
+
+function usage() {
+	echo "\n";
+	echo "generate1.php -b <build_id> [-t <train_id>]\n";
+	echo "  -b <build_id>: The Build ID for this build.\n";
+	echo "  -t <train_id>: Optional: train to build (europa, ganymede, galileo.";
+	echo "\n";
+}
+
 ?>

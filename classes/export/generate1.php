@@ -115,6 +115,8 @@ foreach ($train_result as $train_id => $train_version) {
 	exec("mkdir -p $babel_language_packs_dir");
 	$language_pack_links_file = fopen("${babel_language_packs_dir}${train_id}.php", "w");
 	fwrite($language_pack_links_file, "<?php\n");
+	fwrite($language_pack_links_file, "\$language_pack_leader = \"${train_id}\";\n");
+	fwrite($language_pack_links_file, "?>\n");
 	# copy page_header.html here 
 	$header = file_get_contents("${source_files_dir}page_header.html");
 	fwrite($language_pack_links_file, $header);
@@ -369,8 +371,9 @@ foreach ($train_result as $train_id => $train_version) {
 
 			fwrite($language_pack_links_file, "\n\t\t<h4>Language: $language_name</h4>");
 		}
+		fwrite($language_pack_links_file, "\n\t\t<ul>");
 		foreach ($projects as $project_id => $fragment_ids) {
-			fwrite($language_pack_links_file, "\n\t\t<ul>");
+			
 			/*
 			 * Sort fragment names
 			 */
@@ -479,7 +482,7 @@ foreach ($train_result as $train_id => $train_version) {
 			/*
 			 * Add project language pack link to language pack links file
 			 */
-			fwrite($language_pack_links_file, "\n\t\t\t<li><a href=\"<?= \$language_pack_leader ?>${language_pack_name}\">$language_pack_name ($project_pct_complete%)</a></li>");
+			fwrite($language_pack_links_file, "\n\t\t\t<li><a href=\"<?= \$language_pack_leader ?>/${language_pack_name}\">$language_pack_name ($project_pct_complete%)</a></li>");
 			/*
 			 * Jar up this directory as the feature jar
 			 */
@@ -490,10 +493,11 @@ foreach ($train_result as $train_id => $train_version) {
 			$site_xml .= "\n\t<feature url=\"features/$feature_filename\" id=\"$feature_id\" version=\"$train_version_timestamp\">";
 			$site_xml .= "\n\t\t<category name=\"Babel Language Packs in $language_name\"/>";
 			$site_xml .= "\n\t</feature>";
-			echo "${leader}Completed language pack for $language_name ($language_iso)\n";
+			
 
-			fwrite($language_pack_links_file, "\n\t\t</ul>");
-		}
+		}  /*  End: foreach project  */
+		echo "${leader}Completed language pack for $language_name ($language_iso)\n";
+		fwrite($language_pack_links_file, "\n\t\t</ul>");
 	}
 	/*
 	 * <site mirrorsURL=... implemented in the weekly build process by sed'ing <site>

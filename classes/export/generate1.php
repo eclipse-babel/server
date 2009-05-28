@@ -115,7 +115,8 @@ foreach ($train_result as $train_id => $train_version) {
 	exec("mkdir -p $babel_language_packs_dir");
 	$language_pack_links_file = fopen("${babel_language_packs_dir}${train_id}.php", "w");
 	fwrite($language_pack_links_file, "<?php\n");
-	fwrite($language_pack_links_file, "\$language_pack_leader = \"${train_id}\";\n");
+	# Uncomment if each train is in its own directory: fwrite($language_pack_links_file, "\$language_pack_leader = \"${train_id}\";\n");
+	fwrite($language_pack_links_file, "\$language_pack_leader = \".\";\n");
 	fwrite($language_pack_links_file, "?>\n");
 	# copy page_header.html here 
 	$header = file_get_contents("${source_files_dir}page_header.html");

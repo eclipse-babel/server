@@ -40,19 +40,22 @@
 		# Refresh file progress
 		# This only needs to happen once in a while too.
 		# See also: babel-setup.sql
-		mysql_query("
-INSERT IGNORE INTO file_progress
-select f.file_id, l.language_id, IF(COUNT(s.string_id) > 0, COUNT(t.string_id)/COUNT(s.string_id)*100,100) AS translate_percent
+		$sql = "select f.file_id, l.language_id, IF(COUNT(s.string_id) > 0, COUNT(t.string_id)/COUNT(s.string_id)*100,100) AS translate_percent
 FROM files AS f
         INNER JOIN languages as l ON l.is_active = 1
         LEFT JOIN strings as s ON (s.file_id = f.file_id AND s.is_active AND s.value <> '' AND s.non_translatable <> 1) 
         LEFT JOIN translations AS t ON (s.string_id = t.string_id 
            AND t.language_id = l.language_id AND t.is_active = 1)
 WHERE f.is_active = 1 
-GROUP BY f.file_id, l.language_id", $dbh);
+GROUP BY f.file_id, l.language_id
+HAVING translate_percent > 0";
+		$rs = mysql_query($sql, $dbh);
+		while($myrow = mysql_fetch_assoc($rs)) {
+			mysql_query("INSERT INTO file_progress (file_id, language_id, pct_complete)
+			VALUES(" . $myrow['file_id'] . ", " . $myrow['language_id'] . ", " . $myrow['translate_percent'] . ")
+			ON DUPLICATE KEY UPDATE pct_complete=" . $myrow['translate_percent'], $dbh);
+		}
 		mysql_query("DELETE FROM file_progress WHERE pct_complete = 0", $dbh);
-		
-		
 	}
 	
 	# Update project/version/language progress 

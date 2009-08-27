@@ -39,13 +39,11 @@ class BabelEclipseOrg_backend {
             if(preg_match("/{([^}]+)}$/", $hash, $matches)) {
 				$hash_method 	= $matches[0];
 				$salt 			= substr($hash,0,8);
-  				# Use one or the other, depending on server libs
-				$pw = $salt . str_replace("=", "", base64_encode(hash("sha256", $password . $salt, true))) . $hash_method;
+				$pw = $salt . str_replace("=", "", base64_encode(mhash(MHASH_SHA256, $password . $salt))) . $hash_method;				
 			}
 			else {
   				$pw = crypt($password, $hash);
 			}
-            
                     
         	$sql = "SELECT *
                         FROM users 

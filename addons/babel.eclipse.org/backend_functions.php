@@ -33,11 +33,24 @@ class BabelEclipseOrg_backend {
         if ($hash_result && mysql_num_rows($hash_result) > 0) {
             $hash_row = mysql_fetch_assoc($hash_result);
             $hash = $hash_row['password_hash'];
+            
+            # Handle crypt and sha-256 passwords
+            # Bug 287844
+            if(preg_match("/{([^}]+)}$/", $hash, $matches)) {
+				$hash_method 	= $matches[0];
+				$salt 			= substr($hash,0,8);
+  				# Use one or the other, depending on server libs
+				$pw = $salt . str_replace("=", "", base64_encode(hash("sha256", $password . $salt, true))) . $hash_method;
+			}
+			else {
+  				$pw = crypt($password, $hash);
+			}
+            
                     
-            $sql = "SELECT *
+        	$sql = "SELECT *
                         FROM users 
                         WHERE email = '$email' 
-                            AND password_hash = '" . crypt($password, $hash) . "'";
+                            AND password_hash = '" . $pw . "'";
                             
             $result = mysql_query($sql, $dbh);
             if($result && mysql_num_rows($result) > 0) {

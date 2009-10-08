@@ -1,3 +1,5 @@
+<script src="js/mapFiles.js" type='text/javascript'></script>
+<script src="js/train.js" type='text/javascript'></script>
 <div id="maincontent">
 <div id="rightcolumn">
 		<div class="sideitem">
@@ -8,8 +10,6 @@
 				<li>Maintain your map files on the Babel server (this page) with every release</li>
 				<br />
 				<li>Tell your community about Babel, how to help translate, link to the <a href="http://www.eclipse.org/babel/downloads.php">Babel download page</a></li>
-				<br />
-				<li>Optionally download the Babel fragments for your project and repackage them on your own download site</li>
 			</ul>
 		</div>
 </div>
@@ -65,29 +65,20 @@
 </tr>
 
 <tr>
-  <td><a href="<?php echo imageRoot() ?>/viewcvs/index.cgi">ViewCVS</a> download URL to map file:</td><td><input type="text" name="location" value="<?= $LOCATION ?>" size="80" onchange="fnCheckUrl();" /></td>
+  <td colspan="2"><a href="<?php echo imageRoot() ?>/viewcvs/index.cgi">ViewCVS</a> download URLs to map files (one per line):</td><td></td>
   <td style='width:100px; color:red;'><?= $GLOBALS['g_ERRSTRS'][2] ?></td>
 </tr>
 <tr>
-  <td>&#160;</td><td>e.g. <a href="<?php echo imageRoot() ?>/viewcvs/index.cgi/org.eclipse.releng/maps/core.map?view=co">http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core.map?view=co</a></td>
+	<td colspan="3"><textarea id="files-area" name="fileFld" rows="14" cols="120"></textarea></td>
 </tr>
 <tr>
-  <td>&#160;</td><td><b>NOTE: </b>If you're defining map files for a Release, you must use the download link to the CVS TAG of that release.  This is the pathrev=R3_4 parameter in this example:<br />
-  <a href="http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core.map?view=co&pathrev=R3_4">http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core.map?view=co&pathrev=R3_4</a>
-  </td>
+  <td colspan="2"><b>NOTE: </b>If you're defining map files for a Release, you must use the download link to the CVS TAG of that release.  This is the pathrev=R3_4 parameter in this example:<br />
+  <a href="<?php echo imageRoot() ?>/viewcvs/index.cgi/org.eclipse.releng/maps/core.map?view=co&pathrev=R3_4">http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core.map?view=co&pathrev=R3_4</a><br />
+  <a href="<?php echo imageRoot() ?>/viewcvs/index.cgi/org.eclipse.releng/maps/core.map?view=co&pathrev=HEAD">http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core.map?view=co&pathrev=HEAD</a>  </td>
 </tr>
-<tr>
-  <td>File name: </td><td><input type="text" name="filename" value="<?= $FILENAME ?>" size="32" /></td>
-  <td style='width:100px; color:red;'><?= $GLOBALS['g_ERRSTRS'][5] ?></td>
-</tr>
-
 <tr>
   <td></td><td><input type="submit" name="submit" value="Save" style="font-size:14px;" /></td></tr>
 </table>
-<iframe id="fileShow" name="somefiles" width="950" height="200"
-		  style="border: 1px black solid"
-		  src="">
-		</iframe>
 </form>
 <script language="javascript">
 	function fnSetVersionList() {
@@ -115,8 +106,7 @@
 	}
 	
 	function fnUpdateFileList() {
-		source = "map_files.php?submit=showfiles&project_id=" + document.form1.project_id.value + "&version=" + document.form1.version.options[document.form1.version.selectedIndex].value;
-		document.getElementById("fileShow").src = source;
+		showMapFiles(document.form1.project_id.value, document.form1.version.options[document.form1.version.selectedIndex].value);		
 		fnSetTrain();
 	}
 	
@@ -186,7 +176,4 @@ echo $addon->callHook('validate_map_file_url');
 	echo "};";
  ?>
 	fnSetVersionList();
-  
-	document.form1.submit.disabled = "disabled";
- 
  </script>

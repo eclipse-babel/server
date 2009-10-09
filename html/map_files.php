@@ -40,7 +40,6 @@ $FILENAME	= getHTTPParameter("filename");
 $SUBMIT 	= getHTTPParameter("submit");
 
 $VERSION = preg_replace("/^\* /", "", $VERSION);
-echo $VERSION;
 
 if($SUBMIT == "Save") {
 	if($PROJECT_ID != "" && $VERSION != "" && $FILE_FLD != "") {

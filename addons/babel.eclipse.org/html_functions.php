@@ -20,7 +20,7 @@ class BabelEclipseOrg {
         return "http://dev.eclipse.org";
     }
     
-    function validateMapFileUrl($url) {
+    function validateMapFileUrl() {
         return <<<JS
         function fnCheckUrl() {
             if(!document.form1.location.value.match(/view=co/)) {

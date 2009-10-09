@@ -39,6 +39,9 @@ $FILE_FLD	= getHTTPParameter("fileFld");
 $FILENAME	= getHTTPParameter("filename");
 $SUBMIT 	= getHTTPParameter("submit");
 
+$VERSION = preg_replace("/^\* /", "", $VERSION);
+echo $VERSION;
+
 if($SUBMIT == "Save") {
 	if($PROJECT_ID != "" && $VERSION != "" && $FILE_FLD != "") {
 		$sql = "DELETE FROM map_files WHERE project_id = "
@@ -90,7 +93,7 @@ if($SUBMIT == "delete") {
 $sql = "SELECT project_id FROM projects WHERE is_active = 1 ORDER BY project_id";
 $rs_project_list = mysql_query($sql, $dbh);
 
-$sql = "SELECT project_id, version FROM project_versions WHERE is_active = 1 and version != 'unspecified' ORDER BY project_id ASC, version DESC";
+$sql = "SELECT pv.project_id, pv.version, count(m.is_active) AS map_count FROM project_versions as pv left join map_files as m on m.project_id = pv.project_id and m.version = pv.version WHERE pv.is_active = 1 and pv.version != 'unspecified' group by pv.project_id, pv.version ORDER BY pv.project_id ASC, pv.version DESC;";
 $rs_version_list = mysql_query($sql, $dbh);
 
 $sql = "SELECT DISTINCT train_id FROM release_train_projects ORDER BY train_id ASC";

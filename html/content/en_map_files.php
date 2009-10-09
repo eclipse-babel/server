@@ -37,7 +37,7 @@
 </tr>
 <tr>
   <td>Release Version</td><td><select name="version" onchange="fnUpdateFileList();">
-</select></td>
+</select> * Indicates map files present</td> 
   <td style='width:100px; color:red;'><?= $GLOBALS['g_ERRSTRS'][4] ?></td>
 </tr>
 <tr>
@@ -69,7 +69,7 @@
   <td style='width:100px; color:red;'><?= $GLOBALS['g_ERRSTRS'][2] ?></td>
 </tr>
 <tr>
-	<td colspan="3"><textarea id="files-area" name="fileFld" rows="14" cols="120"></textarea></td>
+	<td colspan="3"><textarea id="files-area" name="fileFld" onclick="fnClickText();" rows="14" cols="120"></textarea></td>
 </tr>
 <tr>
   <td colspan="2"><b>NOTE: </b>If you're defining map files for a Release, you must use the download link to the CVS TAG of that release.  This is the pathrev=R3_4 parameter in this example:<br />
@@ -104,9 +104,19 @@
 		
 		fnUpdateFileList();
 	}
+
+	function cleanVersion(_value) {
+		return _value.replace(/^\* /, "");
+	}
+
+	function fnClickText() {
+		if(document.form1.fileFld.value.substr(0,18) == "No map files found") {
+			document.form1.fileFld.value = "";
+		}
+	}
 	
 	function fnUpdateFileList() {
-		showMapFiles(document.form1.project_id.value, document.form1.version.options[document.form1.version.selectedIndex].value);		
+		showMapFiles(document.form1.project_id.value, cleanVersion(document.form1.version.options[document.form1.version.selectedIndex].value));		
 		fnSetTrain();
 	}
 	
@@ -144,7 +154,12 @@ echo $addon->callHook('validate_map_file_url');
 		if($count > 0) {
 			echo ",";
 		}
-		echo "\"" . $myrow['version'] . "\"";
+		$str = "";
+		if($myrow['map_count'] > 0) {
+			$str = "* ";
+		}
+		
+		echo "\"$str" . $myrow['version'] . "\"";
 		$count++;
 		$prev_project = $myrow['project_id'];
 	}
@@ -169,6 +184,7 @@ echo $addon->callHook('validate_map_file_url');
 		if($count > 0) {
 			echo ",";
 		}
+		
 		echo "'" . $myrow['version'] . "' : '" . $myrow['train_id'] . "'";
 		$count++;
 		$prev_project = $myrow['project_id'];

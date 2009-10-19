@@ -122,16 +122,16 @@
 	
 	function fnSetTrain() {
 		<?# Update train according to selected project/version  ?>
-		if(typeof(project_trains[document.form1.project_id.value][document.form1.version.options[document.form1.version.selectedIndex].value]) != "undefined") {
+		if(typeof(project_trains[document.form1.project_id.value][cleanVersion(document.form1.version.options[document.form1.version.selectedIndex].value)]) != "undefined") {
 			for(i = 0; i < document.form1.train_id.length; i++) {
 				document.form1.train_id.options[i].selected = "";
-				if(document.form1.train_id.options[i].value == project_trains[document.form1.project_id.value][document.form1.version.options[document.form1.version.selectedIndex].value]) {
+				if(document.form1.train_id.options[i].value == project_trains[document.form1.project_id.value][cleanVersion(document.form1.version.options[document.form1.version.selectedIndex].value)]) {
 					document.form1.train_id.options[i].selected = "selected";
 				}
 			}
 		}
 	}
-	
+
 <?php
 global $addon;
 echo $addon->callHook('validate_map_file_url');

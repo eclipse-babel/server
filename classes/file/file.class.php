@@ -11,6 +11,7 @@
  *    Antoine Toulmé - Bug 248917
  *    Kit Lo (IBM) - patch, bug 266250, Map file processor not running properly on live server
  *    Kit Lo (IBM) - patch, bug 258749, Keep spaces at the end of value string
+ *    Kit Lo (IBM) - patch, bug 226378, Non-translatable strings or files should not be presented to user for translation
 *******************************************************************************/
 require(dirname(__FILE__) . "/../system/language.class.php"); 
 require(dirname(__FILE__) . "/../system/release_train.class.php"); 
@@ -102,44 +103,56 @@ class File {
 			# step 1 - import existing strings.  $String->save() will deal with merges
 			$previous_line 	= "";
 			$lines 			= explode("\n", $_content);
+			$non_translatable = FALSE;
 			foreach($lines as $line) {
-				if(strlen($line) > 0 && $line[0] != "#" && $line[0] != ";") {
+				if(strlen($line) > 0 && $line[0] != "!" && $line[0] != ";") {
 					# Bug 235553 - don't trim the space at the end of a line!
 					# $line = trim($line);
 					
-					# Does line end with a \ ?
-					if(preg_match("/\\\\$/", $line)) {
-						# Line ends with \
-						
-						# strip the backslash
-						$previous_line .= $line . "\n";
-					}
-					else {
-						if($previous_line != "") {
-							$line 			= $previous_line . $line;
-							$previous_line 	= "";
+					if($line[0] == "#") {
+						$tokens = preg_split("/[\s]+/", $line);
+						if($tokens[2] == "NON-TRANSLATABLE") {
+							if($tokens[1] == "START")
+								$non_translatable = TRUE;
+							elseif($tokens[1] == "END")
+								$non_translatable = FALSE;
 						}
-
-						$tags = explode("=", $line, 2);
-						if(count($tags) > 1) {
-							if($rValue != "") {
-								$rValue .= ",";
+					}
+					elseif($non_translatable == FALSE) {
+						# Does line end with a \ ?
+						if(preg_match("/\\\\$/", $line)) {
+							# Line ends with \
+							
+							# strip the backslash
+							$previous_line .= $line . "\n";
+						}
+						else {
+							if($previous_line != "") {
+								$line 			= $previous_line . $line;
+								$previous_line 	= "";
 							}
-							$tags[0] = trim($tags[0]);
-							# Bug 235553 - don't trim the space at the end of a line!
-							# Bug 258749 - use ltrim() to remove spaces at the beginning of value string
-							$tags[1] = ltrim($tags[1]);
-							
-							$rValue .= $tags[0];
-							
-							$String = new String();
-							$String->file_id 	= $this->file_id;
-							$String->name 		= $tags[0];
-							$String->value 		= $tags[1];
-							$String->userid 	= $User->userid;
-							$String->created_on = getCURDATE();
-							$String->is_active 	= 1;
-							$String->save();
+	
+							$tags = explode("=", $line, 2);
+							if(count($tags) > 1) {
+								if($rValue != "") {
+									$rValue .= ",";
+								}
+								$tags[0] = trim($tags[0]);
+								# Bug 235553 - don't trim the space at the end of a line!
+								# Bug 258749 - use ltrim() to remove spaces at the beginning of value string
+								$tags[1] = ltrim($tags[1]);
+								
+								$rValue .= $tags[0];
+								
+								$String = new String();
+								$String->file_id 	= $this->file_id;
+								$String->name 		= $tags[0];
+								$String->value 		= $tags[1];
+								$String->userid 	= $User->userid;
+								$String->created_on = getCURDATE();
+								$String->is_active 	= 1;
+								$String->save();
+							}
 						}
 					}
 				}

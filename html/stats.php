@@ -17,7 +17,7 @@ InitPage("");
 global $User;
 global $dbh;
 
-$pageTitle 		= "Babel - Translation statistics";
+$pageTitle 		= "Babel - Translation Statistics";
 $pageKeywords 	= "";
 $incfile 		= "content/en_stats.php";
 

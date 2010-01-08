@@ -24,13 +24,25 @@ if(isset($_SESSION['language']) and isset($_SESSION['version']) and isset($_SESS
 }
 
 
-$query = "SELECT DISTINCT t.value 
+/* $query = "SELECT DISTINCT t.value 
 	FROM translations as t 
 		INNER JOIN strings AS s ON s.string_id = t.string_id 
 	WHERE s.value like '%" . addslashes($tr_string). "%' 
 		AND t.is_active
 		AND t.language_id = '".addslashes($language)."'
 	ORDER BY LENGTH(t.value) ASC LIMIT 15";
+*/
+
+$query = "SELECT DISTINCT t.value 
+FROM translations as t 
+ INNER JOIN strings AS s ON s.string_id = t.string_id
+ INNER JOIN files   AS f ON s.file_id = f.file_id
+ INNER JOIN release_train_projects AS tr ON tr.project_id = f.project_id AND tr.version = f.version
+WHERE s.value like '%" . addslashes($tr_string). "%' 
+ AND t.is_active
+ AND tr.train_id = 'galileo'
+ AND t.language_id = '".addslashes($language)."'
+ORDER BY LENGTH(t.value) ASC LIMIT 15";
 # print $query."\n";
 
 $res = mysql_query($query,$dbh);

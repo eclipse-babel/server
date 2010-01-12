@@ -412,6 +412,43 @@ pass: password
 
 insert into profiles set login_name = "test", cryptpassword = "", realname = "tester", disabledtext = false, mybugslink = 1, extern_id = 1, disable_mail = false;
 insert into users set userid = 1, username = "babel@eclipse.org",first_name="babel",last_name="fish",email="babel@eclipse.org",primary_language_id = "",password_hash = "HSD9a.ShTTdvo", is_committer = true,  updated_on = NOW(), updated_at='',created_on = NOW(), created_at='';
+
+insert into languages values (1,    "en",    null,          "English",    1);
+insert into languages values (null, "fr",    null,          "French",     1);
+insert into languages values (null, "de",    null,          "German",     1);
+insert into languages values (null, "es",    null,          "Spanish",    1);
+insert into languages values (null, "it",    null,          "Italian",    1);
+insert into languages values (null, "ja",    null,          "Japanese",   1);
+insert into languages values (null, "ko",    null,          "Korean",     1);
+insert into languages values (null, "pt_BR", "Brazilian",   "Portuguese", 1);
+insert into languages values (null, "zh",    "Simplified",  "Chinese",    1);
+insert into languages values (null, "zh_TW", "Traditional", "Chinese",    1);
+insert into languages values (null, "cs",    null,          "Czech",      1);
+insert into languages values (null, "hu",    null,          "Hungarian",  1);
+insert into languages values (null, "pl",    null,          "Polish",     1);
+insert into languages values (null, "ru",    null,          "Russian",    1);
+insert into languages values (null, "da",    null,          "Danish",     1);
+insert into languages values (null, "nl",    null,          "Dutch",      1);
+insert into languages values (null, "fi",    null,          "Finnish",    1);
+insert into languages values (null, "el",    null,          "Greek",      1);
+insert into languages values (null, "no",    null,          "Norwegian",  1);
+insert into languages values (null, "pt",    null,          "Portuguese", 1);
+insert into languages values (null, "sv",    null,          "Swedish",    1);
+insert into languages values (null, "tr",    null,          "Turkish",    1);
+insert into languages values (null, "ar",    null,          "Arabic",     1);
+insert into languages values (null, "iw",    null,          "Hebrew",     1);
+insert into languages values (null, "hi",    null,          "Hindi",      1);
+insert into languages values (null, "ro",    null,          "Romanian",   1);
+insert into languages values (null, "uk",    null,          "Ukrainian",  1);
+insert into languages values (null, "ca",    null,          "Catalan",    1);
+insert into languages values (null, "et",    null,          "Estonian",   1);
+insert into languages values (null, "en_CA", "Canadian",    "English",    1);
+insert into languages values (null, "en_AU", "Australian",  "English",    1);
+insert into languages values (null, "mn",    null,          "Mongolian",  1);
+insert into languages values (null, "id",    null,          "Indonesian", 1);
+insert into languages values (null, "bg",    null,          "Bulgarian",  1);
+insert into languages values (null, "tl",    null,          "Klingon",    1);
+
 insert into projects set project_id = 'eclipse', is_active = 1 ;
 insert into projects set project_id = 'birt', is_active = 1 ;
 insert into projects set project_id = 'modeling.emf', is_active = 1 ;
@@ -424,45 +461,11 @@ insert into projects set project_id = 'tools.gef', is_active = 1 ;
 insert into projects set project_id = 'tools.pdt', is_active = 1 ;
 insert into projects set project_id = 'webtools', is_active = 1 ;
 
-INSERT INTO `languages` VALUES (1,'en',NULL,'English',1),
-(2,'fr',NULL,'French',1),
-(4,'de',NULL,'German',1),
-(5,'es',NULL,'Spanish',1),
-(7,'it',NULL,'Italian',1),
-(8,'ja',NULL,'Japanese',1),
-(9,'ko',NULL,'Korean',1),
-(10,'pt_BR','Brazilian','Portuguese',1),
-(11,'zh','Simplified','Chinese',1),
-(12,'zh_TW','Traditional','Chinese',1),
-(13,'cs',NULL,'Czech',1),
-(14,'hu',NULL,'Hungarian',1),
-(15,'pl',NULL,'Polish',1),
-(16,'ru',NULL,'Russian',1),
-(17,'da',NULL,'Danish',1),
-(18,'nl',NULL,'Dutch',1),
-(19,'fi',NULL,'Finnish',1),
-(20,'el',NULL,'Greek',1),
-(21,'no',NULL,'Norwegian',1),
-(22,'pt',NULL,'Portuguese',1),
-(23,'sv',NULL,'Swedish',1),
-(24,'tr',NULL,'Turkish',1),
-(25,'ar',NULL,'Arabic',1),
-(26,'iw',NULL,'Hebrew',1);
-insert into languages set iso_code = 'hi', name = "Hindi";
-insert into languages set iso_code = 'ro', name = "Romanian";
-insert into languages set iso_code = 'uk', name = "Ukrainian";
-insert into languages set iso_code = 'ca', name = "Catalan";
-insert into languages values (null, "et", null, "Estonian", 1);
-insert into languages values (null, "en_CA", "Canadian", "English", 1);
-insert into languages values (null, "en_AU", "Australian", "English", 1);
-insert into languages values (null, "mn", null, "Mongolian", 1);
-insert into languages values (null, "id", null, "Indonesian", 1);
-
+insert into project_versions set project_id = "eclipse", version = "3.3.1", is_active = 1;
+insert into project_versions set project_id = "birt", version = "2.2.0", is_active = 1;
+insert into project_versions set project_id = "stp", version = "0.8", is_active = 1;
 
 insert into project_versions set project_id = "eclipse", version = "3.4", is_active = 1;
-
-insert into project_versions set project_id = "eclipse", version = "3.3.1", is_active = 0;
-insert into project_versions set project_id = "stp", version = "0.8", is_active = 0;
 insert into project_versions set project_id = "birt", version = "2.3.0", is_active = 1;
 insert into project_versions set project_id = "modeling.emf", version = "2.4.0", is_active = 1;
 insert into project_versions set project_id = "modeling.emft", version = "0.8", is_active = 1;
@@ -473,6 +476,38 @@ insert into project_versions set project_id = "tools.cdt", version = "5.0", is_a
 insert into project_versions set project_id = "tools.gef", version = "3.4", is_active = 1;
 insert into project_versions set project_id = "tools.pdt", version = "1.5.1", is_active = 1;
 insert into project_versions set project_id = "webtools", version = "3.0", is_active = 1;
+
+insert into project_versions set project_id = "eclipse", version = "3.5", is_active = 1;
+insert into project_versions set project_id = "birt", version = "2.5.0", is_active = 1;
+insert into project_versions set project_id = "webtools", version = "3.1", is_active = 1;
+
+insert into project_versions set project_id = "eclipse", version = "3.6", is_active = 1;
+insert into project_versions set project_id = "birt", version = "2.6.0", is_active = 1;
+insert into project_versions set project_id = "webtools", version = "3.2", is_active = 1;
+
+insert into release_train_projects values ('europa',   'eclipse',       '3.3.1');
+insert into release_train_projects values ('europa',   'birt',          '2.2.0');
+insert into release_train_projects values ('europa',   'stp',   	    '0.8');
+
+insert into release_train_projects values ('ganymede', 'eclipse',       '3.4');
+insert into release_train_projects values ('ganymede', 'birt',          '2.3.0');
+insert into release_train_projects values ('ganymede', 'modeling.emf',  '2.4.0');
+insert into release_train_projects values ('ganymede', 'modeling.emft', '0.8');
+insert into release_train_projects values ('ganymede', 'modeling.gmf',  '2.1');
+insert into release_train_projects values ('ganymede', 'modeling.mdt',  '2.4.0');
+insert into release_train_projects values ('ganymede', 'stp',           '1.0');
+insert into release_train_projects values ('ganymede', 'tools.cdt',     '5.0');
+insert into release_train_projects values ('ganymede', 'tools.gef',     '3.4');
+insert into release_train_projects values ('ganymede', 'tools.pdt',     '1.5.1');
+insert into release_train_projects values ('ganymede', 'webtools',      '3.0');
+
+insert into release_train_projects values ('galileo',  'eclipse',       '3.5');
+insert into release_train_projects values ('galileo',  'birt',          '2.5.0');
+insert into release_train_projects values ('galileo',  'webtools',      '3.1');
+
+insert into release_train_projects values ('helios',   'eclipse',       '3.6');
+insert into release_train_projects values ('helios',   'birt',          '2.6.0');
+insert into release_train_projects values ('helios',   'webtools',      '3.2');
 
 /* MAP INPUTS */
 insert into map_files values ("eclipse", "3.4", "ant.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/ant.map?view=co", 1);
@@ -501,21 +536,6 @@ insert into map_files values ("eclipse", "3.4", "text.map", "http://dev.eclipse.
 insert into map_files values ("eclipse", "3.4", "ui.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/ui.map?view=co", 1);
 insert into map_files values ("eclipse", "3.4", "update.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/update.map?view=co", 1);
 insert into map_files values ("eclipse", "3.4", "userassist.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/userassist.map?view=co", 1);
-
-
-insert into release_train_projects values ('europa',   'eclipse',   '3.3.1');
-insert into release_train_projects values ('europa',   'stp',   	'0.8');
-insert into release_train_projects values ('ganymede', 'birt',      '2.3.0');
-insert into release_train_projects values ('ganymede', 'eclipse',   '3.4');
-insert into release_train_projects values ('ganymede', 'modeling.emf',   '2.4.0');
-insert into release_train_projects values ('ganymede', 'modeling.emft',   '0.8');
-insert into release_train_projects values ('ganymede', 'modeling.gmf',   '2.1');
-insert into release_train_projects values ('ganymede', 'modeling.mdt',   '2.4.0');
-insert into release_train_projects values ('ganymede', 'stp',       '1.0');
-insert into release_train_projects values ('ganymede', 'tools.cdt', '5.0');
-insert into release_train_projects values ('ganymede', 'tools.gef', '3.4');
-insert into release_train_projects values ('ganymede', 'tools.pdt', '1.5.1');
-insert into release_train_projects values ('ganymede', 'webtools',  '3.0');
 
 /* populate file_progress table  */
 /* See also: dbmaintenance_15min.php */

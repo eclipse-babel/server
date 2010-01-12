@@ -12,6 +12,7 @@
  *    Kit Lo (IBM) - patch, bug 266250, Map file processor not running properly on live server
  *    Kit Lo (IBM) - patch, bug 258749, Keep spaces at the end of value string
  *    Kit Lo (IBM) - patch, bug 226378, Non-translatable strings or files should not be presented to user for translation
+ *    Kit Lo (IBM) - Bug 299402, Extract properties files from Eclipse project update sites for translation
 *******************************************************************************/
 require(dirname(__FILE__) . "/../system/language.class.php"); 
 require(dirname(__FILE__) . "/../system/release_train.class.php"); 
@@ -63,7 +64,7 @@ class File {
 				$Event->add();
 			}
 			else {
-				echo $sql;
+				echo $sql . "\n";
 				$GLOBALS['g_ERRSTRS'][1] = mysql_error();
 			}
 		}
@@ -99,8 +100,25 @@ class File {
 		if($_content != "") {
 			
 			global $User;
-			
-			# step 1 - import existing strings.  $String->save() will deal with merges
+
+			# find all current active strings for this properties file
+			global $dbh;
+			$strings = array();
+			$sql = "SELECT * from strings WHERE is_active = 1 AND file_id = $this->file_id";
+			$rs_strings = mysql_query($sql, $dbh);
+			while ($myrow_strings = mysql_fetch_assoc($rs_strings)) {
+			  $string = new String();
+			  $string->string_id = $myrow_strings['string_id'];
+			  $string->file_id = $myrow_strings['file_id'];
+			  $string->name = $myrow_strings['name'];
+			  $string->value = $myrow_strings['value'];
+			  $string->userid = $myrow_strings['userid'];
+			  $string->created_on = $myrow_strings['created_on'];
+			  $string->is_active = $myrow_strings['is_active'];
+			  $strings[$string->string_id] = $string;
+			}
+
+			# import existing strings.  $String->save() will deal with merges
 			$previous_line 	= "";
 			$lines 			= explode("\n", $_content);
 			$non_translatable = FALSE;
@@ -111,7 +129,7 @@ class File {
 					
 					if($line[0] == "#") {
 						$tokens = preg_split("/[\s]+/", $line);
-						if($tokens[2] == "NON-TRANSLATABLE") {
+						if (sizeof($tokens) > 1 && $tokens[2] == "NON-TRANSLATABLE") {
 							if($tokens[1] == "START")
 								$non_translatable = TRUE;
 							elseif($tokens[1] == "END")
@@ -152,34 +170,26 @@ class File {
 								$String->created_on = getCURDATE();
 								$String->is_active 	= 1;
 								$String->save();
+
+								# remove the string from the list
+								unset($strings[$String->string_id]);
 							}
 						}
 					}
 				}
 			}
-			
-			# step 2 - remove strings that are no longer in the properties file
-			$String = new String();
-			$aStrings = $String->getActiveStrings($this->file_id);
-			foreach ($aStrings as $String) {
-				$found = false;
-				
-				$aStringList = explode(",",$rValue);
-				foreach($aStringList as $strName) {
-					if($strName == $String->name) {
-						$found = true;
-						break;
-					}
-				}
-				
-				if(!$found) {
-					$String->deactivate($String->string_id);
-				}
+
+			# remove strings that are no longer in the properties file
+			foreach ($strings as $string) {
+			  $strings->is_active = 0;
+			  if (!$strings->save()) {
+			    echo "***ERROR: Cannot deactivate string $string->name in file $string->file_id\n";
+			  }
 			}
 		}
 		return $rValue;
 	}
-	
+
 	/**
 	 * Returns the fragment relative path.
 	 */

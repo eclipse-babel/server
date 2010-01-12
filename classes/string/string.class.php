@@ -63,7 +63,8 @@ class String {
 				}
 			}
 			else {
-				# Nothing to do.  Imported string is identical.
+				# Imported string is identical.
+				$this->string_id = $String->string_id;
 				$rValue = true;
 			}
 		}

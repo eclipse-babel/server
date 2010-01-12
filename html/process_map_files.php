@@ -13,6 +13,7 @@
  *    Gustavo de Paula - Bug 261252
  *    Kit Lo (IBM) - Bug 266250, Map file processor not running properly on live server
  *    Kit Lo (IBM) - Bug 272176, Support "bundle" element type in map file
+ *    Kit Lo (IBM) - Bug 257332, NLS warnings appear unnecessarily in runtime log
 *******************************************************************************/
 header("Content-type: text/plain");
 include("global.php");
@@ -202,7 +203,8 @@ function parseLocation($in_string) {
 	$aLocation = split(",", $in_string);
 	foreach($aLocation as $location_part) {
 		# TAG  
-		if(preg_match("/^[0-9a-zA-Z_]+$/", $location_part) && !isset($aTheseElements['cvsroot'])) {
+		# Bug 257332, NLS warnings appear unnecessarily in runtime log
+		if(preg_match("/^[0-9a-zA-Z_]+/", $location_part) && !isset($aTheseElements['cvsroot'])) {
 			$aTheseElements['tag'] = $location_part;
 		}
 		# CVSROOT

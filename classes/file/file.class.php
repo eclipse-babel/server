@@ -129,7 +129,7 @@ class File {
 					
 					if($line[0] == "#") {
 						$tokens = preg_split("/[\s]+/", $line);
-						if (sizeof($tokens) > 1 && $tokens[2] == "NON-TRANSLATABLE") {
+						if (sizeof($tokens) > 2 && $tokens[2] == "NON-TRANSLATABLE") {
 							if($tokens[1] == "START")
 								$non_translatable = TRUE;
 							elseif($tokens[1] == "END")

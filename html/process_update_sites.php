@@ -17,7 +17,10 @@
 $eclipse = array("http://download.eclipse.org/eclipse/updates/3.6milestones/S-3.6M4-200912101301", "eclipse", "3.6");
 $birt = array("http://download.eclipse.org/birt/update-site/2.6-interim", "birt", "2.6.0");
 $webtools = array("http://download.eclipse.org/webtools/updates", "webtools", "3.2");
-$update_sites = array($eclipse, $birt, $webtools);
+
+# BIRT 2.6.0 & Webtools 3.2 are not defined yet, cannot test on staging server
+#$update_sites = array($eclipse, $birt, $webtools);
+$update_sites = array($eclipse);
 
 $temp_dir = "/tmp/tmp-babel/";
 $debug = TRUE;

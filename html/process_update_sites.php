@@ -102,7 +102,8 @@ foreach ($update_sites as $update_site) {
 
     mkdir($temp_unzip_dir . $plugin_id, 0777, TRUE);
     chdir($temp_unzip_dir . $plugin_id);
-    exec("unzip -o -q $temp_site_dir$jar_name *.properties");
+    exec("unzip -o -q $temp_site_dir$jar_name");
+    exec("rm -rf $temp_unzip_dir$plugin_id");
   }
 
   # Collect properties file names

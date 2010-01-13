@@ -24,6 +24,7 @@ $update_sites = array($eclipse);
 
 $temp_dir = "/tmp/tmp-babel/";
 $debug = TRUE;
+$files = array();
 
 header("Content-type: text/plain");
 include("global.php");
@@ -53,19 +54,6 @@ if ($context == "live") {
   $rsync_host = "rsync.osuosl.org::eclipse/";
 }
 
-$files = array();
-$sql = "SELECT * FROM files WHERE is_active = 1";
-$rs_files = mysql_query($sql, $dbh);
-while ($myrow_files = mysql_fetch_assoc($rs_files)) {
-  $file = new File();
-  $file->project_id = $myrow_files['project_id'];
-  $file->version = $myrow_files['version'];
-  $file->name = $myrow_files['name'];
-  $file->plugin_id = $myrow_files['plugin_id'];
-  $file->file_id = $myrow_files['file_id'];
-  $files[$file->file_id] = $file;
-}
-
 foreach ($update_sites as $update_site) {
   $site_url = $update_site[0];
   $project_id = $update_site[1];
@@ -80,6 +68,19 @@ foreach ($update_sites as $update_site) {
   $site_plugins_dir = $site_dir . "/plugins/";
   $temp_site_dir = $temp_dir . "update_sites/" . $project_id . "/" . $version . "/";
   $temp_unzip_dir = $temp_dir . "unzips/" . $project_id . "/" . $version . "/";
+
+  # Find all current active files for this project version
+  $sql = "SELECT * FROM files WHERE is_active = 1 AND project_id = \"$project_id\" AND version = \"$version\"";
+  $rs_files = mysql_query($sql, $dbh);
+  while ($myrow_files = mysql_fetch_assoc($rs_files)) {
+    $file = new File();
+    $file->project_id = $myrow_files['project_id'];
+    $file->version = $myrow_files['version'];
+    $file->name = $myrow_files['name'];
+    $file->plugin_id = $myrow_files['plugin_id'];
+    $file->file_id = $myrow_files['file_id'];
+    $files[$file->file_id] = $file;
+  }
 
   # Rsync update site
   exec("mkdir -p $temp_site_dir; rsync -av --delete $rsync_host$site_plugins_dir $temp_site_dir");

@@ -62,13 +62,12 @@ CREATE TRIGGER `upd_is_active` AFTER UPDATE ON `files` FOR EACH ROW BEGIN
   
   /* update project_progress table to indicate this proj/lang/vers stats are stale */
   /* don't know if record is there or not, so do both an insert and an update */
-  /* This portion of the trigger is similar to what is in the translations table */ 
+  /* This portion of the trigger is similar to what is in the translations table */
+  SET @PROJECT=(SELECT project_id FROM files WHERE file_id = NEW.file_id);
+  SET @VERSION=(SELECT version FROM files WHERE file_id = NEW.file_id);
+     
   UPDATE IGNORE project_progress SET is_stale = 1 where project_id = @PROJECT
-   AND version = @VERSION;
-
-  INSERT IGNORE INTO project_progress SET is_stale = 1, project_id = @PROJECT,
-   version = @VERSION;
-  
+   AND version = @VERSION; 
 END;
 ;;
 DELIMITER ;

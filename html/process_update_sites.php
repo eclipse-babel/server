@@ -13,15 +13,6 @@
 /*
  * Extract properties files from update sites 
  */
-# To-do: hard-coding the Eclipse, BIRT, & Webtools update sites for now; need to create an UI for project committers to enter their update sites
-$eclipse = array("http://download.eclipse.org/eclipse/updates/3.6milestones/S-3.6M4-200912101301", "eclipse", "3.6");
-$birt = array("http://download.eclipse.org/birt/update-site/2.6-interim", "birt", "2.6.0");
-$webtools = array("http://download.eclipse.org/webtools/updates", "webtools", "3.2");
-
-# BIRT 2.6.0 & Webtools 3.2 are not defined yet, cannot test on staging server
-#$update_sites = array($eclipse, $birt, $webtools);
-$update_sites = array($eclipse);
-
 $temp_dir = "/tmp/tmp-babel/";
 $debug = TRUE;
 $files = array();
@@ -54,10 +45,13 @@ if ($context == "live") {
   $rsync_host = "rsync.osuosl.org::eclipse/";
 }
 
-foreach ($update_sites as $update_site) {
-  $site_url = $update_site[0];
-  $project_id = $update_site[1];
-  $version = $update_site[2];
+# Get all active update sites
+$sql = "SELECT * FROM map_files WHERE is_active = 1 AND is_map_file = 0";
+$rs_maps = mysql_query($sql, $dbh);
+while($update_site = mysql_fetch_assoc($rs_maps)) {
+  $site_url = $update_site['location'];
+  $project_id = $update_site['project_id'];
+  $version = $update_site['version'];
   # Sample dirs:
   # $site_url         http://download.eclipse.org/eclipse/updates/3.6milestones/S-3.6M4-200912101301
   # $site_dir         eclipse/updates/3.6milestones/S-3.6M4-200912101301/
@@ -147,6 +141,7 @@ foreach ($update_sites as $update_site) {
 }
 
 # Deactivate the rest of the files
+echo "Start deactivating inactive properties files in all projects above...\n";
 foreach ($files as $file) {
   $file->is_active = 0;
   if (!$file->save()) {
@@ -156,6 +151,7 @@ foreach ($files as $file) {
     echo "  " . $file->name . "\n";
   }
 }
+echo "Done deactivating " . sizeof($files) . " inactive properties files in all projects above\n\n";
 
 if ($headless) {
   $User = null;

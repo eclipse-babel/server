@@ -9,6 +9,7 @@
  * Contributors:
  *    Eclipse Foundation - Initial API and implementation
  *    Kit Lo (IBM) - patch, bug 266010, Map file table does not show release train and file name info
+ *    Kit Lo (IBM) - Bug 299402, Extract properties files from Eclipse project update sites for translation
 *******************************************************************************/
 include("global.php");
 
@@ -28,7 +29,7 @@ if($User->is_committer != 1) {
 require(dirname(__FILE__) . "/../classes/file/file.class.php");
 
 
-$pageTitle 		= "Babel - Define Map Files";
+$pageTitle 		= "Babel - Define Map Files or Update Sites";
 $pageKeywords 	= "";
 $incfile 		= "content/en_map_files.php";
 
@@ -36,6 +37,7 @@ $PROJECT_ID = getHTTPParameter("project_id");
 $VERSION	= getHTTPParameter("version");
 $TRAIN_ID 	= getHTTPParameter("train_id");
 $FILE_FLD	= getHTTPParameter("fileFld");
+$PATTERNS	= getHTTPParameter("patterns");
 $FILENAME	= getHTTPParameter("filename");
 $SUBMIT 	= getHTTPParameter("submit");
 
@@ -43,12 +45,19 @@ $VERSION = preg_replace("/^\* /", "", $VERSION);
 
 if($SUBMIT == "Save") {
 	if($PROJECT_ID != "" && $VERSION != "" && $FILE_FLD != "") {
+		# Set URL type
+		$is_Map_file = 1;
+		if ($_POST["urlType"] == "updateSites") {
+			$is_Map_file = 0;
+		}
+
+		# Delete old map files for this project version
 		$sql = "DELETE FROM map_files WHERE project_id = "
 			. returnQuotedString(sqlSanitize($PROJECT_ID, $dbh)) 
 			. " AND version = " . returnQuotedString(sqlSanitize($VERSION, $dbh));
 		mysql_query($sql, $dbh);
 
-		# loop
+		# Insert new map files for this project version
 		$list = explode("\n", $FILE_FLD);
 		foreach ($list as $file) {
 			$file = str_replace("\r", "", $file);
@@ -58,11 +67,30 @@ if($SUBMIT == "Save") {
 					. "," . returnQuotedString(sqlSanitize($VERSION, $dbh))
 					. "," . returnQuotedString(sqlSanitize(md5($file), $dbh))
 					. "," . returnQuotedString(sqlSanitize($file, $dbh))
-					. ", 1)";
+					. ", 1, $is_Map_file)";
 				mysql_query($sql, $dbh);
 			}
 		}
-		
+
+		# Delete old plugin exclude patterns for this project version
+		$sql = "DELETE FROM plugin_exclude_patterns WHERE project_id = "
+			. returnQuotedString(sqlSanitize($PROJECT_ID, $dbh)) 
+			. " AND version = " . returnQuotedString(sqlSanitize($VERSION, $dbh));
+		mysql_query($sql, $dbh);
+
+		# Insert new plugin exclude patterns for this project version
+		$list = explode("\n", $PATTERNS);
+		foreach ($list as $pattern) {
+			$pattern = str_replace("\r", "", $pattern);
+			if (strlen($pattern) > 0) {
+				$sql = "INSERT INTO plugin_exclude_patterns VALUES ("
+					. returnQuotedString(sqlSanitize($PROJECT_ID, $dbh))
+					. "," . returnQuotedString(sqlSanitize($VERSION, $dbh))
+					. "," . returnQuotedString(sqlSanitize($pattern, $dbh)) . ")";
+				mysql_query($sql, $dbh);
+			}
+		}
+
 		# Save the project/train association
 		$sql = "DELETE FROM release_train_projects WHERE project_id = "
 			. returnQuotedString(sqlSanitize($PROJECT_ID, $dbh)) 

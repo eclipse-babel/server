@@ -103,8 +103,22 @@ CREATE TABLE `map_files` (
   `filename` varchar(100) NOT NULL,
   `location` varchar(255) NOT NULL,
   `is_active` tinyint(3) unsigned NOT NULL default '1',
+  `is_map_file` tinyint(3) unsigned NOT NULL default '1',
   PRIMARY KEY  (`project_id`, `version`, `filename`),
   CONSTRAINT `map_files_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `plugin_exclude_patterns`
+--
+
+DROP TABLE IF EXISTS `plugin_exclude_patterns`;
+CREATE TABLE `plugin_exclude_patterns` (
+  `project_id` varchar(100) NOT NULL,
+  `version` varchar(64) NOT NULL,
+  `pattern` varchar(128) NOT NULL,
+  PRIMARY KEY  (`project_id`, `version`, `pattern`),
+  CONSTRAINT `plugin_exclude_patterns_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -509,32 +523,32 @@ insert into release_train_projects values ('helios',   'birt',          '2.6.0')
 insert into release_train_projects values ('helios',   'webtools',      '3.2');
 
 /* MAP INPUTS */
-insert into map_files values ("eclipse", "3.4", "ant.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/ant.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "base.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/base.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "compare.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/compare.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "core-hpux.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core-hpux.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "core-macosx.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core-macosx.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "core-qnx.map","http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core-qnx.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "core-variables.map","http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core-variables.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "core.map","http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "doc.map","http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/doc.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "equinox-incubator.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/equinox-incubator.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "feature.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/feature.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "jdtapt.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/jdtapt.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "jdtcore.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/jdtcore.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "jdtdebug.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/jdtdebug.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "jdtui.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/jdtui.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "orbit.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/orbit.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "pde.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/pde.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "rcp.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/rcp.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "releng.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/releng.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "swt.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/swt.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "team.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/team.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "testframework.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/testframework.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "text.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/text.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "ui.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/ui.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "update.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/update.map?view=co", 1);
-insert into map_files values ("eclipse", "3.4", "userassist.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/userassist.map?view=co", 1);
+insert into map_files values ("eclipse", "3.4", "ant.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/ant.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "base.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/base.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "compare.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/compare.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "core-hpux.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core-hpux.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "core-macosx.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core-macosx.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "core-qnx.map","http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core-qnx.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "core-variables.map","http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core-variables.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "core.map","http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "doc.map","http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/doc.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "equinox-incubator.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/equinox-incubator.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "feature.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/feature.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "jdtapt.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/jdtapt.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "jdtcore.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/jdtcore.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "jdtdebug.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/jdtdebug.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "jdtui.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/jdtui.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "orbit.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/orbit.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "pde.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/pde.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "rcp.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/rcp.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "releng.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/releng.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "swt.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/swt.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "team.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/team.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "testframework.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/testframework.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "text.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/text.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "ui.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/ui.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "update.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/update.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.4", "userassist.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/userassist.map?view=co", 1, 1);
 
 /* populate file_progress table  */
 /* See also: dbmaintenance_15min.php */

@@ -6,10 +6,12 @@
 <p>Use this form to define the map files or update sites for your project. The map files or update sites are read nightly. Any .properties files except those listed in the plugin exclude patterns will be parsed and imported into Babel, allowing the community to translate the externalized strings.</p>
 <form name="form1" method="post">
 <table cellspacing=4 cellpadding=0 border=0>
-<tr><td "width:100px; color:red;"><?= $GLOBALS['g_ERRSTRS'][0] ?></td></tr>
 <tr>
-  <td>Project:</td><td><select name="project_id" onchange="fnSetVersionList();" style="width:100px">
-<?php
+  <td style="color:red;"><?= $GLOBALS['g_ERRSTRS'][0] ?></td>
+</tr>
+<tr>
+  <td>Project:</td>
+  <td><select name="project_id" onchange="fnSetVersionList();" style="width:150px"><?php
 	while($myrow = mysql_fetch_assoc($rs_project_list)) {
 		$selected = "";
 		if($myrow['project_id'] == $PROJECT_ID) {
@@ -17,17 +19,17 @@
 		}
 		echo "<option value='" . $myrow['project_id'] . "' $selected>" . $myrow['project_id'] . "</option>";
 	}
- ?></select></td>
-  <td style="width:100px; color:red;"><?= $GLOBALS['g_ERRSTRS'][1] ?></td>
+  ?></select></td>
+  <td style="color:red;"><?= $GLOBALS['g_ERRSTRS'][1] ?></td>
 </tr>
 <tr>
   <td>Release Version:</td>
-  <td><select name="version" onchange="fnUpdateFileList();" style="width:100px"></select> * Indicates map files or update sites present</td> 
-  <td style='width:100px; color:red;'><?= $GLOBALS['g_ERRSTRS'][4] ?></td>
+  <td><select name="version" onchange="fnUpdateFileList();" style="width:150px"></select> * Indicates map files or update sites present</td> 
+  <td style="color:red;"><?= $GLOBALS['g_ERRSTRS'][4] ?></td>
 </tr>
 <tr>
   <td>Release Train:</td>
-  <td><select name="train_id" style="width:100px"><?php
+  <td><select name="train_id" style="width:150px"><?php
 	while($myrow = mysql_fetch_assoc($rs_train_list)) {
 		$selected = "";
 		if($myrow['train_id'] == $TRAIN_ID) {
@@ -44,14 +46,14 @@
     <input id="urlType-mapFiles" name="urlType" type="radio" value="mapFiles" checked>Map Files</input>
     <input id="urlType-updateSites" name="urlType" type="radio" value="updateSites">Update Sites</input>
   </td>
-  <td style="width:100px; color:red;"><?= $GLOBALS['g_ERRSTRS'][2] ?></td>
+  <td style="color:red;"><?= $GLOBALS['g_ERRSTRS'][2] ?></td>
 </tr>
 <tr>
   <td colspan=3><textarea id="files-area" name="fileFld" onclick="fnClickTextFilesArea();" rows=5 cols="100"></textarea></td>
 </tr>
 <tr>
-  <td colspan=2>Plugin Exclude Patterns:</td>
-  <td style="width:100px; color:red;"><?= $GLOBALS['g_ERRSTRS'][2] ?></td>
+  <td colspan=2>Plugin Exclude Patterns: (regular expression, example: <b>/^com.\junit\..*$/</b>)</td>
+  <td style="color:red;"><?= $GLOBALS['g_ERRSTRS'][2] ?></td>
 </tr>
 <tr>
   <td colspan=3><textarea id="patterns-area" name="patterns" onclick="fnClickTextPatternsArea();" rows="5" cols="100"></textarea></td>

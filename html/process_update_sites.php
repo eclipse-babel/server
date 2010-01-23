@@ -63,7 +63,7 @@ while($update_site = mysql_fetch_assoc($rs_maps)) {
   $temp_site_dir = $temp_dir . "update_sites/" . $project_id . "/" . $version . "/";
   $temp_unzip_dir = $temp_dir . "unzips/" . $project_id . "/" . $version . "/";
 
-  # Find all current active files for this project version
+  # Get all current active files for this project version
   $sql = "SELECT * FROM files WHERE is_active = 1 AND project_id = \"$project_id\" AND version = \"$version\"";
   $rs_files = mysql_query($sql, $dbh);
   while ($myrow_files = mysql_fetch_assoc($rs_files)) {
@@ -74,6 +74,14 @@ while($update_site = mysql_fetch_assoc($rs_maps)) {
     $file->plugin_id = $myrow_files['plugin_id'];
     $file->file_id = $myrow_files['file_id'];
     $files[$file->file_id] = $file;
+  }
+
+  # Get all plugin exclude patterns for this project version
+  $sql = "SELECT pattern FROM plugin_exclude_patterns WHERE project_id = \"$project_id\" AND version = \"$version\"";
+  $rs_patterns = mysql_query($sql, $dbh);
+  $patterns = Array();
+  while ($myrow_patterns = mysql_fetch_assoc($rs_patterns)) {
+    $patterns[] = $myrow_patterns['pattern'];
   }
 
   # Rsync update site
@@ -111,32 +119,50 @@ while($update_site = mysql_fetch_assoc($rs_maps)) {
   # Parse each properties file
   echo "Start processing properties files in project $project_id version $version...\n";
   foreach ($properties_file_names as $properties_file_name) {
+    # Remove "./" from beginning of properties file name
     $properties_file_name = substr($properties_file_name, 2);
     $plugin_id = substr($properties_file_name, 0, strpos($properties_file_name, "/"));
 	$file_id = File::getFileID($properties_file_name, $project_id, $version);
-						
-    if ($files[$file_id] != null) {
-      $file = $files[$file_id];
-      $file->is_active = 1;
-      unset($files[$file_id]);
-    } else {
-      $file = new File();
-      $file->project_id = $project_id;
-      $file->version = $version;
-      $file->name = $properties_file_name;
-      $file->plugin_id = $plugin_id;
-      $file->is_active = 1;
-    }
-    if (!$file->save()) {
-      echo "***ERROR: Cannot save file $file->name\n";
-    } else {
-      $file_name = $temp_unzip_dir . $properties_file_name;
-      $file->parseProperties(file_get_contents($file_name));
-      if ($debug) {
-        echo "  " . $file->name . "\n";
+
+    # Match plugin exclude list
+    $match = false;
+    foreach ($patterns as $pattern) {
+      if (preg_match($pattern, $properties_file_name)) {
+        $match = true;
+        break;
       }
     }
- }
+
+    if (!$match) {
+      if ($files[$file_id] != null) {
+        # Existing file
+        $file = $files[$file_id];
+        $file->is_active = 1;
+        unset($files[$file_id]);
+      } else {
+        # New file
+        $file = new File();
+        $file->project_id = $project_id;
+        $file->version = $version;
+        $file->name = $properties_file_name;
+        $file->plugin_id = $plugin_id;
+        $file->is_active = 1;
+      }
+      if (!$file->save()) {
+        echo "***ERROR: Cannot save file $file->name\n";
+      } else {
+        $file_name = $temp_unzip_dir . $properties_file_name;
+        $file->parseProperties(file_get_contents($file_name));
+        if ($debug) {
+          echo "  $properties_file_name\n";
+        }
+      }
+    } else {
+      if ($debug) {
+        echo "  !!! Excluding $properties_file_name\n";
+      }
+    }
+  }
   echo "Done processing " . sizeof($properties_file_names) . " properties files in project $project_id version $version\n\n";
 }
 

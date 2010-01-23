@@ -52,7 +52,7 @@
   <td colspan=3><textarea id="files-area" name="fileFld" onclick="fnClickTextFilesArea();" rows=5 cols="100"></textarea></td>
 </tr>
 <tr>
-  <td colspan=2>Plugin Exclude Patterns: (regular expressions, example: <b>/^com\.junit\..*$/</b>)</td>
+  <td colspan=2>Plugin Exclude Patterns: (regular expressions, example: <b>/^org\.junit\..*$/</b>)</td>
   <td style="color:red;"><?= $GLOBALS['g_ERRSTRS'][2] ?></td>
 </tr>
 <tr>

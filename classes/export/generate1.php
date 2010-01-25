@@ -30,6 +30,7 @@ ini_set("memory_limit", "512M");
 require(dirname(__FILE__) . "/../system/backend_functions.php");
 require(dirname(__FILE__) . "/../system/dbconnection.class.php");
 
+# Get all release trains
 $dbc = new DBConnection();
 $dbh = $dbc->connect();
 $result = mysql_query("SELECT * FROM release_trains ORDER BY train_version DESC");

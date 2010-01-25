@@ -18,6 +18,7 @@
  *    Kit Lo (IBM) - patch, bug 261739, Inconsistent use of language names
  *    Sean Flanigan (Red Hat) - patch, bug 261584, wrong output folder
  *    Kit Lo (IBM) - patch, bug 270456, Unable to use Babel PTT to verify PDE in the eclipse SDK
+ *    Kit Lo (IBM) - Bug 299402, Extract properties files from Eclipse project update sites for translation
  *******************************************************************************/
 
 /*
@@ -29,11 +30,13 @@ ini_set("memory_limit", "512M");
 require(dirname(__FILE__) . "/../system/backend_functions.php");
 require(dirname(__FILE__) . "/../system/dbconnection.class.php");
 
-# There is no easy way to sort "galileo", "ganymede", and "europa" in the correct order we want without
-# modifying the release_train_projects table.
-#
-# Here is a temporary fix to display train versions in most recent release order until we have a permanent solution. 
-$train_result = array("galileo" => "3.5.0", "ganymede" => "3.4.0", "europa" => "3.3.0");
+$dbc = new DBConnection();
+$dbh = $dbc->connect();
+$result = mysql_query("SELECT * FROM release_trains ORDER BY train_version DESC");
+$train_result = array();
+while ($train_row = mysql_fetch_assoc($result)) {
+  $train_result[$train_row['train_id']] = $train_row['train_version'];
+}
 
 # Command-line parameter for the release train
 # bug 272958
@@ -63,10 +66,6 @@ else {
 	$buildid = $options['b'];
 }
 
-
-
-$dbc = new DBConnection();
-
 $work_dir = $addon->callHook('babel_working');
 
 global $addon;
@@ -85,7 +84,6 @@ $rm_command = "rm -rf $work_dir" . "*";
 exec($rm_command);
 exec("mkdir -p $output_dir");
 
-
 echo "Requested builds: ";
 foreach ($train_result as $train_id => $train_version) {
 	echo $train_id . " ";
@@ -94,20 +92,7 @@ echo "\n";
 
 # Loop through the trains
 foreach ($train_result as $train_id => $train_version) {
-	
-#$train_result = mysql_query("SELECT DISTINCT train_id FROM release_train_projects ORDER BY train_id DESC");
-#while (($train_row = mysql_fetch_assoc($train_result)) != null) {
-#	$train_id = $train_row['train_id'];
-#	$train_version = "3.5.0";
-#	if (strcmp($train_id, "ganymede") == 0) {
-#		$train_version = "3.4.0";
-#	}
-#	if (strcmp($train_id, "europa") == 0) {
-#		$train_version = "3.3.0";
-#	}
-
 	echo "Generating update site for: $train_id\n";
-	$dbh = $dbc->connect();
 	
 	/*
 	 * Create language pack links file
@@ -121,13 +106,14 @@ foreach ($train_result as $train_id => $train_version) {
 	# copy page_header.html here 
 	$header = file_get_contents("${source_files_dir}page_header.html");
 	fwrite($language_pack_links_file, $header);
-	fwrite($language_pack_links_file, "\n\t<h1>Babel Language Packs for ${train_id}</h1>" .
+	fwrite($language_pack_links_file, "\n\t<h1>Babel Language Packs for " . ucfirst($train_id) . "</h1>" .
 		"\n\t<h2>Build ID: $buildid</h2>" .
 		"\n\t<p>The following language packs are based on the community translations entered into the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a>, and may not be complete or entirely accurate.  If you find missing or incorrect translations, please use the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a> to update them." .   
-		"\n\tAll downloads are provided under the terms and conditions of the <a href='http://www.eclipse.org/legal/epl/notice.php'>Eclipse Foundation Software User Agreement</a> unless otherwise specified.</p>");
-	
-	
+		"\n\tAll downloads are provided under the terms and conditions of the <a href='http://www.eclipse.org/legal/epl/notice.php'>Eclipse Foundation Software User Agreement</a> unless otherwise specified.</p>" .
+		"\n\t<p>Go to: ");
+
 	$train_version_timestamp = "$train_version.v$timestamp";
+	$language_pack_links_file_buffer = "";
 	$site_xml = "";
 
 	$output_dir_for_train = $output_dir . $train_id . "/";
@@ -135,12 +121,10 @@ foreach ($train_result as $train_id => $train_version) {
 	exec("mkdir ${output_dir_for_train}features/");
 	exec("mkdir ${output_dir_for_train}plugins/");
 
-	fwrite($language_pack_links_file, "\n\t<h3>Release Train: $train_id</h3>\n\t<ul>");
-	
 	$sql = "SELECT language_id, iso_code, IF(locale <> '', CONCAT(CONCAT(CONCAT(name, ' ('), locale), ')'), name) as name, is_active, IF(language_id = 1,1,0) AS sorthack FROM languages ORDER BY sorthack, name ASC";
 	$language_result = mysql_query($sql);
 	if($language_result === FALSE) {
-		# we may have lost the database connection.with our shell-outs
+		# we may have lost the database connection with our shell-outs
 		# bug 271685
 		$dbh = $dbc->connect();
 		$language_result = mysql_query($sql);
@@ -150,8 +134,8 @@ foreach ($train_result as $train_id => $train_version) {
 		$language_iso = $language_row['iso_code'];
 		$language_id = $language_row['language_id'];
 		if (strcmp($language_iso, "en") == 0) {
-			$language_iso = "en_AA";
 			$language_name = "Pseudo Translations";
+			$language_iso = "en_AA";
 		}
 
 		echo "${leader}Generating language pack for $train_id - $language_name ($language_iso) (language_id=" . $language_id . ")\n";
@@ -370,11 +354,14 @@ foreach ($train_result as $train_id => $train_version) {
 			$site_xml .= "\n\t\t<description>Babel Language Packs in $language_name</description>";
 			$site_xml .= "\n\t</category-def>";
 
-			fwrite($language_pack_links_file, "\n\t\t<h4>Language: $language_name</h4>");
+			fwrite($language_pack_links_file, "\n\t\t<a href='#$language_iso'>$language_name</a>");
+			if (strcmp($language_iso, "en_AA") != 0) {
+				fwrite($language_pack_links_file, ",");
+			}
+			$language_pack_links_file_buffer .= "\n\t\t<h4>Language: <a name='$language_iso'>$language_name</a></h4>";
+			$language_pack_links_file_buffer .= "\n\t\t<ul>";
 		}
-		fwrite($language_pack_links_file, "\n\t\t<ul>");
 		foreach ($projects as $project_id => $fragment_ids) {
-			
 			/*
 			 * Sort fragment names
 			 */
@@ -483,7 +470,7 @@ foreach ($train_result as $train_id => $train_version) {
 			/*
 			 * Add project language pack link to language pack links file
 			 */
-			fwrite($language_pack_links_file, "\n\t\t\t<li><a href=\"<?= \$language_pack_leader ?>/${language_pack_name}\">$language_pack_name ($project_pct_complete%)</a></li>");
+			$language_pack_links_file_buffer .= "\n\t\t\t<li><a href=\"<?= \$language_pack_leader ?>/${language_pack_name}\">$language_pack_name ($project_pct_complete%)</a></li>";
 			/*
 			 * Jar up this directory as the feature jar
 			 */
@@ -498,7 +485,9 @@ foreach ($train_result as $train_id => $train_version) {
 
 		}  /*  End: foreach project  */
 		echo "${leader}Completed language pack for $language_name ($language_iso)\n";
-		fwrite($language_pack_links_file, "\n\t\t</ul>");
+		if (sizeof($projects) > 0) {
+			$language_pack_links_file_buffer .= "\n\t\t</ul>";
+		}
 	}
 	/*
 	 * <site mirrorsURL=... implemented in the weekly build process by sed'ing <site>
@@ -515,6 +504,8 @@ foreach ($train_result as $train_id => $train_version) {
 	fwrite($outp, "\n</site>");
 	fclose($outp);
 
+	fwrite($language_pack_links_file, "\n\t</p>");
+	fwrite($language_pack_links_file, $language_pack_links_file_buffer);
 	fwrite($language_pack_links_file, "\n\t</ul>");
 	
 	fwrite($language_pack_links_file, "\n</body>\n</html>");
@@ -559,7 +550,7 @@ function usage() {
 	echo "\n";
 	echo "generate1.php -b <build_id> [-t <train_id>]\n";
 	echo "  -b <build_id>: The Build ID for this build.\n";
-	echo "  -t <train_id>: Optional: train to build (europa, ganymede, galileo.";
+	echo "  -t <train_id>: Optional: train to build (helios, galileo, ganymede, europa).";
 	echo "\n";
 }
 

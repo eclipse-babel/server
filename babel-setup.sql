@@ -90,8 +90,6 @@ CREATE TABLE `languages` (
   KEY `locale` (`locale`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-
 --
 -- Table structure for table `map_files`
 --
@@ -150,6 +148,10 @@ CREATE TABLE `projects` (
   PRIMARY KEY  (`project_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `project_progress`
+--
+
 DROP TABLE IF EXISTS `project_progress`;
 CREATE TABLE `project_progress` (
   `project_id` varchar(100) NOT NULL,
@@ -162,7 +164,9 @@ CREATE TABLE `project_progress` (
     CONSTRAINT `project_progress_ibfk_2` FOREIGN KEY (`language_id`) REFERENCES `languages` (`language_id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
+--
+-- Table structure for table `project_versions`
+--
 
 DROP TABLE IF EXISTS `project_versions`;
 CREATE TABLE `project_versions` (
@@ -186,6 +190,21 @@ CREATE TABLE `ratings` (
   PRIMARY KEY  (`translation_id`,`userid`),
   CONSTRAINT `ratings_ibfk_1` FOREIGN KEY (`translation_id`) REFERENCES `translations` (`translation_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `release_trains`
+--
+
+DROP TABLE IF EXISTS `release_trains`;
+CREATE TABLE `release_trains` (
+    `train_id` varchar(30) NOT NULL,
+    `train_version` varchar(64) NOT NULL,
+    PRIMARY KEY (`train_id`, `train_version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `release_train_projects`
+--
 
 DROP TABLE IF EXISTS `release_train_projects`;
 CREATE TABLE `release_train_projects` (
@@ -495,8 +514,11 @@ insert into project_versions set project_id = "birt", version = "2.5.0", is_acti
 insert into project_versions set project_id = "webtools", version = "3.1", is_active = 1;
 
 insert into project_versions set project_id = "eclipse", version = "3.6", is_active = 1;
-insert into project_versions set project_id = "birt", version = "2.6.0", is_active = 1;
-insert into project_versions set project_id = "webtools", version = "3.2", is_active = 1;
+
+insert into release_trains values ('europa',   '3.3.1');
+insert into release_trains values ('ganymede', '3.4.0');
+insert into release_trains values ('galileo',  '3.5.0');
+insert into release_trains values ('helios',   '3.6.0');
 
 insert into release_train_projects values ('europa',   'eclipse',       '3.3.1');
 insert into release_train_projects values ('europa',   'birt',          '2.2.0');
@@ -519,8 +541,6 @@ insert into release_train_projects values ('galileo',  'birt',          '2.5.0')
 insert into release_train_projects values ('galileo',  'webtools',      '3.1');
 
 insert into release_train_projects values ('helios',   'eclipse',       '3.6');
-insert into release_train_projects values ('helios',   'birt',          '2.6.0');
-insert into release_train_projects values ('helios',   'webtools',      '3.2');
 
 /* MAP INPUTS */
 insert into map_files values ("eclipse", "3.4", "ant.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/ant.map?view=co", 1, 1);
@@ -549,6 +569,17 @@ insert into map_files values ("eclipse", "3.4", "text.map", "http://dev.eclipse.
 insert into map_files values ("eclipse", "3.4", "ui.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/ui.map?view=co", 1, 1);
 insert into map_files values ("eclipse", "3.4", "update.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/update.map?view=co", 1, 1);
 insert into map_files values ("eclipse", "3.4", "userassist.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/userassist.map?view=co", 1, 1);
+
+insert into map_files values ("eclipse", "3.6", "eclipse-3.6-updateSite", "http://download.eclipse.org/eclipse/updates/3.6milestones/S-3.6M4-200912101301", 1, 0);
+
+insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^com\.jcraft\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^javax\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\.apache\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\.hamcrest\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\.junit.*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\.mortbay\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\.objectweb\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\.sat4j\..*$/");
 
 /* populate file_progress table  */
 /* See also: dbmaintenance_15min.php */

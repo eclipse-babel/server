@@ -507,7 +507,6 @@ foreach ($train_result as $train_id => $train_version) {
 
 	fwrite($language_pack_links_file, "\n\t</p>");
 	fwrite($language_pack_links_file, $language_pack_links_file_buffer);
-	fwrite($language_pack_links_file, "\n\t</ul>");
 	
 	fwrite($language_pack_links_file, "\n</body>\n</html>");
 	fclose($language_pack_links_file);

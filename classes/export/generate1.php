@@ -81,7 +81,7 @@ $source_files_dir = dirname(__FILE__) . "/source_files_for_generate/";
 $leader = ". . ";
 $timestamp = date("Ymdhis");
 
-$rm_command = "rm -rf $work_dir" . "*";
+$rm_command = "rm -rf $work_context_dir" . "*";
 exec($rm_command);
 exec("mkdir -p $output_dir");
 

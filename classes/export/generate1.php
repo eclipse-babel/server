@@ -519,7 +519,7 @@ foreach ($train_result as $train_id => $train_version) {
 	 * Generate the metadata and add the non-greedy tags
 	 * Note: Not needed for Europa and Ganymede because p2 repository was not supported
 	 */
-	if (strcmp($train_id, "europa") != 0 && strcmp($train_id, "ganymede") != 0) {
+	if (file_exists(METADATA_GENERATOR_LOCATION) && strcmp($train_id, "europa") != 0 && strcmp($train_id, "ganymede") != 0) {
 		system("sh " . dirname(__FILE__) . "/runMetadata.sh ". METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
 		system("xsltproc -o ${output_dir_for_train}content.xml ". dirname(__FILE__) . "/content.xsl ${output_dir_for_train}content.xml");
 		system("cd ${output_dir_for_train} ; jar -fc content.jar content.xml ; jar -fc artifacts.jar artifacts.xml ; rm *.xml");

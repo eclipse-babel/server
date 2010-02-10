@@ -1,3 +1,3 @@
 #!/bin/sh
 
-$1/eclipse -application org.eclipse.equinox.p2.metadata.generator.EclipseGenerator -updateSite $2 -site file:$2/site.xml -metadataRepositoryName "Babel language packs update site" -append -reusePack200Files -vmargs -Xmx256m
+$1/eclipse -application org.eclipse.equinox.p2.publisher.UpdateSitePublisher -metadataRepository file:$2 -metadataRepositoryName "Babel Language Pack Metadata Repository" -artifactRepository file:$2 -artifactRepositoryName "Babel Language Pack Artifact Repository" -source $2

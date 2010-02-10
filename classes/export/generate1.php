@@ -19,6 +19,7 @@
  *    Sean Flanigan (Red Hat) - patch, bug 261584, wrong output folder
  *    Kit Lo (IBM) - patch, bug 270456, Unable to use Babel PTT to verify PDE in the eclipse SDK
  *    Kit Lo (IBM) - Bug 299402, Extract properties files from Eclipse project update sites for translation
+ *    Kit Lo (IBM) - Bug 276306, Re-enable p2 repository
  *******************************************************************************/
 
 /*
@@ -513,18 +514,16 @@ foreach ($train_result as $train_id => $train_version) {
 	
 	
 	$dbh = $dbc->disconnect();
-	
-	// now generate the metadata and add the non-greedy tags
-	
+
 	/*
-	 * Leaving this out of generate1 to avoid p2 breakage
-	 * 
-	system("sh " . dirname(__FILE__) . "/runMetadata.sh ". 
-	   METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
-	system("xsltproc -o ${output_dir_for_train}content.xml ".
-           dirname(__FILE__) . "/content.xsl ${output_dir_for_train}content.xml");
-    system("cd ${output_dir_for_train} ; jar -fc content.jar content.xml ; jar -fc artifacts.jar artifacts.xml ; rm site.xml");
-    */
+	 * Generate the metadata and add the non-greedy tags
+	 * Note: Not needed for Europa and Ganymede because p2 repository was not supported
+	 */
+	if (strcmp($train_id, "europa") != 0 && strcmp($train_id, "ganymede") != 0) {
+		system("sh " . dirname(__FILE__) . "/runMetadata.sh ". METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
+		system("xsltproc -o ${output_dir_for_train}content.xml ". dirname(__FILE__) . "/content.xsl ${output_dir_for_train}content.xml");
+		system("cd ${output_dir_for_train} ; jar -fc content.jar content.xml ; jar -fc artifacts.jar artifacts.xml ; rm *.xml");
+	}
 }
 echo "Completed generating update site\n";
 

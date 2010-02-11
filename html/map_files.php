@@ -83,7 +83,7 @@ if($SUBMIT == "Save") {
 		foreach ($list as $pattern) {
 			$pattern = str_replace("\r", "", $pattern);
 			if (strlen($pattern) > 0) {
-				if (strlen($pattern) > 32 && strcmp(substr($pattern, 0, 32), "No plugin exclude patterns found") == 0) {
+				if (strlen($pattern) > 26 && strcmp(substr($pattern, 0, 26), "No plugin exclude patterns") == 0) {
 				} else {
 					$sql = "INSERT INTO plugin_exclude_patterns VALUES ("
 						. returnQuotedString(sqlSanitize($PROJECT_ID, $dbh))

@@ -479,6 +479,7 @@ insert into languages values (null, "en_AU", "Australian",  "English",    1);
 insert into languages values (null, "mn",    null,          "Mongolian",  1);
 insert into languages values (null, "id",    null,          "Indonesian", 1);
 insert into languages values (null, "bg",    null,          "Bulgarian",  1);
+insert into languages values (null, "sl",    null,          "Slovenian",  1);
 insert into languages values (null, "tl",    null,          "Klingon",    1);
 
 insert into projects set project_id = 'eclipse', is_active = 1 ;

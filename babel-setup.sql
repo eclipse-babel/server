@@ -573,14 +573,14 @@ insert into map_files values ("eclipse", "3.4", "userassist.map", "http://dev.ec
 
 insert into map_files values ("eclipse", "3.6", "eclipse-3.6-updateSite", "http://download.eclipse.org/eclipse/updates/3.6milestones/S-3.6M5-201001291300", 1, 0);
 
-insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^com\.jcraft\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^javax\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\.apache\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\.hamcrest\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\.junit.*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\.mortbay\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\.objectweb\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\.sat4j\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^com\\.jcraft\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^javax\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\\.apache\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\\.hamcrest\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\\.junit.*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\\.mortbay\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\\.objectweb\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\\.sat4j\\..*$/");
 
 /* populate file_progress table  */
 /* See also: dbmaintenance_15min.php */

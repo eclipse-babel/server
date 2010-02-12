@@ -181,8 +181,8 @@ class File {
 
 			# remove strings that are no longer in the properties file
 			foreach ($strings as $string) {
-			  $strings->is_active = 0;
-			  if (!$strings->save()) {
+			  $string->is_active = 0;
+			  if (!$string->save()) {
 			    echo "***ERROR: Cannot deactivate string $string->name in file $string->file_id\n";
 			  }
 			}

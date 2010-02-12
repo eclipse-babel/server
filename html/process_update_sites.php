@@ -14,7 +14,6 @@
  * Extract properties files from update sites 
  */
 $temp_dir = "/tmp/tmp-babel/";
-$debug = TRUE;
 $files = array();
 
 header("Content-type: text/plain");
@@ -153,14 +152,10 @@ while($update_site = mysql_fetch_assoc($rs_maps)) {
       } else {
         $file_name = $temp_unzip_dir . $properties_file_name;
         $file->parseProperties(file_get_contents($file_name));
-        if ($debug) {
-          echo "  $properties_file_name\n";
-        }
+        echo "  $properties_file_name\n";
       }
     } else {
-      if ($debug) {
-        echo "  !!! Excluding $properties_file_name\n";
-      }
+      echo "  !!! Excluding $properties_file_name\n";
     }
   }
   echo "Done processing " . sizeof($properties_file_names) . " properties files in project $project_id version $version\n\n";
@@ -173,9 +168,7 @@ foreach ($files as $file) {
   if (!$file->save()) {
     echo "***ERROR: Cannot deactivate file $file->name\n";
   }
-  if ($debug) {
     echo "  " . $file->name . "\n";
-  }
 }
 echo "Done deactivating " . sizeof($files) . " inactive properties files in all projects above\n\n";
 

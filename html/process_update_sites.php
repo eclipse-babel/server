@@ -134,7 +134,7 @@ while($update_site = mysql_fetch_assoc($rs_maps)) {
     }
 
     if (!$match) {
-      if ($files[$file_id] != null) {
+      if ($file_id > 0 && $files[$file_id] != null) {
         # Existing file
         $file = $files[$file_id];
         $file->is_active = 1;

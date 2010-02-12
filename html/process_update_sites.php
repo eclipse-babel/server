@@ -179,6 +179,10 @@ foreach ($files as $file) {
 }
 echo "Done deactivating " . sizeof($files) . " inactive properties files in all projects above\n\n";
 
+if (is_dir($temp_unzips_dir)) {
+  exec("rm -rf $temp_unzips_dir");
+}
+
 if ($headless) {
   $User = null;
 }

@@ -16,6 +16,9 @@
  *    Kit Lo (IBM) - Bug 257332, NLS warnings appear unnecessarily in runtime log
  *    Kit Lo (IBM) - Bug 302834, Add plugin filtering supports to map files process
 *******************************************************************************/
+$temp_dir = "/tmp/tmp-babel/";
+$files = array();
+
 header("Content-type: text/plain");
 include("global.php");
 InitPage("");
@@ -23,20 +26,20 @@ InitPage("");
 $headless = 0;
 if (!isset($User)) {
   echo "User not defined - running headless\n";
-    $User = getGenieUser();
-    $headless = 1;
+  $User = getGenieUser();
+  $headless = 1;
 }
 
 require(dirname(__FILE__) . "/../classes/file/file.class.php");
 $html_spacer = "  ";
-$files = array();
 
 global $dbh;
 
-if (!is_dir("/tmp/tmp-babel")) {
-  mkdir("/tmp/tmp-babel") || die("Cannot create a working directory");
+$temp_downloads_dir = $temp_dir . "downloads/";
+if (!is_dir($temp_downloads_dir)) {
+  mkdir($temp_downloads_dir) || die("Cannot create a working directory");
 }
-chdir("/tmp/tmp-babel")  || die("Cannot use working directory");
+chdir($temp_downloads_dir)  || die("Cannot use working directory");
 
 $sql = "SELECT * FROM map_files WHERE is_active = 1 AND is_map_file = 1";
 $rs_maps = mysql_query($sql, $dbh);
@@ -73,7 +76,7 @@ while ($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 
   # echo "Processing map file: " . $myrow_maps['filename'] . " in location: " . $myrow_maps['location'] . "\n";
     
-  $tmpdir = "/tmp/tmp-babel/" . str_replace(" ", "_", $myrow_maps['project_id']);
+  $tmpdir = $temp_downloads_dir . str_replace(" ", "_", $myrow_maps['project_id']);
   if (is_dir($tmpdir)) {
     # zap the directory to make sure CVS versions don't overlap
     exec("rm -rf " . $tmpdir);
@@ -208,6 +211,10 @@ foreach ($files as $file) {
   }
 }
 echo "Done deactivating " . sizeof($files) . " inactive properties files in all projects above\n\n";
+
+if (is_dir($temp_downloads_dir)) {
+  exec("rm -rf $temp_downloads_dir");
+}
 
 if ($headless) {
   $User = null;

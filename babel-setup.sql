@@ -444,6 +444,8 @@ pass: password
 
 insert into profiles set login_name = "test", cryptpassword = "", realname = "tester", disabledtext = false, mybugslink = 1, extern_id = 1, disable_mail = false;
 insert into users set userid = 1, username = "babel@eclipse.org",first_name="babel",last_name="fish",email="babel@eclipse.org",primary_language_id = "",password_hash = "HSD9a.ShTTdvo", is_committer = true,  updated_on = NOW(), updated_at='',created_on = NOW(), created_at='';
+insert into users set userid = 2, username = "genie@eclipse.org",first_name="babel",last_name="genie",email="genie@eclipse.org",primary_language_id = "",password_hash = "HSD9a.ShTTdvo", is_committer = true,  updated_on = NOW(), updated_at='',created_on = NOW(), created_at='';
+insert into users set userid = 3, username = "syncup@eclipse.org",first_name="babel",last_name="syncup",email="syncup@eclipse.org",primary_language_id = "",password_hash = "HSD9a.ShTTdvo", is_committer = true,  updated_on = NOW(), updated_at='',created_on = NOW(), created_at='';
 
 insert into languages values (1,    "en",    null,          "English",    1);
 insert into languages values (null, "fr",    null,          "French",     1);

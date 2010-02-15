@@ -37,7 +37,8 @@ function InitPage($login) {
   if (empty($GLOBALS['page']))
 	  $GLOBALS['page'] = '';
 	
-  if((strpos($_SERVER['REQUEST_URI'], "login.php") == FALSE) &&
+  if (isset($_SERVER['REQUEST_URI']) &&
+	 (strpos($_SERVER['REQUEST_URI'], "login.php") == FALSE) &&
 	 (strpos($_SERVER['REQUEST_URI'], "callback") == FALSE)) {
 	  	SetSessionVar('s_pageLast', $_SERVER['REQUEST_URI']);
   }
@@ -70,9 +71,11 @@ function InitPage($login) {
   
   $GLOBALS['g_PHPSELF']  = $GLOBALS['page'];
   $GLOBALS['g_PAGE']     = $page;
-  $GLOBALS['g_SITEURL']  = $_SERVER['HTTP_HOST'];
-  $GLOBALS['g_SITENAME'] = substr($GLOBALS['g_SITEURL'],0,strlen($GLOBALS['g_SITEURL'])-4);
-  $GLOBALS['g_TITLE']    = $GLOBALS['g_SITENAME'];
+  if (isset($_SERVER['HTTP_HOST'])) {
+    $GLOBALS['g_SITEURL']  = $_SERVER['HTTP_HOST'];
+    $GLOBALS['g_SITENAME'] = substr($GLOBALS['g_SITEURL'],0,strlen($GLOBALS['g_SITEURL'])-4);
+    $GLOBALS['g_TITLE']    = $GLOBALS['g_SITENAME'];
+  }
   $GLOBALS['g_ERRSTRS']  = array("","","","","","","","","","","",);
   $GLOBALS['DEBUG']      = "";
 }

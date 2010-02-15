@@ -559,7 +559,6 @@ insert into map_files values ("eclipse", "3.4", "jdtapt.map", "http://dev.eclips
 insert into map_files values ("eclipse", "3.4", "jdtcore.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/jdtcore.map?view=co", 1, 1);
 insert into map_files values ("eclipse", "3.4", "jdtdebug.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/jdtdebug.map?view=co", 1, 1);
 insert into map_files values ("eclipse", "3.4", "jdtui.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/jdtui.map?view=co", 1, 1);
-insert into map_files values ("eclipse", "3.4", "orbit.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/orbit.map?view=co", 1, 1);
 insert into map_files values ("eclipse", "3.4", "pde.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/pde.map?view=co", 1, 1);
 insert into map_files values ("eclipse", "3.4", "rcp.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/rcp.map?view=co", 1, 1);
 insert into map_files values ("eclipse", "3.4", "releng.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/releng.map?view=co", 1, 1);

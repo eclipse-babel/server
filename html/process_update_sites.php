@@ -62,8 +62,8 @@ while($update_site = mysql_fetch_assoc($rs_maps)) {
   $temp_site_dir = $temp_dir . "update_sites/" . $project_id . "/" . $version . "/";
   $temp_unzip_dir = $temp_dir . "unzips/" . $project_id . "/" . $version . "/";
 
-  # Get all current active files for this project version
-  $sql = "SELECT * FROM files WHERE is_active = 1 AND project_id = \"$project_id\" AND version = \"$version\"";
+  # Get all files for this project version
+  $sql = "SELECT * FROM files WHERE project_id = \"$project_id\" AND version = \"$version\"";
   $rs_files = mysql_query($sql, $dbh);
   while ($myrow_files = mysql_fetch_assoc($rs_files)) {
     $file = new File();
@@ -117,6 +117,7 @@ while($update_site = mysql_fetch_assoc($rs_maps)) {
 
   # Parse each properties file
   echo "Start processing properties files in project $project_id version $version...\n";
+  echo "  Update site location: $site_url\n";
   foreach ($properties_file_names as $properties_file_name) {
     # Remove "./" from beginning of properties file name
     $properties_file_name = substr($properties_file_name, 2);
@@ -164,11 +165,15 @@ while($update_site = mysql_fetch_assoc($rs_maps)) {
 # Deactivate the rest of the files
 echo "Start deactivating inactive properties files in all projects above...\n";
 foreach ($files as $file) {
-  $file->is_active = 0;
-  if (!$file->save()) {
-    echo "***ERROR: Cannot deactivate file $file->name\n";
-  }
+  if ($file->is_active == 1) {
+    $file->is_active = 0;
+    if (!$file->save()) {
+      echo "***ERROR: Cannot deactivate file $file->name\n";
+    }
     echo "  " . $file->name . "\n";
+  } else {
+    unset($files[$file->file_id]);
+  }
 }
 echo "Done deactivating " . sizeof($files) . " inactive properties files in all projects above\n\n";
 

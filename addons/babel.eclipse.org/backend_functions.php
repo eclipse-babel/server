@@ -79,24 +79,24 @@ class BabelEclipseOrg_backend {
     }
     
     /**
-     * Returns a user that is specialized in running the syncup script.
-     */
-    function syncupUser() {
-        $User = new User();
-        $User->loadFromID(57110);
-        return $User;
-    }
-    
-    /**
      * Returns the genie user that represents the headless admin for most operations,
      * like importing a zip of translations.
      */
     function genieUser() {
         $User = new User();
-        $User->loadFromID(40623);
+        $User->loadFromID(2);
         return $User;
     }
 
+    /**
+     * Returns a user that is specialized in running the syncup script.
+     */
+    function syncupUser() {
+        $User = new User();
+        $User->loadFromID(3);
+        return $User;
+    }
+    
 	/**
 	 * Returns the name of the current context, one of live, staging or dev.
 	 */

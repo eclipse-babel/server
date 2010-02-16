@@ -18,6 +18,7 @@
 *******************************************************************************/
 $temp_dir = "/tmp/tmp-babel/";
 $files = array();
+$files_collected = array(array());
 
 header("Content-type: text/plain");
 include("global.php");
@@ -53,20 +54,24 @@ while ($myrow_maps = mysql_fetch_assoc($rs_maps)) {
   echo "Start processing properties files in project $project_id version $version...\n";
   echo "  Map file location: $location\n";
 
-  # Get all files for this project version
-  $sql = "SELECT * FROM files WHERE project_id = \"$project_id\" AND version = \"$version\"";
-  $rs_files = mysql_query($sql, $dbh);
-  while($myrow_file = mysql_fetch_assoc($rs_files)) {
-    $file = new File();
-    $file->project_id = $myrow_file['project_id'];
-    $file->version = $myrow_file['version'];
-    $file->name = $myrow_file['name'];
-    $file->plugin_id = $myrow_file['plugin_id'];
-    $file->file_id = $myrow_file['file_id'];
-    $files[$file->file_id] = $file;
+  # Collect all files for this project version
+  if (!(isset($files_collected[$project_id]) && isset($files_collected[$project_id][$version]))) {
+    $files_collected[$project_id][$version] = 1;
+    $sql = "SELECT * FROM files WHERE project_id = \"$project_id\" AND version = \"$version\"";
+    $rs_files = mysql_query($sql, $dbh);
+    while($myrow_files = mysql_fetch_assoc($rs_files)) {
+      $file = new File();
+      $file->project_id = $myrow_files['project_id'];
+      $file->version = $myrow_files['version'];
+      $file->name = $myrow_files['name'];
+      $file->plugin_id = $myrow_files['plugin_id'];
+      $file->file_id = $myrow_files['file_id'];
+      $file->is_active = $myrow_files['is_active'];
+      $files[$file->file_id] = $file;
+    }
   }
 
-  # Get all plugin exclude patterns for this project version
+  # Collect all plugin exclude patterns for this project version
   $sql = "SELECT pattern FROM plugin_exclude_patterns WHERE project_id = \"$project_id\" AND version = \"$version\"";
   $rs_patterns = mysql_query($sql, $dbh);
   $patterns = Array();
@@ -169,10 +174,12 @@ while ($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 
             if (!$match) {
               if ($file_id > 0 && $files[$file_id] != null) {
+                # Existing file
                 $file = $files[$file_id];
                 $file->is_active = 1;
                 unset($files[$file_id]);
               } else {
+                # New file
                 $file = new File();
                 $file->project_id = $myrow_maps['project_id'];
                 $file->version = $myrow_maps['version'];

@@ -15,6 +15,7 @@
  */
 $temp_dir = "/tmp/tmp-babel/";
 $files = array();
+$files_collected = array(array());
 
 header("Content-type: text/plain");
 include("global.php");
@@ -62,20 +63,24 @@ while($update_site = mysql_fetch_assoc($rs_maps)) {
   $temp_site_dir = $temp_dir . "update_sites/" . $project_id . "/" . $version . "/";
   $temp_unzip_dir = $temp_dir . "unzips/" . $project_id . "/" . $version . "/";
 
-  # Get all files for this project version
-  $sql = "SELECT * FROM files WHERE project_id = \"$project_id\" AND version = \"$version\"";
-  $rs_files = mysql_query($sql, $dbh);
-  while ($myrow_files = mysql_fetch_assoc($rs_files)) {
-    $file = new File();
-    $file->project_id = $myrow_files['project_id'];
-    $file->version = $myrow_files['version'];
-    $file->name = $myrow_files['name'];
-    $file->plugin_id = $myrow_files['plugin_id'];
-    $file->file_id = $myrow_files['file_id'];
-    $files[$file->file_id] = $file;
+  # Collect all files for this project version
+  if (!(isset($files_collected[$project_id]) && isset($files_collected[$project_id][$version]))) {
+    $files_collected[$project_id][$version] = 1;
+    $sql = "SELECT * FROM files WHERE project_id = \"$project_id\" AND version = \"$version\"";
+    $rs_files = mysql_query($sql, $dbh);
+    while ($myrow_files = mysql_fetch_assoc($rs_files)) {
+      $file = new File();
+      $file->project_id = $myrow_files['project_id'];
+      $file->version = $myrow_files['version'];
+      $file->name = $myrow_files['name'];
+      $file->plugin_id = $myrow_files['plugin_id'];
+      $file->file_id = $myrow_files['file_id'];
+      $file->is_active = $myrow_files['is_active'];
+      $files[$file->file_id] = $file;
+    }
   }
 
-  # Get all plugin exclude patterns for this project version
+  # Collect all plugin exclude patterns for this project version
   $sql = "SELECT pattern FROM plugin_exclude_patterns WHERE project_id = \"$project_id\" AND version = \"$version\"";
   $rs_patterns = mysql_query($sql, $dbh);
   $patterns = Array();

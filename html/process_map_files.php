@@ -42,7 +42,10 @@ if (!is_dir($temp_downloads_dir)) {
 }
 chdir($temp_downloads_dir)  || die("Cannot use working directory");
 
-$sql = "SELECT * FROM map_files WHERE is_active = 1 AND is_map_file = 1";
+$sql = "SELECT * FROM map_files AS m 
+INNER JOIN release_train_projects AS r ON r.project_id = m.project_id AND r.version = m.version 
+INNER JOIN release_trains AS t on t.train_id = r.train_id 
+WHERE m.is_active = 1 AND m.is_map_file = 1 AND t.is_active = 1";
 $rs_maps = mysql_query($sql, $dbh);
 while ($myrow_maps = mysql_fetch_assoc($rs_maps)) {
   $location = $myrow_maps['location'];

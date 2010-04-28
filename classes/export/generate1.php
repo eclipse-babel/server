@@ -20,6 +20,7 @@
  *    Kit Lo (IBM) - patch, bug 270456, Unable to use Babel PTT to verify PDE in the eclipse SDK
  *    Kit Lo (IBM) - Bug 299402, Extract properties files from Eclipse project update sites for translation
  *    Kit Lo (IBM) - Bug 276306, Re-enable p2 repository
+ *    Kit Lo (IBM) - Bug 310135, Babel p2 update site not using mirrors
  *******************************************************************************/
 
 /*
@@ -522,7 +523,7 @@ foreach ($train_result as $train_id => $train_version) {
 	if (file_exists(METADATA_GENERATOR_LOCATION) && strcmp($train_id, "europa") != 0 && strcmp($train_id, "ganymede") != 0) {
 		system("sh " . dirname(__FILE__) . "/runMetadata.sh ". METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
 		system("xsltproc -o ${output_dir_for_train}content.xml ". dirname(__FILE__) . "/content.xsl ${output_dir_for_train}content.xml");
-		system("cd ${output_dir_for_train} ; jar -fc content.jar content.xml ; jar -fc artifacts.jar artifacts.xml ; rm *.xml");
+		system("cd ${output_dir_for_train} ; jar -fc content.jar content.xml ; jar -fc artifacts.jar artifacts.xml ; mv site.xml site.txt ; rm *.xml");
 	}
 }
 echo "Completed generating update site\n";

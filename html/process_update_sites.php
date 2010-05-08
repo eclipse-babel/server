@@ -39,11 +39,7 @@ mkdir($temp_unzips_dir, 0777, TRUE) || die("***ERROR: Cannot create working dire
 
 global $addon;
 $context = $addon->callHook('context');
-if ($context == "live") {
-  $rsync_host = "download.eclipse.org::eclipseMirror/";
-} else {
-  $rsync_host = "rsync.osuosl.org::eclipse/";
-}
+$rsync_host = "rsync.osuosl.org::eclipse/";
 
 # Get all active update sites
 $sql = "SELECT * FROM map_files AS m 

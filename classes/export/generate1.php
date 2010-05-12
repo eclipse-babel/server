@@ -60,14 +60,16 @@ if(isset($options['t'])) {
 	}
 }
 
-$buildid = "";
+$build_id = "";
 if(!isset($options['b'])) {
 	usage();
 	exit();
 }
 else {
-	$buildid = $options['b'];
+	$build_id = $options['b'];
 }
+
+$release_id = "0.8.0";
 
 $work_dir = $addon->callHook('babel_working');
 
@@ -110,7 +112,7 @@ foreach ($train_result as $train_id => $train_version) {
 	$header = file_get_contents("${source_files_dir}page_header.html");
 	fwrite($language_pack_links_file, $header);
 	fwrite($language_pack_links_file, "\n\t<h1>Babel Language Packs for " . ucfirst($train_id) . "</h1>" .
-		"\n\t<h2>Build ID: $buildid</h2>" .
+		"\n\t<h2>Build ID: $build_id</h2>" .
 		"\n\t<p>The following language packs are based on the community translations entered into the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a>, and may not be complete or entirely accurate.  If you find missing or incorrect translations, please use the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a> to update them." .   
 		"\n\tAll downloads are provided under the terms and conditions of the <a href='http://www.eclipse.org/legal/epl/notice.php'>Eclipse Foundation Software User Agreement</a> unless otherwise specified.</p>" .
 		"\n\t<p>Go to: ");
@@ -361,8 +363,8 @@ foreach ($train_result as $train_id => $train_version) {
 			if (strcmp($language_iso, "en_AA") != 0) {
 				fwrite($language_pack_links_file, ",");
 			}
-			$language_pack_links_file_buffer .= "\n\t\t<h4>Language: <a name='$language_iso'>$language_name</a></h4>";
-			$language_pack_links_file_buffer .= "\n\t\t<ul>";
+			$language_pack_links_file_buffer .= "\n\t<h4>Language: <a name='$language_iso'>$language_name</a></h4>";
+			$language_pack_links_file_buffer .= "\n\t<ul>";
 		}
 		foreach ($projects as $project_id => $fragment_ids) {
 			/*
@@ -473,7 +475,7 @@ foreach ($train_result as $train_id => $train_version) {
 			/*
 			 * Add project language pack link to language pack links file
 			 */
-			$language_pack_links_file_buffer .= "\n\t\t\t<li><a href=\"<?= \$language_pack_leader ?>/${language_pack_name}\">$language_pack_name ($project_pct_complete%)</a></li>";
+			$language_pack_links_file_buffer .= "\n\t\t<li><a href=\"<?= \$language_pack_leader ?>/${language_pack_name}\">$language_pack_name ($project_pct_complete%)</a></li>";
 			/*
 			 * Jar up this directory as the feature jar
 			 */
@@ -489,11 +491,50 @@ foreach ($train_result as $train_id => $train_version) {
 		}  /*  End: foreach project  */
 		echo "${leader}Completed language pack for $language_name ($language_iso)\n";
 		if (sizeof($projects) > 0) {
-			$language_pack_links_file_buffer .= "\n\t\t</ul>";
+			$language_pack_links_file_buffer .= "\n\t</ul>";
 		}
 	}
+
+	fwrite($language_pack_links_file, "\n\t</p>");
+	fwrite($language_pack_links_file, $language_pack_links_file_buffer);
+	
+	fwrite($language_pack_links_file, "\n\t<br />\n</body>\n</html>");
+	fclose($language_pack_links_file);
+	
+	$dbh = $dbc->disconnect();
+
 	/*
-	 * <site mirrorsURL=... implemented in the weekly build process by sed'ing <site>
+	 * Generate and save site.xml/content.jar/artifacts.jar with mirrorsURL
+	 */
+	$outp = fopen("${output_dir_for_train}site.xml", "w");
+	fwrite($outp, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" .
+		"\n<site pack200=\"true\" digestURL=\"http://download.eclipse.org/technology/babel/update-site/R$release_id/$train_id\"" .
+		"\n\tmirrorsURL=\"http://www.eclipse.org/downloads/download.php?file=/technology/babel/update-site/R$release_id/$train_id/site.xml&amp;format=xml\">" .
+		"\n\t<description url=\"http://babel.eclipse.org/\">" .
+		"\n\t\tThis update site contains user-contributed translations of the strings in all Eclipse projects." .
+		"\n\t\tPlease see the http://babel.eclipse.org/ Babel project web pages for a full how-to-use explanation of" .
+		"\n\t\tthese translations as well as how you can contribute to the translations of this and future versions of Eclipse." .
+		"\n\t</description>");
+	fwrite($outp, $site_xml);
+	fwrite($outp, "\n</site>");
+	fclose($outp);
+
+	/*
+	 * Generate the metadata and add the non-greedy tags
+	 * Note: Not needed for Europa and Ganymede because p2 repository was not supported
+	 */
+	exec("mkdir ${output_dir_for_train}mirrors/");
+	if (file_exists(METADATA_GENERATOR_LOCATION) && strcmp($train_id, "europa") != 0 && strcmp($train_id, "ganymede") != 0) {
+		system("sh " . dirname(__FILE__) . "/runMetadata.sh ". METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
+		system("xsltproc -o ${output_dir_for_train}content.xml ". dirname(__FILE__) . "/content.xsl ${output_dir_for_train}content.xml");
+		system("cd ${output_dir_for_train} ; jar -fc content.jar content.xml ; jar -fc artifacts.jar artifacts.xml");
+		system("cd ${output_dir_for_train} ; rm content.xml ; rm artifacts.xml");
+		system("cd ${output_dir_for_train} ; mv content.jar mirrors/content.mirrors ; mv artifacts.jar mirrors/artifacts.mirrors");
+	}
+	system("cd ${output_dir_for_train} ; mv site.xml mirrors/site.mirrors");
+
+	/*
+	 * Generate normal site.xml/content.jar/artifacts.jar without mirrorsURL
 	 */
 	$outp = fopen("${output_dir_for_train}site.xml", "w");
 	fwrite($outp, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" .
@@ -507,15 +548,6 @@ foreach ($train_result as $train_id => $train_version) {
 	fwrite($outp, "\n</site>");
 	fclose($outp);
 
-	fwrite($language_pack_links_file, "\n\t</p>");
-	fwrite($language_pack_links_file, $language_pack_links_file_buffer);
-	
-	fwrite($language_pack_links_file, "\n</body>\n</html>");
-	fclose($language_pack_links_file);
-	
-	
-	$dbh = $dbc->disconnect();
-
 	/*
 	 * Generate the metadata and add the non-greedy tags
 	 * Note: Not needed for Europa and Ganymede because p2 repository was not supported
@@ -523,7 +555,11 @@ foreach ($train_result as $train_id => $train_version) {
 	if (file_exists(METADATA_GENERATOR_LOCATION) && strcmp($train_id, "europa") != 0 && strcmp($train_id, "ganymede") != 0) {
 		system("sh " . dirname(__FILE__) . "/runMetadata.sh ". METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
 		system("xsltproc -o ${output_dir_for_train}content.xml ". dirname(__FILE__) . "/content.xsl ${output_dir_for_train}content.xml");
-		system("cd ${output_dir_for_train} ; jar -fc content.jar content.xml ; jar -fc artifacts.jar artifacts.xml ; mv site.xml site.txt ; rm *.xml");
+		system("cd ${output_dir_for_train} ; jar -fc content.jar content.xml ; jar -fc artifacts.jar artifacts.xml");
+		system("cd ${output_dir_for_train} ; rm content.xml ; rm artifacts.xml");
+		system("cd ${output_dir_for_train} ; mv site.xml mirrors/site.txt");
+	} else {
+		system("cd ${output_dir_for_train} ; cp site.xml mirrors/site.txt");
 	}
 }
 echo "Completed generating update site\n";

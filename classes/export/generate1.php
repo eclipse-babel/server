@@ -228,6 +228,7 @@ foreach ($train_result as $train_id => $train_version) {
 		/*
 		 * Generate one plug-in fragment for each plug-in
 		 */
+		asort($plugins);
 		foreach ($plugins as $plugin_name => $plugin_row) {
 			echo "${leader}${leader}Generating plug-in fragment $plugin_name\n";
 			/*
@@ -578,9 +579,6 @@ echo "Completed generating update site\n";
  3. need to handle different versions of each feature/plugin/platform; generate different
  language packs for each
  */
-
-$alloutput = fopen($output_dir."langpack_output_".date("m_d_Y"), "w");
-fwrite($alloutput,ob_get_contents());
 
 function usage() {
 	echo "\n";

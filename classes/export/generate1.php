@@ -228,7 +228,7 @@ foreach ($train_result as $train_id => $train_version) {
 		/*
 		 * Generate one plug-in fragment for each plug-in
 		 */
-		asort($plugins);
+		ksort($plugins);
 		foreach ($plugins as $plugin_name => $plugin_row) {
 			echo "${leader}${leader}Generating plug-in fragment $plugin_name\n";
 			/*
@@ -367,6 +367,7 @@ foreach ($train_result as $train_id => $train_version) {
 			$language_pack_links_file_buffer .= "\n\t<h4>Language: <a name='$language_iso'>$language_name</a></h4>";
 			$language_pack_links_file_buffer .= "\n\t<ul>";
 		}
+		ksort($projects);
 		foreach ($projects as $project_id => $fragment_ids) {
 			/*
 			 * Sort fragment names

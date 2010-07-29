@@ -85,7 +85,7 @@ $source_files_dir = dirname(__FILE__) . "/source_files_for_generate/";
 $leader = ". . ";
 $timestamp = date("Ymdhis");
 
-$rm_command = "rm -rf $work_context_dir" . "*";
+$rm_command = "rm -rf $tmp_dir; rm -rf $babel_language_packs_dir; rm -rf $output_dir";
 exec($rm_command);
 exec("mkdir -p $output_dir");
 
@@ -399,16 +399,17 @@ foreach ($train_result as $train_id => $train_version) {
 			$feature_id = "org.eclipse.babel.nls_${project_id}_$language_iso";
 			$feature_filename = "${feature_id}_$train_version_timestamp.jar";
 
-			$project_version = $project_versions[$project_id];
-			$sql = "SELECT pct_complete
-				FROM project_progress
-				WHERE project_id = \"$project_id\"
-					AND version = \"$project_version\"
-					AND language_id = $language_id";
-			$project_pct_complete_result = mysql_query($sql);
-			$project_pct_complete = mysql_result($project_pct_complete_result, 0);
 			if (strcmp($language_iso, "en_AA") == 0) {
 				$project_pct_complete = 100;
+			} else {
+				$project_version = $project_versions[$project_id];
+				$sql = "SELECT pct_complete
+					FROM project_progress
+					WHERE project_id = \"$project_id\"
+						AND version = \"$project_version\"
+						AND language_id = $language_id";
+				$project_pct_complete_result = mysql_query($sql);
+				$project_pct_complete = mysql_result($project_pct_complete_result, 0);
 			}
 
 			$outp = fopen("$tmp_dir/feature.xml", "w");
@@ -527,7 +528,9 @@ foreach ($train_result as $train_id => $train_version) {
 	 */
 	exec("mkdir ${output_dir_for_train}mirrors/");
 	if (file_exists(METADATA_GENERATOR_LOCATION) && strcmp($train_id, "europa") != 0 && strcmp($train_id, "ganymede") != 0) {
-		system("sh " . dirname(__FILE__) . "/runMetadata.sh ". METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
+		echo "Running the Meta at " . dirname(__FILE__) . "/runMetadata.sh\n";
+		system("/bin/sh " . dirname(__FILE__) . "/runMetadata.sh ". METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
+		echo "Processing XML\n";
 		system("xsltproc -o ${output_dir_for_train}content.xml ". dirname(__FILE__) . "/content.xsl ${output_dir_for_train}content.xml");
 		system("cd ${output_dir_for_train} ; jar -fc content.jar content.xml ; jar -fc artifacts.jar artifacts.xml");
 		system("cd ${output_dir_for_train} ; rm content.xml ; rm artifacts.xml");
@@ -555,7 +558,9 @@ foreach ($train_result as $train_id => $train_version) {
 	 * Note: Not needed for Europa and Ganymede because p2 repository was not supported
 	 */
 	if (file_exists(METADATA_GENERATOR_LOCATION) && strcmp($train_id, "europa") != 0 && strcmp($train_id, "ganymede") != 0) {
-		system("sh " . dirname(__FILE__) . "/runMetadata.sh ". METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
+		echo "Running the Meta at " . dirname(__FILE__) . "/runMetadata.sh\n";
+		system("/bin/sh " . dirname(__FILE__) . "/runMetadata.sh ". METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
+		echo "Processing XML\n";
 		system("xsltproc -o ${output_dir_for_train}content.xml ". dirname(__FILE__) . "/content.xsl ${output_dir_for_train}content.xml");
 		system("cd ${output_dir_for_train} ; jar -fc content.jar content.xml ; jar -fc artifacts.jar artifacts.xml");
 		system("cd ${output_dir_for_train} ; rm content.xml ; rm artifacts.xml");

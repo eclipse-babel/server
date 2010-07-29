@@ -21,6 +21,7 @@
  *    Kit Lo (IBM) - Bug 299402, Extract properties files from Eclipse project update sites for translation
  *    Kit Lo (IBM) - Bug 276306, Re-enable p2 repository
  *    Kit Lo (IBM) - Bug 310135, Babel p2 update site not using mirrors
+ *    Kit Lo (IBM) - [289376] Need to start up a Helios build
  *******************************************************************************/
 
 /*

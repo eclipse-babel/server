@@ -482,6 +482,8 @@ insert into languages values (null, "mn",    null,          "Mongolian",  1);
 insert into languages values (null, "id",    null,          "Indonesian", 1);
 insert into languages values (null, "bg",    null,          "Bulgarian",  1);
 insert into languages values (null, "sl",    null,          "Slovenian",  1);
+insert into languages values (null, "fa",    null,          "Persian",    1);
+
 insert into languages values (null, "tl",    null,          "Klingon",    1);
 
 insert into projects set project_id = 'eclipse', is_active = 1 ;
@@ -573,7 +575,7 @@ insert into map_files values ("eclipse", "3.4", "ui.map", "http://dev.eclipse.or
 insert into map_files values ("eclipse", "3.4", "update.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/update.map?view=co", 1, 1);
 insert into map_files values ("eclipse", "3.4", "userassist.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/userassist.map?view=co", 1, 1);
 
-insert into map_files values ("eclipse", "3.6", "eclipse-3.6-updateSite", "http://download.eclipse.org/eclipse/updates/3.6milestones/S-3.6M5-201001291300", 1, 0);
+insert into map_files values ("eclipse", "3.6", "eclipse-3.6-updateSite", "http://download.eclipse.org/eclipse/updates/3.6", 1, 0);
 
 insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^com\\.jcraft\\..*$/");
 insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^javax\\..*$/");

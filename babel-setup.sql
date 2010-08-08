@@ -199,6 +199,7 @@ DROP TABLE IF EXISTS `release_trains`;
 CREATE TABLE `release_trains` (
     `train_id` varchar(30) NOT NULL,
     `train_version` varchar(64) NOT NULL,
+    `is_active` tinyint(3) unsigned NOT NULL default '1',
     PRIMARY KEY (`train_id`, `train_version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -520,10 +521,10 @@ insert into project_versions set project_id = "webtools", version = "3.1", is_ac
 
 insert into project_versions set project_id = "eclipse", version = "3.6", is_active = 1;
 
-insert into release_trains values ('europa',   '3.3.1');
-insert into release_trains values ('ganymede', '3.4.0');
-insert into release_trains values ('galileo',  '3.5.0');
-insert into release_trains values ('helios',   '3.6.0');
+insert into release_trains values ('europa',   '3.3.1', 1);
+insert into release_trains values ('ganymede', '3.4.0', 1);
+insert into release_trains values ('galileo',  '3.5.0', 1);
+insert into release_trains values ('helios',   '3.6.0', 1);
 
 insert into release_train_projects values ('europa',   'eclipse',       '3.3.1');
 insert into release_train_projects values ('europa',   'birt',          '2.2.0');

@@ -484,6 +484,7 @@ insert into languages values (null, "id",    null,          "Indonesian", 1);
 insert into languages values (null, "bg",    null,          "Bulgarian",  1);
 insert into languages values (null, "sl",    null,          "Slovenian",  1);
 insert into languages values (null, "fa",    null,          "Persian",    1);
+insert into languages values (null, "sq",    null,          "Albanian",   1);
 
 insert into languages values (null, "tl",    null,          "Klingon",    1);
 
@@ -521,10 +522,13 @@ insert into project_versions set project_id = "webtools", version = "3.1", is_ac
 
 insert into project_versions set project_id = "eclipse", version = "3.6", is_active = 1;
 
+insert into project_versions set project_id = "eclipse", version = "3.7", is_active = 1;
+
 insert into release_trains values ('europa',   '3.3.1', 1);
 insert into release_trains values ('ganymede', '3.4.0', 1);
 insert into release_trains values ('galileo',  '3.5.0', 1);
 insert into release_trains values ('helios',   '3.6.0', 1);
+insert into release_trains values ('indigo',   '3.7.0', 1);
 
 insert into release_train_projects values ('europa',   'eclipse',       '3.3.1');
 insert into release_train_projects values ('europa',   'birt',          '2.2.0');
@@ -547,6 +551,8 @@ insert into release_train_projects values ('galileo',  'birt',          '2.5.0')
 insert into release_train_projects values ('galileo',  'webtools',      '3.1');
 
 insert into release_train_projects values ('helios',   'eclipse',       '3.6');
+
+insert into release_train_projects values ('indigo',   'eclipse',       '3.7');
 
 /* MAP INPUTS */
 insert into map_files values ("eclipse", "3.4", "ant.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/ant.map?view=co", 1, 1);

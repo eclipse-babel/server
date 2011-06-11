@@ -22,6 +22,7 @@
  *    Kit Lo (IBM) - Bug 276306, Re-enable p2 repository
  *    Kit Lo (IBM) - Bug 310135, Babel p2 update site not using mirrors
  *    Kit Lo (IBM) - [289376] Need to start up a Helios build
+ *    Kit Lo (IBM) - [344764] Translation fragments discard the plug-in's directory structure
  *******************************************************************************/
 
 /*
@@ -200,6 +201,7 @@ foreach ($train_result as $train_id => $train_version) {
 			*/
 			
 			# fix output folder (bug 261584)
+			/*
 			$pattern = 
 				'/^
 				(.*\/)?            # \1 optional outer directories
@@ -224,6 +226,44 @@ foreach ($train_result as $train_id => $train_version) {
 			} else {
 				echo "  WARNING: no plug-in name found in file " . $file_row['file_id'] . " \"" . $file_row['name'] . "\"\n";
 			}
+			*/
+
+			# remove optional outer dirs, e.g. 'pde/ui/'
+			$pos = strripos($file_row['name'], 'org.');
+			if ($pos !== false) {
+				$file_row['name'] = substr($file_row['name'], $pos);
+			}
+			$pos = strripos($file_row['name'], 'com.');
+			if ($pos !== false) {
+				$file_row['name'] = substr($file_row['name'], $pos);
+			}
+
+			$pattern = 
+				'/^
+				(.*?)?					# $1 plugin name
+				\/						# slash
+				(.*?\/)?				# $2 dir name
+				([^\/]+[.]properties)	# $3 file name
+				$/ix';
+			$plugin_name_string = preg_replace($pattern, '$1', $file_row['name']);
+			$dir_name_string = preg_replace($pattern, '$2', $file_row['name']);
+			$file_name_string = preg_replace($pattern, '$3', $file_row['name']);
+
+			# remove optional source dir, e.g. 'src' or 'src_ant'
+			$pos = stripos($dir_name_string, 'org/');
+			if ($pos !== false) {
+				$dir_string = substr($dir_name_string, $pos);
+			}
+			$pos = strripos($dir_name_string, 'com/');
+			if ($pos !== false) {
+				$dir_name_string = substr($dir_name_string, $pos);
+			}
+
+			$file_row['plugin_name'] = $plugin_name_string;
+			$file_row['dir_name'] = $dir_name_string;
+			$file_row['file_name'] = $file_name_string;
+
+			$plugins[$plugin_name_string][] = $file_row;
 		}
 
 		/*
@@ -247,7 +287,7 @@ foreach ($train_result as $train_id => $train_version) {
 				/*
 				 * Convert the filename to *_lang.properties, e.g., foo_fr.properties
 				 */
-				$filename = $properties_file['subname'];
+				$filename = $properties_file['file_name'];
 				if (preg_match( "/^(.*)\.properties$/", $filename, $matches)) {
 					$filename = $matches[1] . '_' . $language_iso . '.properties';
 				}
@@ -255,12 +295,11 @@ foreach ($train_result as $train_id => $train_version) {
 				/*
 				 * Create any needed sub-directories
 				 */
-				$fullpath =  $tmp_dir . $filename;
-				preg_match("/^((.*)\/)?(.+?)$/", $fullpath, $matches);
-				exec("mkdir -p \"" . $matches[1] . "\"");
+				exec("mkdir -p \"" . $tmp_dir . $properties_file['dir_name'] . "\"");
 				/*
 				 * Start writing to the file
 				 */
+				$fullpath = $tmp_dir . $properties_file['dir_name'] . $filename;
 				$outp = fopen($fullpath, "w");
 				fwrite($outp, "# Copyright by many contributors; see http://babel.eclipse.org/");
 				if (strcmp($language_iso, "en_AA") == 0) {

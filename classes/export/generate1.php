@@ -176,58 +176,6 @@ foreach ($train_result as $train_id => $train_version) {
 			# save original filename
 			$file_row['origname'] = $file_row['name'];
 
-			# strip useless CVS structure before the plugin name (bug 221675 c14):
-			$pattern = '/^([a-zA-Z0-9\/_-])+\/([a-zA-Z0-9_-]+)\.([a-zA-Z0-9_-]+)(.*)\.properties$/i';
-			$replace = '${2}.${3}${4}.properties';
-			$file_row['name'] = preg_replace($pattern, $replace, $file_row['name']);
-
-			# strip source folder (bug 221675) (org.eclipse.plugin/source_folder/org/eclipse/plugin)
-			/*	
-			$pattern =
-				'/^
-				([a-zA-Z0-9_-]+)\.        # \1 org.
-				([a-zA-Z0-9_-]+)\.        # \2 eclipse.
-				([a-zA-Z0-9\._-]+)        # \3 datatools.connectivity
-				(.*)\/                    # \4 \/plugins\/
-				(\1)                      # \5 org
-				([\.\/])                  # \6 .
-				(\2)                      # \7 eclipse
-				([\.\/])                  # \8 .
-				(.*)                      # \9 datatools.connectivity.ui\/plugin
-				\.properties              # .properties
-				$/ix
-				';
-			$replace = '${1}.${2}.${3}/${5}${6}${7}${8}${9}.properties';
-			*/
-			
-			# fix output folder (bug 261584)
-			/*
-			$pattern = 
-				'/^
-				(.*\/)?            # \1 optional outer directories
-				([a-z]+)           # \2 org|com|etc
-				[.]                # dot
-				([^\/]+)           # \3 plugin id except org.|com.
-				\/                 # slash
-				(.*?\/)?           # \4 optional src\/, src\/main\/ etc
-				# \5 resource path (pathname inside resulting jar)
-				# (a) within a org|com directory, or
-				# (b) in plugin root dir.
-				(\2\/.*[.]properties| # org|com\/anything.properties
-				[^\/]+[.]properties)  # eg plugin.properties
-				$/ix';
-			$replace = '$2.$3/$5';
-
-			$file_row['name'] = preg_replace($pattern, $replace, $file_row['name']);
-
-			if (preg_match("/^([a-zA-Z0-9\.]+)\/(.*)$/", $file_row['name'], $matches)) {
-				$file_row['subname'] = $matches[2];
-				$plugins[$matches[1]][] = $file_row;
-			} else {
-				echo "  WARNING: no plug-in name found in file " . $file_row['file_id'] . " \"" . $file_row['name'] . "\"\n";
-			}
-			*/
-
 			# remove optional outer dirs, e.g. 'pde/ui/'
 			$pos = strripos($file_row['name'], 'org.');
 			if ($pos !== false) {
@@ -252,7 +200,7 @@ foreach ($train_result as $train_id => $train_version) {
 			# remove optional source dir, e.g. 'src' or 'src_ant'
 			$pos = stripos($dir_name_string, 'org/');
 			if ($pos !== false) {
-				$dir_string = substr($dir_name_string, $pos);
+				$dir_name_string = substr($dir_name_string, $pos);
 			}
 			$pos = strripos($dir_name_string, 'com/');
 			if ($pos !== false) {

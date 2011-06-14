@@ -39,7 +39,11 @@ mkdir($temp_unzips_dir, 0777, TRUE) || die("***ERROR: Cannot create working dire
 
 global $addon;
 $context = $addon->callHook('context');
-$rsync_host = "rsync.osuosl.org::eclipse/";
+if ($context == "live") {
+  $rsync_host = "download.eclipse.org::eclipseFullMirror/";
+} else {
+  $rsync_host = "rsync.osuosl.org::eclipse/";
+}
 
 # Get all active update sites
 $sql = "SELECT * FROM map_files AS m 
@@ -57,8 +61,11 @@ while($update_site = mysql_fetch_assoc($rs_maps)) {
   # $site_plugins_dir eclipse/updates/3.6milestones/S-3.6M4-200912101301/plugins/
   # $temp_site_dir    /tmp/tmp-babel/update_sites/eclipse/3.6/
   # $temp_unzip_dir   /tmp/tmp-babel/unzips/eclipse/3.6/
-  $site_dir = substr($site_url, strpos($site_url, "/", 7) + 1) . "/";
-  $site_plugins_dir = $site_dir . "/plugins/";
+  $site_dir = substr($site_url, strpos($site_url, "/", 7) + 1);
+  if (strcmp(substr($site_dir, -1), "/") != 0) {
+    $site_dir = $site_dir . "/";
+  }
+  $site_plugins_dir = $site_dir . "plugins/";
   $temp_site_dir = $temp_dir . "update_sites/" . $project_id . "/" . $version . "/";
   $temp_unzip_dir = $temp_dir . "unzips/" . $project_id . "/" . $version . "/";
 
@@ -88,6 +95,7 @@ while($update_site = mysql_fetch_assoc($rs_maps)) {
   }
 
   # Rsync update site
+  echo "rsync -av --delete $rsync_host$site_plugins_dir $temp_site_dir\n";
   exec("mkdir -p $temp_site_dir; rsync -av --delete $rsync_host$site_plugins_dir $temp_site_dir");
 
   # Make unzip dir

@@ -239,7 +239,7 @@ foreach ($train_result as $train_id => $train_version) {
 				if (preg_match( "/^(.*)\.properties$/", $filename, $matches)) {
 					$filename = $matches[1] . '_' . $language_iso . '.properties';
 				}
-				echo "${leader}${leader}${leader}Generating properties file $filename (file_id=" . $properties_file['file_id'] . ")\n";
+				echo "${leader}${leader}${leader}Generating properties file " . $properties_file['dir_name'] . $filename . " (file_id=" . $properties_file['file_id'] . ")\n";
 				/*
 				 * Create any needed sub-directories
 				 */
@@ -308,7 +308,7 @@ foreach ($train_result as $train_id => $train_version) {
 				 * Finish the properties file
 				 */
 				fclose($outp);
-				echo "${leader}${leader}${leader}Completed  properties file $filename\n";
+				echo "${leader}${leader}${leader}Completed  properties file " . $properties_file['dir_name'] . $filename . "\n";
 			}
 			/*
 			 * Copy in the various legal files

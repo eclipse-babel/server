@@ -485,43 +485,16 @@ insert into languages values (null, "bg",    null,          "Bulgarian",  1);
 insert into languages values (null, "sl",    null,          "Slovenian",  1);
 insert into languages values (null, "fa",    null,          "Persian",    1);
 insert into languages values (null, "sq",    null,          "Albanian",   1);
+insert into languages values (null, "ku",    null,          "Kurdish",    1);
 
 insert into languages values (null, "tl",    null,          "Klingon",    1);
 
 insert into projects set project_id = 'eclipse', is_active = 1 ;
-insert into projects set project_id = 'birt', is_active = 1 ;
-insert into projects set project_id = 'modeling.emf', is_active = 1 ;
-insert into projects set project_id = 'modeling.emft', is_active = 1 ;
-insert into projects set project_id = 'modeling.gmf', is_active = 1 ;
-insert into projects set project_id = 'modeling.mdt', is_active = 1 ;
-insert into projects set project_id = 'stp', is_active = 1 ;
-insert into projects set project_id = 'tools.cdt', is_active = 1 ;
-insert into projects set project_id = 'tools.gef', is_active = 1 ;
-insert into projects set project_id = 'tools.pdt', is_active = 1 ;
-insert into projects set project_id = 'webtools', is_active = 1 ;
 
 insert into project_versions set project_id = "eclipse", version = "3.3.1", is_active = 1;
-insert into project_versions set project_id = "birt", version = "2.2.0", is_active = 1;
-insert into project_versions set project_id = "stp", version = "0.8", is_active = 1;
-
 insert into project_versions set project_id = "eclipse", version = "3.4", is_active = 1;
-insert into project_versions set project_id = "birt", version = "2.3.0", is_active = 1;
-insert into project_versions set project_id = "modeling.emf", version = "2.4.0", is_active = 1;
-insert into project_versions set project_id = "modeling.emft", version = "0.8", is_active = 1;
-insert into project_versions set project_id = "modeling.gmf", version = "2.1", is_active = 1;
-insert into project_versions set project_id = "modeling.mdt", version = "2.4.0", is_active = 1;
-insert into project_versions set project_id = "stp", version = "1.0", is_active = 1;
-insert into project_versions set project_id = "tools.cdt", version = "5.0", is_active = 1;
-insert into project_versions set project_id = "tools.gef", version = "3.4", is_active = 1;
-insert into project_versions set project_id = "tools.pdt", version = "1.5.1", is_active = 1;
-insert into project_versions set project_id = "webtools", version = "3.0", is_active = 1;
-
 insert into project_versions set project_id = "eclipse", version = "3.5", is_active = 1;
-insert into project_versions set project_id = "birt", version = "2.5.0", is_active = 1;
-insert into project_versions set project_id = "webtools", version = "3.1", is_active = 1;
-
 insert into project_versions set project_id = "eclipse", version = "3.6", is_active = 1;
-
 insert into project_versions set project_id = "eclipse", version = "3.7", is_active = 1;
 
 insert into release_trains values ('europa',   '3.3.1', 1);
@@ -531,27 +504,9 @@ insert into release_trains values ('helios',   '3.6.0', 1);
 insert into release_trains values ('indigo',   '3.7.0', 1);
 
 insert into release_train_projects values ('europa',   'eclipse',       '3.3.1');
-insert into release_train_projects values ('europa',   'birt',          '2.2.0');
-insert into release_train_projects values ('europa',   'stp',   	    '0.8');
-
 insert into release_train_projects values ('ganymede', 'eclipse',       '3.4');
-insert into release_train_projects values ('ganymede', 'birt',          '2.3.0');
-insert into release_train_projects values ('ganymede', 'modeling.emf',  '2.4.0');
-insert into release_train_projects values ('ganymede', 'modeling.emft', '0.8');
-insert into release_train_projects values ('ganymede', 'modeling.gmf',  '2.1');
-insert into release_train_projects values ('ganymede', 'modeling.mdt',  '2.4.0');
-insert into release_train_projects values ('ganymede', 'stp',           '1.0');
-insert into release_train_projects values ('ganymede', 'tools.cdt',     '5.0');
-insert into release_train_projects values ('ganymede', 'tools.gef',     '3.4');
-insert into release_train_projects values ('ganymede', 'tools.pdt',     '1.5.1');
-insert into release_train_projects values ('ganymede', 'webtools',      '3.0');
-
 insert into release_train_projects values ('galileo',  'eclipse',       '3.5');
-insert into release_train_projects values ('galileo',  'birt',          '2.5.0');
-insert into release_train_projects values ('galileo',  'webtools',      '3.1');
-
 insert into release_train_projects values ('helios',   'eclipse',       '3.6');
-
 insert into release_train_projects values ('indigo',   'eclipse',       '3.7');
 
 /* MAP INPUTS */
@@ -581,8 +536,18 @@ insert into map_files values ("eclipse", "3.4", "text.map", "http://dev.eclipse.
 insert into map_files values ("eclipse", "3.4", "ui.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/ui.map?view=co", 1, 1);
 insert into map_files values ("eclipse", "3.4", "update.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/update.map?view=co", 1, 1);
 insert into map_files values ("eclipse", "3.4", "userassist.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/userassist.map?view=co", 1, 1);
+insert into map_files values ("eclipse", "3.5", "eclipse-3.5-updateSite", "http://download.eclipse.org/eclipse/updates/3.5/R-3.5-200906111540", 1, 0);
+insert into map_files values ("eclipse", "3.6", "eclipse-3.6-updateSite", "http://download.eclipse.org/eclipse/updates/3.6/R-3.6-201006080911", 1, 0);
+insert into map_files values ("eclipse", "3.7", "eclipse-3.7-updateSite", "http://download.eclipse.org/eclipse/updates/3.7milestones/S-3.7RC5-201106131736", 1, 0);
 
-insert into map_files values ("eclipse", "3.6", "eclipse-3.6-updateSite", "http://download.eclipse.org/eclipse/updates/3.6", 1, 0);
+insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^com\\.jcraft\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^javax\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^org\\.apache\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^org\\.hamcrest\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^org\\.junit.*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^org\\.mortbay\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^org\\.objectweb\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^org\\.sat4j\\..*$/");
 
 insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^com\\.jcraft\\..*$/");
 insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^javax\\..*$/");
@@ -592,6 +557,15 @@ insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\\.junit.*$/
 insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\\.mortbay\\..*$/");
 insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\\.objectweb\\..*$/");
 insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\\.sat4j\\..*$/");
+
+insert into plugin_exclude_patterns values ("eclipse", "3.7", "/^com\\.jcraft\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.7", "/^javax\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.7", "/^org\\.apache\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.7", "/^org\\.hamcrest\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.7", "/^org\\.junit.*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.7", "/^org\\.mortbay\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.7", "/^org\\.objectweb\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "3.7", "/^org\\.sat4j\\..*$/");
 
 /* populate file_progress table  */
 /* See also: dbmaintenance_15min.php */

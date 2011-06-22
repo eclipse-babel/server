@@ -81,7 +81,7 @@ $context = $addon->callHook('context');
 $work_context_dir = $work_dir . $context . "/";
 $tmp_dir = $work_context_dir . "tmp/";
 $babel_language_packs_dir = $work_context_dir . "babel_language_packs/";
-$output_dir = $work_context_dir . "output/";
+$output_dir = $work_context_dir . "update-site/";
 $source_files_dir = dirname(__FILE__) . "/source_files_for_generate/";
 
 $leader = ". . ";

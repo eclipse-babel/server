@@ -472,13 +472,15 @@ foreach ($train_result as $train_id => $train_version) {
 			 */
 			system("cd $tmp_dir; jar cfM ${output_dir_for_train}features/$feature_filename .");
 			/*
+			 * Clean the temporary directory
+			 */
+			exec("rm -rf $tmp_dir");
+			/*
 			 * Register this feature with the site.xml
 			 */
 			$site_xml .= "\n\t<feature url=\"features/$feature_filename\" id=\"$feature_id\" version=\"$train_version_timestamp\">";
 			$site_xml .= "\n\t\t<category name=\"Babel Language Packs in $language_name\"/>";
 			$site_xml .= "\n\t</feature>";
-			
-
 		}  /*  End: foreach project  */
 		echo "${leader}Completed language pack for $language_name ($language_iso)\n";
 		if (sizeof($projects) > 0) {

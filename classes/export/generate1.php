@@ -104,8 +104,9 @@ foreach ($train_result as $train_id => $train_version) {
 	/*
 	 * Create language pack links file
 	 */
-	exec("mkdir -p $babel_language_packs_dir");
-	$language_pack_links_file = fopen("${babel_language_packs_dir}${train_id}.php", "w");
+	$babel_language_packs_dir_for_train = $babel_language_packs_dir . $train_id . "/";
+	exec("mkdir -p $babel_language_packs_dir_for_train");
+	$language_pack_links_file = fopen("${babel_language_packs_dir_for_train}${train_id}.php", "w");
 	fwrite($language_pack_links_file, "<?php\n");
 	# Uncomment if each train is in its own directory: fwrite($language_pack_links_file, "\$language_pack_leader = \"${train_id}\";\n");
 	fwrite($language_pack_links_file, "\$language_pack_leader = \".\";\n");
@@ -362,10 +363,10 @@ foreach ($train_result as $train_id => $train_version) {
 			 */
 			asort($fragment_ids);
 			/*
-			 * Create ${babel_language_packs_dir}tmp
+			 * Create ${babel_language_packs_dir_for_train}tmp
 			 */
-			exec("mkdir -p ${babel_language_packs_dir}tmp/eclipse/features");
-			exec("mkdir -p ${babel_language_packs_dir}tmp/eclipse/plugins");
+			exec("mkdir -p ${babel_language_packs_dir_for_train}tmp/eclipse/features");
+			exec("mkdir -p ${babel_language_packs_dir_for_train}tmp/eclipse/plugins");
 			/*
 			 * Clean and create the temporary directory
 			 */
@@ -417,9 +418,9 @@ foreach ($train_result as $train_id => $train_version) {
 				fwrite($outp, "\n\t<plugin fragment=\"true\" id=\"$fragment_id\" unpack=\"false\" " .
 					"version=\"$train_version_timestamp\" download-size=\"$size\" install-size=\"$size\" />");
 				/*
-				 * Copy the plugin to ${babel_language_packs_dir}tmp
+				 * Copy the plugin to ${babel_language_packs_dir_for_train}tmp
 				 */
-				exec("cp ${output_dir_for_train}plugins/${fragment_id}_$train_version_timestamp.jar ${babel_language_packs_dir}tmp/eclipse/plugins");
+				exec("cp ${output_dir_for_train}plugins/${fragment_id}_$train_version_timestamp.jar ${babel_language_packs_dir_for_train}tmp/eclipse/plugins");
 			}
 			fwrite($outp, "\n</feature>");
 			fclose($outp);
@@ -450,19 +451,19 @@ foreach ($train_result as $train_id => $train_version) {
 				exec("rm ${output_dir}BabelPseudoTranslationsIndex-$project_id.html");
 			}
 			/*
-			 * Copy the feature to ${babel_language_packs_dir}tmp before jar'ing up
+			 * Copy the feature to ${babel_language_packs_dir_for_train}tmp before jar'ing up
 			 */
-			exec("mkdir -p ${babel_language_packs_dir}tmp/eclipse/features/${feature_id}_$train_version_timestamp");
-			exec("cd $tmp_dir; cp * ${babel_language_packs_dir}tmp/eclipse/features/${feature_id}_$train_version_timestamp");
+			exec("mkdir -p ${babel_language_packs_dir_for_train}tmp/eclipse/features/${feature_id}_$train_version_timestamp");
+			exec("cd $tmp_dir; cp * ${babel_language_packs_dir_for_train}tmp/eclipse/features/${feature_id}_$train_version_timestamp");
 			/*
 			 * Zip up language pack
 			 */
 			$language_pack_name = "BabelLanguagePack-$project_id-${language_iso}_$train_version_timestamp.zip";
-			exec("cd ${babel_language_packs_dir}tmp; zip -r $babel_language_packs_dir$language_pack_name eclipse");
+			exec("cd ${babel_language_packs_dir_for_train}tmp; zip -r $babel_language_packs_dir_for_train$language_pack_name eclipse");
 			/*
-			 * Clean up ${babel_language_packs_dir}tmp
+			 * Clean up ${babel_language_packs_dir_for_train}tmp
 			 */
-			exec("rm -rf ${babel_language_packs_dir}tmp");
+			exec("rm -rf ${babel_language_packs_dir_for_train}tmp");
 			/*
 			 * Add project language pack link to language pack links file
 			 */

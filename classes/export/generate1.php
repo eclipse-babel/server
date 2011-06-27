@@ -23,6 +23,7 @@
  *    Kit Lo (IBM) - Bug 310135, Babel p2 update site not using mirrors
  *    Kit Lo (IBM) - [289376] Need to start up a Helios build
  *    Kit Lo (IBM) - [344764] Translation fragments discard the plug-in's directory structure
+ *    Kit Lo (IBM) - [330735] Generate a better id for the categories
  *******************************************************************************/
 
 /*
@@ -71,7 +72,7 @@ else {
 	$build_id = $options['b'];
 }
 
-$release_id = "0.8.0";
+$release_id = "0.8.1";
 
 $work_dir = $addon->callHook('babel_working');
 
@@ -345,7 +346,7 @@ foreach ($train_result as $train_id => $train_version) {
 			$project_versions[$project_id] = $properties_file['version'];
 		}
 		if (sizeof($projects) > 0) {
-			$site_xml .= "\n\t<category-def name=\"Babel Language Packs in $language_name\" label=\"Babel Language Packs in $language_name\">";
+			$site_xml .= "\n\t<category-def name=\"org.eclipse.babel.nls_$language_iso\" label=\"Babel Language Packs in $language_name\">";
 			$site_xml .= "\n\t\t<description>Babel Language Packs in $language_name</description>";
 			$site_xml .= "\n\t</category-def>";
 
@@ -581,7 +582,7 @@ function usage() {
 	echo "\n";
 	echo "generate1.php -b <build_id> [-t <train_id>]\n";
 	echo "  -b <build_id>: The Build ID for this build.\n";
-	echo "  -t <train_id>: Optional: train to build (helios, galileo, ganymede, europa).";
+	echo "  -t <train_id>: Optional: train to build (indigo, helios, galileo, ganymede, europa).";
 	echo "\n";
 }
 

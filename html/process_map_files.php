@@ -165,8 +165,42 @@ while ($myrow_maps = mysql_fetch_assoc($rs_maps)) {
           # A org.eclipse.stp.bpmn/trunk/org.eclipse.stp.bpmn/org.eclipse.stp.eid/trunk/org.eclipse.stp.eid.generator.test/build.properties
           if (preg_match("/\.properties$/", $out_line) && !preg_match("/build\.properties$/", $out_line)) {
             # this is a .properties file!
-            $file_name = trim(substr($out_line, 2)); 
-            # echo $html_spacer . $html_spacer . $html_spacer . "Processing .properties file: " . $file_name . "\n";
+            $repository_file_name = trim(substr($out_line, 2));
+            $file_name = $repository_file_name;
+
+            # remove optional outer dirs, e.g. 'pde/ui/'
+            $pos = strripos($file_name, 'org.');
+            if ($pos !== false) {
+              $file_name = substr($file_name, $pos);
+            }
+            $pos = strripos($file_name, 'com.');
+            if ($pos !== false) {
+              $file_name = substr($file_name, $pos);
+            }
+ 
+            $pattern = 
+              '/^
+              (.*?)?                # $1 plugin name
+              \/                    # slash
+              (.*?\/)?              # $2 dir name
+              ([^\/]+[.]properties) # $3 file name
+              $/ix';
+            $plugin_name_string = preg_replace($pattern, '$1', $file_name);
+            $dir_name_string = preg_replace($pattern, '$2', $file_name);
+            $file_name_string = preg_replace($pattern, '$3', $file_name);
+
+            # remove optional source dir, e.g. 'src' or 'src_ant'
+            $pos = stripos($dir_name_string, 'org/');
+            if ($pos !== false) {
+              $dir_name_string = substr($dir_name_string, $pos);
+            }
+            $pos = strripos($dir_name_string, 'com/');
+            if ($pos !== false) {
+              $dir_name_string = substr($dir_name_string, $pos);
+            }
+
+            $file_name = $plugin_name_string . "/" . $dir_name_string . $file_name_string;
+
             $file_id = File::getFileID($file_name, $myrow_maps['project_id'], $myrow_maps['version']);
             $properties_file_count = $properties_file_count + 1;
 
@@ -197,7 +231,7 @@ while ($myrow_maps = mysql_fetch_assoc($rs_maps)) {
               if (!$file->save()) {
                 echo $html_spacer . $html_spacer . $html_spacer . $html_spacer . "***ERROR saving file: " . $file_name . "\n";
               } else {
-                $file->parseProperties(file_get_contents($file_name));
+                $file->parseProperties(file_get_contents($repository_file_name));
                 echo "  $file_name\n";
               }
             } else {

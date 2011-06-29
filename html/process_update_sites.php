@@ -90,6 +90,10 @@ while($update_site = mysql_fetch_assoc($rs_maps)) {
   $sql = "SELECT pattern FROM plugin_exclude_patterns WHERE project_id = \"$project_id\" AND version = \"$version\"";
   $rs_patterns = mysql_query($sql, $dbh);
   $patterns = Array();
+  # Add default exclude patterns
+  $patterns[] = "/^.*\.source\/.*$/";
+  $patterns[] = "/^.*\.test\/.*$/";
+  $patterns[] = "/^.*\.tests\/.*$/";
   while ($myrow_patterns = mysql_fetch_assoc($rs_patterns)) {
     $patterns[] = $myrow_patterns['pattern'];
   }

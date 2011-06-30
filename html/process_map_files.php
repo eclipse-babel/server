@@ -168,7 +168,7 @@ while ($myrow_maps = mysql_fetch_assoc($rs_maps)) {
           # U org.eclipse.ant.ui/Ant Editor/org/eclipse/ant/internal/ui/dtd/util/AntDTDUtilMessages.properties
           # SVN: 
           # A org.eclipse.stp.bpmn/trunk/org.eclipse.stp.bpmn/org.eclipse.stp.eid/trunk/org.eclipse.stp.eid.generator.test/build.properties
-          if (preg_match("/\.properties$/", $out_line), $out_line)) {
+          if (preg_match("/\.properties$/", $out_line)) {
             # this is a .properties file!
             $repository_file_name = trim(substr($out_line, 2));
             $file_name = $repository_file_name;

@@ -91,9 +91,14 @@ while($update_site = mysql_fetch_assoc($rs_maps)) {
   $rs_patterns = mysql_query($sql, $dbh);
   $patterns = Array();
   # Add default exclude patterns
+  $patterns[] = "/^.*\/feature.properties$/";
+  $patterns[] = "/^.*\/build.properties$/";
+  $patterns[] = "/^.*\/pom.properties$/";
+  $patterns[] = "/^.*\/css\/.*$/";
   $patterns[] = "/^.*\.source\/.*$/";
   $patterns[] = "/^.*\.test\/.*$/";
   $patterns[] = "/^.*\.tests\/.*$/";
+  $patterns[] = "/^.*\.testing\/.*$/";
   while ($myrow_patterns = mysql_fetch_assoc($rs_patterns)) {
     $patterns[] = $myrow_patterns['pattern'];
   }

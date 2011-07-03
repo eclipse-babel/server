@@ -36,18 +36,20 @@ $dbc = new DBConnection();
 global $dbh;
 $dbh = $dbc->connect();
 
-echo "Connection established, ready to begin; The syncup user id is $User->userid \n";
-$langs = mysql_query( "SELECT language_id FROM languages where languages.is_active" );
-while( ($lang_row = mysql_fetch_assoc($langs)) != null ) {
-	$language_id = $lang_row['language_id'];
-    echo "Investigating language " . $language_id . "\n\n";
-	$untranslated_strings = mysql_query( "SELECT * from strings where is_active and value <> '' and string_id not in(select string_id from translations where language_id=". $language_id .")" );
+echo "Connection established. Ready to begin. The syncup user id is: $User->userid\n";
+$language_result = mysql_query( "SELECT language_id, iso_code, IF(locale <> '', CONCAT(CONCAT(CONCAT(name, ' ('), locale), ')'), name) as name FROM languages WHERE languages.is_active AND languages.language_id<>1 ORDER BY name ASC" );
+while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
+	$language_name = $language_row['name'];
+	$language_iso = $language_row['iso_code'];
+	$language_id = $language_row['language_id'];
+	echo "\nInvestigating $language_name ($language_iso) (language_id=$language_id)\n";
+	$untranslated_strings = mysql_query( "SELECT * from strings where is_active and value <> '' and string_id not in(select string_id from translations where language_id=$language_id)" );
 	$count = 0;
     while ( ($string_row = mysql_fetch_assoc($untranslated_strings)) != null) {
     	$count++;
     	
     	if($count % 10000 == 0) {
-    		echo "Processed " . $count . " strings (language_id=$language_id)... \n";
+    		echo "Processed " . $count . " strings...\n";
     	}
     	
 		$untranslated_value = $string_row['value'];
@@ -73,4 +75,5 @@ while( ($lang_row = mysql_fetch_assoc($langs)) != null ) {
 		}
     }
 }
+echo "\nDone\n";
 ?>

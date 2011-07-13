@@ -346,7 +346,7 @@ foreach ($train_result as $train_id => $train_version) {
 			$project_versions[$project_id] = $properties_file['version'];
 		}
 		if (sizeof($projects) > 0) {
-			$site_xml .= "\n\t<category-def name=\"org.eclipse.babel.nls_$language_iso\" label=\"Babel Language Packs in $language_name\">";
+			$site_xml .= "\n\t<category-def name=\"nls_$language_iso\" label=\"Babel Language Packs in $language_name\">";
 			$site_xml .= "\n\t\t<description>Babel Language Packs in $language_name</description>";
 			$site_xml .= "\n\t</category-def>";
 
@@ -481,7 +481,7 @@ foreach ($train_result as $train_id => $train_version) {
 			 * Register this feature with the site.xml
 			 */
 			$site_xml .= "\n\t<feature url=\"features/$feature_filename\" id=\"$feature_id\" version=\"$train_version_timestamp\">";
-			$site_xml .= "\n\t\t<category name=\"Babel Language Packs in $language_name\"/>";
+			$site_xml .= "\n\t\t<category name=\"nls_$language_iso\"/>";
 			$site_xml .= "\n\t</feature>";
 		}  /*  End: foreach project  */
 		echo "${leader}Completed language pack for $language_name ($language_iso)\n";
@@ -521,7 +521,7 @@ foreach ($train_result as $train_id => $train_version) {
 	exec("mkdir ${output_dir_for_train}mirrors/");
 	if (file_exists(METADATA_GENERATOR_LOCATION) && strcmp($train_id, "europa") != 0 && strcmp($train_id, "ganymede") != 0) {
 		echo "Running the Meta at " . dirname(__FILE__) . "/runMetadata.sh\n";
-		system("/bin/sh " . dirname(__FILE__) . "/runMetadata.sh ". METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
+		system("/bin/sh " . dirname(__FILE__) . "/runMetadata.sh ". METADATA_GENERATOR_LOCATION . " $output_dir_for_train $train_version_timestamp");
 		echo "Processing XML\n";
 		system("xsltproc -o ${output_dir_for_train}content.xml ". dirname(__FILE__) . "/content.xsl ${output_dir_for_train}content.xml");
 		system("cd ${output_dir_for_train} ; jar -fc content.jar content.xml ; jar -fc artifacts.jar artifacts.xml");
@@ -551,7 +551,7 @@ foreach ($train_result as $train_id => $train_version) {
 	 */
 	if (file_exists(METADATA_GENERATOR_LOCATION) && strcmp($train_id, "europa") != 0 && strcmp($train_id, "ganymede") != 0) {
 		echo "Running the Meta at " . dirname(__FILE__) . "/runMetadata.sh\n";
-		system("/bin/sh " . dirname(__FILE__) . "/runMetadata.sh ". METADATA_GENERATOR_LOCATION . " ${output_dir_for_train} ");
+		system("/bin/sh " . dirname(__FILE__) . "/runMetadata.sh ". METADATA_GENERATOR_LOCATION . " $output_dir_for_train $train_version_timestamp");
 		echo "Processing XML\n";
 		system("xsltproc -o ${output_dir_for_train}content.xml ". dirname(__FILE__) . "/content.xsl ${output_dir_for_train}content.xml");
 		system("cd ${output_dir_for_train} ; jar -fc content.jar content.xml ; jar -fc artifacts.jar artifacts.xml");

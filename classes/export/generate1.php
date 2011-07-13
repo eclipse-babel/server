@@ -346,7 +346,7 @@ foreach ($train_result as $train_id => $train_version) {
 			$project_versions[$project_id] = $properties_file['version'];
 		}
 		if (sizeof($projects) > 0) {
-			$site_xml .= "\n\t<category-def name=\"nls_$language_iso\" label=\"Babel Language Packs in $language_name\">";
+			$site_xml .= "\n\t<category-def name=\"lang_$language_iso\" label=\"Babel Language Packs in $language_name\">";
 			$site_xml .= "\n\t\t<description>Babel Language Packs in $language_name</description>";
 			$site_xml .= "\n\t</category-def>";
 
@@ -391,6 +391,9 @@ foreach ($train_result as $train_id => $train_version) {
 
 			if (strcmp($language_iso, "en_AA") == 0) {
 				$project_pct_complete = 100;
+				$site_xml .= "\n\t<category-def name=\"proj_$project_id\" label=\"Babel Language Packs for $project_id\">";
+				$site_xml .= "\n\t\t<description>Babel Language Packs for $project_id</description>";
+				$site_xml .= "\n\t</category-def>";
 			} else {
 				$project_version = $project_versions[$project_id];
 				$sql = "SELECT pct_complete
@@ -481,7 +484,8 @@ foreach ($train_result as $train_id => $train_version) {
 			 * Register this feature with the site.xml
 			 */
 			$site_xml .= "\n\t<feature url=\"features/$feature_filename\" id=\"$feature_id\" version=\"$train_version_timestamp\">";
-			$site_xml .= "\n\t\t<category name=\"nls_$language_iso\"/>";
+			$site_xml .= "\n\t\t<category name=\"proj_$project_id\"/>";
+			$site_xml .= "\n\t\t<category name=\"lang_$language_iso\"/>";
 			$site_xml .= "\n\t</feature>";
 		}  /*  End: foreach project  */
 		echo "${leader}Completed language pack for $language_name ($language_iso)\n";

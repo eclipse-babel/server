@@ -129,6 +129,15 @@ while ($myrow_maps = mysql_fetch_assoc($rs_maps)) {
           $tagPart = split(",", $aParts[2]);
           $cvsRootPart = split(",", $aParts[3]);
           $plugin = $tagPart[0] . "," . $cvsRootPart[0] . "," . $aParts[4];
+        } elseif ($aParts[1] == "SVN,url") {
+          # Support STEM project SVN syntax
+          # plugin@org.eclipse.stem.core=SVN,url=http://dev.eclipse.org/svnroot/technology/org.eclipse.stem,tag=trunk,path=core/org.eclipse.stem.core
+          #
+          # maps $plugin to:
+          # SVN,<tagPath>[:revision],<svnRepositoryURL>,<preTagPath>,<postTagPath>
+          $svnRootPart = split(",", $aParts[2]);
+          $svnTagPart = split(",", $aParts[3]);
+          $plugin = "SVN," . $svnTagPart[0] . "," . $svnRootPart[0] . ",," . $aParts[4];
         }
         $aStuff = parseLocation($plugin);
 

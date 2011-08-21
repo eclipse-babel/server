@@ -486,6 +486,7 @@ insert into languages values (null, "sl",    null,          "Slovenian",  1);
 insert into languages values (null, "fa",    null,          "Persian",    1);
 insert into languages values (null, "sq",    null,          "Albanian",   1);
 insert into languages values (null, "ku",    null,          "Kurdish",    1);
+insert into languages values (null, "sr",    null,          "Serbian",    1);
 
 insert into languages values (null, "tl",    null,          "Klingon",    1);
 
@@ -567,7 +568,7 @@ insert into map_files values ("eclipse", "3.4", "userassist.map", "http://dev.ec
 insert into map_files values ("eclipse", "3.5", "eclipse-3.5-update-site", "http://download.eclipse.org/eclipse/updates/3.5/R-3.5-200906111540", 1, 0);
 insert into map_files values ("eclipse", "3.6", "eclipse-3.6-update-site", "http://download.eclipse.org/eclipse/updates/3.6/R-3.6-201006080911", 1, 0);
 insert into map_files values ("eclipse", "3.7", "eclipse-3.7-update-site", "http://download.eclipse.org/eclipse/updates/3.7/R-3.7-201106131736", 1, 0);
-insert into map_files values ("eclipse", "4.1", "eclipse-4.1-update-site", "http://download.eclipse.org/e4/sdk/drops/R-4.1-201106201631/repository", 1, 0);
+insert into map_files values ("eclipse", "4.1", "eclipse-4.1-update-site", "http://download.eclipse.org/eclipse/updates/4.1/R-4.1-201106201631", 1, 0);
 
 insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^com\\.ibm\\.icu.*$/");
 insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^com\\.jcraft\\..*$/");

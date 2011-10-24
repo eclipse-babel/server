@@ -487,6 +487,7 @@ insert into languages values (null, "fa",    null,          "Persian",    1);
 insert into languages values (null, "sq",    null,          "Albanian",   1);
 insert into languages values (null, "ku",    null,          "Kurdish",    1);
 insert into languages values (null, "sr",    null,          "Serbian",    1);
+insert into languages values (null, "sk",    null,          "Slovak",     1);
 
 insert into languages values (null, "tl",    null,          "Klingon",    1);
 

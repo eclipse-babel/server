@@ -73,7 +73,7 @@ else {
 	$build_id = $options['b'];
 }
 
-$release_id = "0.9.0";
+$release_id = "0.9.1";
 
 $work_dir = $addon->callHook('babel_working');
 

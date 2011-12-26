@@ -110,6 +110,12 @@ while($update_site = mysql_fetch_assoc($rs_maps)) {
   # Make unzip dir
   mkdir($temp_unzip_dir, 0777, TRUE);
 
+  # Temporary workaround to remove Eclipse 3.8 plugins in 4.2 update site
+  chdir($temp_site_dir);
+  if ($project_id == "eclipse" && $version == "4.2") {
+    exec("rm org.eclipse.ui.workbench_3.8.*");
+  }
+
   # Unzip properties files in each jar
   chdir($temp_site_dir);
   foreach (glob("*.jar") as $jar_name) {

@@ -114,6 +114,7 @@ while($update_site = mysql_fetch_assoc($rs_maps)) {
   chdir($temp_site_dir);
   if ($project_id == "eclipse" && $version == "4.2") {
     exec("rm org.eclipse.ui.workbench_3.8.*");
+    exec("rm org.eclipse.update.ui_*");
   }
 
   # Unzip properties files in each jar
@@ -179,7 +180,8 @@ while($update_site = mysql_fetch_assoc($rs_maps)) {
         echo "***ERROR: Cannot save file $file->name\n";
       } else {
         $file_name = $temp_unzip_dir . $properties_file_name;
-        $file->parseProperties(file_get_contents($file_name));
+        $file_contents = ereg_replace("\r\n?", "\n", file_get_contents($file_name));
+        $file->parseProperties($file_contents);
         echo "  $properties_file_name\n";
       }
     } else {

@@ -8,6 +8,8 @@
  * Contributors:
  *    Paul Colton (Aptana)- initial API and implementation
  *    Eclipse Foundation
+ *    Kit Lo (IBM) - [281434] Syncup overuses the "possibly incorrect" flag
+ *    Kit Lo (IBM) - [370349] Remove [link to this file/key]
 *******************************************************************************/
 
 YAHOO.projectStringsManager = {
@@ -35,20 +37,17 @@ YAHOO.projectStringsManager = {
 			success: function(o) {
 				var titleNode = document.getElementById('string-title');
 				var filename = YAHOO.filesManager.getSelected().filename;
-				if (filename.length > 135) {
-					filename = filename.substr(0, 65) + "(...)" + filename.substr(filename.length - 65);
+				if (filename.length > 150) {
+					filename = filename.substr(0, (150 - 5) / 2) + "(...)" + filename.substr(filename.length - (150 - 5) / 2);
 				}
 				var href = '<a href="?project=' + YAHOO.projectManager.getSelected().project;
 				href += '&version=' + YAHOO.versionManager.getSelected().version;
 				href += '&file=' + YAHOO.filesManager.getSelected().filename + '">';
 
-				var someString = 'Strings In File <span id="title-link">\"';
+				// [370349] Remove [link to this file/key]
+				var someString = 'Strings In File: <span id="title-link">';
 				someString += href;
 				someString += filename;
-				someString += '</a>';
-				someString += '\" ';
-				someString += href;
-				someString += '[link to this file]';
 				someString += '</a>';
 				titleNode.innerHTML = someString;
 				
@@ -183,21 +182,18 @@ YAHOO.projectStringsManager = {
 		
 		var titleNode = document.getElementById('translation-title');
 		var keyname = this.selected.data['stringName']
-		if (keyname.length > 135) {
-			keyname = keyname.substr(0, 65) + "(...)" + keyname.substr(filename.length - 65);
+		if (keyname.length > 130) {
+			keyname = keyname.substr(0, (130 - 5) / 2) + "(...)" + keyname.substr(keyname.length - (130 - 5) / 2);
 		}
 		var href = '<a href="?project=' + YAHOO.projectManager.getSelected().project;
 		href += '&version=' + YAHOO.versionManager.getSelected().version;
 		href += '&file=' + YAHOO.filesManager.getSelected().filename;
 		href += '&string=' + this.selected.data['stringName'] + '">';
 
-		var someString = 'Translation For Key <span id="title-link">\"';
+		// [370349] Remove [link to this file/key]
+		var someString = 'Translation For Key: <span id="title-link">';
 		someString += href;
 		someString += keyname;
-		someString += '</a>';
-		someString += '\" ';
-		someString += href;
-		someString += '[link to this key]';
 		someString += '</a>';
 		titleNode.innerHTML = someString;
 		showTranslateStringForm(this.selected.data['stringId'],this.selected.domElem.rowIndex);
@@ -240,9 +236,10 @@ projectString.prototype.createHTML = function(tableDom){
 	
 	temp = this.data['translationString'] ? this.data['translationString'] : ''
 	
-	if(this.data['fuzzy'] == 1 && this.data['nontranslatable'] != 1) {
-		temp = "<img src='images/fuzzy.png' title='Possibly incorrect' />" + temp;
-	}
+//  [281434] Syncup overuses the "possibly incorrect" flag
+//	if(this.data['fuzzy'] == 1 && this.data['nontranslatable'] != 1) {
+//		temp = "<img src='images/fuzzy.png' title='Possibly incorrect' />" + temp;
+//	}
 	
 	values.translation = "<div style='width: 100%; overflow: hidden;'>"+temp+"</div>";
 	values.translator = this.data['translator'] ? this.data['translator'] : '';

@@ -9,6 +9,7 @@
  * Contributors:
  *    Paul Colton (Aptana)- initial API and implementation
  *    Eclipse Foundation
+ *    Kit Lo (IBM) - [281434] Syncup overuses the "possibly incorrect" flag
 *******************************************************************************/
 require("global.php");
 InitPage("login");
@@ -125,6 +126,8 @@ if (isset($_SESSION['filesOrder']) and $_SESSION['filesOrder'] == 'completion') 
 	<div class="clearing"></div>
 	
 </div>
+
+<center>Note: Translations by Babel Syncup are synchronization of existing translations. Translations are possibly incorrect.</center>
 
 <script language="javascript">
 	YAHOO.languageManager.getAjaxLanguages();

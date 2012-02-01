@@ -9,6 +9,7 @@
  * Contributors:
  *    Paul Colton (Aptana)- initial API and implementation
  *    Eclipse Foundation
+ *    Kit Lo (IBM) - [281434] Syncup overuses the "possibly incorrect" flag
 *******************************************************************************/
 
 require_once("cb_global.php");
@@ -142,11 +143,11 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 			English String
 			[<a id="copy-english-string-link">Copy</a>]
 		</h4>
-		<div style='overflow: auto; height: 80px;'>
+		<div style='overflow: auto; height: 75px;'>
 			<div id="english-string"><?= nl2br(htmlspecialchars($line['string_value'])); ?></div>
 		</div>
 		<h4 id="translation-hints-title">Translation Hints</h4>
-		<div id="translation-hints" style='overflow-x: hidden; overflow-y: auto; height: 80px;'>
+		<div id="translation-hints" style='overflow-x: hidden; overflow-y: auto; height: 75px;'>
 		Select some English text above to find similar translations.
 		</div>
 		
@@ -160,10 +161,12 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 			[<a id="clear-current-translation-link">Clear</a>]
 		</h4>
 		
-		<textarea id="current-translation" style='display: inline; width: 320px; height: 150px;' name="translation"><?=(($line['translation_value']));?></textarea>
+		<textarea id="current-translation" style='display: inline; width: 320px; height: 154px;' name="translation"><?=(($line['translation_value']));?></textarea>
 		<br />
+		<!-- [281434] Syncup overuses the "possibly incorrect" flag
 		<input id='fuzzy' type=checkbox name="fuzzy_checkbox" <?= $line['fuzzy'] ? 'checked' : '' ;?>> Translation is possibly incorrect 
 		<br />
+		-->
 		<button id="allversions" type="submit" name="translateAction" value="All Versions">Submit</button>
 		
 	<?}else{?>
@@ -195,7 +198,9 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 					}
 					print "<tr>";
 					print "<td width='40%'>";
-					print "<div>$fuzzy".nl2br(htmlspecialchars($line['value']))."</div>";
+					// [281434] Syncup overuses the "possibly incorrect" flag
+					// print "<div>$fuzzy".nl2br(htmlspecialchars($line['value']))."</div>";
+					print "<div>".nl2br(htmlspecialchars($line['value']))."</div>";
 					print "</td>";
 					print "<td width='20%'>";
 					print $line['first_name']." ".$line['last_name'];

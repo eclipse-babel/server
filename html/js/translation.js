@@ -8,6 +8,7 @@
  * Contributors:
  *    Paul Colton (Aptana)- initial API and implementation
  *    Eclipse Foundation
+ *    Kit Lo (IBM) - [281434] Syncup overuses the "possibly incorrect" flag
 *******************************************************************************/
 
 YAHOO.tranlsation = new Object();
@@ -83,7 +84,9 @@ function translationSumbitStop(e){
 function translationSumbit(allornot,translationIndex){
 	var target = document.getElementById('translation-form');
 	var tr_value = target.translation.value;
-	var fuzzy_value = (target.fuzzy_checkbox.checked ? 1 : 0);
+	// [281434] Syncup overuses the "possibly incorrect" flag
+	// var fuzzy_value = (target.fuzzy_checkbox.checked ? 1 : 0);
+	var fuzzy_value = 0;
 	
 	var callback = 
 	{ 

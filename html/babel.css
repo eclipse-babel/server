@@ -949,6 +949,14 @@ p{
 	margin: 0px;
 }
 
+.side-component-small+.projects{
+	width: 160px;	
+}
+
+.side-component-small+.versions{
+	width: 100px;	
+}
+
 .side-component-small+.files{
 	width: 594px;	
 }

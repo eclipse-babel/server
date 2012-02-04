@@ -61,12 +61,12 @@ if (isset($_SESSION['filesOrder']) and $_SESSION['filesOrder'] == 'completion') 
 		<ul id="language-area"class="scrollable-area"></ul>
 	</div>
 
-	<div id="project" class="side-component-small">
+	<div id="project" class="side-component-small projects">
 		<h4 id="project-selection">Projects</h4>
 		<ul id="project-area" class="scrollable-area"></ul>
 	</div>
 	
-	<div id="version" class="side-component-small">
+	<div id="version" class="side-component-small versions">
 		<h4 id="version-selection">Versions</h4>
 		<ul id="version-area" class="scrollable-area"></ul>
 	</div>

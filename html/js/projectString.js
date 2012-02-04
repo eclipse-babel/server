@@ -45,7 +45,7 @@ YAHOO.projectStringsManager = {
 				href += '&file=' + YAHOO.filesManager.getSelected().filename + '">';
 
 				// [370349] Remove [link to this file/key]
-				var someString = 'Strings In File: <span id="title-link">';
+				var someString = 'Strings In File <span id="title-link">';
 				someString += href;
 				someString += filename;
 				someString += '</a>';
@@ -191,7 +191,7 @@ YAHOO.projectStringsManager = {
 		href += '&string=' + this.selected.data['stringName'] + '">';
 
 		// [370349] Remove [link to this file/key]
-		var someString = 'Translation For Key: <span id="title-link">';
+		var someString = 'Translation For Key <span id="title-link">';
 		someString += href;
 		someString += keyname;
 		someString += '</a>';

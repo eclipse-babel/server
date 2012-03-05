@@ -15,19 +15,10 @@ require_once("cb_global.php");
 $return = "";
 
 if(isset($_SESSION['language'])) {
-	$query = "select 
-			DISTINCT projects.*  
-		  from 
-		  	projects,
-		  	files,
-		  	strings
-		  where 
-		  	projects.project_id =files.project_id
-		  and
-		  	files.file_id = strings.file_id
-		  and
-		  	projects.is_active = 1
-		  ";
+	$query = "SELECT /* getProjects.php */ DISTINCT P.project_id, P.is_active
+FROM projects AS P
+INNER JOIN files AS F ON P.project_id = F.project_id
+WHERE P.is_active = 1";
 
 
 	$res = mysql_query($query,$dbh);

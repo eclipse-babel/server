@@ -34,13 +34,13 @@ if(isset($_SESSION['language']) and isset($_SESSION['version']) and isset($_SESS
 */
 
 $train_id = "";
-$query = "SELECT train_id FROM release_trains ORDER BY release_train_version LIMIT 2";
+$query = "SELECT train_id FROM release_trains ORDER BY train_version LIMIT 2";
 $res = mysql_query($query,$dbh);
 while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
 	if($train_id != "") {
 		$train_id .= ",";
 	}
-	$train_id .= "'" . $line['value'] . "'";
+	$train_id .= "'" . $line['train_id'] . "'";
 }
 
 if($train_id == "") {

@@ -25,7 +25,7 @@ function showTranslationHints(trString){
 			YAHOO.log('failed!');
 		} 
 	} 
-	YAHOO.util.Connect.asyncRequest('POST', "callback/getTranslationHints.php", callback, "tr_string="+trString);
+	YAHOO.util.Connect.asyncRequest('POST', "callback/getTranslationHints.php", callback, "tr_string="+encodeURIComponent(trString));
 	this.setupCB();
 }
 

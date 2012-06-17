@@ -8,7 +8,8 @@
  *
  * Contributors:
  *    Kit Lo (IBM) - Initial API and implementation
- *    Kit Lo (IBM) - Bug 299402, Extract properties files from Eclipse project update sites for translation
+ *    Kit Lo (IBM) - [299402] Extract properties files from Eclipse project update sites for translation
+ *    Kit Lo (IBM) - [382800] CSSUIPluginResources.properties is missing on translator tool
 *******************************************************************************/
 /*
  * Extract properties files from update sites 

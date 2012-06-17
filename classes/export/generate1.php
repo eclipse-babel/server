@@ -25,6 +25,7 @@
  *    Kit Lo (IBM) - [344764] Translation fragments discard the plug-in's directory structure
  *    Kit Lo (IBM) - [330735] Generate a better id for the categories
  *    Kit Lo (IBM) - [313310] Support Eclipse-PlatformFilter for fragment of fragment
+ *    Satoru Yoshida - [349107] properties file for template is located in wrong path
  *******************************************************************************/
 
 /*
@@ -231,26 +232,37 @@ foreach ($train_result as $train_id => $train_version) {
 			} else {
 				exec("mkdir $tmp_dir");
 			}
+
+			$need_nl_path_case = array('templates/', 'config/', 'data/', 'property_files/');
 			/*
 			 * Generate each *.properties file
 			 */
 			foreach ($plugin_row as $properties_file) {
-				/*
-				 * Convert the filename to *_lang.properties, e.g., foo_fr.properties
-				 */
+				$dirname = $properties_file['dir_name'];
 				$filename = $properties_file['file_name'];
-				if (preg_match( "/^(.*)\.properties$/", $filename, $matches)) {
-					$filename = $matches[1] . '_' . $language_iso . '.properties';
+
+				if (in_array($dirname, $need_nl_path_case)) {
+					/*
+					 * Convert the dirname to nl/lang/path, e.g., nl/fr/templates
+					 */
+					$dirname = 'nl/' . $language_iso . '/' . $dirname;
+				} else {
+					/*
+					 * Convert the filename to *_lang.properties, e.g., foo_fr.properties
+					 */
+					if (preg_match( "/^(.*)\.properties$/", $filename, $matches)) {
+						$filename = $matches[1] . '_' . $language_iso . '.properties';
+					}
 				}
-				echo "${leader}${leader}${leader}Generating properties file " . $properties_file['dir_name'] . $filename . " (file_id=" . $properties_file['file_id'] . ")\n";
+				echo "${leader}${leader}${leader}Generating properties file " . $dirname . $filename . " (file_id=" . $properties_file['file_id'] . ")\n";
 				/*
 				 * Create any needed sub-directories
 				 */
-				exec("mkdir -p \"" . $tmp_dir . $properties_file['dir_name'] . "\"");
+				exec("mkdir -p \"" . $tmp_dir . $dirname . "\"");
 				/*
 				 * Start writing to the file
 				 */
-				$fullpath = $tmp_dir . $properties_file['dir_name'] . $filename;
+				$fullpath = $tmp_dir . $dirname . $filename;
 				$outp = fopen($fullpath, "w");
 				fwrite($outp, "# Copyright by many contributors; see http://babel.eclipse.org/");
 				if (strcmp($language_iso, "en_AA") == 0) {
@@ -311,7 +323,7 @@ foreach ($train_result as $train_id => $train_version) {
 				 * Finish the properties file
 				 */
 				fclose($outp);
-				echo "${leader}${leader}${leader}Completed  properties file " . $properties_file['dir_name'] . $filename . "\n";
+				echo "${leader}${leader}${leader}Completed  properties file " . $dirname . $filename . "\n";
 			}
 			/*
 			 * Copy in the various legal files

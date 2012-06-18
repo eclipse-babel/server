@@ -15,6 +15,7 @@
  *    Kit Lo (IBM) - Bug 272176, Support "bundle" element type in map file
  *    Kit Lo (IBM) - Bug 257332, NLS warnings appear unnecessarily in runtime log
  *    Kit Lo (IBM) - Bug 302834, Add plugin filtering supports to map files process
+ *    Kit Lo (IBM) - [382800] CSSUIPluginResources.properties is missing on translator tool
 *******************************************************************************/
 $temp_dir = "/tmp/tmp-babel/";
 $files = array();
@@ -82,7 +83,6 @@ while ($myrow_maps = mysql_fetch_assoc($rs_maps)) {
   $patterns[] = "/^.*\/feature.properties$/";
   $patterns[] = "/^.*\/build.properties$/";
   $patterns[] = "/^.*\/pom.properties$/";
-  $patterns[] = "/^.*\/css\/.*$/";
   $patterns[] = "/^.*\.source\/.*$/";
   $patterns[] = "/^.*\.test\/.*$/";
   $patterns[] = "/^.*\.tests\/.*$/";

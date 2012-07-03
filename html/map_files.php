@@ -126,7 +126,7 @@ $rs_project_list = mysql_query($sql, $dbh);
 $sql = "SELECT pv.project_id, pv.version, count(m.is_active) AS map_count FROM project_versions as pv left join map_files as m on m.project_id = pv.project_id and m.version = pv.version WHERE pv.is_active = 1 and pv.version != 'unspecified' group by pv.project_id, pv.version ORDER BY pv.project_id ASC, pv.version DESC;";
 $rs_version_list = mysql_query($sql, $dbh);
 
-$sql = "SELECT DISTINCT train_id FROM release_train_projects ORDER BY train_id ASC";
+$sql = "SELECT train_id FROM release_trains ORDER BY train_id ASC";
 $rs_train_list = mysql_query($sql, $dbh);
 
 $sql = "SELECT train_id, project_id, version FROM release_train_projects ORDER BY project_id, version ASC";

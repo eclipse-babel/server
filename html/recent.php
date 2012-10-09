@@ -45,7 +45,7 @@ if($LANGUAGE_ID == "All") {
 }
 $LIMIT 		= getHTTPParameter("limit");
 if($LIMIT == "" || $LIMIT <= 0 || $LIMIT > 20000) {
-	$LIMIT = 200;
+	$LIMIT = 25;
 }
 $LAYOUT 		= getHTTPParameter("layout");
 if($LAYOUT == "list" || $LAYOUT == "table") {

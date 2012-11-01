@@ -900,7 +900,9 @@ li{
 }
 
 #contentArea{
-	border: 1px solid black;	
+	border: 1px solid black;
+	font-size: 12px;
+	margin: 10px;	
 }
 
 h1{
@@ -928,14 +930,9 @@ p{
 	margin: 0px;	
 }
 
-#contentArea{
-	font-size: 12px;
-}
-
-
 .side-component{
 	float: left;	
-	width: 333px;
+	width: 33.3%;
 }
 	
 	
@@ -950,15 +947,15 @@ p{
 }
 
 .side-component-small+.projects{
-	width: 165px;	
+	width: 10%;	
 }
 
 .side-component-small+.versions{
-	width: 95px;	
+	width: 8%;	
 }
 
 .side-component-small+.files{
-	width: 594px;	
+	width: 70%;
 }
 
 * html #files{
@@ -981,6 +978,7 @@ h4{
 .side-component-small h4{
 	padding-top: 3px;
 	padding-bottom: 2px;
+	padding-left: 1px;
 }
 
 .files h4{
@@ -995,7 +993,7 @@ h4{
 }
 
 #language{
-	width: 145px
+	width: 12%;
 	}
 	
 .project-area{

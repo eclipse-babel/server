@@ -21,10 +21,10 @@ $res = mysql_query($query);
 <div id="top-translators-area">
 	<h2>Top Translators</h2>
 	<dl>
-	<?
-		while($row = mysql_fetch_assoc($res)){
-			?><dt><?=$row['value'] ?></dt>
-			<dd><?=$row['quantity'];?></dd><?
+	<?php
+		while($row = mysql_fetch_assoc($res)) {
+			echo "<dt>" . $row['value'] . "</dt>";
+			echo "<dd>" . $row['quantity'] . "</dd>";
 		}
 	?>
 	</dl>

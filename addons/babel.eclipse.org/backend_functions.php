@@ -152,4 +152,6 @@ function __register_backend($addon) {
 global $register_function_backend;
 $register_function_backend = '__register_backend';
 
+date_default_timezone_set('America/Montreal');
+
 ?>

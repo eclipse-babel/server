@@ -4,14 +4,14 @@
 
 <div id="index-page">
 
-	<a href="https://bugs.eclipse.org/bugs/createaccount.cgi"><img src="<?php echo imageRoot() ?>/large_icons/categories/preferences-desktop-peripherals.png">	<h2>A Bugzilla Account is all you need</h2></a>
+	<a href="https://dev.eclipse.org/site_login/createaccount.php"><img src="<?php echo imageRoot() ?>/large_icons/categories/preferences-desktop-peripherals.png">	<h2>An Eclipse.org account is all you need</h2></a>
     <br style='clear: both;'>
-	<p>If you don't already have an Eclipse Bugzilla account then <a href="https://bugs.eclipse.org/bugs/createaccount.cgi">create one today</a>.  
-	It takes Babel a few minutes to receive your new Bugzilla account information. 
+	<p>If you don't already have an Eclipse.org account then <a href="https://dev.eclipse.org/site_login/createaccount.php">create one today</a>.  
+	It takes Babel a few minutes to receive your new account information. 
 	If logging in doesn't work after a few minutes, please contact <a href="mailto:webmaster@eclipse.org">webmaster@eclipse.org</a>.</p>
 
     <br style='clear: both;'>
-	<p>If you already have an Eclipse Bugzilla account, then log in and started helping Eclipse speak your language.</p>
+	<p>If you already have an Eclipse account, then log in and start helping Eclipse speak your language.</p>
 
 <form style="margin-left: 35px;" name="frmLogin" method="post">
 <div>
@@ -22,12 +22,12 @@
 			  <img style='margin-left: 70px;' src='<?php echo imageRoot() ?>/small_icons/actions/process-stop.png'>
 		      <div style='color: red; font-weight: bold; '><?=$GLOBALS['g_ERRSTRS'][0]?></div>
 		      <br style='clear: both;'>
-		    <?
+		    <?php
 	    }else{
 			?>
 	    		<img style='margin-left: 70px;' src="<?php echo imageRoot() ?>/small_icons/emblems/emblem-important.png">	<h2 style='font-size: 14px; margin-top: 0px; background-color: yellow;'>Use your Bugzilla login information</h2>
 		    	<br style='clear: both;'>
-		   <?
+		   <?php
 	    }
 	 ?>
 	

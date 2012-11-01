@@ -80,8 +80,8 @@ class AddonsManagement {
     /**
      * Executes the function associated with the hook and returns the result
      */ 
-    public function callHook($hook_key, $args = null) {
-        return call_user_func_array($this->hook($hook_key), $args);
+    public function callHook($hook_key, $args = array()) {
+    	return call_user_func_array($this->hook($hook_key), $args);
     }
 }
 

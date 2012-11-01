@@ -135,14 +135,11 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 ?>
 
 <form id='translation-form'>
-	<input type="hidden" name="string_id" value="<?=$line['string_id'];?>">
-	<input type="hidden" name="stringTableIndex" value="<?=$stringTableIndex;?>">
+	<input type="hidden" name="string_id" value="<?= $line['string_id'] ?>">
+	<input type="hidden" name="stringTableIndex" value="<?= $stringTableIndex ?>">
 
 	<div id="english-area" class="side-component">
-		<h4>
-			English String
-			[<a id="copy-english-string-link">Copy</a>]
-		</h4>
+		<h4>English String [<a id="copy-english-string-link">Copy</a>]</h4>
 		<div style='overflow: auto; height: 75px;'>
 			<div id="english-string"><?= nl2br(htmlspecialchars($line['string_value'])); ?></div>
 		</div>
@@ -154,14 +151,14 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 		<input id='non-translatable-checkbox' type=checkbox name="non_translatable_string" <?= $line['non_translatable'] ? 'checked' : '' ;?>>Non-Translatable		
 	</div>
 	<div id="translation-textarea" class="side-component">
-	<?if($line['non_translatable'] == 0){?>
+	<?php if($line['non_translatable'] == 0) {?>
 		<h4>
 			Current Translation
 			[<a id="reset-current-translation-link">Reset</a>]
 			[<a id="clear-current-translation-link">Clear</a>]
 		</h4>
 		
-		<textarea id="current-translation" style='display: inline; width: 320px; height: 154px;' name="translation"><?=(($line['translation_value']));?></textarea>
+		<textarea id="current-translation" style='display: inline; width: 95%; height: 154px;' name="translation"><?=(($line['translation_value']));?></textarea>
 		<br />
 		<!-- [281434] Syncup overuses the "possibly incorrect" flag
 		<input id='fuzzy' type=checkbox name="fuzzy_checkbox" <?= $line['fuzzy'] ? 'checked' : '' ;?>> Translation is possibly incorrect 
@@ -169,20 +166,16 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 		-->
 		<button id="allversions" type="submit" name="translateAction" value="All Versions">Submit</button>
 		
-	<?}else{?>
+	<?php }else{?>
 		<h4>Non Translatable String</h4>
-		<br>
-		<br>
-		<br>
+		<br /><br /><br />
 		<div style='text-align:center;'>This string has been marked as <b>'non-translatable'</b>.</div>
-		
-	<?}?>		
 
+	<?php }?>
 	</div>	
 	<div id="translation-history-area" class="side-component">
 		<h4>History of Translations</h4>
 		<div id="translation-history">
-		
 		<table>
 		<?php
 			$query = "select value,first_name,last_name,translations.created_on, possibly_incorrect as fuzzy from translations,users where string_id = '".addslashes($line['string_id'])."' and language_id = '".addslashes($language)."' and translations.userid = users.userid order by translations.created_on desc";

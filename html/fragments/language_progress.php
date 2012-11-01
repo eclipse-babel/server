@@ -22,10 +22,10 @@ $res = mysql_query($query);
 <div id="trans-progress-area">
 	<h2>Translation Progress</h2>
 	<dl>
-	<?
+	<?php
 		while($row = mysql_fetch_assoc($res)){
-			?><dt><?=$row['value'] ?></dt>
-			<dd><?=$row['quantity'];?></dd><?
+			echo "<dt>" . $row['value'] . "</dt>";
+			echo "<dd>" . $row['quantity'] . "</dd>";
 		}
 	?>
 	</dl>

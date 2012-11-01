@@ -52,13 +52,13 @@ if (isset($_SESSION['filesOrder']) and $_SESSION['filesOrder'] == 'completion') 
 ?>
 
 <h1 id="page-message">Welcome to the Babel Project</h1>
-<? include("fragments/motd.php");?>
+<?php include("fragments/motd.php");?>
 <div id="contentArea">
 
 	<h2>Languages / Projects / Versions / Files</h2>
 	<div id="language" class="side-component-small">
 		<h4 id="language-selection">Languages</h4>
-		<ul id="language-area"class="scrollable-area"></ul>
+		<ul id="language-area" class="scrollable-area"></ul>
 	</div>
 
 	<div id="project" class="side-component-small projects">
@@ -79,7 +79,6 @@ if (isset($_SESSION['filesOrder']) and $_SESSION['filesOrder'] == 'completion') 
 		</h4>
 		<ul id="files-area" class="scrollable-area"></ul>
 	</div>
-
 	<div class="clearing"></div>
 	
 	

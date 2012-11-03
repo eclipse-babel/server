@@ -9,6 +9,7 @@
  * Contributors:
  *    Paul Colton (Aptana)- initial API and implementation
  *    Eclipse Foundation
+ *    Jesse Weinstein - [268882] Add link for "STATS" to the Babel home page header
 *******************************************************************************/
 
 global $pageTitle, $pageAuthor, $pageKeywords;
@@ -46,6 +47,7 @@ global $pageTitle, $pageAuthor, $pageKeywords;
     <ul>
         <li><a class="first_one" href="./" target="_self">Home</a></li> 
         <li><a  href="map_files.php" target="_self">For committers</a></li> 
+        <li><a  href="stats.php" target="_self">Translation Statistics</a></li>
         <li><a  href="recent.php" target="_self">Recent Translations</a></li> 
         <li><a  href="http://www.eclipse.org/babel" target="_self">About Babel</a></li> 
     </ul>

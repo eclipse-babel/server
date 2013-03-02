@@ -1,15 +1,17 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2009 Eclipse Foundation and others.
+ * Copyright (c) 2009-2013 Eclipse Foundation, IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Eclipse Foundation - initial API and implementation
+ *    Eclipse Foundation - Initial API and implementation
  *    Kit Lo (IBM) - Bug 299402, Extract properties files from Eclipse project update sites for translation
-*******************************************************************************/
+ *    Kit Lo (IBM) - [402192] Extract project source files from Git repositories for translation
+ *******************************************************************************/
+
 require_once("cb_global.php");
 
 $return = array();
@@ -29,6 +31,6 @@ if (mysql_affected_rows($dbh) > 0) {
 		echo $line['location'] . "\n";
 	}
 } else {
-	echo "No map files or update sites found for $project_id $version.";
+	echo "No map files or update sites found for $project_id $version";
 }
 ?>

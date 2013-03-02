@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2007-2012 Eclipse Foundation and others.
+ * Copyright (c) 2007-2013 Eclipse Foundation, IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,7 +10,8 @@
  *    Paul Colton (Aptana)- initial API and implementation
  *    Eclipse Foundation
  *    Jesse Weinstein - [268882] Add link for "STATS" to the Babel home page header
-*******************************************************************************/
+ *    Kit Lo (IBM) - [402192] Extract project source files from Git repositories for translation
+ *******************************************************************************/
 
 global $pageTitle, $pageAuthor, $pageKeywords;
 ?>
@@ -46,7 +47,7 @@ global $pageTitle, $pageAuthor, $pageKeywords;
     <div id="header-nav">
     <ul>
         <li><a class="first_one" href="./" target="_self">Home</a></li> 
-        <li><a  href="map_files.php" target="_self">For committers</a></li> 
+        <li><a  href="project_source_locations.php" target="_self">For committers</a></li> 
         <li><a  href="stats.php" target="_self">Translation Statistics</a></li>
         <li><a  href="recent.php" target="_self">Recent Translations</a></li> 
         <li><a  href="http://www.eclipse.org/babel" target="_self">About Babel</a></li> 

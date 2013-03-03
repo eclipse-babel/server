@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2007 Eclipse Foundation and others.
+ * Copyright (c) 2007-2013 Eclipse Foundation, IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,7 +9,8 @@
  * Contributors:
  *    Eclipse Foundation - initial API and implementation
  *    Kit Lo (IBM) - 272661 - Pseudo translations change " to ', breaking link texts
-*******************************************************************************/
+ *    Kit Lo (IBM) - [402215] Extract Orion JavaScript files for translation
+ *******************************************************************************/
 
 class String {
   public $errStrs;
@@ -49,6 +50,53 @@ class String {
 								file_id		= " . sqlSanitize($this->file_id, $dbh) . ", 
 								name		= " . returnQuotedString(sqlSanitize($this->name, $dbh)) . ",
 								value		= " . returnSmartQuotedString(sqlSanitize($this->value, $dbh)) . ",
+								userid		= " . returnQuotedString(sqlSanitize($this->userid, $dbh)) . ",
+								created_on	= " . $created_on . ",
+								is_active	= " . sqlSanitize($this->is_active, $dbh) . $where;
+				if(mysql_query($sql, $dbh)) {
+					if($this->string_id == 0) {
+						$this->string_id = mysql_insert_id($dbh);
+					}
+					$rValue = true;
+				}
+				else {
+					$GLOBALS['g_ERRSTRS'][1] = mysql_error();
+				}
+			}
+			else {
+				# Imported string is identical.
+				$this->string_id = $String->string_id;
+				$rValue = true;
+			}
+		}
+		return $rValue;
+	}
+	
+	function saveJs() {
+		$rValue = false;
+		if($this->file_id != 0 && $this->name != "" && $this->userid > 0) {
+			global $dbh;
+
+			$String = $this->getStringFromName($this->file_id, $this->name);
+			if($String->value != $this->value || $String->is_active != $this->is_active) {
+				$sql 		= "INSERT INTO";
+				$created_on = "NOW()";
+				$where 		= "";
+				if($String->string_id > 0) {
+					$this->string_id = $String->string_id;
+					$this->is_active = 1;
+					$sql = "UPDATE";
+					$created_on = "created_on";
+					$where = " WHERE string_id = " . sqlSanitize($this->string_id, $dbh);
+					$Event = new EventLog("strings", "string_id:old_value", $this->string_id . ":" . $String->value, "UPDATE");
+					$Event->add();
+				}
+
+				$sql .= " strings 
+							SET string_id 	= " . sqlSanitize($this->string_id, $dbh) . ",
+								file_id		= " . sqlSanitize($this->file_id, $dbh) . ", 
+								name		= " . returnEscapedQuotedString(sqlSanitize($this->name, $dbh)) . ",
+								value		= " . returnEscapedQuotedString(sqlSanitize($this->value, $dbh)) . ",
 								userid		= " . returnQuotedString(sqlSanitize($this->userid, $dbh)) . ",
 								created_on	= " . $created_on . ",
 								is_active	= " . sqlSanitize($this->is_active, $dbh) . $where;

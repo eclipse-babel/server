@@ -34,7 +34,7 @@ CREATE TABLE `file_progress` (
   `pct_complete` float NOT NULL,
   PRIMARY KEY  (`file_id`, `language_id`),
   CONSTRAINT `file_progress_ibfk_1` FOREIGN KEY (`file_id`) REFERENCES `files` (`file_id`) ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT `file_progress_ibfk_2` FOREIGN KEY (`language_id`) REFERENCES `languages` (`language_id`) ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT `file_progress_ibfk_2` FOREIGN KEY (`language_id`) REFERENCES `languages` (`language_id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `files`;
@@ -94,16 +94,13 @@ CREATE TABLE `languages` (
 -- Table structure for table `map_files`
 --
 
-DROP TABLE IF EXISTS `map_files`;
-CREATE TABLE `map_files` (
+DROP TABLE IF EXISTS `project_source_locations`;
+CREATE TABLE `project_source_locations` (
   `project_id` varchar(100) NOT NULL,
   `version` varchar(64) NOT NULL,
-  `filename` varchar(100) NOT NULL,
   `location` varchar(255) NOT NULL,
-  `is_active` tinyint(3) unsigned NOT NULL default '1',
-  `is_map_file` tinyint(3) unsigned NOT NULL default '1',
-  PRIMARY KEY  (`project_id`, `version`, `filename`),
-  CONSTRAINT `map_files_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON UPDATE CASCADE ON DELETE CASCADE
+  PRIMARY KEY  (`project_id`, `version`, `location`),
+  CONSTRAINT `project_source_locations_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -490,136 +487,47 @@ insert into languages values (null, "sr",    null,          "Serbian",    1);
 insert into languages values (null, "sk",    null,          "Slovak",     1);
 insert into languages values (null, "eu",    null,          "Basque",     1);
 insert into languages values (null, "ml",    null,          "Malayalam",  1);
-
 insert into languages values (null, "tl",    null,          "Klingon",    1);
 
-insert into projects set project_id = 'eclipse', is_active = 1 ;
+insert into release_trains values ("kepler", "4.3.0", 1);
 
-insert into project_versions set project_id = "eclipse", version = "3.3", is_active = 1;
-insert into project_versions set project_id = "eclipse", version = "3.4", is_active = 1;
-insert into project_versions set project_id = "eclipse", version = "3.5", is_active = 1;
-insert into project_versions set project_id = "eclipse", version = "3.6", is_active = 1;
-insert into project_versions set project_id = "eclipse", version = "3.7", is_active = 1;
-insert into project_versions set project_id = "eclipse", version = "4.1", is_active = 1;
+insert into projects values ("eclipse", 1);
+insert into projects values ("eclipse.orion", 1);
 
-insert into release_trains values ('europa',   '3.3.0', 1);
-insert into release_trains values ('ganymede', '3.4.0', 1);
-insert into release_trains values ('galileo',  '3.5.0', 1);
-insert into release_trains values ('helios',   '3.6.0', 1);
-insert into release_trains values ('indigo',   '3.7.0', 1);
+insert into project_versions values ("eclipse", "4.3", 1);
+insert into project_versions values ("eclipse.orion", "2.0", 1);
 
-insert into release_train_projects values ('europa',   'eclipse', '3.3');
-insert into release_train_projects values ('ganymede', 'eclipse', '3.4');
-insert into release_train_projects values ('galileo',  'eclipse', '3.5');
-insert into release_train_projects values ('helios',   'eclipse', '3.6');
-insert into release_train_projects values ('indigo',   'eclipse', '3.7');
-insert into release_train_projects values ('indigo',   'eclipse', '4.1');
+insert into release_train_projects values ("kepler", "eclipse", "4.3");
+insert into release_train_projects values ("kepler", "eclipse.orion", "2.0");
 
-/* MAP INPUTS */
-insert into map_files values ("eclipse", "3.3", "ant.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/ant.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "base.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/base.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "compare.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/compare.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "core-hpux.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core-hpux.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "core-macosx.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core-macosx.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "core-qnx.map","http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core-qnx.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "core-variables.map","http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core-variables.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "core.map","http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "doc.map","http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/doc.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "equinox-incubator.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/equinox-incubator.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "feature.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/feature.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "jdtapt.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/jdtapt.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "jdtcore.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/jdtcore.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "jdtdebug.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/jdtdebug.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "jdtui.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/jdtui.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "orbit.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/orbit.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "pde.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/pde.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "rcp.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/rcp.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "releng.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/releng.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "swt.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/swt.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "team.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/team.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "testframework.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/testframework.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "text.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/text.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "ui.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/ui.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "update.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/update.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.3", "userassist.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/userassist.map?view=co&pathrev=R3_3", 1, 1);
-insert into map_files values ("eclipse", "3.4", "ant.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/ant.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "base.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/base.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "compare.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/compare.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "core-hpux.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core-hpux.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "core-macosx.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core-macosx.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "core-qnx.map","http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core-qnx.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "core-variables.map","http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core-variables.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "core.map","http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/core.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "doc.map","http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/doc.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "equinox-incubator.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/equinox-incubator.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "feature.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/feature.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "jdtapt.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/jdtapt.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "jdtcore.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/jdtcore.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "jdtdebug.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/jdtdebug.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "jdtui.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/jdtui.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "orbit.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/orbit.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "pde.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/pde.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "rcp.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/rcp.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "releng.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/releng.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "swt.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/swt.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "team.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/team.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "testframework.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/testframework.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "text.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/text.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "ui.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/ui.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "update.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/update.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.4", "userassist.map", "http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.releng/maps/userassist.map?view=co&pathrev=R3_4", 1, 1);
-insert into map_files values ("eclipse", "3.5", "eclipse-3.5-update-site", "http://download.eclipse.org/eclipse/updates/3.5/R-3.5-200906111540", 1, 0);
-insert into map_files values ("eclipse", "3.6", "eclipse-3.6-update-site", "http://download.eclipse.org/eclipse/updates/3.6/R-3.6-201006080911", 1, 0);
-insert into map_files values ("eclipse", "3.7", "eclipse-3.7-update-site", "http://download.eclipse.org/eclipse/updates/3.7/R-3.7-201106131736", 1, 0);
-insert into map_files values ("eclipse", "4.1", "eclipse-4.1-update-site", "http://download.eclipse.org/eclipse/updates/4.1/R-4.1-201106201631", 1, 0);
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/equinox/rt.equinox.framework.git/snapshot/I20121210-2000.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/equinox/rt.equinox.p2.git/snapshot/I20130108-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/jdt/eclipse.jdt.git/snapshot/I20121210-2000.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/jdt/eclipse.jdt.core.git/snapshot/I20130101-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/jdt/eclipse.jdt.debug.git/snapshot/I20121225-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/jdt/eclipse.jdt.ui.git/snapshot/I20121225-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/pde/eclipse.pde.git/snapshot/I20121210-2000.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/pde/eclipse.pde.ui.git/snapshot/I20121218-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.git/snapshot/I20130101-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.debug.git/snapshot/I20121225-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.team.git/snapshot/I20121212-2000.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.text.git/snapshot/I20121225-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.ua.git/snapshot/I20121218-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.ui.git/snapshot/I20121225-0800.zip");
+insert into project_source_locations values ("eclipse.orion", "2.0", "http://git.eclipse.org/c/orion/org.eclipse.orion.client.git/snapshot/org.eclipse.orion.client-20130222-1757.zip");
 
-insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^com\\.ibm\\.icu.*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^com\\.jcraft\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^javax\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^org\\.apache\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^org\\.hamcrest\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^org\\.junit.*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^org\\.mortbay\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^org\\.objectweb\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^org\\.sat4j\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^org\\.w3c\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.5", "/^.*\\/jface\\/resource\\/.*$/");
-
-insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^com\\.ibm\\.icu.*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^com\\.jcraft\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^javax\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\\.apache\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\\.hamcrest\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\\.junit.*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\\.mortbay\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\\.objectweb\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\\.sat4j\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^org\\.w3c\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.6", "/^.*\\/jface\\/resource\\/.*$/");
-
-insert into plugin_exclude_patterns values ("eclipse", "3.7", "/^com\\.ibm\\.icu.*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.7", "/^com\\.jcraft\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.7", "/^javax\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.7", "/^org\\.apache\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.7", "/^org\\.hamcrest\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.7", "/^org\\.junit.*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.7", "/^org\\.mortbay\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.7", "/^org\\.objectweb\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.7", "/^org\\.sat4j\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.7", "/^org\\.w3c\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "3.7", "/^.*\\/jface\\/resource\\/.*$/");
-
-insert into plugin_exclude_patterns values ("eclipse", "4.1", "/^com\\.ibm\\.icu.*$/");
-insert into plugin_exclude_patterns values ("eclipse", "4.1", "/^com\\.jcraft\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "4.1", "/^javax\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "4.1", "/^org\\.apache\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "4.1", "/^org\\.hamcrest\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "4.1", "/^org\\.junit.*$/");
-insert into plugin_exclude_patterns values ("eclipse", "4.1", "/^org\\.mortbay\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "4.1", "/^org\\.objectweb\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "4.1", "/^org\\.sat4j\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "4.1", "/^org\\.w3c\\..*$/");
-insert into plugin_exclude_patterns values ("eclipse", "4.1", "/^.*\\/jface\\/resource\\/.*$/");
+insert into plugin_exclude_patterns values ("eclipse", "4.3", "/^com\\.ibm\\.icu.*$/");
+insert into plugin_exclude_patterns values ("eclipse", "4.3", "/^com\\.jcraft\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "4.3", "/^javax\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "4.3", "/^org\\.apache\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "4.3", "/^org\\.hamcrest\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "4.3", "/^org\\.junit.*$/");
+insert into plugin_exclude_patterns values ("eclipse", "4.3", "/^org\\.mortbay\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "4.3", "/^org\\.objectweb\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "4.3", "/^org\\.sat4j\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "4.3", "/^org\\.w3c\\..*$/");
+insert into plugin_exclude_patterns values ("eclipse", "4.3", "/^.*\\/jface\\/resource\\/.*$/");
+insert into plugin_exclude_patterns values ("eclipse.orion", "2.0", "/^.*\\/bundle.properties$/");
 
 /* populate file_progress table  */
 /* See also: dbmaintenance_15min.php */

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="copyright" content="Copyright (c) 2013 IBM Corporation and others.">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Babel Language Pack Plugin for Orion Users in [language]</title>
+	<script type="text/javascript" src="lib/plugin.js"></script>
+	<script type="text/javascript" src="lib/require.js"></script>
+	<script>
+		window.onload = function() {
+			var headers = {
+				name: "Babel Language Pack Plugin for Orion Users in [language]",
+				version: "[build_id]",
+				description: "Babel community translations for Orion Users in [language]."
+			};
+			var provider = new orion.PluginProvider(headers);
+			var messages = [
+				//The list of message files
+				'profile/nls/[locale]/messages'
+			];
+			
+			require({baseUrl: 'org.eclipse.orion.client.users'});
+			
+			require(['../lib/Deferred'], function(Deferred){
+			
+				function defineMessages(msg){
+					provider.registerServiceProvider("orion.i18n.message", {
+						getMessageBundle: function() {
+						var deferred = new Deferred();
+							require([msg], function(messages){
+									deferred.resolve(messages);
+								});
+							return deferred;
+						}
+					}, {
+						name: msg
+					});
+				};
+				
+				for(var i=0; i<messages.length; i++){
+					defineMessages(messages[i]);
+				}
+				
+				provider.connect();
+			
+			});
+		};
+		
+	</script>
+</head>
+<body>
+<h1>Babel Language Pack Plugin for Orion Users in [language]</h1>
+<h2>Build ID: [build_id]</h2>
+<p>This Babel language pack plugin is based on the community translations entered into the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a>, and may not be complete or entirely accurate.
+If you find missing or incorrect translations, please use the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a> to update them.
+All downloads are provided under the terms and conditions of the <a href='http://www.eclipse.org/legal/epl/notice.php'>Eclipse Foundation Software User Agreement</a> unless otherwise specified.</p>
+<h2>Installation</h2>
+<p>See <a href='http://wiki.eclipse.org/Orion/How_Tos/Installing_A_Plugin'>Installing A Plugin</a> for instructions on how to install this Babel language pack plugin.</p>
+</body>
+</html>

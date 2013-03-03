@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2007,2008 Eclipse Foundation and others.
+ * Copyright (c) 2007-2013 Eclipse Foundation, IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,7 +13,10 @@
  *    Kit Lo (IBM) - patch, bug 258749, Keep spaces at the end of value string
  *    Kit Lo (IBM) - patch, bug 226378, Non-translatable strings or files should not be presented to user for translation
  *    Kit Lo (IBM) - Bug 299402, Extract properties files from Eclipse project update sites for translation
-*******************************************************************************/
+ *    Kit Lo (IBM) - [402215] Extract Orion JavaScript files for translation
+ *******************************************************************************/
+
+require_once("/home/data/httpd/babel.eclipse.org/html/json_encode.php");
 require(dirname(__FILE__) . "/../system/language.class.php"); 
 require(dirname(__FILE__) . "/../system/release_train.class.php"); 
 
@@ -29,7 +32,6 @@ class File {
   public $is_active 	= 0;
   public $plugin_id = '';
 
-	
 	function save() {
 		$rValue = false;
 		if($this->name != "" && $this->project_id != "" && $this->version != "") {
@@ -118,7 +120,7 @@ class File {
 			  $strings[$string->string_id] = $string;
 			}
 
-			# import existing strings.  $String->save() will deal with merges
+			# import existing strings, $String->save() will deal with merges
 			$previous_line 	= "";
 			$lines 			= explode("\n", $_content);
 			$non_translatable = FALSE;
@@ -188,6 +190,59 @@ class File {
 			}
 		}
 		return $rValue;
+	}
+
+	function parseJs($_content) {
+		if($_content != "") {
+			
+			global $User;
+
+			# find all current active strings for this properties file
+			global $dbh;
+			$strings = array();
+			$sql = "SELECT * from strings WHERE is_active = 1 AND file_id = $this->file_id";
+			$rs_strings = mysql_query($sql, $dbh);
+			while ($myrow_strings = mysql_fetch_assoc($rs_strings)) {
+			  $string = new String();
+			  $string->string_id = $myrow_strings['string_id'];
+			  $string->file_id = $myrow_strings['file_id'];
+			  $string->name = $myrow_strings['name'];
+			  $string->value = $myrow_strings['value'];
+			  $string->userid = $myrow_strings['userid'];
+			  $string->created_on = $myrow_strings['created_on'];
+			  $string->is_active = $myrow_strings['is_active'];
+			  $strings[$string->string_id] = $string;
+			}
+
+			# import existing strings, $String->save() will deal with merges
+			$file_contents = preg_replace("/NON-NLS-(.*)/", "", $_content);
+			$file_contents = preg_replace("/\\/\\/\\$/", "", $file_contents);
+			$file_contents = preg_replace("/((.*?(\n))+.*?)define\(/", "define(", $file_contents);
+			$file_contents = preg_replace("/define\(((.*?(\n))+.*?)\)\;/", "$1", $file_contents);
+			$jsons = new Services_JSON();
+			$lines = $jsons->decode($file_contents);
+			foreach($lines as $key => $value) {
+				$String = new String();
+				$String->file_id 	= $this->file_id;
+				$String->name 		= $key;
+				$String->value 		= $value;
+				$String->userid 	= $User->userid;
+				$String->created_on = getCURDATE();
+				$String->is_active 	= 1;
+				$String->saveJs();
+
+				# remove the string from the list
+				unset($strings[$String->string_id]);
+			}
+
+			# remove strings that are no longer in the properties file
+			foreach ($strings as $string) {
+			  $string->is_active = 0;
+			  if (!$string->save()) {
+			    echo "***ERROR: Cannot deactivate string $string->name in file $string->file_id\n";
+			  }
+			}
+		}
 	}
 
 	/**

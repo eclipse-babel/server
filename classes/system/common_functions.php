@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2007-2009 Intalio, Inc.
+ * Copyright (c) 2007-2003 Intalio, Inc., IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,7 +9,8 @@
  * Contributors:
  *    Antoine Toulme, Intalio Inc. 217488: Remove Phoenix as a requirement for Babel server
  *    Kit Lo (IBM) - 272661 - Pseudo translations change " to ', breaking link texts
-*******************************************************************************/
+ *    Kit Lo (IBM) - [402215] Extract Orion JavaScript files for translation
+ *******************************************************************************/
 
     /**
      * Sanitize incoming value to prevent SQL injections
@@ -31,6 +32,17 @@
         
         // replace " with '
         $_String = str_replace('"', "'", $_String);
+    
+        return "\"" . $_String . "\"";
+    }
+
+    function returnEscapedQuotedString($_String) {
+        # Accept: String - String to be quoted
+        # return: string - Quoted String
+        
+        // replace \" with \\"", then quote the whole string
+	// for example: Generate an HTML5 \"Hello World\" website => "Generate an HTML5 \\""Hello World\\"" website"
+        $_String = str_replace('\\"', '\\\\""', $_String);
     
         return "\"" . $_String . "\"";
     }

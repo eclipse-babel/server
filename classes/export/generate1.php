@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2008 Eclipse Foundation and others.
+ * Copyright (c) 2008-2013 Eclipse Foundation, IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -26,6 +26,7 @@
  *    Kit Lo (IBM) - [330735] Generate a better id for the categories
  *    Kit Lo (IBM) - [313310] Support Eclipse-PlatformFilter for fragment of fragment
  *    Satoru Yoshida - [349107] properties file for template is located in wrong path
+ *    Kit Lo (IBM) - [402215] Extract Orion JavaScript files for translation
  *******************************************************************************/
 
 /*
@@ -74,7 +75,7 @@ else {
 	$build_id = $options['b'];
 }
 
-$release_id = "0.10.1";
+$release_id = "0.11.0";
 
 $work_dir = $addon->callHook('babel_working');
 
@@ -90,8 +91,11 @@ $source_files_dir = dirname(__FILE__) . "/source_files_for_generate/";
 $leader = ". . ";
 $timestamp = date("Ymdhis");
 
-$rm_command = "rm -rf $tmp_dir; rm -rf $babel_language_packs_dir; rm -rf $output_dir";
-exec($rm_command);
+# Generate Orion language packs
+exec("php5 generate_orion.php -b $build_id");
+
+# Generate Babel language packs
+exec("rm -rf $tmp_dir; rm -rf $output_dir");
 exec("mkdir -p $output_dir");
 
 echo "Requested builds: ";
@@ -174,6 +178,7 @@ foreach ($train_result as $train_id => $train_version) {
 
 		$plugins = array();
 		$projects = array();
+		$projects_include_orion = array();
 		$project_versions = array();
 		$pseudo_translations_indexes = array();
 		while (($file_row = mysql_fetch_assoc($file_result)) != null) {
@@ -215,7 +220,13 @@ foreach ($train_result as $train_id => $train_version) {
 			$file_row['dir_name'] = $dir_name_string;
 			$file_row['file_name'] = $file_name_string;
 
-			$plugins[$plugin_name_string][] = $file_row;
+			if (preg_match("/^(.*)\.js$/", $plugin_name_string)) {
+				$project_id = $file_row['project_id'];
+				$projects_include_orion[$project_id][] = "eclipse.orion";
+				$project_versions[$project_id] = $file_row['version'];
+			} else {
+				$plugins[$plugin_name_string][] = $file_row;
+			}
 		}
 
 		/*
@@ -472,13 +483,15 @@ foreach ($train_result as $train_id => $train_version) {
 			echo "${leader}${leader}Completed  plug-in fragment $plugin_name\n";
 
 			$projects[$project_id][] = $fragment_id;
+			$projects_include_orion[$project_id][] = $fragment_id;
 			$project_versions[$project_id] = $properties_file['version'];
 		}
 		if (sizeof($projects) > 0) {
 			$site_xml .= "\n\t<category-def name=\"lang_$language_iso\" label=\"Babel Language Packs in $language_name\">";
 			$site_xml .= "\n\t\t<description>Babel Language Packs in $language_name</description>";
 			$site_xml .= "\n\t</category-def>";
-
+		}
+		if (sizeof($projects_include_orion) > 0) {
 			fwrite($language_pack_links_file, "\n\t\t<a href='#$language_iso'>$language_name</a>");
 			if (strcmp($language_iso, "en_AA") != 0) {
 				fwrite($language_pack_links_file, ",");
@@ -486,8 +499,8 @@ foreach ($train_result as $train_id => $train_version) {
 			$language_pack_links_file_buffer .= "\n\t<h4>Language: <a name='$language_iso'>$language_name</a></h4>";
 			$language_pack_links_file_buffer .= "\n\t<ul>";
 		}
-		ksort($projects);
-		foreach ($projects as $project_id => $fragment_ids) {
+		ksort($projects_include_orion);
+		foreach ($projects_include_orion as $project_id => $fragment_ids) {
 			/*
 			 * Sort fragment names
 			 */
@@ -520,9 +533,11 @@ foreach ($train_result as $train_id => $train_version) {
 
 			if (strcmp($language_iso, "en_AA") == 0) {
 				$project_pct_complete = 100;
-				$site_xml .= "\n\t<category-def name=\"proj_$project_id\" label=\"Babel Language Packs for $project_id\">";
-				$site_xml .= "\n\t\t<description>Babel Language Packs for $project_id</description>";
-				$site_xml .= "\n\t</category-def>";
+				if (strcmp($project_id, "eclipse.orion") != 0) {
+					$site_xml .= "\n\t<category-def name=\"proj_$project_id\" label=\"Babel Language Packs for $project_id\">";
+					$site_xml .= "\n\t\t<description>Babel Language Packs for $project_id</description>";
+					$site_xml .= "\n\t</category-def>";
+				}
 			} else {
 				$project_version = $project_versions[$project_id];
 				$sql = "SELECT pct_complete
@@ -546,14 +561,16 @@ foreach ($train_result as $train_id => $train_version) {
 				"\n\t<license url=\"%licenseURL\">\n\t\t%license\n\t</license>" .
 				"\n\t<description>Babel Language Pack for $project_id in $language_name</description>" );
 			foreach ($fragment_ids as $fragment_id) {
-				$jar_name = "${output_dir_for_train}plugins/${fragment_id}_$train_version_timestamp.jar";
-				$size = filesize($jar_name);
-				fwrite($outp, "\n\t<plugin fragment=\"true\" id=\"$fragment_id\" unpack=\"false\" " .
-					"version=\"$train_version_timestamp\" download-size=\"$size\" install-size=\"$size\" />");
-				/*
-				 * Copy the plugin to ${babel_language_packs_dir_for_train}tmp
-				 */
-				exec("cp ${output_dir_for_train}plugins/${fragment_id}_$train_version_timestamp.jar ${babel_language_packs_dir_for_train}tmp/eclipse/plugins");
+				if (strcmp($fragment_id, "eclipse.orion") != 0) {
+					$jar_name = "${output_dir_for_train}plugins/${fragment_id}_$train_version_timestamp.jar";
+					$size = filesize($jar_name);
+					fwrite($outp, "\n\t<plugin fragment=\"true\" id=\"$fragment_id\" unpack=\"false\" " .
+						"version=\"$train_version_timestamp\" download-size=\"$size\" install-size=\"$size\" />");
+					/*
+					 * Copy the plugin to ${babel_language_packs_dir_for_train}tmp
+					 */
+					exec("cp ${output_dir_for_train}plugins/${fragment_id}_$train_version_timestamp.jar ${babel_language_packs_dir_for_train}tmp/eclipse/plugins");
+				}
 			}
 			fwrite($outp, "\n</feature>");
 			fclose($outp);
@@ -568,7 +585,7 @@ foreach ($train_result as $train_id => $train_version) {
 			/*
 			 * Copy in the Babel Pseudo Translations Index file
 			 */
-			if (strcmp($language_iso, "en_AA") == 0) {
+			if (strcmp($language_iso, "en_AA") == 0 && strcmp($project_id, "eclipse.orion") != 0) {
 				$pseudo_translations_index_file = fopen("${output_dir}BabelPseudoTranslationsIndex-$project_id.html", "w");
 				fwrite($pseudo_translations_index_file, "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">" .
 					"\n<html>\n<head>\n<title>Babel Pseudo Translations Index for $project_id</title>" .
@@ -592,7 +609,9 @@ foreach ($train_result as $train_id => $train_version) {
 			 * Zip up language pack
 			 */
 			$language_pack_name = "BabelLanguagePack-$project_id-${language_iso}_$train_version_timestamp.zip";
-			exec("cd ${babel_language_packs_dir_for_train}tmp; zip -r $babel_language_packs_dir_for_train$language_pack_name eclipse");
+			if (strcmp($project_id, "eclipse.orion") != 0) {
+				exec("cd ${babel_language_packs_dir_for_train}tmp; zip -r $babel_language_packs_dir_for_train$language_pack_name eclipse");
+			}
 			/*
 			 * Clean up ${babel_language_packs_dir_for_train}tmp
 			 */
@@ -604,7 +623,9 @@ foreach ($train_result as $train_id => $train_version) {
 			/*
 			 * Jar up this directory as the feature jar
 			 */
-			system("cd $tmp_dir; jar cfM ${output_dir_for_train}features/$feature_filename .");
+			if (strcmp($project_id, "eclipse.orion") != 0) {
+				system("cd $tmp_dir; jar cfM ${output_dir_for_train}features/$feature_filename .");
+			}
 			/*
 			 * Clean the temporary directory
 			 */
@@ -612,13 +633,15 @@ foreach ($train_result as $train_id => $train_version) {
 			/*
 			 * Register this feature with the site.xml
 			 */
-			$site_xml .= "\n\t<feature url=\"features/$feature_filename\" id=\"$feature_id\" version=\"$train_version_timestamp\">";
-			$site_xml .= "\n\t\t<category name=\"proj_$project_id\"/>";
-			$site_xml .= "\n\t\t<category name=\"lang_$language_iso\"/>";
-			$site_xml .= "\n\t</feature>";
+			if (strcmp($project_id, "eclipse.orion") != 0) {
+				$site_xml .= "\n\t<feature url=\"features/$feature_filename\" id=\"$feature_id\" version=\"$train_version_timestamp\">";
+				$site_xml .= "\n\t\t<category name=\"proj_$project_id\"/>";
+				$site_xml .= "\n\t\t<category name=\"lang_$language_iso\"/>";
+				$site_xml .= "\n\t</feature>";
+			}
 		}  /*  End: foreach project  */
 		echo "${leader}Completed language pack for $language_name ($language_iso)\n";
-		if (sizeof($projects) > 0) {
+		if (sizeof($projects_include_orion) > 0) {
 			$language_pack_links_file_buffer .= "\n\t</ul>";
 		}
 	}

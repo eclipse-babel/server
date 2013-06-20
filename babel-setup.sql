@@ -495,26 +495,26 @@ insert into projects values ("eclipse", 1);
 insert into projects values ("eclipse.orion", 1);
 
 insert into project_versions values ("eclipse", "4.3", 1);
-insert into project_versions values ("eclipse.orion", "2.0", 1);
+insert into project_versions values ("eclipse.orion", "3.0", 1);
 
 insert into release_train_projects values ("kepler", "eclipse", "4.3");
-insert into release_train_projects values ("kepler", "eclipse.orion", "2.0");
+insert into release_train_projects values ("kepler", "eclipse.orion", "3.0");
 
-insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/equinox/rt.equinox.framework.git/snapshot/I20121210-2000.zip");
-insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/equinox/rt.equinox.p2.git/snapshot/I20130108-0800.zip");
-insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/jdt/eclipse.jdt.git/snapshot/I20121210-2000.zip");
-insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/jdt/eclipse.jdt.core.git/snapshot/I20130101-0800.zip");
-insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/jdt/eclipse.jdt.debug.git/snapshot/I20121225-0800.zip");
-insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/jdt/eclipse.jdt.ui.git/snapshot/I20121225-0800.zip");
-insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/pde/eclipse.pde.git/snapshot/I20121210-2000.zip");
-insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/pde/eclipse.pde.ui.git/snapshot/I20121218-0800.zip");
-insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.git/snapshot/I20130101-0800.zip");
-insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.debug.git/snapshot/I20121225-0800.zip");
-insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.team.git/snapshot/I20121212-2000.zip");
-insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.text.git/snapshot/I20121225-0800.zip");
-insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.ua.git/snapshot/I20121218-0800.zip");
-insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.ui.git/snapshot/I20121225-0800.zip");
-insert into project_source_locations values ("eclipse.orion", "2.0", "http://git.eclipse.org/c/orion/org.eclipse.orion.client.git/snapshot/org.eclipse.orion.client-20130222-1757.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/equinox/rt.equinox.framework.git/snapshot/I20130618-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/equinox/rt.equinox.p2.git/snapshot/I20130618-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/jdt/eclipse.jdt.git/snapshot/I20130618-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/jdt/eclipse.jdt.core.git/snapshot/I20130618-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/jdt/eclipse.jdt.debug.git/snapshot/I20130618-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/jdt/eclipse.jdt.ui.git/snapshot/I20130618-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/pde/eclipse.pde.git/snapshot/I20130618-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/pde/eclipse.pde.ui.git/snapshot/I20130618-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.git/snapshot/I20130618-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.debug.git/snapshot/I20130618-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.team.git/snapshot/I20130618-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.text.git/snapshot/I20130618-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.ua.git/snapshot/I20130618-0800.zip");
+insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.ui.git/snapshot/I20130618-0800.zip");
+insert into project_source_locations values ("eclipse.orion", "3.0", "http://git.eclipse.org/c/orion/org.eclipse.orion.client.git/snapshot/org.eclipse.orion.client-20130617-2124.zip");
 
 insert into plugin_exclude_patterns values ("eclipse", "4.3", "/^com\\.ibm\\.icu.*$/");
 insert into plugin_exclude_patterns values ("eclipse", "4.3", "/^com\\.jcraft\\..*$/");
@@ -527,7 +527,7 @@ insert into plugin_exclude_patterns values ("eclipse", "4.3", "/^org\\.objectweb
 insert into plugin_exclude_patterns values ("eclipse", "4.3", "/^org\\.sat4j\\..*$/");
 insert into plugin_exclude_patterns values ("eclipse", "4.3", "/^org\\.w3c\\..*$/");
 insert into plugin_exclude_patterns values ("eclipse", "4.3", "/^.*\\/jface\\/resource\\/.*$/");
-insert into plugin_exclude_patterns values ("eclipse.orion", "2.0", "/^.*\\/bundle.properties$/");
+insert into plugin_exclude_patterns values ("eclipse.orion", "3.0", "/^.*\\/bundle.properties$/");
 
 /* populate file_progress table  */
 /* See also: dbmaintenance_15min.php */

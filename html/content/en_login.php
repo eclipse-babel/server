@@ -56,6 +56,9 @@
 
 </form>
 </div>
+</div>
+<br class='clearing'>
+</div>
 
 <script language="javascript">
 	document.forms['frmLogin'].username.focus();

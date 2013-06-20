@@ -54,4 +54,7 @@ img {
 	}
  ?>
  </ul>
- <?= $rowcount ?> row<?= $rowcount > 1 || $rowcount == 0 ? "s" : "" ?> found</td>
+<ul><?= $rowcount ?> row<?= $rowcount > 1 || $rowcount == 0 ? "s" : "" ?> found</ul>
+</div>
+<br class='clearing'>
+</div>

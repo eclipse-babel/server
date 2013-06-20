@@ -66,4 +66,6 @@
  	<td colspan="<?= $i ?>"> <?= $rowcount ?> row<?= $rowcount > 1 || $rowcount == 0 ? "s" : "" ?> found</td>
  </tr>
  </table>
- 
+</div>
+<br class='clearing'>
+</div>

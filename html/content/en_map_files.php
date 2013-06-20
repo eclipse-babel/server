@@ -65,6 +65,9 @@
 </tr>
 </table>
 </form>
+</div>
+<br class='clearing'>
+</div>
 <script language="javascript">
 	function fnSetVersionList() {
 		document.form1.version.options.length = 0;

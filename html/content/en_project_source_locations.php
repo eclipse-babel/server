@@ -60,6 +60,9 @@
 </tr>
 </table>
 </form>
+</div>
+<br class='clearing'>
+</div>
 <script language="javascript">
 	function fnSetVersionList() {
 		document.form1.version.options.length = 0;
@@ -90,7 +93,7 @@
 	}
 
 	function fnClickTextFilesArea() {
-		if(document.form1.fileFld.value.substr(0,12) == "No project source locations") {
+		if(document.form1.fileFld.value.substr(0,27) == "No project source locations") {
 			document.form1.fileFld.value = "";
 		}
 	}

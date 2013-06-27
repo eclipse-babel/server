@@ -8,7 +8,8 @@
  *
  * Contributors:
  *    Eclipse Foundation - Initial API and implementation
- *    Kit Lo (IBM) - patch, bug 261739, Inconsistent use of language names
+ *    Kit Lo (IBM) - [261739] Inconsistent use of language names
+ *    Kit Lo (IBM) - [411832] Stats and Recent pages do not show Orion in project dropdown list
 *******************************************************************************/
 include("global.php");
 
@@ -34,8 +35,13 @@ if($PROJECT_VERSION != "") {
 $LANGUAGE_ID= getHTTPParameter("language_id");
 $SUBMIT 	= getHTTPParameter("submit");
 
-$sql = "SELECT DISTINCT pv.project_id, pv.version FROM project_versions AS pv INNER JOIN map_files as m ON pv.project_id = m.project_id AND pv.version = m.version INNER JOIN project_source_locations as psl ON pv.project_id = psl.project_id AND pv.version = psl.version WHERE pv.is_active ORDER BY pv.project_id ASC, pv.version DESC";
-$rs_p_list = mysql_query($sql, $dbh);
+$sql = "SELECT DISTINCT pv.project_id, pv.version FROM project_versions AS pv INNER JOIN map_files as m ON pv.project_id = m.project_id AND pv.version = m.version WHERE pv.is_active ORDER BY pv.project_id ASC, pv.version DESC";
+$rs_p_list_map_files = mysql_query($sql, $dbh);
+
+$sql = "SELECT DISTINCT pv.project_id, pv.version FROM project_versions AS pv INNER JOIN project_source_locations as psl ON pv.project_id = psl.project_id AND pv.version = psl.version WHERE pv.is_active ORDER BY pv.project_id ASC, pv.version DESC";
+$rs_p_list_project_source_locations = mysql_query($sql, $dbh);
+
+$rs_p_list = $rs_p_list_map_files + $rs_p_list_project_source_locations;
 
 $sql = "SELECT language_id, IF(locale <> '', CONCAT(CONCAT(CONCAT(name, ' ('), locale), ')'), name) as name FROM languages WHERE is_active AND iso_code != 'en' ORDER BY name";
 $rs_l_list = mysql_query($sql, $dbh);

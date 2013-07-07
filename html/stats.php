@@ -35,7 +35,7 @@ if($PROJECT_VERSION != "") {
 $LANGUAGE_ID= getHTTPParameter("language_id");
 $SUBMIT 	= getHTTPParameter("submit");
 
-$sql = "SELECT DISTINCT pv.project_id, pv.version FROM project_versions AS pv INNER JOIN map_files as m ON pv.project_id = m.project_id AND pv.version = m.version WHERE pv.is_active UNION SELECT DISTINCT pv.project_id, pv.version FROM project_versions AS pv INNER JOIN project_source_locations as psl ON pv.project_id = psl.project_id AND pv.version = psl.version WHERE pv.is_active ORDER BY pv.project_id ASC, pv.version DESC";
+$sql = "SELECT DISTINCT pv_m.project_id, pv_m.version FROM project_versions AS pv_m INNER JOIN map_files as m ON pv_m.project_id = m.project_id AND pv_m.version = m.version WHERE pv_m.is_active UNION SELECT DISTINCT pv_s.project_id, pv_s.version FROM project_versions AS pv_s INNER JOIN project_source_locations as s ON pv_s.project_id = s.project_id AND pv_s.version = s.version WHERE pv_s.is_active ORDER BY project_id ASC, version DESC";
 $rs_p_list = mysql_query($sql, $dbh);
 
 $sql = "SELECT language_id, IF(locale <> '', CONCAT(CONCAT(CONCAT(name, ' ('), locale), ')'), name) as name FROM languages WHERE is_active AND iso_code != 'en' ORDER BY name";

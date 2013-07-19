@@ -532,7 +532,7 @@ insert into project_source_locations values ("eclipse", "4.3", "http://git.eclip
 insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.text.git/snapshot/R4_3.zip");
 insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.ua.git/snapshot/R4_3.zip");
 insert into project_source_locations values ("eclipse", "4.3", "http://git.eclipse.org/c/platform/eclipse.platform.ui.git/snapshot/R4_3.zip");
-insert into project_source_locations values ("eclipse.orion", "3.0", "http://git.eclipse.org/c/orion/org.eclipse.orion.client.git/snapshot/org.eclipse.orion.client-20130625-1949.zip");
+insert into project_source_locations values ("eclipse.orion", "3.0", "http://git.eclipse.org/c/orion/org.eclipse.orion.client.git/snapshot/R3_0.zip");
 
 insert into plugin_exclude_patterns values ("eclipse", "4.3", "/^com\\.ibm\\.icu.*$/");
 insert into plugin_exclude_patterns values ("eclipse", "4.3", "/^com\\.jcraft\\..*$/");

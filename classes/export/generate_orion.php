@@ -277,18 +277,18 @@ foreach ($train_result as $train_id => $train_version) {
 				exec("cp -r ${source_files_dir}* $orion_language_packs_dir_for_train$each_language_pack_dir");
 				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; rename Plugin ${language_name_no_space}Plugin *.html");
 	
-				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[locale\]/$language_iso_web/g\" babelEditor*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelEditor*Plugin.html");
-				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[locale\]/$language_iso_web/g\" babelGit*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelGit*Plugin.html");
-				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[locale\]/$language_iso_web/g\" babelUi*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelUi*Plugin.html");
-				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[locale\]/$language_iso_web/g\" babelUsers*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelUsers*Plugin.html");
-				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[language\]/$language_name/g\" babelEditor*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelEditor*Plugin.html");
-				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[language\]/$language_name/g\" babelGit*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelGit*Plugin.html");
-				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[language\]/$language_name/g\" babelUi*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelUi*Plugin.html");
-				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[language\]/$language_name/g\" babelUsers*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelUsers*Plugin.html");
-				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[build_id\]/$build_id/g\" babelEditor*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelEditor*Plugin.html");
-				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[build_id\]/$build_id/g\" babelGit*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelGit*Plugin.html");
-				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[build_id\]/$build_id/g\" babelUi*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelUi*Plugin.html");
-				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[build_id\]/$build_id/g\" babelUsers*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelUsers*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[locale\]/$language_iso_web/g\" BabelOrionEditor*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ BabelOrionEditor*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[locale\]/$language_iso_web/g\" BabelOrionGit*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ BabelOrionGit*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[locale\]/$language_iso_web/g\" BabelOrionUi*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ BabelOrionUi*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[locale\]/$language_iso_web/g\" BabelOrionUsers*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ BabelOrionUsers*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[language\]/$language_name/g\" BabelOrionEditor*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ BabelOrionEditor*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[language\]/$language_name/g\" BabelOrionGit*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ BabelOrionGit*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[language\]/$language_name/g\" BabelOrionUi*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ BabelOrionUi*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[language\]/$language_name/g\" BabelOrionUsers*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ BabelOrionUsers*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[build_id\]/$build_id/g\" BabelOrionEditor*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ BabelOrionEditor*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[build_id\]/$build_id/g\" BabelOrionGit*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ BabelOrionGit*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[build_id\]/$build_id/g\" BabelOrionUi*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ BabelOrionUi*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[build_id\]/$build_id/g\" BabelOrionUsers*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ BabelOrionUsers*Plugin.html");
 				/*
 				 * Copy in the Babel Pseudo Translations Index file
 				 */
@@ -317,10 +317,10 @@ foreach ($train_result as $train_id => $train_version) {
 				/*
 				 * Add language pack links to language pack links file
 				 */
-				$language_pack_links_file_buffer .= "\n\t\t<li><a href=\"<?= \$language_pack_leader ?>/${each_language_pack_dir}babelEditor${language_name_no_space}Plugin.html\">Babel Orion Editor Language Pack Plugin</a></li>";
-				$language_pack_links_file_buffer .= "\n\t\t<li><a href=\"<?= \$language_pack_leader ?>/${each_language_pack_dir}babelGit${language_name_no_space}Plugin.html\">Babel Orion Git Language Pack Plugin</a></li>";
-				$language_pack_links_file_buffer .= "\n\t\t<li><a href=\"<?= \$language_pack_leader ?>/${each_language_pack_dir}babelUi${language_name_no_space}Plugin.html\">Babel Orion UI Language Pack Plugin</a></li>";
-				$language_pack_links_file_buffer .= "\n\t\t<li><a href=\"<?= \$language_pack_leader ?>/${each_language_pack_dir}babelUsers${language_name_no_space}Plugin.html\">Babel Orion Users Language Pack Plugin</a></li>";
+				$language_pack_links_file_buffer .= "\n\t\t<li><a href=\"<?= \$language_pack_leader ?>/${each_language_pack_dir}BabelOrionEditor${language_name_no_space}Plugin.html\">Babel Orion Editor Language Pack Plugin</a></li>";
+				$language_pack_links_file_buffer .= "\n\t\t<li><a href=\"<?= \$language_pack_leader ?>/${each_language_pack_dir}BabelOrionGit${language_name_no_space}Plugin.html\">Babel Orion Git Language Pack Plugin</a></li>";
+				$language_pack_links_file_buffer .= "\n\t\t<li><a href=\"<?= \$language_pack_leader ?>/${each_language_pack_dir}BabelOrionUi${language_name_no_space}Plugin.html\">Babel Orion UI Language Pack Plugin</a></li>";
+				$language_pack_links_file_buffer .= "\n\t\t<li><a href=\"<?= \$language_pack_leader ?>/${each_language_pack_dir}BabelOrionUsers${language_name_no_space}Plugin.html\">Babel Orion Users Language Pack Plugin</a></li>";
 			}  /* End: foreach project  */
 			echo "${leader}Completed  language pack for: $language_name ($language_iso)\n";
 			$language_pack_links_file_buffer .= "\n\t</ul>";
@@ -341,7 +341,7 @@ function usage() {
 	echo "\n";
 	echo "generate_orion.php -b <build_id> [-t <train_id>]\n";
 	echo "  -b <build_id>: The Build ID for this build\n";
-	echo "  -t <train_id>: Optional: train to build (indigo, helios, galileo, ganymede, europa)";
+	echo "  -t <train_id>: Optional: train to build (kepler, juno, indigo, helios, galileo, ganymede, europa)";
 	echo "\n";
 }
 

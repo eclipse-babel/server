@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Kit Lo (IBM) - [402215] Extract Orion JavaScript files for translation
+ *    Kit Lo (IBM) - [413292] Add language pack link page for Orion language packs
  *******************************************************************************/
 
 ini_set("memory_limit", "512M");
@@ -68,6 +69,23 @@ foreach ($train_result as $train_id => $train_version) {
 	$babel_language_packs_dir_for_train = $babel_language_packs_dir . $train_id . "/";
 	exec("mkdir -p $babel_language_packs_dir_for_train");
 
+	/*
+	 * Create language pack links file
+	 */
+	$language_pack_links_file = fopen("${orion_language_packs_dir_for_train}${train_id}.php", "w");
+	fwrite($language_pack_links_file, "<?php\n");
+	# Uncomment if each train is in its own directory: fwrite($language_pack_links_file, "\$language_pack_leader = \"${train_id}\";\n");
+	# fwrite($language_pack_links_file, "\$language_pack_leader = \"http://www.eclipse.org/downloads/download.php?protocol=http&r=1&file=/technology/babel/orion_language_packs/RC2/kepler\";\n");
+	fwrite($language_pack_links_file, "\$language_pack_leader = \".\";\n");
+	fwrite($language_pack_links_file, "?>\n");
+	# copy page_header.html here 
+	$header = file_get_contents(dirname(__FILE__) . "/source_files_for_generate/page_header.html");
+	fwrite($language_pack_links_file, $header);
+	fwrite($language_pack_links_file, "\n\t<h1>Babel Orion Language Packs for " . ucfirst($train_id) . "</h1>" .
+		"\n\t<h2>Build ID: $build_id</h2>" .
+		"\n\t<p>The following language packs are based on the community translations entered into the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a>, and may not be complete or entirely accurate.  If you find missing or incorrect translations, please use the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a> to update them." .   
+		"\n\tAll downloads are provided under the terms and conditions of the <a href='http://www.eclipse.org/legal/epl/notice.php'>Eclipse Foundation Software User Agreement</a> unless otherwise specified.</p>" .
+		"\n\t<p>Go to: ");
 	$train_version_timestamp = "$train_version.v$timestamp";
 	$language_pack_links_file_buffer = "";
 	$site_xml = "";
@@ -112,167 +130,208 @@ foreach ($train_result as $train_id => $train_version) {
 				AND v.train_id = '" . $train_id . "'");
 		}
 
-		$plugins = array();
-		$projects = array();
-		$project_versions = array();
-		$pseudo_translations_indexes = array();
-		while (($file_row = mysql_fetch_assoc($file_result)) != null) {
-			# parse plugin name, dir name, file name
-			$pattern = 
-				'/^
-				(.*?)?					# $1 plugin name
-				\/						# slash
-				(.*?\/)?				# $2 dir name
-				([^\/]+[.]js)			# $3 file name
-				$/ix';
-			$plugin_name_string = preg_replace($pattern, '$1', $file_row['name']);
-			$dir_name_string = preg_replace($pattern, '$2', $file_row['name']);
-			$file_name_string = preg_replace($pattern, '$3', $file_row['name']);
-
-			# Generate dir name in language pack
-			$dir_name_string = str_replace("web/", "", $dir_name_string);
-			$dir_name_string = str_replace("nls/root/", "nls/" . $language_iso_web . "/", $dir_name_string);
-
-			$file_row['plugin_name'] = $plugin_name_string;
-			$file_row['dir_name'] = $dir_name_string;
-			$file_row['file_name'] = $file_name_string;
-
-			$plugins[$plugin_name_string][] = $file_row;
+		$project_id = "eclipse.orion";
+		$version = "3.0";
+		if (strcmp($language_iso, "en_AA") == 0) {
+			$project_pct_complete = 100;
+		} else {
+			$sql = "SELECT pct_complete
+				FROM project_progress
+				WHERE project_id = \"$project_id\"
+					AND version = \"$version\"
+					AND language_id = $language_id";
+			$project_pct_complete_result = mysql_query($sql);
+			if (mysql_num_rows($project_pct_complete_result) == 0) {
+				$project_pct_complete = 0;
+			} else {
+				$project_pct_complete = mysql_result($project_pct_complete_result, 0);
+			}
 		}
 
-		# Generate one plug-in fragment for each plug-in
-		ksort($plugins);
-		foreach ($plugins as $plugin_name => $plugin_row) {
-			echo "${leader}${leader}Generating plug-in fragment: $plugin_name\n";
-
-			foreach ($plugin_row as $properties_file) {
+		if ($project_pct_complete > 0) {
+			$plugins = array();
+			$projects = array();
+			$project_versions = array();
+			$pseudo_translations_indexes = array();
+			while (($file_row = mysql_fetch_assoc($file_result)) != null) {
+				# parse plugin name, dir name, file name
+				$pattern = 
+					'/^
+					(.*?)?					# $1 plugin name
+					\/						# slash
+					(.*?\/)?				# $2 dir name
+					([^\/]+[.]js)			# $3 file name
+					$/ix';
+				$plugin_name_string = preg_replace($pattern, '$1', $file_row['name']);
+				$dir_name_string = preg_replace($pattern, '$2', $file_row['name']);
+				$file_name_string = preg_replace($pattern, '$3', $file_row['name']);
+	
+				# Generate dir name in language pack
+				$dir_name_string = str_replace("web/", "", $dir_name_string);
+				$dir_name_string = str_replace("nls/root/", "nls/" . $language_iso_web . "/", $dir_name_string);
+	
+				$file_row['plugin_name'] = $plugin_name_string;
+				$file_row['dir_name'] = $dir_name_string;
+				$file_row['file_name'] = $file_name_string;
+	
+				$plugins[$plugin_name_string][] = $file_row;
+			}
+	
+			fwrite($language_pack_links_file, "\n\t\t<a href='#$language_iso'>$language_name</a>");
+			if (strcmp($language_iso, "en_AA") != 0) {
+				fwrite($language_pack_links_file, ",");
+			}
+			$language_pack_links_file_buffer .= "\n\t<h4>Language: <a name='$language_iso'>$language_name ($project_pct_complete%)</a></h4>";
+			$language_pack_links_file_buffer .= "\n\t<ul>";
+	
+			# Generate one plug-in fragment for each plug-in
+			ksort($plugins);
+			foreach ($plugins as $plugin_name => $plugin_row) {
+				echo "${leader}${leader}Generating plug-in fragment: $plugin_name\n";
+	
+				foreach ($plugin_row as $properties_file) {
+					$project_id = $properties_file['project_id'];
+					$dirname = $properties_file['dir_name'];
+					$filename = $properties_file['file_name'];
+					$each_language_pack_dir = "BabelLanguagePack-$project_id-${language_iso}/";
+	
+					echo "${leader}${leader}${leader}Generating file: " . $plugin_name . "/" . $dirname . $filename . " (file_id=" . $properties_file['file_id'] . ")\n";
+					# Create any needed sub-directories
+					exec("mkdir -p " . $orion_language_packs_dir_for_train . $each_language_pack_dir . $plugin_name . "/" . $dirname);
+					$fullpath = $orion_language_packs_dir_for_train . $each_language_pack_dir . $plugin_name . "/" . $dirname . $filename;
+					$outp = fopen($fullpath, "w");
+					fwrite($outp, "// Copyright by many contributors; see http://babel.eclipse.org/\ndefine({");
+					$line_leader = null;
+					if (strcmp($language_iso, "en_AA") == 0) {
+						$sql = "SELECT string_id, name AS 'key', value FROM strings WHERE file_id = " . $properties_file['file_id'] .
+							" AND is_active AND non_translatable = 0";
+						$strings_result = mysql_query($sql);
+						while (($strings_row = mysql_fetch_assoc($strings_result)) != null) {
+							if ($line_leader == null) {
+								fwrite($outp, "\n  ");
+								$line_leader = ",\n  ";
+							} else {
+								fwrite($outp, $line_leader);
+							}
+					        $outp_line = "\"" . $strings_row['key'] . "\": \"" . $properties_file['project_id'] . $strings_row['string_id'] .
+									":" . $strings_row['value'] . "\"";
+							fwrite($outp, $outp_line);
+	
+							$value = htmlspecialchars($strings_row['value']);
+							if (strlen($value) > 100) {
+								$value = substr($value, 0, 100) . " ...";
+							}
+							$pseudo_translations_indexes[$properties_file['project_id']][] = "\n\t\t<li><a href=\"http://babel.eclipse.org/babel/translate.php?project=" .
+							$properties_file['project_id'] . "&version=" . $properties_file['version'] . "&file=" .
+							$properties_file['name'] . "&string=" . $strings_row['key'] . "\">" .
+							$properties_file['project_id'] . $strings_row['string_id'] . "</a>&nbsp;" . $value . "</li>";
+						}
+					} else {
+						$sql = "SELECT
+							strings.name AS 'key', 
+							translations.value AS trans
+							FROM strings, translations
+							WHERE strings.string_id = translations.string_id
+							AND strings.file_id = " . $properties_file['file_id'] . "
+							AND strings.is_active
+							AND strings.non_translatable = 0
+							AND translations.language_id = " . $language_id . "
+							AND translations.is_active";
+						$strings_result = mysql_query($sql);
+						while (($strings_row = mysql_fetch_assoc($strings_result)) != null) {
+							if ($line_leader == null) {
+								fwrite($outp, "\n  ");
+								$line_leader = ",\n  ";
+							} else {
+								fwrite($outp, $line_leader);
+							}
+							fwrite($outp, "\"" . $strings_row['key'] . "\": \"" . $strings_row['trans'] . "\"");
+						}
+					}
+					/*
+					 * Finish the properties file
+					 */
+					fwrite($outp, "\n});");
+					fclose($outp);
+					echo "${leader}${leader}${leader}Completed  file: " . $plugin_name . "/" . $dirname . $filename . "\n";
+				}
+				echo "${leader}${leader}Completed  plug-in fragment: $plugin_name\n";
+	
+				$parent_plugin_id = $plugin_name;
 				$project_id = $properties_file['project_id'];
-				$dirname = $properties_file['dir_name'];
-				$filename = $properties_file['file_name'];
-				$each_language_pack_dir = "BabelLanguagePack-$project_id-${language_iso}/";
-
-				echo "${leader}${leader}${leader}Generating file: " . $plugin_name . "/" . $dirname . $filename . " (file_id=" . $properties_file['file_id'] . ")\n";
-				# Create any needed sub-directories
-				exec("mkdir -p " . $orion_language_packs_dir_for_train . $each_language_pack_dir . $plugin_name . "/" . $dirname);
-				$fullpath = $orion_language_packs_dir_for_train . $each_language_pack_dir . $plugin_name . "/" . $dirname . $filename;
-				$outp = fopen($fullpath, "w");
-				fwrite($outp, "// Copyright by many contributors; see http://babel.eclipse.org/\ndefine({");
-				$line_leader = null;
+				$fragment_id = "$parent_plugin_id.nl_$language_iso";
+				$fragment_filename = "${fragment_id}_$train_version_timestamp.jar";
+	
+				$projects[$project_id][] = $fragment_id;
+				$project_versions[$project_id] = $properties_file['version'];
+			}
+			ksort($projects);
+			foreach ($projects as $project_id => $fragment_ids) {
+				/*
+				 * Sort fragment names
+				 */
+				asort($fragment_ids);
+				/*
+				 * Copy in the build files
+				 */
+				exec("cp -r ${source_files_dir}* $orion_language_packs_dir_for_train$each_language_pack_dir");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; rename Plugin ${language_name_no_space}Plugin *.html");
+	
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[locale\]/$language_iso_web/g\" babelEditor*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelEditor*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[locale\]/$language_iso_web/g\" babelGit*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelGit*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[locale\]/$language_iso_web/g\" babelUi*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelUi*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[locale\]/$language_iso_web/g\" babelUsers*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelUsers*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[language\]/$language_name/g\" babelEditor*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelEditor*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[language\]/$language_name/g\" babelGit*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelGit*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[language\]/$language_name/g\" babelUi*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelUi*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[language\]/$language_name/g\" babelUsers*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelUsers*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[build_id\]/$build_id/g\" babelEditor*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelEditor*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[build_id\]/$build_id/g\" babelGit*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelGit*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[build_id\]/$build_id/g\" babelUi*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelUi*Plugin.html");
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[build_id\]/$build_id/g\" babelUsers*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelUsers*Plugin.html");
+				/*
+				 * Copy in the Babel Pseudo Translations Index file
+				 */
 				if (strcmp($language_iso, "en_AA") == 0) {
-					$sql = "SELECT string_id, name AS 'key', value FROM strings WHERE file_id = " . $properties_file['file_id'] .
-						" AND is_active AND non_translatable = 0";
-					$strings_result = mysql_query($sql);
-					while (($strings_row = mysql_fetch_assoc($strings_result)) != null) {
-						if ($line_leader == null) {
-							fwrite($outp, "\n  ");
-							$line_leader = ",\n  ";
-						} else {
-							fwrite($outp, $line_leader);
-						}
-				        $outp_line = "\"" . $strings_row['key'] . "\": \"" . $properties_file['project_id'] . $strings_row['string_id'] .
-								":" . $strings_row['value'] . "\"";
-						fwrite($outp, $outp_line);
-
-						$value = htmlspecialchars($strings_row['value']);
-						if (strlen($value) > 100) {
-							$value = substr($value, 0, 100) . " ...";
-						}
-						$pseudo_translations_indexes[$properties_file['project_id']][] = "\n\t\t<li><a href=\"http://babel.eclipse.org/babel/translate.php?project=" .
-						$properties_file['project_id'] . "&version=" . $properties_file['version'] . "&file=" .
-						$properties_file['name'] . "&string=" . $strings_row['key'] . "\">" .
-						$properties_file['project_id'] . $strings_row['string_id'] . "</a>&nbsp;" . $value . "</li>";
+					$pseudo_translations_index_file = fopen($orion_language_packs_dir_for_train . $each_language_pack_dir . "BabelPseudoTranslationsIndex-$project_id.html", "w");
+					fwrite($pseudo_translations_index_file, "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">" .
+						"\n<html>\n<head>\n<title>Babel Pseudo Translations Index for $project_id</title>" .
+						"\n<meta http-equiv=Content-Type content=\"text/html; charset=UTF-8\">\n</head>" .
+						"\n<body>\n\t<h1>Babel Pseudo Translations Index for $project_id</h1>" .
+						"\n\t<h2>Version: $train_version_timestamp</h2>\n\t<ul>");
+					foreach ($pseudo_translations_indexes[$project_id] as $index) {
+						fwrite($pseudo_translations_index_file, $index);
 					}
-				} else {
-					$sql = "SELECT
-						strings.name AS 'key', 
-						translations.value AS trans
-						FROM strings, translations
-						WHERE strings.string_id = translations.string_id
-						AND strings.file_id = " . $properties_file['file_id'] . "
-						AND strings.is_active
-						AND strings.non_translatable = 0
-						AND translations.language_id = " . $language_id . "
-						AND translations.is_active";
-					$strings_result = mysql_query($sql);
-					while (($strings_row = mysql_fetch_assoc($strings_result)) != null) {
-						if ($line_leader == null) {
-							fwrite($outp, "\n  ");
-							$line_leader = ",\n  ";
-						} else {
-							fwrite($outp, $line_leader);
-						}
-						fwrite($outp, "\"" . $strings_row['key'] . "\": \"" . $strings_row['trans'] . "\"");
-					}
+					fwrite($pseudo_translations_index_file, "\n\t</ul>\n</div></div></body>\n</html>");
+					fclose($pseudo_translations_index_file);
 				}
 				/*
-				 * Finish the properties file
+				 * Zip up language pack
 				 */
-				fwrite($outp, "\n});");
-				fclose($outp);
-				echo "${leader}${leader}${leader}Completed  file: " . $plugin_name . "/" . $dirname . $filename . "\n";
-			}
-			echo "${leader}${leader}Completed  plug-in fragment: $plugin_name\n";
-
-			$parent_plugin_id = $plugin_name;
-			$project_id = $properties_file['project_id'];
-			$fragment_id = "$parent_plugin_id.nl_$language_iso";
-			$fragment_filename = "${fragment_id}_$train_version_timestamp.jar";
-
-			$projects[$project_id][] = $fragment_id;
-			$project_versions[$project_id] = $properties_file['version'];
-		}
-		ksort($projects);
-		foreach ($projects as $project_id => $fragment_ids) {
-			/*
-			 * Sort fragment names
-			 */
-			asort($fragment_ids);
-			/*
-			 * Copy in the build files
-			 */
-			exec("cp -r ${source_files_dir}* $orion_language_packs_dir_for_train$each_language_pack_dir");
-			exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; rename Plugin ${language_name_no_space}Plugin *.html");
-
-			exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[locale\]/$language_iso_web/g\" babelEditor*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelEditor*Plugin.html");
-			exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[locale\]/$language_iso_web/g\" babelGit*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelGit*Plugin.html");
-			exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[locale\]/$language_iso_web/g\" babelUi*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelUi*Plugin.html");
-			exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[locale\]/$language_iso_web/g\" babelUsers*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelUsers*Plugin.html");
-			exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[language\]/$language_name/g\" babelEditor*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelEditor*Plugin.html");
-			exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[language\]/$language_name/g\" babelGit*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelGit*Plugin.html");
-			exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[language\]/$language_name/g\" babelUi*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelUi*Plugin.html");
-			exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[language\]/$language_name/g\" babelUsers*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelUsers*Plugin.html");
-			exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[build_id\]/$build_id/g\" babelEditor*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelEditor*Plugin.html");
-			exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[build_id\]/$build_id/g\" babelGit*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelGit*Plugin.html");
-			exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[build_id\]/$build_id/g\" babelUi*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelUi*Plugin.html");
-			exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[build_id\]/$build_id/g\" babelUsers*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ babelUsers*Plugin.html");
-			/*
-			 * Copy in the Babel Pseudo Translations Index file
-			 */
-			if (strcmp($language_iso, "en_AA") == 0) {
-				$pseudo_translations_index_file = fopen($orion_language_packs_dir_for_train . $each_language_pack_dir . "BabelPseudoTranslationsIndex-$project_id.html", "w");
-				fwrite($pseudo_translations_index_file, "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\">" .
-					"\n<html>\n<head>\n<title>Babel Pseudo Translations Index for $project_id</title>" .
-					"\n<meta http-equiv=Content-Type content=\"text/html; charset=UTF-8\">\n</head>" .
-					"\n<body>\n\t<h1>Babel Pseudo Translations Index for $project_id</h1>" .
-					"\n\t<h2>Version: $train_version_timestamp</h2>\n\t<ul>");
-				foreach ($pseudo_translations_indexes[$project_id] as $index) {
-					fwrite($pseudo_translations_index_file, $index);
-				}
-				fwrite($pseudo_translations_index_file, "\n\t</ul>\n</div></div></body>\n</html>");
-				fclose($pseudo_translations_index_file);
-			}
-			/*
-			 * Zip up language pack
-			 */
-			$language_pack_name = "BabelLanguagePack-$project_id-${language_iso}_$train_version_timestamp.zip";
-			exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; zip -r $babel_language_packs_dir_for_train$language_pack_name *");
-			/*
-			 * Save and do not delete $orion_language_packs_dir_for_train$each_language_pack_dir
-			 */
-			/* exec("rm -rf $orion_language_packs_dir_for_train$each_language_pack_dir"); */
-		}  /* End: foreach project  */
-		echo "${leader}Completed  language pack for: $language_name ($language_iso)\n";
+				$language_pack_name = "BabelLanguagePack-$project_id-${language_iso}_$train_version_timestamp.zip";
+				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; zip -r $babel_language_packs_dir_for_train$language_pack_name *");
+				/*
+				 * Save and do not delete $orion_language_packs_dir_for_train$each_language_pack_dir
+				 */
+				/* exec("rm -rf $orion_language_packs_dir_for_train$each_language_pack_dir"); */
+				/*
+				 * Add language pack links to language pack links file
+				 */
+				$language_pack_links_file_buffer .= "\n\t\t<li><a href=\"<?= \$language_pack_leader ?>/${each_language_pack_dir}babelEditor${language_name_no_space}Plugin.html\">Babel Orion Editor Language Pack Plugin</a></li>";
+				$language_pack_links_file_buffer .= "\n\t\t<li><a href=\"<?= \$language_pack_leader ?>/${each_language_pack_dir}babelGit${language_name_no_space}Plugin.html\">Babel Orion Git Language Pack Plugin</a></li>";
+				$language_pack_links_file_buffer .= "\n\t\t<li><a href=\"<?= \$language_pack_leader ?>/${each_language_pack_dir}babelUi${language_name_no_space}Plugin.html\">Babel Orion UI Language Pack Plugin</a></li>";
+				$language_pack_links_file_buffer .= "\n\t\t<li><a href=\"<?= \$language_pack_leader ?>/${each_language_pack_dir}babelUsers${language_name_no_space}Plugin.html\">Babel Orion Users Language Pack Plugin</a></li>";
+			}  /* End: foreach project  */
+			echo "${leader}Completed  language pack for: $language_name ($language_iso)\n";
+			$language_pack_links_file_buffer .= "\n\t</ul>";
+		} /* End: $project_pct_complete > 0 */
 	}
+
+	fwrite($language_pack_links_file, "\n\t</p>");
+	fwrite($language_pack_links_file, $language_pack_links_file_buffer);
+	
+	fwrite($language_pack_links_file, "\n\t<br />\n</body>\n</html>");
+	fclose($language_pack_links_file);
 
 	$dbh = $dbc->disconnect();
 	echo "Completed  language packs for: $train_id\n";

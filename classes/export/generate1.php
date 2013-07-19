@@ -54,12 +54,12 @@ while ($train_row = mysql_fetch_assoc($result)) {
 
 $options = getopt("b:t:");
 $argv_train = "";
-if(isset($options['t'])) {
+if (isset($options['t'])) {
 	$argv_train = $options['t'];
-	if(array_key_exists($argv_train, $train_result)) {
+	if (array_key_exists($argv_train, $train_result)) {
 		# Picked a valid train .. remove all others
 		foreach ($train_result as $train_id => $train_version) {
-			if($train_id != $argv_train) {
+			if ($train_id != $argv_train) {
 				unset($train_result[$train_id]);
 			}
 		}
@@ -67,19 +67,17 @@ if(isset($options['t'])) {
 }
 
 $build_id = "";
-if(!isset($options['b'])) {
+if (!isset($options['b'])) {
 	usage();
 	exit();
-}
-else {
+} else {
 	$build_id = $options['b'];
 }
 
 $release_id = "0.11.0";
 
-$work_dir = $addon->callHook('babel_working');
-
 global $addon;
+$work_dir = $addon->callHook('babel_working');
 $context = $addon->callHook('context');
 
 $work_context_dir = $work_dir . $context . "/";
@@ -88,7 +86,7 @@ $babel_language_packs_dir = $work_context_dir . "babel_language_packs/";
 $output_dir = $work_context_dir . "update-site/";
 $source_files_dir = dirname(__FILE__) . "/source_files_for_generate/";
 
-$leader = ". . ";
+$leader = ". ";
 $timestamp = date("Ymdhis");
 
 # Generate Orion language packs
@@ -115,7 +113,6 @@ foreach ($train_result as $train_id => $train_version) {
 	exec("mkdir -p $babel_language_packs_dir_for_train");
 	$language_pack_links_file = fopen("${babel_language_packs_dir_for_train}${train_id}.php", "w");
 	fwrite($language_pack_links_file, "<?php\n");
-	# Uncomment if each train is in its own directory: fwrite($language_pack_links_file, "\$language_pack_leader = \"${train_id}\";\n");
 	fwrite($language_pack_links_file, "\$language_pack_leader = \".\";\n");
 	fwrite($language_pack_links_file, "?>\n");
 	# copy page_header.html here 
@@ -126,7 +123,6 @@ foreach ($train_result as $train_id => $train_version) {
 		"\n\t<p>The following language packs are based on the community translations entered into the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a>, and may not be complete or entirely accurate.  If you find missing or incorrect translations, please use the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a> to update them." .   
 		"\n\tAll downloads are provided under the terms and conditions of the <a href='http://www.eclipse.org/legal/epl/notice.php'>Eclipse Foundation Software User Agreement</a> unless otherwise specified.</p>" .
 		"\n\t<p>Go to: ");
-
 	$train_version_timestamp = "$train_version.v$timestamp";
 	$language_pack_links_file_buffer = "";
 	$site_xml = "";
@@ -139,8 +135,7 @@ foreach ($train_result as $train_id => $train_version) {
 	$sql = "SELECT language_id, iso_code, IF(locale <> '', CONCAT(CONCAT(CONCAT(name, ' ('), locale), ')'), name) as name, is_active, IF(language_id = 1,1,0) AS sorthack FROM languages ORDER BY sorthack, name ASC";
 	$language_result = mysql_query($sql);
 	if($language_result === FALSE) {
-		# we may have lost the database connection with our shell-outs
-		# bug 271685
+		# We may have lost the database connection with our shell-outs, reconnect
 		$dbh = $dbc->connect();
 		$language_result = mysql_query($sql);
 	}
@@ -153,11 +148,9 @@ foreach ($train_result as $train_id => $train_version) {
 			$language_iso = "en_AA";
 		}
 
-		echo "${leader}Generating language pack for $train_id - $language_name ($language_iso) (language_id=" . $language_id . ")\n";
+		echo "${leader}Generating language pack for: $language_name ($language_iso) (language_id=" . $language_id . ")\n";
 
-		/*
-		 * Determine which plug-ins need to be in this language pack.
-		 */
+		# Determine which plug-ins need to be in this language pack
 		if (strcmp($language_iso, "en_AA") == 0) {
 			$file_result = mysql_query("SELECT DISTINCT f.project_id, f.version, f.file_id, f.name
 				FROM files AS f
@@ -651,7 +644,7 @@ foreach ($train_result as $train_id => $train_version) {
 	
 	fwrite($language_pack_links_file, "\n\t<br />\n</body>\n</html>");
 	fclose($language_pack_links_file);
-	
+
 	$dbh = $dbc->disconnect();
 
 	/*
@@ -738,7 +731,7 @@ function usage() {
 	echo "\n";
 	echo "generate1.php -b <build_id> [-t <train_id>]\n";
 	echo "  -b <build_id>: The Build ID for this build.\n";
-	echo "  -t <train_id>: Optional: train to build (indigo, helios, galileo, ganymede, europa).";
+	echo "  -t <train_id>: Optional: train to build (kepler, juno, indigo, helios, galileo, ganymede, europa)";
 	echo "\n";
 }
 

@@ -27,7 +27,7 @@ $options = getopt("b:t:");
 $argv_train = "";
 if (isset($options['t'])) {
 	$argv_train = $options['t'];
-	if( array_key_exists($argv_train, $train_result)) {
+	if (array_key_exists($argv_train, $train_result)) {
 		# Picked a valid train, remove all others
 		foreach ($train_result as $train_id => $train_version) {
 			if ($train_id != $argv_train) {
@@ -51,7 +51,8 @@ $context = $addon->callHook('context');
 $work_context_dir = $work_dir . $context . "/";
 $orion_language_packs_dir = $work_context_dir . "orion_language_packs/";
 $babel_language_packs_dir = $work_context_dir . "babel_language_packs/";
-$source_files_dir = dirname(__FILE__) . "/source_files_for_orion/";
+$orion_source_files_dir = dirname(__FILE__) . "/source_files_for_orion/";
+$babel_source_files_dir = dirname(__FILE__) . "/source_files_for_generate/";
 
 $leader = ". ";
 $timestamp = date("Ymdhis");
@@ -74,12 +75,10 @@ foreach ($train_result as $train_id => $train_version) {
 	 */
 	$language_pack_links_file = fopen("${orion_language_packs_dir_for_train}${train_id}.php", "w");
 	fwrite($language_pack_links_file, "<?php\n");
-	# Uncomment if each train is in its own directory: fwrite($language_pack_links_file, "\$language_pack_leader = \"${train_id}\";\n");
-	# fwrite($language_pack_links_file, "\$language_pack_leader = \"http://www.eclipse.org/downloads/download.php?protocol=http&r=1&file=/technology/babel/orion_language_packs/RC2/kepler\";\n");
 	fwrite($language_pack_links_file, "\$language_pack_leader = \".\";\n");
 	fwrite($language_pack_links_file, "?>\n");
 	# copy page_header.html here 
-	$header = file_get_contents(dirname(__FILE__) . "/source_files_for_generate/page_header.html");
+	$header = file_get_contents("${babel_source_files_dir}page_header.html");
 	fwrite($language_pack_links_file, $header);
 	fwrite($language_pack_links_file, "\n\t<h1>Babel Orion Language Packs for " . ucfirst($train_id) . "</h1>" .
 		"\n\t<h2>Build ID: $build_id</h2>" .
@@ -274,7 +273,7 @@ foreach ($train_result as $train_id => $train_version) {
 				/*
 				 * Copy in the build files
 				 */
-				exec("cp -r ${source_files_dir}* $orion_language_packs_dir_for_train$each_language_pack_dir");
+				exec("cp -r ${orion_source_files_dir}* $orion_language_packs_dir_for_train$each_language_pack_dir");
 				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; rename Plugin ${language_name_no_space}Plugin *.html");
 	
 				exec("cd $orion_language_packs_dir_for_train$each_language_pack_dir; sed -e \"s/\[locale\]/$language_iso_web/g\" BabelOrionEditor*Plugin.html > /tmp/babelfile.$$; mv -f /tmp/babelfile.$$ BabelOrionEditor*Plugin.html");

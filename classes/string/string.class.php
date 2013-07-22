@@ -10,6 +10,7 @@
  *    Eclipse Foundation - initial API and implementation
  *    Kit Lo (IBM) - 272661 - Pseudo translations change " to ', breaking link texts
  *    Kit Lo (IBM) - [402215] Extract Orion JavaScript files for translation
+ *    Kit Lo (IBM) - [413459] Received "Cannot deactivate string" messages during process_project_source_locations.php
  *******************************************************************************/
 
 class String {
@@ -77,14 +78,13 @@ class String {
 		if($this->file_id != 0 && $this->name != "" && $this->userid > 0) {
 			global $dbh;
 
-			$String = $this->getStringFromName($this->file_id, $this->name);
+			$String = $this->getStringFromNameJs($this->file_id, returnEscapedQuotedString(sqlSanitize($this->name, $dbh)));
 			if($String->value != $this->value || $String->is_active != $this->is_active) {
 				$sql 		= "INSERT INTO";
 				$created_on = "NOW()";
 				$where 		= "";
 				if($String->string_id > 0) {
 					$this->string_id = $String->string_id;
-					$this->is_active = 1;
 					$sql = "UPDATE";
 					$created_on = "created_on";
 					$where = " WHERE string_id = " . sqlSanitize($this->string_id, $dbh);
@@ -137,6 +137,34 @@ class String {
 					strings
 				WHERE file_id = " . sqlSanitize($_file_id, $dbh) . "
 					AND name = BINARY " . returnQuotedString(sqlSanitize($_name, $dbh));	
+			$result = mysql_query($sql, $dbh);
+			if($result && mysql_num_rows($result) > 0) {
+				$myrow = mysql_fetch_assoc($result);
+				$String = new String();
+				$String->string_id 	= $myrow['string_id'];
+				$String->file_id 	= $myrow['file_id'];
+				$String->name 		= $myrow['name'];
+				$String->value 		= $myrow['value'];
+				$String->userid 	= $myrow['userid'];
+				$String->created_on = $myrow['created_on'];
+				$String->is_active 	= $myrow['is_active'];
+				$rValue = $String;
+			}
+		}
+		return $rValue;
+	}
+	
+	function getStringFromNameJs($_file_id, $_name) {
+		$rValue = new String();
+		if($_file_id > 0 && $_name != "") {
+			global $dbh;
+
+		# Bug 236454 - string token needs to be case sensitive
+		$sql = "SELECT *
+				FROM 
+					strings
+				WHERE file_id = " . sqlSanitize($_file_id, $dbh) . "
+					AND name = BINARY " . str_replace('\\\\', '\\', $_name);	
 
 			$result = mysql_query($sql, $dbh);
 			if($result && mysql_num_rows($result) > 0) {

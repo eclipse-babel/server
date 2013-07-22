@@ -14,6 +14,7 @@
  *    Kit Lo (IBM) - patch, bug 226378, Non-translatable strings or files should not be presented to user for translation
  *    Kit Lo (IBM) - Bug 299402, Extract properties files from Eclipse project update sites for translation
  *    Kit Lo (IBM) - [402215] Extract Orion JavaScript files for translation
+ *    Kit Lo (IBM) - [413459] Received "Cannot deactivate string" messages during process_project_source_locations.php
  *******************************************************************************/
 
 require_once("/home/data/httpd/babel.eclipse.org/html/json_encode.php");
@@ -238,7 +239,7 @@ class File {
 			# remove strings that are no longer in the properties file
 			foreach ($strings as $string) {
 			  $string->is_active = 0;
-			  if (!$string->save()) {
+			  if (!$string->saveJs()) {
 			    echo "***ERROR: Cannot deactivate string $string->name in file $string->file_id\n";
 			  }
 			}

@@ -36,9 +36,7 @@ class String {
 				$where 		= "";
 				if($String->string_id > 0) {
 					$this->string_id = $String->string_id;
-					$this->is_active = 1;
 					$sql = "UPDATE";
-					$created_on = "created_on";
 					$where = " WHERE string_id = " . sqlSanitize($this->string_id, $dbh);
 					$Event = new EventLog("strings", "string_id:old_value", $this->string_id . ":" . $String->value, "UPDATE");
 					$Event->add();
@@ -78,7 +76,11 @@ class String {
 		if($this->file_id != 0 && $this->name != "" && $this->userid > 0) {
 			global $dbh;
 
-			$String = $this->getStringFromNameJs($this->file_id, returnEscapedQuotedString(sqlSanitize($this->name, $dbh)));
+			if ($this->string_id > 0) {
+				$String = $this->getStringFromStringId($this->file_id, $this->string_id);
+			} else {
+				$String = $this->getStringFromNameJs($this->file_id, returnEscapedQuotedString(sqlSanitize($this->name, $dbh)));
+			}
 			if($String->value != $this->value || $String->is_active != $this->is_active) {
 				$sql 		= "INSERT INTO";
 				$created_on = "NOW()";
@@ -86,7 +88,6 @@ class String {
 				if($String->string_id > 0) {
 					$this->string_id = $String->string_id;
 					$sql = "UPDATE";
-					$created_on = "created_on";
 					$where = " WHERE string_id = " . sqlSanitize($this->string_id, $dbh);
 					$Event = new EventLog("strings", "string_id:old_value", $this->string_id . ":" . $String->value, "UPDATE");
 					$Event->add();
@@ -137,6 +138,7 @@ class String {
 					strings
 				WHERE file_id = " . sqlSanitize($_file_id, $dbh) . "
 					AND name = BINARY " . returnQuotedString(sqlSanitize($_name, $dbh));	
+
 			$result = mysql_query($sql, $dbh);
 			if($result && mysql_num_rows($result) > 0) {
 				$myrow = mysql_fetch_assoc($result);
@@ -164,7 +166,7 @@ class String {
 				FROM 
 					strings
 				WHERE file_id = " . sqlSanitize($_file_id, $dbh) . "
-					AND name = BINARY " . str_replace('\\\\', '\\', $_name);	
+					AND name = BINARY " . $_name;
 
 			$result = mysql_query($sql, $dbh);
 			if($result && mysql_num_rows($result) > 0) {
@@ -183,6 +185,34 @@ class String {
 		return $rValue;
 	}
 	
+	function getStringFromStringId($_file_id, $_string_id) {
+		$rValue = new String();
+		if($_file_id > 0 && $_string_id != "") {
+			global $dbh;
+
+		$sql = "SELECT *
+				FROM 
+					strings
+				WHERE file_id = " . sqlSanitize($_file_id, $dbh) . "
+					AND string_id = " . $_string_id;	
+
+			$result = mysql_query($sql, $dbh);
+			if($result && mysql_num_rows($result) > 0) {
+				$myrow = mysql_fetch_assoc($result);
+				$String = new String();
+				$String->string_id 	= $myrow['string_id'];
+				$String->file_id 	= $myrow['file_id'];
+				$String->name 		= $myrow['name'];
+				$String->value 		= $myrow['value'];
+				$String->userid 	= $myrow['userid'];
+				$String->created_on = $myrow['created_on'];
+				$String->is_active 	= $myrow['is_active'];
+				$rValue = $String;
+			}
+		}
+		return $rValue;
+	}
+
 	/**
 	* Returns Array of active strings
 	* @author droy

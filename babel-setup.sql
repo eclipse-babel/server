@@ -505,6 +505,7 @@ insert into languages values (null, "eu",    null,          "Basque",     1);
 insert into languages values (null, "ml",    null,          "Malayalam",  1);
 insert into languages values (null, "my",    null,          "Myanmar",    1);
 insert into languages values (null, "th",    null,          "Thai",       1);
+insert into languages values (null, "lt",    null,          "Lithuanian", 1);
 insert into languages values (null, "tl",    null,          "Klingon",    1);
 
 insert into release_trains values ("kepler", "4.3.0", 1);

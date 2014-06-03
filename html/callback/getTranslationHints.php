@@ -44,7 +44,7 @@ while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
 }
 
 if($train_id == "") {
-	$train_id = 'indigo';
+	$train_id = 'kepler';
 }
 
 

@@ -3,36 +3,23 @@
 <head>
 	<meta name="copyright" content="Copyright (c) 2013 IBM Corporation and others.">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Babel Orion UI Language Pack Plugin in [language]</title>
+	<title>Babel Orion Cloud Foundry Language Pack Plugin in [language]</title>
 	<script type="text/javascript" src="lib/plugin.js"></script>
 	<script type="text/javascript" src="lib/require.js"></script>
 	<script>
 		window.onload = function() {
 			var headers = {
-				name: "Babel Orion UI Language Pack Plugin in [language]",
+				name: "Babel Orion Cloud Foundry Language Pack Plugin in [language]",
 				version: "[build_id]",
-				description: "Babel community translations for Orion UI in [language]."
+				description: "Babel community translations for Orion Cloud Foundry in [language]."
 			};
 			var provider = new orion.PluginProvider(headers);
 			var messages = [
 				//The list of message files
-				'orion/compare/nls/[locale]/messages',
-				'orion/content/nls/[locale]/messages',
-				'orion/crawler/nls/[locale]/messages',
-				'orion/edit/nls/[locale]/messages',
-				'orion/navigate/nls/[locale]/messages',
-				'orion/nls/[locale]/messages',
-				'orion/operations/nls/[locale]/messages',
-				'orion/search/nls/[locale]/messages',
-				'orion/settings/nls/[locale]/messages',
-				'orion/shell/[locale]/messages',
-				'orion/sites/nls/[locale]/messages',
-				'orion/stringexternalizer/nls/[locale]/messages',
-				'orion/terminal/nls/[locale]/messages',
-				'orion/widgets/nls/[locale]/messages'
+				'cfui/nls/[locale]/messages'
 			];
 			
-			require({baseUrl: 'org.eclipse.orion.client.ui'});
+			require({baseUrl: 'org.eclipse.orion.client.cf'});
 			
 			require(['../lib/Deferred'], function(Deferred){
 			
@@ -62,7 +49,7 @@
 	</script>
 </head>
 <body>
-<h1>Babel Orion UI Language Pack Plugin in [language]</h1>
+<h1>Babel Orion Cloud Foundry Language Pack Plugin in [language]</h1>
 <h2>Build ID: [build_id]</h2>
 <p>This Babel language pack plugin is based on the community translations entered into the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a>, and may not be complete or entirely accurate.
 If you find missing or incorrect translations, please use the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a> to update them.

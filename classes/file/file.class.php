@@ -223,6 +223,10 @@ class File {
 			$jsons = new Services_JSON();
 			$lines = $jsons->decode($file_contents);
 			foreach($lines as $key => $value) {
+				# escape newlines and tabs
+				$value = preg_replace("/\\n/", "\\\\n", $value);
+				$value = preg_replace("/\\t/", "\\\\t", $value);
+
 				$String = new String();
 				$String->file_id 	= $this->file_id;
 				$String->name 		= $key;

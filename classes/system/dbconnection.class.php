@@ -35,7 +35,7 @@ class DBConnection {
 				exitTo("/error.php?errNo=101303","error: 101303 - unknown database name");
 			}
 		}					
-		
+		mysql_query("SET character_set_results=latin1", $dbh);
 		return $dbh;
 	}
 	

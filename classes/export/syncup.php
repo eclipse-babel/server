@@ -12,7 +12,7 @@
  *    Satoru Yoshida - Bug 380524
 *******************************************************************************/
 
-ini_set("memory_limit", "64M");
+// ini_set("memory_limit", "64M");
 
 error_reporting(E_ALL);
 ini_set('display_errors', '1');

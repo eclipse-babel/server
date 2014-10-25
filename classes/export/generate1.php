@@ -90,7 +90,7 @@ $leader = ". ";
 $timestamp = date("Ymdhis");
 
 # Generate Orion language packs
-exec("php5 generate_orion.php -b $build_id");
+exec("/usr/bin/php generate_orion.php -b $build_id");
 
 # Generate Babel language packs
 exec("rm -rf $tmp_dir; rm -rf $output_dir");

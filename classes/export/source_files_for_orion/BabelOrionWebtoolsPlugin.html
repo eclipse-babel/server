@@ -3,24 +3,23 @@
 <head>
 	<meta name="copyright" content="Copyright (c) 2013 IBM Corporation and others.">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Babel Orion JavaScript Language Pack Plugin in [language]</title>
+	<title>Babel Orion Webtools Language Pack Plugin in [language]</title>
 	<script type="text/javascript" src="lib/plugin.js"></script>
 	<script type="text/javascript" src="lib/require.js"></script>
 	<script>
 		window.onload = function() {
 			var headers = {
-				name: "Babel Orion JavaScript Language Pack Plugin in [language]",
+				name: "Babel Orion Webtools Language Pack Plugin in [language]",
 				version: "[build_id]",
-				description: "Babel community translations for Orion JavaScript in [language]."
+				description: "Babel community translations for Orion Webtools in [language]."
 			};
 			var provider = new orion.PluginProvider(headers);
 			var messages = [
 				//The list of message files
-				'javascript/nls/[locale]/messages',
-				'javascript/nls/[locale]/problems'
+				'webtools/nls/[locale]/messages'
 			];
 			
-			require({baseUrl: 'org.eclipse.orion.client.javascript'});
+			require({baseUrl: 'org.eclipse.orion.client.webtools'});
 			
 			require(['../lib/Deferred'], function(Deferred){
 			
@@ -50,7 +49,7 @@
 	</script>
 </head>
 <body>
-<h1>Babel Orion JavaScript Language Pack Plugin in [language]</h1>
+<h1>Babel Orion Webtools Language Pack Plugin in [language]</h1>
 <h2>Build ID: [build_id]</h2>
 <p>This Babel language pack plugin is based on the community translations entered into the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a>, and may not be complete or entirely accurate.
 If you find missing or incorrect translations, please use the <a href='http://babel.eclipse.org/'>Babel Translation Tool</a> to update them.

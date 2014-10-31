@@ -23,7 +23,7 @@ while ($train_row = mysql_fetch_assoc($result)) {
   $train_result[$train_row['train_id']] = $train_row['train_version'];
 }
 
-$options = getopt("b:t:");
+$options = getopt("b:t:s:");
 $argv_train = "";
 if (isset($options['t'])) {
 	$argv_train = $options['t'];
@@ -35,6 +35,12 @@ if (isset($options['t'])) {
 			}
 		}
 	}
+}
+
+if (isset($options['s'])) {
+	$timestamp = $options['s'];
+} else {
+	$timestamp = date("Ymdhis");
 }
 
 $build_id = "";
@@ -55,7 +61,6 @@ $orion_source_files_dir = dirname(__FILE__) . "/source_files_for_orion/";
 $babel_source_files_dir = dirname(__FILE__) . "/source_files_for_generate/";
 
 $leader = ". ";
-$timestamp = date("Ymdhis");
 
 $rm_command = "rm -rf $orion_language_packs_dir";
 exec($rm_command);
@@ -356,7 +361,7 @@ function usage() {
 	echo "\n";
 	echo "generate_orion.php -b <build_id> [-t <train_id>]\n";
 	echo "  -b <build_id>: The Build ID for this build\n";
-	echo "  -t <train_id>: Optional: train to build (luna, kepler, juno)";
+	echo "  -t <train_id>: Optional: train to build (luna, kepler)";
 	echo "\n";
 }
 

@@ -1,20 +1,18 @@
 <?php
+/*******************************************************************************
+* Copyright (c) 2007-2014 Eclipse Foundation, Intalio, Inc., IBM Corporation and others.
+* All rights reserved. This program and the accompanying materials
+* are made available under the terms of the Eclipse Public License v1.0
+* which accompanies this distribution, and is available at
+* http://www.eclipse.org/legal/epl-v10.html
+*
+* Contributors:
+*    Denis Roy, Eclipse Foundation - Initial Implementation
+*    Antoine Toulme, Intalio - Backend functions
+*******************************************************************************/
 
 require_once(dirname(__FILE__) . "/backend_functions.php");
 class DBConnection {
-
-	#*****************************************************************************
-	#
-	# dbconnection.class.php
-	#
-	# Author: 		Denis Roy
-	# Date:			2004-08-05
-	#
-	# Description: Functions and modules related to the MySQL database connection
-	#
-	# HISTORY:
-	#
-	#*****************************************************************************
 
 	function connect()
 	{
@@ -34,11 +32,11 @@ class DBConnection {
 				errorLog("Failed attempt to open database: $database - aborting \n\t" . mysql_error());
 				exitTo("/error.php?errNo=101303","error: 101303 - unknown database name");
 			}
-		}					
-		mysql_query("SET character_set_results=latin1", $dbh);
+		}
+		# mysql_query("SET character_set_results=latin1", $dbh);
 		return $dbh;
 	}
-	
+
 	function disconnect() {
 		mysql_close();
 	}

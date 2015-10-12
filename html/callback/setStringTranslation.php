@@ -10,6 +10,7 @@
  *    Paul Colton (Aptana)- initial API and implementation
  *    Eclipse Foundation
  * 	  Eclipse Contributors (bug 217257)
+ *    Satoru Yoshida - [373204] Babel server getting slow
 *******************************************************************************/
 
 require_once("cb_global.php");
@@ -173,7 +174,7 @@ if(!$do_nothing) {
 		$sql = "SELECT s.string_id, COUNT(t.string_id) AS tr_count
 		FROM strings AS s 
 		LEFT JOIN translations AS t ON t.string_id = s.string_id AND t.language_id = '".addslashes($language_id)."'
-		WHERE BINARY s.value = (select value from strings where string_id = '".addslashes($string_id)."')  
+		WHERE s.value = BINARY (select value from strings where string_id = '".addslashes($string_id)."')  
 			AND s.is_active = 1 AND t.value IS NULL GROUP BY s.string_id HAVING tr_count = 0";
 
 		$res 		= mysql_query($sql, $dbh);

@@ -11,6 +11,7 @@
  *    Eclipse Foundation
  *    Jesse Weinstein - [268882] Add link for "STATS" to the Babel home page header
  *    Kit Lo (IBM) - [402192] Extract project source files from Git repositories for translation
+ *    Satoru Yoshida - [481655] jumpto.js and search.js do not exist.
  *******************************************************************************/
 
 global $pageTitle, $pageAuthor, $pageKeywords;
@@ -82,12 +83,12 @@ if(!$User) {
 
 <script src='js/global.js' type='text/javascript'></script>
 <script src='js/projectString.js' type='text/javascript'></script>
-<script src='js/jumpto.js' type='text/javascript'></script>
+<!-- <script src='js/jumpto.js' type='text/javascript'></script> -->
 <script src='js/language.js' type='text/javascript'></script>
 <script src='js/project.js' type='text/javascript'></script>
 <script src='js/version.js' type='text/javascript'></script>
 <script src='js/files.js' type='text/javascript'></script>
-<script src='js/search.js' type='text/javascript'></script>
+<!-- <script src='js/search.js' type='text/javascript'></script> -->
 <script src='js/translation.js' type='text/javascript'></script>
 <script src='js/translationHint.js' type='text/javascript'></script>
 

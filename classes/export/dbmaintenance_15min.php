@@ -9,6 +9,7 @@
  *
  * Contributors:
  *    Eclipse Foundation - Initial API and implementation
+ *    Satoru Yoshida - [470121] scoreboard could be removed if no needed
 *******************************************************************************/
 
 	/*
@@ -35,7 +36,7 @@
 	if(rand(1, 100) < 25 || $forceRefresh) {
 		require_once(dirname(__FILE__) . "/../system/scoreboard.class.php");
 		$sb = new Scoreboard();
-		$sb->refresh();
+		$sb->refresh($forceRefresh);
 		
 		# Refresh file progress
 		# This only needs to happen once in a while too.

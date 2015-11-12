@@ -10,6 +10,7 @@
  *    Eclipse Foundation - Initial API and implementation
  *    Kit Lo (IBM) - [261739] Inconsistent use of language names
  *    Kit Lo (IBM) - [411832] Stats and Recent pages do not show Orion in project dropdown list
+ *    Satoru Yoshida - [221181] Search a specific string
 *******************************************************************************/
 include("global.php");
 
@@ -56,6 +57,13 @@ $FORMAT		= getHTTPParameter("format");
 if($FORMAT == "rss") {
 	$incfile 		= "content/en_recent_rss.php";
 }
+$s_value	= getHTTPParameter("s_value");
+$s_value	= trim($s_value);
+if ($s_value !== '') {
+	$s_value_in_sql = $s_value . '%';
+} else {
+	$s_value_in_sql = '';
+}
 $USERID		= getHTTPParameter("userid");
 $SUBMIT 	= getHTTPParameter("submit");
 
@@ -78,6 +86,10 @@ if($LANGUAGE_ID != "") {
 if($VERSION != "") {
 	$where = addAndIfNotNull($where) . "f.version = ";
 	$where .= returnQuotedString(sqlSanitize($VERSION, $dbh));
+}
+if($s_value_in_sql !== "") {
+	$where = addAndIfNotNull($where) . "s.value like ";
+	$where .= returnQuotedString(sqlSanitize($s_value_in_sql, $dbh));
 }
 if($USERID != "") {
 	$where = addAndIfNotNull($where) . "u.userid = ";

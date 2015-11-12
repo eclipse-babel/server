@@ -13,14 +13,14 @@
 
 class Scoreboard {
 
-	public function refresh() {
+	public function refresh($forceRefresh) {
 		global $dbh;
 		$sql = "SELECT quantity FROM scoreboard " .
 			"WHERE itemid = 'LASGEN' " .
 			"AND quantity < (SELECT MAX(translation_id) as t FROM translations)";
 
 		$result = mysql_query($sql, $dbh);
-		if($result && mysql_num_rows($result) > 0) {
+		if(($result && mysql_num_rows($result) > 0) || $forceRefresh) {
 
 			# "lock" the scoreboard so that 2 clients don't update it simultaneously
 			mysql_query("UPDATE scoreboard SET quantity = 9999999999 WHERE itemid = 'LASGEN'", $dbh);

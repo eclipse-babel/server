@@ -1,6 +1,6 @@
 -- MySQL dump 10.10
 --
--- Host: localhost    Database: babelstg
+-- Host: localhost    Database: babel
 -- ------------------------------------------------------
 -- Server version	5.0.18
 

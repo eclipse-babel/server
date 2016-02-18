@@ -28,6 +28,7 @@
  *    Satoru Yoshida - [349107] properties file for template is located in wrong path
  *    Kit Lo (IBM) - [402215] Extract Orion JavaScript files for translation
  *    Satoru Yoshida - [487881] generate1.php needs some efficiency
+ *    Satoru Yoshida - [487881] generate1.php needs some efficiency, array define fix
  *******************************************************************************/
 
 /*
@@ -86,7 +87,7 @@ $tmp_dir = $work_context_dir . "tmp/";
 $babel_language_packs_dir = $work_context_dir . "babel_language_packs/";
 $output_dir = $work_context_dir . "update-site/";
 $source_files_dir = dirname(__FILE__) . "/source_files_for_generate/";
-$need_nl_path_case = array('templates/', 'config/', 'data/', 'property_files/');
+$need_nl_path_case = array('templates/' => true, 'config/' => true, 'data/' => true, 'property_files/' => true);
 
 $leader = ". ";
 $timestamp = date("Ymdhis");

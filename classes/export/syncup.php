@@ -9,7 +9,8 @@
  * Contributors:
  *    Intalio, Inc. - Initial API and implementation
  *    Antoine Toulme - Initial contribution.
- *    Satoru Yoshida - Bug 380524
+ *    Satoru Yoshida - [380524] Performance up proposal for Babel Syncup
+ *    Satoru Yoshida - [487636] should not sync up non translatable strings
 *******************************************************************************/
 
 // ini_set("memory_limit", "64M");
@@ -50,7 +51,7 @@ function possible_translation($untranslated_value) {
 	$untranslated_value = rtrim($untranslated_value, "\n\r");
 	# BINARY the lookup value instead of the field to support an index.
 	# is_active is not used in consideration of case to reuse.
-	$rs = mysql_query( "SELECT string_id FROM strings WHERE value = BINARY '" . addslashes($untranslated_value) . "'");
+	$rs = mysql_query( "SELECT string_id FROM strings WHERE value = BINARY '" . addslashes($untranslated_value) . "' and non_translatable = 0 ");
 	if ($rs === false) {
 		return NULL;
 	}
@@ -64,7 +65,7 @@ function possible_translation($untranslated_value) {
 	}
 	#if SQL result has many records, last created record will be used.
 	# s.is_active is not used in consideration of case to reuse.
-	$rs2 = mysql_query( "SELECT t.created_on, t.value from strings As s inner join translations AS t on s.string_id = t.string_id where s.string_id IN ($string_ids) and t.language_id = '" . $language_id . "' and t.is_active and s.value <> BINARY t.value order by created_on DESC");
+	$rs2 = mysql_query( "SELECT t.created_on, t.value from strings As s inner join translations AS t on s.string_id = t.string_id where s.string_id IN ($string_ids) and t.language_id = '" . $language_id . "' and t.is_active order by created_on DESC");
 	if ($rs2 and (($translation_row = mysql_fetch_assoc($rs2)) != null)) {
 		return $translation_row['value'];
 	}
@@ -85,7 +86,7 @@ while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
     	$count++;
 
     	if($count % 10000 == 0) {
-    		echo "Processed " . $count . " strings...\n";
+    		echo "Processed ", $count, " strings...\n";
     	}
 
 		$untranslated_value = $string_row['value'];
@@ -101,8 +102,8 @@ while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
 		}
 
        	if ($translation !== null) {
-           	$query = "INSERT INTO translations(string_id, language_id, value, userid, created_on, possibly_incorrect) values('". addslashes($untranslated_id) ."','". addslashes($language_id) ."','" . addslashes($translation) . "', '". addslashes($User->userid) ."', NOW(), 1)";
-           	echo "\tTranslating ". addslashes($untranslated_id) ." with: " . addslashes($translation) . "\n";
+           	$query = "INSERT INTO translations(string_id, language_id, value, userid, created_on) values('". addslashes($untranslated_id) ."','". addslashes($language_id) ."','" . addslashes($translation) . "', '". addslashes($User->userid) ."', NOW())";
+           	echo "\tTranslating ", addslashes($untranslated_id), " with: ", addslashes($translation), "\n";
 			mysql_query($query);
 		}
     }

@@ -76,7 +76,7 @@ if (!isset($options['b'])) {
 	$build_id = $options['b'];
 }
 
-$release_id = "0.13.1";
+$release_id = "0.14.0";
 
 global $addon;
 $work_dir = $addon->callHook('babel_working');
@@ -761,7 +761,7 @@ function usage() {
 	echo "\n";
 	echo "generate1.php -b <build_id> [-t <train_id>]\n";
 	echo "  -b <build_id>: The Build ID for this build.\n";
-	echo "  -t <train_id>: Optional: train to build (mars, luna, kepler, juno, indigo, helios, galileo, ganymede, europa)";
+	echo "  -t <train_id>: Optional: train to build (neon, mars, luna, kepler, juno, indigo, helios, galileo, ganymede, europa)";
 	echo "\n";
 }
 

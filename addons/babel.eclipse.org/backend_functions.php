@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2007-2009 Intalio, Inc.
+ * Copyright (c) 2007-2018 Intalio, Inc. and other
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,54 +8,56 @@
  *
  * Contributors:
  *    Antoine Toulme, Intalio Inc.
+ *    Denis Roy, Eclipse Foundation Inc.
 *******************************************************************************/
 
 
 // Use a class to define the hooks to avoid bugs with already defined functions.
 class BabelEclipseOrg_backend {
-	
+
     /*
      * Authenticate a user.
      * Adds data to the user object passed in argument if authenticated.
      */
     function authenticate($User, $email, $password) {
         global $dbh;
-                
+
         $email      = sqlSanitize($email, $dbh);
         $password   = sqlSanitize($password, $dbh);
-    
+
         // since MySQL ENCRYPT is not supported on windows we have to move encryption
         // from the database layer out to the application layer
         //  https://bugs.eclipse.org/bugs/show_bug.cgi?id=242011
-                 
+
         $hash_query = "SELECT users.password_hash FROM users WHERE email = '$email'";
         $hash_result = mysql_query($hash_query, $dbh);
-             
+
         if ($hash_result && mysql_num_rows($hash_result) > 0) {
             $hash_row = mysql_fetch_assoc($hash_result);
             $hash = $hash_row['password_hash'];
-            
+
             # Handle crypt and sha-256 passwords
             # Bug 287844
             if(preg_match("/{([^}]+)}$/", $hash, $matches)) {
-				$hash_method 	= $matches[0];
-				$salt 			= substr($hash,0,8);
-				$pw = $salt . str_replace("=", "", base64_encode(mhash(MHASH_SHA256, $password . $salt))) . $hash_method;				
-			}
-			else {
-  				$pw = crypt($password, $hash);
-			}
-                    
-        	$sql = "SELECT *
+              $hash_method = $matches[0];
+              $salt = substr($hash,0,8);
+              # 2018-02-27 - Comma separator between salt and hash
+              $pw = $salt . "," . str_replace("=", "", base64_encode(mhash(MHASH_SHA256, $password . $salt))) . $hash_method;				
+            }
+            else {
+              $pw = crypt($password, $hash);
+            }
+
+            $sql = "SELECT *
                         FROM users 
                         WHERE email = '$email' 
                             AND password_hash = '" . $pw . "'";
-                            
+
             $result = mysql_query($sql, $dbh);
             if($result && mysql_num_rows($result) > 0) {
                 $rValue = true;
                 $myrow = mysql_fetch_assoc($result);
-                        
+
                 $User->userid               = $myrow['userid'];
                 $User->username             = $myrow['username'];
                 $User->first_name           = $myrow['first_name'];
@@ -68,7 +70,7 @@ class BabelEclipseOrg_backend {
                 $User->updated_at           = $myrow['updated_at'];
                 $User->created_on           = $myrow['created_on'];
                 $User->created_at           = $myrow['created_at'];
-    
+
             } else {
                 // password failed
                 $GLOBALS['g_ERRSTRS'][1] = mysql_error();
@@ -78,7 +80,7 @@ class BabelEclipseOrg_backend {
             $GLOBALS['g_ERRSTRS'][1] = mysql_error();
         }
     }
-    
+
     /**
      * Returns the genie user that represents the headless admin for most operations,
      * like importing a zip of translations.
@@ -97,7 +99,7 @@ class BabelEclipseOrg_backend {
         $User->loadFromID(3);
         return $User;
     }
-    
+
 	/**
 	 * Returns the name of the current context, one of live, staging or dev.
 	 */
@@ -108,7 +110,7 @@ class BabelEclipseOrg_backend {
 		}
 		return $ini["context"];
 	}
-	
+
 	/**
 	 * Returns a hash of the parameters.
 	 */

@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2007 Eclipse Foundation and others.
+ * Copyright (c) 2007-2018 Eclipse Foundation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -54,8 +54,7 @@ $query = "select
 		  	  files.version = '".addslashes($version)."'
 		  group by translations.version
 		  order by translations.version desc
-		  limit 1
-			";
+		  limit 1";
 
 //print $query;
 
@@ -117,21 +116,6 @@ $query = "SELECT
 		  AND 
 		  	T.is_active = 1
 		  	";
-
-//INSERT INTO translations SELECT S.string_id, 2, "Some Enhanced Text", other fields.....  FROM strings AS S inner join files AS F on F.file_id = S.file_id inner join translations AS T on T.string_id = S.string_id where F.project_id = "eclipse" AND F.name=(SELECT files.name FROM files where file_id = 7) AND S.name="pluginName" and T.value = "Some Old Text" AND T.is_active = 1				
-				
-//print $query;
-
-
-/*
-$res = mysql_query($query,$dbh);
-while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
-	print "<pre>--";
-	print_r($same_trans);
-	print "</pre>";
-}
-*/
-
 ?>
 
 <form id='translation-form'>
@@ -145,7 +129,25 @@ while($same_trans = mysql_fetch_array($res, MYSQL_ASSOC)){
 		</div>
 		<h4 id="translation-hints-title">Translation Hints</h4>
 		<div id="translation-hints" style='overflow-x: hidden; overflow-y: auto; height: 75px;'>
-		Select some English text above to find similar translations.
+		Select some English text above to find similar translations
+		<?php
+		$q_th = "SELECT DISTINCT t.value
+                 FROM translations as t
+                 INNER JOIN strings AS s ON s.string_id = t.string_id
+                 INNER JOIN files   AS f ON s.file_id = f.file_id
+                 WHERE s.value like '" . addslashes(substr($line['string_value'], 0, 15)) . "%'
+                 AND t.is_active
+                 AND t.language_id = '".addslashes($language)."'
+                 ORDER BY LENGTH(t.value) ASC LIMIT 10";
+		$res_th = mysql_query($q_th, $dbh);
+		if(mysql_affected_rows($dbh) > 0) {
+			echo ", or use from the following:<ul>";
+			while($line = mysql_fetch_array($res_th, MYSQL_ASSOC)){
+				echo "<li>", $line['value'], "</li>";
+			}
+			echo "</ul>";
+		}
+		?>
 		</div>
 		
 		<input id='non-translatable-checkbox' type=checkbox name="non_translatable_string" <?= $line['non_translatable'] ? 'checked' : '' ;?>>Non-Translatable		

@@ -127,7 +127,7 @@ $query = "SELECT
 		<div style='overflow: auto; height: 75px;'>
 			<div id="english-string"><?= nl2br(htmlspecialchars($line['string_value'])); ?></div>
 		</div>
-		<h4 id="translation-hints-title">Translation Hints</h4>
+		<h4 id="translation-hints-title">Translation Hints [<a id="clear-btn" href="javascript:clearHints();">Clear</a>]</h4>
 		<div id="translation-hints" style='overflow-x: hidden; overflow-y: auto; height: 75px;'>
 		Select some English text above to find similar translations
 		<?php

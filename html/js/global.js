@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 Eclipse Foundation and others.
+ * Copyright (c) 2007-2018 Eclipse Foundation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -124,11 +124,14 @@ function catchSelection() {
 		// document.selection.empty();
 	}
 	if(sel != "") {
-		if(document.getElementById('translation-hints')) {
+		if(document.getElementById('translation-hints') && !document.getElementById('translation-hints').innerHTML.includes("or use from the following:") ) {
 			var domNode = document.getElementById('translation-hints');
-			
-			domNode.innerHTML = "Please wait, looking for : <b>" + sel + "</b>";			
+
+			domNode.innerHTML = "Please wait, looking for : <b>" + sel + "</b>";
 			showTranslationHints(sel);
 		}
+        	if(document.getElementById('translation-hints') && document.getElementById('translation-hints').innerHTML.includes("or use from the following:") ) {
+            		YAHOO.util.Event.addListener("clear-btn","click",clearHints);
+        	}
 	}
 }

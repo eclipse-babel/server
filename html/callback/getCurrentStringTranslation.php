@@ -67,26 +67,24 @@ $line = mysql_fetch_array($res, MYSQL_ASSOC);
 $trans = "";
 
 if($line['translation_value']){
-	$trans = " AND translations.value = '".addslashes($line['translation_value'])."'  			
+	$trans = " AND translations.value = '".addslashes($line['translation_value'])."' 
 				AND 
 			  translations.is_active = 1
 	";
-}else{
-//	$trans = "translations.value is NULL ";
 }
 
 $query = "select 
 				strings.string_id, strings.value, strings.name max(translations.translation_id)
 			FROM 
 				files,
-				strings								
+				strings
 			left join 
 				translations 
 			on 
 				translations.string_id = strings.string_id 
 			where
 				files.file_id = strings.file_id 
-			AND			
+			AND
 				files.project_id = '".addslashes($project_id)."' 
 			AND 
 				strings.value = '".addslashes($line['string_value'])."'
@@ -94,11 +92,8 @@ $query = "select
 				$trans
 			AND
 				files.is_active = 1
-				group by translations.string_id
-				";
-//			AND 
-//				files.name = (SELECT files.name FROM files as F where F.project_id = '".addslashes($project_id)."')
-				
+				group by translations.string_id";
+
 $query = "SELECT 
 			S.*
 		  FROM 
@@ -129,23 +124,25 @@ $query = "SELECT
 		</div>
 		<h4 id="translation-hints-title">Translation Hints [<a id="clear-btn" href="javascript:clearHints();">Clear</a>]</h4>
 		<div id="translation-hints" style='overflow-x: hidden; overflow-y: auto; height: 75px;'>
-		Select some English text above to find similar translations
-		<?php
-		$q_th = "SELECT DISTINCT t.value
+		<b>Select some English text above to find similar translations</b><?php
+		# offer up some hints is the string is not translated
+		if($line['translation_value'] == "") {
+			$q_th = "SELECT DISTINCT t.value
                  FROM translations as t
                  INNER JOIN strings AS s ON s.string_id = t.string_id
                  INNER JOIN files   AS f ON s.file_id = f.file_id
                  WHERE s.value like '" . addslashes(substr($line['string_value'], 0, 15)) . "%'
                  AND t.is_active
-                 AND t.language_id = '".addslashes($language)."'
+                 AND t.language_id = '" . addslashes($language) . "'
                  ORDER BY LENGTH(t.value) ASC LIMIT 10";
-		$res_th = mysql_query($q_th, $dbh);
-		if(mysql_affected_rows($dbh) > 0) {
-			echo ", or use from the following:<ul>";
-			while($line = mysql_fetch_array($res_th, MYSQL_ASSOC)){
-				echo "<li>", $line['value'], "</li>";
+			$res_th = mysql_query($q_th, $dbh);
+			if(mysql_affected_rows($dbh) > 0) {
+				echo "<b>, or use from the following:</b><ul>";
+				while($translation_hints = mysql_fetch_array($res_th, MYSQL_ASSOC)){
+					echo "<li>", $translation_hints['value'], "</li>";
+				}
+				echo "</ul>";
 			}
-			echo "</ul>";
 		}
 		?>
 		</div>

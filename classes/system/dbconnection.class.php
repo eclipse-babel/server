@@ -20,7 +20,7 @@ class DBConnection {
 		global $addon;
 		$db_params = $addon->callHook('db_params');
   
-		$dbh = mysql_connect($db_params['db_read_host'],$db_params['db_read_user'],$db_params['db_read_pass']);
+		$dbh = @mysql_connect($db_params['db_read_host'],$db_params['db_read_user'],$db_params['db_read_pass']);
 		if (!$dbh) {
 			errorLog("Failed attempt to connect to server - aborting.");
 			exitTo("/error.php?errNo=101301","error: 101301 - data server can not be found");

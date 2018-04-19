@@ -47,7 +47,7 @@ class context{
 }
 $context = new context();
 $context->components_directory = "tables/";
-$context->dbhs['refactor_test'] = mysql_connect("localhost","root","","refactor_test");
+$context->dbhs['refactor_test'] = @mysql_connect("localhost","root","","refactor_test");
 
 $check = new CheckAndModifyDatabaseSchema();
 $worked = $check->check_and_modify( $context );

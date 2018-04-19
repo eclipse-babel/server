@@ -58,7 +58,7 @@ $release_train_id = $argv[2];
 $csv_file = $argv[3];
 
 $sql = "select language_id from languages where iso_code = '" . addslashes($language) ."'";
-$lrow = mysql_fetch_assoc(mysql_query($sql));
+$lrow = mysql_fetch_assoc(mysqli_query($sql));
 if (!$lrow) {
 	echo "This language code is not supported by Babel. Please see the Babel documentation for more information";
 	exit;
@@ -72,7 +72,7 @@ while (($data = fgetcsv($handle)) !== FALSE) {
 SELECT s.string_id FROM files AS f INNER JOIN strings AS s ON f.file_id = s.file_id INNER JOIN release_train_projects as v ON (f.project_id = v.project_id AND f.version = v.version) WHERE f.is_active AND s.non_translatable <> 1 AND s.name = '$data[0]' AND s.value = BINARY '$data[1]' AND v.train_id = '$release_train_id'
 
 SQL;
-    $values = mysql_query($sql);
+    $values = mysqli_query($sql);
     $value_row = mysql_fetch_assoc($values);
     if (!$value_row) {
 	    echo "Could not find the matching record for $data[0] with a value of $data[1]";
@@ -81,7 +81,7 @@ SQL;
     $string_id = $value_row['string_id'];
     
     $sql = "select possibly_incorrect from translations where string_id = $string_id and language_id = $language_id";
-    $tr_row = mysql_fetch_assoc(mysql_query($sql));
+    $tr_row = mysql_fetch_assoc(mysqli_query($sql));
     if ($tr_row) {
 	    if ($fuzzy == 1) {
 		    if ($tr_row['possibly_incorrect'] == 1) {
@@ -95,10 +95,10 @@ SQL;
 		    // we are not fuzzy, for now let's assume it's ok to override non-fuzzy translations when yours aren't either.
 	    }
 	    $query = "UPDATE translations set is_active = 0 where string_id = " . $string_id . " and language_id = '" . $language_id . "'";
-	    mysql_query($query);
+	    mysqli_query($query);
     }
     $query = "INSERT INTO translations(string_id, language_id, value, userid, created_on, possibly_incorrect) values('". addslashes($string_id) ."','".  addslashes($language_id) ."','" . addslashes($data[2]) . "', '". addslashes($USER) ."', NOW(), $fuzzy)";
-    mysql_query($query);
+    mysqli_query($query);
     echo "Added translation \"$data[2]\" for entry '$data[0]'\n";
 }
 fclose($handle);

@@ -31,7 +31,7 @@ if (!$value || !$nl) {
 
 $value = html_entity_decode($value);
 
-$possible_translations = mysql_query(
+$possible_translations = mysqli_query(
 	"SELECT t.value 
 		from strings As s inner join translations AS t on s.string_id = t.string_id
 					inner join languages As l on l.language_id = t.language_id

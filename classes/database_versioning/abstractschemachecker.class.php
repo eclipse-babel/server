@@ -165,7 +165,7 @@ abstract class AbstractSchemaChecker {
 		}
 		$query .= ")";
 		
-		mysql_query($query,$dbh);
+		mysqli_query($dbh, $query);
 	}
 	
 	
@@ -198,7 +198,7 @@ print "\n";//gogo
 				if($v['Key'] == "MUL"){
 					$query .= " DROP INDEX ";
 				}
-				mysql_query($query);
+				mysqli_query($query);
 			}
 		}
 
@@ -221,9 +221,9 @@ print "\n";//gogo
 				}
 				
 				print $query."\n";
-				mysql_query($query);
+				mysqli_query($query);
 				foreach($endqueries as $q){
-					mysql_query($q);
+					mysqli_query($q);
 				}
 				
 			}
@@ -274,7 +274,7 @@ print "\n";//gogo
 	private function getTableDescription($table_name,$dbh){
 		$query = "DESCRIBE $table_name";
 		print $query;
-		$result = mysql_query($query,$dbh);
+		$result = mysqli_query($dbh, $query);
 		$ret = array();
 		while( $row = mysql_fetch_assoc($result) ) {
 			$ret[$row['Field']] = $row;

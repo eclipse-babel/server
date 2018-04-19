@@ -60,7 +60,7 @@ class User {
 				FROM 
 					users 
 				WHERE userid = $_userid";
-			$result = mysql_query($sql, $dbh);
+			$result = mysqli_query($dbh, $sql);
 			if($result && mysql_num_rows($result) > 0) {
 				$rValue = true;
 				$myrow = mysql_fetch_assoc($result);

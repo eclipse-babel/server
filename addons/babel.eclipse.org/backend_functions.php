@@ -30,7 +30,7 @@ class BabelEclipseOrg_backend {
         //  https://bugs.eclipse.org/bugs/show_bug.cgi?id=242011
 
         $hash_query = "SELECT users.password_hash FROM users WHERE email = '$email'";
-        $hash_result = mysql_query($hash_query, $dbh);
+        $hash_result = mysqli_query($dbh, $hash_query);
 
         if ($hash_result && mysql_num_rows($hash_result) > 0) {
             $hash_row = mysql_fetch_assoc($hash_result);
@@ -53,7 +53,7 @@ class BabelEclipseOrg_backend {
                         WHERE email = '$email' 
                             AND password_hash = '" . $pw . "'";
 
-            $result = mysql_query($sql, $dbh);
+            $result = mysqli_query($dbh, $sql);
             if($result && mysql_num_rows($result) > 0) {
                 $rValue = true;
                 $myrow = mysql_fetch_assoc($result);

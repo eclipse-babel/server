@@ -47,7 +47,7 @@ $sql = "SELECT * FROM map_files AS m
 INNER JOIN release_train_projects AS r ON r.project_id = m.project_id AND r.version = m.version 
 INNER JOIN release_trains AS t on t.train_id = r.train_id 
 WHERE m.is_active = 1 AND m.is_map_file = 1 AND t.is_active = 1";
-$rs_maps = mysql_query($sql, $dbh);
+$rs_maps = mysqli_query($dbh, $sql);
 while ($myrow_maps = mysql_fetch_assoc($rs_maps)) {
   $location = $myrow_maps['location'];
   $project_id = $myrow_maps['project_id'];
@@ -62,7 +62,7 @@ while ($myrow_maps = mysql_fetch_assoc($rs_maps)) {
   if (!(isset($files_collected[$project_id]) && isset($files_collected[$project_id][$version]))) {
     $files_collected[$project_id][$version] = 1;
     $sql = "SELECT * FROM files WHERE project_id = \"$project_id\" AND version = \"$version\"";
-    $rs_files = mysql_query($sql, $dbh);
+    $rs_files = mysqli_query($dbh, $sql);
     while($myrow_files = mysql_fetch_assoc($rs_files)) {
       $file = new File();
       $file->project_id = $myrow_files['project_id'];
@@ -77,7 +77,7 @@ while ($myrow_maps = mysql_fetch_assoc($rs_maps)) {
 
   # Collect all plugin exclude patterns for this project version
   $sql = "SELECT pattern FROM plugin_exclude_patterns WHERE project_id = \"$project_id\" AND version = \"$version\"";
-  $rs_patterns = mysql_query($sql, $dbh);
+  $rs_patterns = mysqli_query($dbh, $sql);
   $patterns = Array();
   # Add default exclude patterns
   $patterns[] = "/^.*\/feature.properties$/";

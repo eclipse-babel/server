@@ -17,7 +17,7 @@ require_once("cb_global.php");
 
 
 $query = "SELECT language_id, IF(locale <> '', CONCAT(CONCAT(CONCAT(name, ' ('), locale), ')'), name) as name FROM languages WHERE is_active AND iso_code != 'en' ORDER BY name";
-$res = mysql_query($query,$dbh);
+$res = mysqli_query($dbh, $query);
 
 
 $return = Array();

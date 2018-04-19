@@ -22,7 +22,7 @@ $version 	= getHTTPParameter("version", "POST");
 $query = "SELECT pattern FROM plugin_exclude_patterns WHERE project_id = " . returnQuotedString(sqlSanitize($project_id, $dbh)) .
 	" AND version = " . returnQuotedString(sqlSanitize($version, $dbh));
 
-$res = mysql_query($query, $dbh);
+$res = mysqli_query($dbh, $query);
 if (mysql_affected_rows($dbh) > 0) {
 	while ($line = mysql_fetch_array($res, MYSQL_ASSOC)) {
 		echo $line['pattern'] . "\n";

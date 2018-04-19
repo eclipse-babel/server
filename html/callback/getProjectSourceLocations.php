@@ -22,7 +22,7 @@ $query = "SELECT m.project_id, m.version, r.train_id, m.location FROM project_so
 	WHERE m.project_id = " . returnQuotedString(sqlSanitize($project_id, $dbh)) . "
 	AND m.version = " . returnQuotedString(sqlSanitize($version, $dbh));
 
-$res = mysql_query($query,$dbh);
+$res = mysqli_query($dbh, $query);
 if (mysql_affected_rows($dbh) > 0) {
 	while ($line = mysql_fetch_array($res, MYSQL_ASSOC)) {
 		echo $line['location'] . "\n";

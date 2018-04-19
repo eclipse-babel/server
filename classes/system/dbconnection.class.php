@@ -20,12 +20,13 @@ class DBConnection {
 		global $addon;
 		$db_params = $addon->callHook('db_params');
   
-		$dbh = @mysql_connect($db_params['db_read_host'],$db_params['db_read_user'],$db_params['db_read_pass']);
+		$dbh = mysqli_connect($db_params['db_read_host'],$db_params['db_read_user'],$db_params['db_read_pass'],$db_params['db_read_name']);
 		if (!$dbh) {
 			errorLog("Failed attempt to connect to server - aborting.");
 			exitTo("/error.php?errNo=101301","error: 101301 - data server can not be found");
 		}
 
+		/*
     	$database = $db_params['db_read_name'];
 		if (isset($database)) {
 			if (!mysql_select_db($database)) {
@@ -33,7 +34,8 @@ class DBConnection {
 				exitTo("/error.php?errNo=101303","error: 101303 - unknown database name");
 			}
 		}
-		# mysql_query("SET character_set_results=latin1", $dbh);
+		*/
+		# mysqli_query($dbh, "SET character_set_results=latin1");
 		return $dbh;
 	}
 

@@ -52,7 +52,7 @@ class String {
 								userid		= " . returnQuotedString(sqlSanitize($this->userid, $dbh)) . ",
 								created_on	= " . $created_on . ",
 								is_active	= " . sqlSanitize($this->is_active, $dbh) . $where;
-				if(mysql_query($sql, $dbh)) {
+				if(mysqli_query($dbh, $sql)) {
 					if($this->string_id == 0) {
 						$this->string_id = mysql_insert_id($dbh);
 					}
@@ -101,7 +101,7 @@ class String {
 								userid		= " . returnQuotedString(sqlSanitize($this->userid, $dbh)) . ",
 								created_on	= " . $created_on . ",
 								is_active	= " . sqlSanitize($this->is_active, $dbh) . $where;
-				if(mysql_query($sql, $dbh)) {
+				if(mysqli_query($dbh, $sql)) {
 					if($this->string_id == 0) {
 						$this->string_id = mysql_insert_id($dbh);
 					}
@@ -139,7 +139,7 @@ class String {
 				WHERE file_id = " . sqlSanitize($_file_id, $dbh) . "
 					AND name = BINARY " . returnQuotedString(sqlSanitize($_name, $dbh));	
 
-			$result = mysql_query($sql, $dbh);
+			$result = mysqli_query($dbh, $sql);
 			if($result && mysql_num_rows($result) > 0) {
 				$myrow = mysql_fetch_assoc($result);
 				$String = new String();
@@ -168,7 +168,7 @@ class String {
 				WHERE file_id = " . sqlSanitize($_file_id, $dbh) . "
 					AND name = BINARY " . $_name;
 
-			$result = mysql_query($sql, $dbh);
+			$result = mysqli_query($dbh, $sql);
 			if($result && mysql_num_rows($result) > 0) {
 				$myrow = mysql_fetch_assoc($result);
 				$String = new String();
@@ -196,7 +196,7 @@ class String {
 				WHERE file_id = " . sqlSanitize($_file_id, $dbh) . "
 					AND string_id = " . $_string_id;	
 
-			$result = mysql_query($sql, $dbh);
+			$result = mysqli_query($dbh, $sql);
 			if($result && mysql_num_rows($result) > 0) {
 				$myrow = mysql_fetch_assoc($result);
 				$String = new String();
@@ -230,7 +230,7 @@ class String {
 				WHERE file_id = " . sqlSanitize($_file_id, $dbh) . "
 					AND is_active = 1";	
 
-			$result = mysql_query($sql, $dbh);
+			$result = mysqli_query($dbh, $sql);
 			while($myrow = mysql_fetch_assoc($result)) {
 				$String = new String();
 				$String->string_id 	= $myrow['string_id'];
@@ -260,7 +260,7 @@ class String {
 			$sql = "UPDATE strings 
 					SET is_active = 0 WHERE string_id = " . sqlSanitize($_string_id, $dbh);	
 
-			$rValue = mysql_query($sql, $dbh);
+			$rValue = mysqli_query($dbh, $sql);
 			
 			$Event = new EventLog("strings", "string_id", $_string_id, "DEACTIVATE");
 			$Event->add();

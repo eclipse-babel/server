@@ -28,7 +28,7 @@ class DescribeReleaseTrainClass extends PHPSpec_Context {
 // TODO add a spec for the version of the release train
     
    public function itShouldLoadAllTheReleaseTrains() {
-	 $train_result = mysql_query("SELECT DISTINCT train_id FROM release_train_projects");
+	 $train_result = mysqli_query("SELECT DISTINCT train_id FROM release_train_projects");
      $all = ReleaseTrain::all();
 	 $this->spec(count($all))->should->equal(mysql_num_rows($train_result));
    }

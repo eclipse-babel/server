@@ -135,7 +135,7 @@ switch($state){
 
 //print $query."<br>";
 
-$res = mysql_query($query,$dbh);
+$res = mysqli_query($dbh, $query);
 
 //print mysql_error();
 

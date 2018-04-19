@@ -55,7 +55,7 @@ if($SUBMIT == "Save") {
 		$sql = "DELETE FROM map_files WHERE project_id = "
 			. returnQuotedString(sqlSanitize($PROJECT_ID, $dbh)) 
 			. " AND version = " . returnQuotedString(sqlSanitize($VERSION, $dbh));
-		mysql_query($sql, $dbh);
+		mysqli_query($dbh, $sql);
 
 		# Insert new map files for this project version
 		$list = explode("\n", $FILE_FLD);
@@ -68,7 +68,7 @@ if($SUBMIT == "Save") {
 					. "," . returnQuotedString(sqlSanitize(md5($file), $dbh))
 					. "," . returnQuotedString(sqlSanitize($file, $dbh))
 					. ", 1, $is_Map_file)";
-				mysql_query($sql, $dbh);
+				mysqli_query($dbh, $sql);
 			}
 		}
 
@@ -76,7 +76,7 @@ if($SUBMIT == "Save") {
 		$sql = "DELETE FROM plugin_exclude_patterns WHERE project_id = "
 			. returnQuotedString(sqlSanitize($PROJECT_ID, $dbh)) 
 			. " AND version = " . returnQuotedString(sqlSanitize($VERSION, $dbh));
-		mysql_query($sql, $dbh);
+		mysqli_query($dbh, $sql);
 
 		# Insert new plugin exclude patterns for this project version
 		$list = explode("\n", $PATTERNS);
@@ -89,7 +89,7 @@ if($SUBMIT == "Save") {
 						. returnQuotedString(sqlSanitize($PROJECT_ID, $dbh))
 						. "," . returnQuotedString(sqlSanitize($VERSION, $dbh))
 						. "," . returnQuotedString(sqlSanitize($pattern, $dbh)) . ")";
-					mysql_query($sql, $dbh);
+					mysqli_query($dbh, $sql);
 				}
 			}
 		}
@@ -98,12 +98,12 @@ if($SUBMIT == "Save") {
 		$sql = "DELETE FROM release_train_projects WHERE project_id = "
 			. returnQuotedString(sqlSanitize($PROJECT_ID, $dbh)) 
 			. " AND version = " . returnQuotedString(sqlSanitize($VERSION, $dbh));
-		mysql_query($sql, $dbh);
+		mysqli_query($dbh, $sql);
 		$sql = "INSERT INTO release_train_projects SET project_id = "
 			. returnQuotedString(sqlSanitize($PROJECT_ID, $dbh)) 
 			. ", version = " . returnQuotedString(sqlSanitize($VERSION, $dbh))
 			. ", train_id = " . returnQuotedString(sqlSanitize($TRAIN_ID, $dbh));
-		mysql_query($sql, $dbh);
+		mysqli_query($dbh, $sql);
 		$GLOBALS['g_ERRSTRS'][0] = "Map files saved.";
 	}
 	else {
@@ -116,21 +116,21 @@ if($SUBMIT == "delete") {
 	project_id = " . returnQuotedString(sqlSanitize($PROJECT_ID, $dbh)) . "
 	AND version = " . returnQuotedString(sqlSanitize($VERSION, $dbh)) . "
 	AND filename = ". returnQuotedString(sqlSanitize($FILENAME, $dbh)) . " LIMIT 1";
-	mysql_query($sql, $dbh);
+	mysqli_query($dbh, $sql);
 }
 
 
 $sql = "SELECT project_id FROM projects WHERE is_active = 1 ORDER BY project_id";
-$rs_project_list = mysql_query($sql, $dbh);
+$rs_project_list = mysqli_query($dbh, $sql);
 
 $sql = "SELECT pv.project_id, pv.version, count(m.is_active) AS map_count FROM project_versions as pv left join map_files as m on m.project_id = pv.project_id and m.version = pv.version WHERE pv.is_active = 1 and pv.version != 'unspecified' group by pv.project_id, pv.version ORDER BY pv.project_id ASC, pv.version DESC;";
-$rs_version_list = mysql_query($sql, $dbh);
+$rs_version_list = mysqli_query($dbh, $sql);
 
 $sql = "SELECT train_id FROM release_trains ORDER BY train_id ASC";
-$rs_train_list = mysql_query($sql, $dbh);
+$rs_train_list = mysqli_query($dbh, $sql);
 
 $sql = "SELECT train_id, project_id, version FROM release_train_projects ORDER BY project_id, version ASC";
-$rs_train_project_list = mysql_query($sql, $dbh);
+$rs_train_project_list = mysqli_query($dbh, $sql);
 
 global $addon;
 $addon->callHook("head");

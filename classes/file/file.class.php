@@ -58,7 +58,7 @@ class File {
 							name		= " . returnQuotedString(sqlSanitize($this->name, $dbh)) . ",
 							plugin_id	= " . returnQuotedString(sqlSanitize($this->plugin_id, $dbh)) . ",
 							is_active	= " . $this->is_active . $where;
-			if(mysql_query($sql, $dbh)) {
+			if(mysqli_query($dbh, $sql)) {
 				if($this->file_id == 0) {
 					$this->file_id = mysql_insert_id($dbh);
 					$Event->key_value = $this->file_id;
@@ -89,7 +89,7 @@ class File {
 					AND project_id = " . returnQuotedString(sqlSanitize($_project_id, $dbh)) . "	
 					AND version = '" . sqlSanitize($_version, $dbh) . "'";
 
-			$result = mysql_query($sql, $dbh);
+			$result = mysqli_query($dbh, $sql);
 			if($result && mysql_num_rows($result) > 0) {
 				$myrow = mysql_fetch_assoc($result);
 				$rValue = $myrow['file_id'];
@@ -108,7 +108,7 @@ class File {
 			global $dbh;
 			$strings = array();
 			$sql = "SELECT * from strings WHERE is_active = 1 AND file_id = $this->file_id";
-			$rs_strings = mysql_query($sql, $dbh);
+			$rs_strings = mysqli_query($dbh, $sql);
 			while ($myrow_strings = mysql_fetch_assoc($rs_strings)) {
 			  $string = new String();
 			  $string->string_id = $myrow_strings['string_id'];
@@ -202,7 +202,7 @@ class File {
 			global $dbh;
 			$strings = array();
 			$sql = "SELECT * from strings WHERE is_active = 1 AND file_id = $this->file_id";
-			$rs_strings = mysql_query($sql, $dbh);
+			$rs_strings = mysqli_query($dbh, $sql);
 			while ($myrow_strings = mysql_fetch_assoc($rs_strings)) {
 			  $string = new String();
 			  $string->string_id = $myrow_strings['string_id'];
@@ -288,7 +288,7 @@ class File {
 		if (strcmp($language->iso, "en_AA") == 0) {
 			$sql = "SELECT string_id, name, value FROM strings WHERE file_id = " . $this->file_id .
 			" AND is_active AND non_translatable = 0";
-			$strings_result = mysql_query($sql);
+			$strings_result = mysqli_query($sql);
 			while (($strings_row = mysql_fetch_assoc($strings_result)) != null) {
 				$result[$strings_row['name']] = $this->project_id . $strings_row['string_id'] . ":" . $strings_row['value'];
 			}
@@ -304,7 +304,7 @@ class File {
 				AND strings.non_translatable = 0
 				AND translations.language_id = " . $language->id . "
 				AND translations.is_active";
-			$strings_result = mysql_query($sql);
+			$strings_result = mysqli_query($sql);
 			while (($strings_row = mysql_fetch_assoc($strings_result)) != null) {
 				$result[$strings_row['key']] = $strings_row['trans'];
 			}

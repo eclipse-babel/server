@@ -68,10 +68,10 @@ $USERID		= getHTTPParameter("userid");
 $SUBMIT 	= getHTTPParameter("submit");
 
 $sql = "SELECT DISTINCT pv_m.project_id, pv_m.version FROM project_versions AS pv_m INNER JOIN map_files as m ON pv_m.project_id = m.project_id AND pv_m.version = m.version WHERE pv_m.is_active UNION SELECT DISTINCT pv_s.project_id, pv_s.version FROM project_versions AS pv_s INNER JOIN project_source_locations as s ON pv_s.project_id = s.project_id AND pv_s.version = s.version WHERE pv_s.is_active ORDER BY project_id ASC, version DESC";
-$rs_p_list = mysql_query($sql, $dbh);
+$rs_p_list = mysqli_query($dbh, $sql);
 
 $sql = "SELECT language_id, IF(locale <> '', CONCAT(CONCAT(CONCAT(name, ' ('), locale), ')'), name) as name FROM languages WHERE is_active AND iso_code != 'en' ORDER BY name";
-$rs_l_list = mysql_query($sql, $dbh);
+$rs_l_list = mysqli_query($dbh, $sql);
 
 $where = " t.is_active ";
 
@@ -123,7 +123,7 @@ FROM
 $where
 ORDER BY t.created_on desc 
 LIMIT $LIMIT";
-$rs_p_stat = mysql_query($sql, $dbh);
+$rs_p_stat = mysqli_query($dbh, $sql);
 global $addon;
 $addon->callHook("head");
 include($incfile);

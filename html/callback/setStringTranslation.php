@@ -47,7 +47,7 @@ if (empty($translation) || (trim($translation) == '')) {
 			  and 
 			  	is_active = 1
 			  ";
-	$res = mysql_query($query,$dbh);
+	$res = mysqli_query($dbh, $query);
 	
 	$query = "insert into 
 					translations
@@ -59,7 +59,7 @@ if (empty($translation) || (trim($translation) == '')) {
 				  	possibly_incorrect = '".addslashes($fuzzy_state)."',
 				  	created_on = NOW()
 				  	";
-	$res = mysql_query($query,$dbh);
+	$res = mysqli_query($dbh, $query);
 	$affected_rows += mysql_affected_rows();
 	
 //	print $query;
@@ -79,14 +79,14 @@ if (empty($translation) || (trim($translation) == '')) {
 			  and f.project_id =  the_file_selected_for_translation.project_id
 			  and s.is_active = 1";
 		  	
-	$res = mysql_query($query,$dbh);
+	$res = mysqli_query($dbh, $query);
 	while($row = mysql_fetch_assoc($res)){
 		$string_ids[] = $row['string_id'];
 	}
 	
 	//GET CURRENT TRANSLATION FOR THIS STRING
 	$query= "select value from translations where string_id = '".addslashes($string_id)."' and language_id = '".addslashes($language_id)."' and is_active = 1 order by version limit 1";
-	$res = mysql_query($query,$dbh);
+	$res = mysqli_query($dbh, $query);
 	$string_translation = "";
 	while($row = mysql_fetch_assoc($res)){
 		$string_translation = $row['value'];
@@ -108,11 +108,11 @@ if (empty($translation) || (trim($translation) == '')) {
 			and language_id = '" . addslashes($language_id)."'
 		  ";
 		
-		$res = mysql_query($query,$dbh);
+		$res = mysqli_query($dbh, $query);
 		while($row = mysql_fetch_assoc($res)){
 			//DE-ACTIVATE ALL OLD TRANSLATIONS
 			$query = "update translations set is_active = 0 where translation_id = '".addslashes($row['translation_id'])."'";	
-			$res2 = mysql_query($query,$dbh);
+			$res2 = mysqli_query($dbh, $query);
 			
 			//INSERT NEW TRANSLATIONS
 			$query = "insert into 
@@ -125,7 +125,7 @@ if (empty($translation) || (trim($translation) == '')) {
   						possibly_incorrect = '".addslashes($fuzzy_state)."',
 				   		created_on  = NOW()
 					";
-			$res2 = mysql_query($query,$dbh);
+			$res2 = mysqli_query($dbh, $query);
 			$affected_rows += mysql_affected_rows();
 			
 		}
@@ -146,7 +146,7 @@ if (empty($translation) || (trim($translation) == '')) {
 				strings.string_id in (".addslashes(implode(',',$string_ids)).")
 		";
 		
-		$res = mysql_query($query,$dbh);
+		$res = mysqli_query($dbh, $query);
 		
 		while($row = mysql_fetch_assoc($res)){
 			$translation_ids[] = $row['string_id'];
@@ -161,7 +161,7 @@ if (empty($translation) || (trim($translation) == '')) {
   						userid = '".addslashes($user_id)."',
 				   		created_on  = NOW()
 					";
-			$res2 = mysql_query($query,$dbh);
+			$res2 = mysqli_query($dbh, $query);
 			$affected_rows += mysql_affected_rows();
 		}	
 	}	
@@ -177,7 +177,7 @@ if(!$do_nothing) {
 		WHERE s.value = BINARY (select value from strings where string_id = '".addslashes($string_id)."')  
 			AND s.is_active = 1 AND t.value IS NULL GROUP BY s.string_id HAVING tr_count = 0";
 
-		$res 		= mysql_query($sql, $dbh);
+		$res 		= mysqli_query($dbh, $sql);
 		$str_count 	= mysql_affected_rows();
 	
 		while($myrow = mysql_fetch_assoc($res)) {
@@ -189,7 +189,7 @@ if(!$do_nothing) {
 					  	value = '".addslashes($translation)."',
 					  	userid = '".addslashes($user_id)."',
 					  	created_on = NOW()";
-			mysql_query($sql, $dbh);
+			mysqli_query($dbh, $sql);
 			$affected_rows += mysql_affected_rows();
 		}
 	}

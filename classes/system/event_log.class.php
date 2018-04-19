@@ -61,7 +61,7 @@ class EventLog {
 					userid = " 		. sqlSanitize($User->userid, $dbh) . ",
 					created_on = NOW()";
 
-			mysql_query($sql, $dbh);
+			mysqli_query($dbh, $sql);
 			if(mysql_error() != "") {
 				echo "An unknown database error has occurred while logging information.  Please contact the System Administrator.";
 				echo mysql_error();

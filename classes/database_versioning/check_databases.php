@@ -20,7 +20,7 @@ $spent_quries = array();
 function mysql_remember_query($sql,$dbh){
 	global $spent_quries;
 	$spent_quries[] = $sql;
-	return mysql_query($sql,$dbh);
+	return mysqli_query($dbh, $sql);
 }
 
 function dirs($path){
@@ -47,7 +47,7 @@ class context{
 }
 $context = new context();
 $context->components_directory = "tables/";
-$context->dbhs['refactor_test'] = @mysql_connect("localhost","root","","refactor_test");
+$context->dbhs['refactor_test'] = mysqli_connect("localhost","root","","refactor_test");
 
 $check = new CheckAndModifyDatabaseSchema();
 $worked = $check->check_and_modify( $context );

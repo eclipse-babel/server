@@ -50,30 +50,30 @@ FROM files AS f
 WHERE f.is_active = 1 
 GROUP BY f.file_id, l.language_id
 HAVING translate_percent > 0";
-		$rs = mysql_query($sql, $dbh);
+		$rs = mysqli_query($dbh, $sql);
 		while($myrow = mysql_fetch_assoc($rs)) {
-			mysql_query("INSERT INTO file_progress (file_id, language_id, pct_complete)
+			mysqli_query($dbh, "INSERT INTO file_progress (file_id, language_id, pct_complete)
 			VALUES(" . $myrow['file_id'] . ", " . $myrow['language_id'] . ", " . $myrow['translate_percent'] . ")
-			ON DUPLICATE KEY UPDATE pct_complete=" . $myrow['translate_percent'], $dbh);
+			ON DUPLICATE KEY UPDATE pct_complete=" . $myrow['translate_percent']);
 		}
-		mysql_query("DELETE FROM file_progress WHERE pct_complete = 0", $dbh);
+		mysqli_query($dbh, "DELETE FROM file_progress WHERE pct_complete = 0");
 	}
 	
 	# Update project/version/language progress 
 	$sql = "SELECT * FROM project_progress WHERE is_stale";
-	$rs = mysql_query($sql, $dbh);
+	$rs = mysqli_query($dbh, $sql);
 	while($myrow = mysql_fetch_assoc($rs)) {
-		mysql_query("LOCK TABLES project_progress WRITE, 
+		mysqli_query($dbh, "LOCK TABLES project_progress WRITE, 
 			project_versions AS v READ, 
 			files AS f READ, 
 			strings AS s READ, 
 			translations AS t READ,
 			languages AS l READ
-			", $dbh);
+			");
 		$sql = "DELETE /* dbmaintenance_15min.php */ FROM project_progress where project_id = '" . addslashes($myrow['project_id']) . "'
    					AND version = '" . addslashes($myrow['version']) . "' 
    					AND language_id = " . $myrow['language_id'];
-		mysql_query($sql, $dbh);
+		mysqli_query($dbh, $sql);
 
 		$sql = "INSERT /* dbmaintenance_15min.php */ INTO project_progress SET project_id = '" . addslashes($myrow['project_id']) . "',
    					version = '" . addslashes($myrow['version']) . "',
@@ -93,11 +93,11 @@ HAVING translate_percent > 0";
 					        v.project_id = '" . addslashes($myrow['project_id']) . "'
 					        AND v.version = '" . addslashes($myrow['version']) . "'
 					 )";
-		mysql_query($sql, $dbh);
+		mysqli_query($dbh, $sql);
 		echo mysql_error();
 		
 		# Let's lock and unlock in the loop to allow other queries to go through. There's no rush on completing these stats.
-		mysql_query("UNLOCK TABLES", $dbh);
+		mysqli_query($dbh, "UNLOCK TABLES");
 		sleep(2);
 	}
 ?>

@@ -15,7 +15,7 @@ require_once("frag_global.php");
 
 $query = "SELECT value, quantity FROM scoreboard WHERE itemid = 'TOPTR' ORDER BY quantity DESC";
 
-$res = mysql_query($query);
+$res = mysqli_query($query);
 
 ?>
 <div id="top-translators-area">

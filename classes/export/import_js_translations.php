@@ -57,7 +57,7 @@ foreach ($lines as $line) {
 		FROM files AS F, languages AS L WHERE F.is_active = 1 
 		AND F.project_id = '" . $PROJECT_ID . "' AND F.version = '" . $VERSION . "'
 			AND F.name LIKE '%" . $file . "' AND L.iso_code = '" . $language . "'";
-		$rs = mysql_query($SQL, $dbh);
+		$rs = mysqli_query($dbh, $SQL);
 		if($myrow = mysql_fetch_assoc($rs)) {
 			$file_id 		= $myrow['file_id'];
 			$language_id 	= $myrow['language_id'];
@@ -91,7 +91,7 @@ foreach ($lines as $line) {
 	    					and trv.language_id = $language_id
 	    					and trv.value = '" . addslashes(unescape($value)) . "')
 							WHERE s.is_active = 1 AND s.non_translatable <> 1 AND s.file_id = " . $file_id . " AND s.name = '" . $key . "'";
-							$rs_string = mysql_query($SQL, $dbh);
+							$rs_string = mysqli_query($dbh, $SQL);
 						if ($rs_string) {
 							$myrow_string = mysql_fetch_assoc($rs_string);
 							if($myrow_string['string_id'] > 0  				# There is an English string   
@@ -111,13 +111,13 @@ foreach ($lines as $line) {
 								}
 								# echo "    Language: " . $language . " - Found string with ID: " . $myrow_string['string_id'] . " value: " . $myrow_string['value'] . " never translated to: " . $value . "\n";
 								$SQL = "UPDATE translations set is_active = 0 where string_id = " . $myrow_string['string_id'] . " and language_id = '" . $language_id . "'";
-								mysql_query($SQL, $dbh);
+								mysqli_query($dbh, $SQL);
 								$SQL = "INSERT INTO translations (translation_id, string_id, language_id, version, value, possibly_incorrect, is_active, userid, created_on)
 								VALUES (
 									NULL, " . $myrow_string['string_id'] . ", 
 									" . $language_id . ", 0, '" . addslashes(unescape($value)) . "', $insert_as_fuzzy, 1, " . $USER . ", NOW()
 								)";
-								mysql_query($SQL, $dbh);
+								mysqli_query($dbh, $SQL);
 								# echo $SQL;
 							}
 						}

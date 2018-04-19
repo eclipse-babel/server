@@ -21,7 +21,7 @@ INNER JOIN files AS F ON P.project_id = F.project_id
 WHERE P.is_active = 1";
 
 
-	$res = mysql_query($query,$dbh);
+	$res = mysqli_query($dbh, $query);
 
 //	$return = '<ul id="project-choices">';
 

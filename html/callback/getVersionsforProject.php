@@ -33,7 +33,7 @@ if(isset($_SESSION['language']) && isset($_SESSION['project'])) {
 	order by
 		f.version desc";
 
-	$res = mysql_query($query,$dbh);
+	$res = mysqli_query($dbh, $query);
 
 	$return = array();
 

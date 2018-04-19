@@ -19,8 +19,8 @@ class DescribeUserClass extends PHPSpec_Context {
 
 	public function before() {
       //delete all users from the test DB then recreate one.
-      mysql_query("DELETE FROM users");
-      mysql_query('insert into users set userid = 1, username = "babel@eclipse.org", first_name="babel", last_name="fish", email="babel@eclipse.org", primary_language_id = "", password_hash = "HSD9a.ShTTdvo", is_committer = true, updated_on = NOW(), updated_at="",created_on = NOW(), created_at=""');
+      mysqli_query("DELETE FROM users");
+      mysqli_query('insert into users set userid = 1, username = "babel@eclipse.org", first_name="babel", last_name="fish", email="babel@eclipse.org", primary_language_id = "", password_hash = "HSD9a.ShTTdvo", is_committer = true, updated_on = NOW(), updated_at="",created_on = NOW(), created_at=""');
     }
 
     public function itShouldBeAbleToFindAUserFromItsEmailAndItsPassword() {

@@ -58,7 +58,7 @@ $query = "select
 
 //print $query;
 
-$res = mysql_query($query,$dbh);
+$res = mysqli_query($dbh, $query);
 
 $line = mysql_fetch_array($res, MYSQL_ASSOC);
 
@@ -135,7 +135,7 @@ $query = "SELECT
                  AND t.is_active
                  AND t.language_id = '" . addslashes($language) . "'
                  ORDER BY LENGTH(t.value) ASC LIMIT 10";
-			$res_th = mysql_query($q_th, $dbh);
+			$res_th = mysqli_query($dbh, $q_th);
 			if(mysql_affected_rows($dbh) > 0) {
 				echo "<b>, or use from the following:</b><ul>";
 				while($translation_hints = mysql_fetch_array($res_th, MYSQL_ASSOC)){
@@ -178,7 +178,7 @@ $query = "SELECT
 		<table>
 		<?php
 			$query = "select value,first_name,last_name,translations.created_on, possibly_incorrect as fuzzy from translations,users where string_id = '".addslashes($line['string_id'])."' and language_id = '".addslashes($language)."' and translations.userid = users.userid order by translations.created_on desc";
-			$res_history = mysql_query($query,$dbh);
+			$res_history = mysqli_query($dbh, $query);
 			
 			if(!mysql_num_rows($res_history)){
 				print "No history.";

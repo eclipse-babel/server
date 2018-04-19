@@ -17,7 +17,7 @@ $query = "select
 		  	strings.string_id = '".addslashes($string_id)."
 		 '";
 
-$res = mysql_query($query,$dbh);
+$res = mysqli_query($dbh, $query);
 $row = mysql_fetch_assoc($res);
 
 if($checked_state == "true"){
@@ -36,7 +36,7 @@ $query = "update
 			AND strings.file_id = files.file_id
 		  ";
 
-$res = mysql_query($query,$dbh);
+$res = mysqli_query($dbh, $query);
 $updated_rows = mysql_affected_rows();
 
 if($updated_rows < 0){

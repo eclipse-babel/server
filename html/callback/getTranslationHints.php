@@ -38,7 +38,7 @@ WHERE s.value like '" . addslashes($tr_string). "%'
  AND t.language_id = '".addslashes($language)."'
 ORDER BY LENGTH(t.value) ASC LIMIT 15";
 
-$res = mysql_query($query,$dbh);
+$res = mysqli_query($dbh, $query);
 if(mysql_affected_rows($dbh) > 0) {
 	echo "<ul>";
 	while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
@@ -60,7 +60,7 @@ else {
 	 AND t.language_id = '".addslashes($language)."'
 	ORDER BY LENGTH(t.value) ASC LIMIT 15";
 	
-	$res = mysql_query($query2,$dbh);
+	$res = mysqli_query($dbh, $query2);
 	if(mysql_affected_rows($dbh) > 0) {
 		echo "<ul>";
 		while($line = mysql_fetch_array($res, MYSQL_ASSOC)){

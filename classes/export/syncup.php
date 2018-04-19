@@ -51,7 +51,7 @@ function possible_translation($untranslated_value) {
 	$untranslated_value = rtrim($untranslated_value, "\n\r");
 	# BINARY the lookup value instead of the field to support an index.
 	# is_active is not used in consideration of case to reuse.
-	$rs = mysql_query( "SELECT string_id FROM strings WHERE value = BINARY '" . addslashes($untranslated_value) . "' and non_translatable = 0 ");
+	$rs = mysqli_query( "SELECT string_id FROM strings WHERE value = BINARY '" . addslashes($untranslated_value) . "' and non_translatable = 0 ");
 	if ($rs === false) {
 		return NULL;
 	}
@@ -65,21 +65,21 @@ function possible_translation($untranslated_value) {
 	}
 	#if SQL result has many records, last created record will be used.
 	# s.is_active is not used in consideration of case to reuse.
-	$rs2 = mysql_query( "SELECT t.created_on, t.value from strings As s inner join translations AS t on s.string_id = t.string_id where s.string_id IN ($string_ids) and t.language_id = '" . $language_id . "' and t.is_active order by created_on DESC");
+	$rs2 = mysqli_query( "SELECT t.created_on, t.value from strings As s inner join translations AS t on s.string_id = t.string_id where s.string_id IN ($string_ids) and t.language_id = '" . $language_id . "' and t.is_active order by created_on DESC");
 	if ($rs2 and (($translation_row = mysql_fetch_assoc($rs2)) != null)) {
 		return $translation_row['value'];
 	}
 	return null;
 }
 
-$language_result = mysql_query( "SELECT language_id, iso_code, IF(locale <> '', CONCAT(CONCAT(CONCAT(name, ' ('), locale), ')'), name) as name FROM languages WHERE languages.is_active AND languages.language_id<>1 ORDER BY name ASC" );
+$language_result = mysqli_query( "SELECT language_id, iso_code, IF(locale <> '', CONCAT(CONCAT(CONCAT(name, ' ('), locale), ')'), name) as name FROM languages WHERE languages.is_active AND languages.language_id<>1 ORDER BY name ASC" );
 while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
 	$language_name = $language_row['name'];
 	$language_iso = $language_row['iso_code'];
 	$language_id = $language_row['language_id'];
 	echo "\nInvestigating $language_name ($language_iso) (language_id=$language_id)\n";
 	#In performance purpose, the SQL sorts a temporary table, TEMP.
-	$untranslated_strings = mysql_query( "SELECT * FROM (SELECT string_id, value from strings where is_active and non_translatable = 0 and value <> '' and string_id not in(select string_id from translations where language_id=$language_id) ) AS TEMP order by value" );
+	$untranslated_strings = mysqli_query( "SELECT * FROM (SELECT string_id, value from strings where is_active and non_translatable = 0 and value <> '' and string_id not in(select string_id from translations where language_id=$language_id) ) AS TEMP order by value" );
 	$count = 0;
 	$prev_value = '';
     while ( ($string_row = mysql_fetch_assoc($untranslated_strings)) != null) {
@@ -104,7 +104,7 @@ while( ($language_row = mysql_fetch_assoc($language_result)) != null ) {
        	if ($translation !== null) {
            	$query = "INSERT INTO translations(string_id, language_id, value, userid, created_on) values('". addslashes($untranslated_id) ."','". addslashes($language_id) ."','" . addslashes($translation) . "', '". addslashes($User->userid) ."', NOW())";
            	echo "\tTranslating ", addslashes($untranslated_id), " with: ", addslashes($translation), "\n";
-			mysql_query($query);
+			mysqli_query($query);
 		}
     }
 }

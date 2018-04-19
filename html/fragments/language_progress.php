@@ -16,7 +16,7 @@ require_once("frag_global.php");
 
 $query = "SELECT value, quantity FROM scoreboard WHERE itemid = 'LANGPR' ORDER BY quantity DESC";
 
-$res = mysql_query($query);
+$res = mysqli_query($query);
 
 ?>
 <div id="trans-progress-area">

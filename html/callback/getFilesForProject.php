@@ -58,7 +58,7 @@ WHERE
 
 # print $query."\n";
 
-$res = mysql_query($query,$dbh);
+$res = mysqli_query($dbh, $query);
 
 
 while($line = mysql_fetch_array($res, MYSQL_ASSOC)){

@@ -44,7 +44,7 @@ class Session {
 		
 		$sql = "SELECT id, userid, gid, subnet, updated_at FROM sessions WHERE gid = " . returnQuotedString($_gid);
 		
-		$result = mysql_query($sql, $dbh);
+		$result = mysqli_query($dbh, $sql);
 		if($result && mysql_num_rows($result) > 0) {
 			$rValue = true;
 			$myrow = mysql_fetch_assoc($result);
@@ -67,7 +67,7 @@ class Session {
 		
 		$sql = "UPDATE sessions SET updated_at = NOW() WHERE gid = " . returnQuotedString($_gid);
 		
-		mysql_query($sql, $dbh);
+		mysqli_query($dbh, $sql);
 	}
 
 	function destroy() {
@@ -75,7 +75,7 @@ class Session {
 		if($cookie != "" && $this->load($cookie)) {
 			global $dbh;
 			$sql = "DELETE FROM sessions WHERE userid = " . $this->_userid;
-			mysql_query($sql, $dbh);
+			mysqli_query($dbh, $sql);
 		}
 		setcookie(COOKIE_REMEMBER, "", -36000, "/");
 		session_destroy();
@@ -99,7 +99,7 @@ class Session {
 				" . returnQuotedString($this->_gid) . ",
 				" . returnQuotedString($this->_subnet) . ",
 				NOW())";
-		mysql_query($sql, $dbh);
+		mysqli_query($dbh, $sql);
 		$cookieTime = 0;
 		if($_remember) {
 			$cookieTime = time()+3600*24*365;
@@ -118,7 +118,7 @@ class Session {
 					OR (userid = " . $this->_userid . "
 						AND subnet = " . returnQuotedString($this->getSubnet()) . "
 						AND gid <> " . returnQuotedString($this->_gid) . ")";
-		mysql_query($sql, $dbh);
+		mysqli_query($dbh, $sql);
 	}
 		
 	function getSubnet() {

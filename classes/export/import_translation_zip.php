@@ -84,7 +84,7 @@ foreach ($lines as $line) {
 		AND F.project_id = '" . $PROJECT_ID . "' AND F.version = '" . $VERSION . "'
 			AND F.name LIKE '%" . $first_part_file . "%' AND F.name LIKE '%" . $second_part_file . "' AND L.iso_code = '" . $language . "'";
 		$rs = mysqli_query($dbh, $SQL);
-		if($myrow = mysql_fetch_assoc($rs)) {
+		if($myrow = mysqli_fetch_assoc($rs)) {
 			$file_id 		= $myrow['file_id'];
 			$language_id 	= $myrow['language_id'];
 			echo "  Found file: " . $file_id . "\n";
@@ -95,7 +95,7 @@ foreach ($lines as $line) {
 			AND F.project_id = '" . $PROJECT_ID . "' AND F.version = '" . $VERSION . "'
 				AND F.name LIKE '%" . $first_part_file . "%' AND F.name LIKE '%" . $last_part_file . "' AND L.iso_code = '" . $language . "'";
 			$rs = mysqli_query($dbh, $SQL);
-			if($myrow = mysql_fetch_assoc($rs)) {
+			if($myrow = mysqli_fetch_assoc($rs)) {
 				$file_id 		= $myrow['file_id'];
 				$language_id 	= $myrow['language_id'];
 				echo "  Found file: " . $file_id . "\n";
@@ -154,7 +154,7 @@ foreach ($lines as $line) {
 	    					and trv.value = '" . addslashes(unescape($tags[1])) . "')
 							WHERE s.is_active = 1 AND s.non_translatable <> 1 AND s.file_id = " . $file_id . " AND s.name = '" . $tags[0] . "'";
 							$rs_string = mysqli_query($dbh, $SQL);
-							$myrow_string = mysql_fetch_assoc($rs_string);
+							$myrow_string = mysqli_fetch_assoc($rs_string);
 							if($myrow_string['string_id'] > 0  				# There is an English string   
 								 && $tags[1] != ""							# With a non-null English value
 								 && $myrow_string['ever_tr_value'] == ""	# That's never been translated to this incoming value

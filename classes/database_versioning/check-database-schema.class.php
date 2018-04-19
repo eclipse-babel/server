@@ -26,7 +26,7 @@ class CheckAndModifyDatabaseSchema {
 	
 			if( file_exists( $dir . "$component/check-database-schema.php" ) ) {
 				echo "Checking db schema for table '$component'\n";
-				mysql_select_db($component);
+				mysqli_select_db($dbh, $component);
 				// the included code uses the context to check (and perhaps modify) the database(s) schemas
 				include_once( $dir . "$component/check-database-schema.php" );
 				$checkername = $component . "_SchemaChecker";

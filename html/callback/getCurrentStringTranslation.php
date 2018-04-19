@@ -60,7 +60,7 @@ $query = "select
 
 $res = mysqli_query($dbh, $query);
 
-$line = mysql_fetch_array($res, MYSQL_ASSOC);
+$line = mysqli_fetch_array($res, MYSQL_ASSOC);
 
 //print_r($line);
 
@@ -136,9 +136,9 @@ $query = "SELECT
                  AND t.language_id = '" . addslashes($language) . "'
                  ORDER BY LENGTH(t.value) ASC LIMIT 10";
 			$res_th = mysqli_query($dbh, $q_th);
-			if(mysql_affected_rows($dbh) > 0) {
+			if(mysqli_affected_rows($dbh) > 0) {
 				echo "<b>, or use from the following:</b><ul>";
-				while($translation_hints = mysql_fetch_array($res_th, MYSQL_ASSOC)){
+				while($translation_hints = mysqli_fetch_array($res_th, MYSQL_ASSOC)){
 					echo "<li>", $translation_hints['value'], "</li>";
 				}
 				echo "</ul>";
@@ -180,10 +180,10 @@ $query = "SELECT
 			$query = "select value,first_name,last_name,translations.created_on, possibly_incorrect as fuzzy from translations,users where string_id = '".addslashes($line['string_id'])."' and language_id = '".addslashes($language)."' and translations.userid = users.userid order by translations.created_on desc";
 			$res_history = mysqli_query($dbh, $query);
 			
-			if(!mysql_num_rows($res_history)){
+			if(!mysqli_num_rows($res_history)){
 				print "No history.";
 			}else{		
-				while($line = mysql_fetch_array($res_history, MYSQL_ASSOC)){
+				while($line = mysqli_fetch_array($res_history, MYSQL_ASSOC)){
 					$fuzzy = "";
 					if($line['fuzzy'] == 1) {
 						$fuzzy = "<img src='images/fuzzy.png' />";

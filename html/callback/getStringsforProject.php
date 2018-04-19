@@ -137,11 +137,11 @@ switch($state){
 
 $res = mysqli_query($dbh, $query);
 
-//print mysql_error();
+//print mysqli_error();
 
 $stringids = Array();
 $return = Array();
-while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
+while($line = mysqli_fetch_array($res, MYSQL_ASSOC)){
     if(isset($stringids[$line['stringId']])){
  		  continue;
     }else{

@@ -26,8 +26,8 @@ $query = "SELECT m.project_id, m.version, r.train_id, m.location, m.filename FRO
 	AND m.version = " . returnQuotedString(sqlSanitize($version, $dbh));
 
 $res = mysqli_query($dbh, $query);
-if (mysql_affected_rows($dbh) > 0) {
-	while ($line = mysql_fetch_array($res, MYSQL_ASSOC)) {
+if (mysqli_affected_rows($dbh) > 0) {
+	while ($line = mysqli_fetch_array($res, MYSQL_ASSOC)) {
 		echo $line['location'] . "\n";
 	}
 } else {

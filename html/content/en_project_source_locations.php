@@ -12,7 +12,7 @@
 <tr>
   <td>Project:</td>
   <td><select name="project_id" onchange="fnSetVersionList();" style="width:150px"><?php
-	while($myrow = mysql_fetch_assoc($rs_project_list)) {
+	while($myrow = mysqli_fetch_assoc($rs_project_list)) {
 		$selected = "";
 		if($myrow['project_id'] == $PROJECT_ID) {
 			$selected = 'selected="selected"';
@@ -30,7 +30,7 @@
 <tr>
   <td>Release Train:</td>
   <td><select name="train_id" style="width:150px"><?php
-	while($myrow = mysql_fetch_assoc($rs_train_list)) {
+	while($myrow = mysqli_fetch_assoc($rs_train_list)) {
 		$selected = "";
 		if($myrow['train_id'] == $TRAIN_ID) {
 			$selected = 'selected="selected"';
@@ -134,7 +134,7 @@ echo $addon->callHook('validate_map_file_url');
 <?php
 	$prev_project = "";
 	$count = 0;
-	while($myrow = mysql_fetch_assoc($rs_version_list)) {
+	while($myrow = mysqli_fetch_assoc($rs_version_list)) {
 		if($prev_project != $myrow['project_id']) {
 			if($count > 0) {
 				echo "];
@@ -164,7 +164,7 @@ echo $addon->callHook('validate_map_file_url');
 <?php
 	$prev_project = "";
 	$count = 0;
-	while($myrow = mysql_fetch_assoc($rs_train_project_list)) {
+	while($myrow = mysqli_fetch_assoc($rs_train_project_list)) {
 		if($prev_project != $myrow['project_id']) {
 			if($count > 0) {
 				echo "};

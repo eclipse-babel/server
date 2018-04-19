@@ -14,8 +14,8 @@ require_once("frag_global.php");
 
 $query = "SELECT value FROM sys_values WHERE itemid = 'MOTD' AND value IS NOT NULL AND value <> '' LIMIT 1";
 
-if ($res = mysqli_query($query)) {
-	if ($row = mysql_fetch_assoc($res)) {
+if ($res = mysqli_query($dbh, $query)) {
+	if ($row = mysqli_fetch_assoc($res)) {
 		echo "<div id='motd'>";
 		echo $row['value'];
 		echo "</div>";

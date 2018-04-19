@@ -29,8 +29,8 @@
 <tr class="head">
 <?php
     $i = 0;
-	while($i < mysql_num_fields($rs_p_stat)) {
-		 $meta = mysql_fetch_field($rs_p_stat, $i);
+	while($i < mysqli_num_fields($rs_p_stat)) {
+		 $meta = mysqli_fetch_field($rs_p_stat, $i);
 		 $align = "";
 		 if($meta->numeric) {
 		 	$align="align='right'";
@@ -41,7 +41,7 @@
  ?></tr>
 <?php
 	$rowcount=0;
-	while($myrow = mysql_fetch_assoc($rs_p_stat)) {
+	while($myrow = mysqli_fetch_assoc($rs_p_stat)) {
 		$rowcount++;
 		$class="";
 		if($rowcount % 2) {
@@ -49,8 +49,8 @@
 		}
 		echo "<tr $class>";
 		$i = 0;
-		while($i < mysql_num_fields($rs_p_stat)) {
-			$meta = mysql_fetch_field($rs_p_stat, $i);
+		while($i < mysqli_num_fields($rs_p_stat)) {
+			$meta = mysqli_fetch_field($rs_p_stat, $i);
 			$align = "";
 		 	if($meta->numeric) {
 		 		$align="align='right'";

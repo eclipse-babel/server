@@ -39,9 +39,9 @@ WHERE s.value like '" . addslashes($tr_string). "%'
 ORDER BY LENGTH(t.value) ASC LIMIT 15";
 
 $res = mysqli_query($dbh, $query);
-if(mysql_affected_rows($dbh) > 0) {
+if(mysqli_affected_rows($dbh) > 0) {
 	echo "<ul>";
-	while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
+	while($line = mysqli_fetch_array($res, MYSQL_ASSOC)){
 		echo "<li>", $line['value'], "</li>";
 	}
 	echo "</ul>";
@@ -61,9 +61,9 @@ else {
 	ORDER BY LENGTH(t.value) ASC LIMIT 15";
 	
 	$res = mysqli_query($dbh, $query2);
-	if(mysql_affected_rows($dbh) > 0) {
+	if(mysqli_affected_rows($dbh) > 0) {
 		echo "<ul>";
-		while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
+		while($line = mysqli_fetch_array($res, MYSQL_ASSOC)){
 			echo "<li>", $line['value'], "</li>";
 		}
 		echo "</ul>";

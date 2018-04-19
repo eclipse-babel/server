@@ -54,9 +54,9 @@ class Feature {
 				WHERE project_id = \"". $project->id ."\"
 					AND version = \"". $project->version ."\"
 					AND language_id = " . $this->language->id;
-			$project_pct_complete_result = mysqli_query($sql);
+			$project_pct_complete_result = mysqli_query($dbh, $sql);
 			if ($project_pct_complete_result and 
-				(($project_pct_complete = mysql_fetch_assoc($project_pct_complete_result)) != null)) {
+				(($project_pct_complete = mysqli_fetch_assoc($project_pct_complete_result)) != null)) {
 				if (!isSet($pct)) {
 					$pct = $project_pct_complete['pct_complete'];
 				} else {
@@ -292,10 +292,10 @@ class Feature {
 			AND s.non_translatable <> 1
 			AND v.train_id = '$train'
 SQL;
-		$result = mysqli_query($sql);
+		$result = mysqli_query($dbh, $sql);
 		$f = fopen("$this->output_dir/" . $this->filename() . ".csv", "w");
-		while (($row = mysql_fetch_assoc($result)) != null) {
-		    $value_row = mysql_fetch_assoc(mysqli_query("SELECT value from translations where string_id = " . $row['string_id'] . " and language_id = " . $language));
+		while (($row = mysqli_fetch_assoc($result)) != null) {
+		    $value_row = mysqli_fetch_assoc(mysqli_query($dbh, "SELECT value from translations where string_id = " . $row['string_id'] . " and language_id = " . $language));
 			$value = '';
 			if ($value_row != null) {
 				$value = $value_row['value'];

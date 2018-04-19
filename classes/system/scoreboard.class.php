@@ -20,7 +20,7 @@ class Scoreboard {
 			"AND quantity < (SELECT MAX(translation_id) as t FROM translations)";
 
 		$result = mysqli_query($dbh, $sql);
-		if(($result && mysql_num_rows($result) > 0) || $forceRefresh) {
+		if(($result && mysqli_num_rows($result) > 0) || $forceRefresh) {
 
 			# "lock" the scoreboard so that 2 clients don't update it simultaneously
 			mysqli_query($dbh, "UPDATE scoreboard SET quantity = 9999999999 WHERE itemid = 'LASGEN'");

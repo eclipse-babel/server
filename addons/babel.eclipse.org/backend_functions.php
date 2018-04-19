@@ -32,8 +32,8 @@ class BabelEclipseOrg_backend {
         $hash_query = "SELECT users.password_hash FROM users WHERE email = '$email'";
         $hash_result = mysqli_query($dbh, $hash_query);
 
-        if ($hash_result && mysql_num_rows($hash_result) > 0) {
-            $hash_row = mysql_fetch_assoc($hash_result);
+        if ($hash_result && mysqli_num_rows($hash_result) > 0) {
+            $hash_row = mysqli_fetch_assoc($hash_result);
             $hash = $hash_row['password_hash'];
 
             # Handle crypt and sha-256 passwords
@@ -54,9 +54,9 @@ class BabelEclipseOrg_backend {
                             AND password_hash = '" . $pw . "'";
 
             $result = mysqli_query($dbh, $sql);
-            if($result && mysql_num_rows($result) > 0) {
+            if($result && mysqli_num_rows($result) > 0) {
                 $rValue = true;
-                $myrow = mysql_fetch_assoc($result);
+                $myrow = mysqli_fetch_assoc($result);
 
                 $User->userid               = $myrow['userid'];
                 $User->username             = $myrow['username'];
@@ -73,11 +73,11 @@ class BabelEclipseOrg_backend {
 
             } else {
                 // password failed
-                $GLOBALS['g_ERRSTRS'][1] = mysql_error();
+                $GLOBALS['g_ERRSTRS'][1] = mysqli_error();
             }
         } else {
             // username failed
-            $GLOBALS['g_ERRSTRS'][1] = mysql_error();
+            $GLOBALS['g_ERRSTRS'][1] = mysqli_error();
         }
     }
 

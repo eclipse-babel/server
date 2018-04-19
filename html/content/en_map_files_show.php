@@ -4,7 +4,7 @@
 <tr>
   <td>Project</td><td align="right">Version</td><td>Train</td><td>URL</td><td>File name</td><td>Delete</td></tr>
 <?php
-	while($myrow = mysql_fetch_assoc($rs_map_file_list)) {
+	while($myrow = mysqli_fetch_assoc($rs_map_file_list)) {
 		$train_id = $myrow['train_id'];
 		if ($train_id == null)
 			$train_id = "&nbsp";

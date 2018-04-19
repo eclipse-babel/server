@@ -62,10 +62,10 @@ class EventLog {
 					created_on = NOW()";
 
 			mysqli_query($dbh, $sql);
-			if(mysql_error() != "") {
+			if(mysqli_error() != "") {
 				echo "An unknown database error has occurred while logging information.  Please contact the System Administrator.";
-				echo mysql_error();
-				$rValue = "MYSQL: " . mysql_error();
+				echo mysqli_error();
+				$rValue = "MYSQL: " . mysqli_error();
 			}
 		}
 		else {

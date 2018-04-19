@@ -54,12 +54,12 @@ class String {
 								is_active	= " . sqlSanitize($this->is_active, $dbh) . $where;
 				if(mysqli_query($dbh, $sql)) {
 					if($this->string_id == 0) {
-						$this->string_id = mysql_insert_id($dbh);
+						$this->string_id = mysqli_insert_id($dbh);
 					}
 					$rValue = true;
 				}
 				else {
-					$GLOBALS['g_ERRSTRS'][1] = mysql_error();
+					$GLOBALS['g_ERRSTRS'][1] = mysqli_error();
 				}
 			}
 			else {
@@ -103,12 +103,12 @@ class String {
 								is_active	= " . sqlSanitize($this->is_active, $dbh) . $where;
 				if(mysqli_query($dbh, $sql)) {
 					if($this->string_id == 0) {
-						$this->string_id = mysql_insert_id($dbh);
+						$this->string_id = mysqli_insert_id($dbh);
 					}
 					$rValue = true;
 				}
 				else {
-					$GLOBALS['g_ERRSTRS'][1] = mysql_error();
+					$GLOBALS['g_ERRSTRS'][1] = mysqli_error();
 				}
 			}
 			else {
@@ -140,8 +140,8 @@ class String {
 					AND name = BINARY " . returnQuotedString(sqlSanitize($_name, $dbh));	
 
 			$result = mysqli_query($dbh, $sql);
-			if($result && mysql_num_rows($result) > 0) {
-				$myrow = mysql_fetch_assoc($result);
+			if($result && mysqli_num_rows($result) > 0) {
+				$myrow = mysqli_fetch_assoc($result);
 				$String = new String();
 				$String->string_id 	= $myrow['string_id'];
 				$String->file_id 	= $myrow['file_id'];
@@ -169,8 +169,8 @@ class String {
 					AND name = BINARY " . $_name;
 
 			$result = mysqli_query($dbh, $sql);
-			if($result && mysql_num_rows($result) > 0) {
-				$myrow = mysql_fetch_assoc($result);
+			if($result && mysqli_num_rows($result) > 0) {
+				$myrow = mysqli_fetch_assoc($result);
 				$String = new String();
 				$String->string_id 	= $myrow['string_id'];
 				$String->file_id 	= $myrow['file_id'];
@@ -197,8 +197,8 @@ class String {
 					AND string_id = " . $_string_id;	
 
 			$result = mysqli_query($dbh, $sql);
-			if($result && mysql_num_rows($result) > 0) {
-				$myrow = mysql_fetch_assoc($result);
+			if($result && mysqli_num_rows($result) > 0) {
+				$myrow = mysqli_fetch_assoc($result);
 				$String = new String();
 				$String->string_id 	= $myrow['string_id'];
 				$String->file_id 	= $myrow['file_id'];
@@ -231,7 +231,7 @@ class String {
 					AND is_active = 1";	
 
 			$result = mysqli_query($dbh, $sql);
-			while($myrow = mysql_fetch_assoc($result)) {
+			while($myrow = mysqli_fetch_assoc($result)) {
 				$String = new String();
 				$String->string_id 	= $myrow['string_id'];
 				$String->file_id 	= $myrow['file_id'];

@@ -21,8 +21,8 @@ $query = "SELECT is_map_file FROM map_files WHERE project_id = " . returnQuotedS
 	" AND version = " . returnQuotedString(sqlSanitize($version, $dbh)) . " LIMIT 1";
 
 $res = mysqli_query($dbh, $query);
-if (mysql_affected_rows($dbh) > 0) {
-	while ($line = mysql_fetch_array($res, MYSQL_ASSOC)) {
+if (mysqli_affected_rows($dbh) > 0) {
+	while ($line = mysqli_fetch_array($res, MYSQL_ASSOC)) {
 		echo $line['is_map_file'];
 	}
 } else {

@@ -15,14 +15,14 @@ require_once("frag_global.php");
 
 $query = "SELECT value, quantity FROM scoreboard WHERE itemid = 'TOPTR' ORDER BY quantity DESC";
 
-$res = mysqli_query($query);
+$res = mysqli_query($dbh, $query);
 
 ?>
 <div id="top-translators-area">
 	<h2>Top Translators</h2>
 	<dl>
 	<?php
-		while($row = mysql_fetch_assoc($res)) {
+		while($row = mysqli_fetch_assoc($res)) {
 			echo "<dt>" . $row['value'] . "</dt>";
 			echo "<dd>" . $row['quantity'] . "</dd>";
 		}

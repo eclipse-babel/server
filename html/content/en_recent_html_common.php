@@ -5,7 +5,7 @@
  <td><select name="project_version">
  <option value="">All projects</option>
 <?php
-	while($myrow = mysql_fetch_assoc($rs_p_list)) {
+	while($myrow = mysqli_fetch_assoc($rs_p_list)) {
 		$selected = "";
 		if($myrow['project_id'] . "|" . $myrow['version'] == $PROJECT_ID . "|" . $VERSION) {
 			$selected = 'selected="selected"';
@@ -33,7 +33,7 @@
    <td><select name="language_id">
    <option value="All">All languages</option>
 <?php
-	while($myrow = mysql_fetch_assoc($rs_l_list)) {
+	while($myrow = mysqli_fetch_assoc($rs_l_list)) {
 		$selected = "";
 		if($myrow['language_id'] == $LANGUAGE_ID) {
 			$selected = 'selected="selected"';

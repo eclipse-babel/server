@@ -17,7 +17,7 @@ include("abstractschemachecker.class.php");
 global $spent_quries;
 $spent_quries = array();
 
-function mysql_remember_query($sql,$dbh){
+function remember_query($dbh, $sql){
 	global $spent_quries;
 	$spent_quries[] = $sql;
 	return mysqli_query($dbh, $sql);

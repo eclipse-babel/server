@@ -18,7 +18,7 @@ $query = "select
 		 '";
 
 $res = mysqli_query($dbh, $query);
-$row = mysql_fetch_assoc($res);
+$row = mysqli_fetch_assoc($res);
 
 if($checked_state == "true"){
 	$checked_state = 1;
@@ -37,7 +37,7 @@ $query = "update
 		  ";
 
 $res = mysqli_query($dbh, $query);
-$updated_rows = mysql_affected_rows();
+$updated_rows = mysqli_affected_rows($dbh);
 
 if($updated_rows < 0){
 	$message = "An error has occurred in processing your request, please file a bug.";

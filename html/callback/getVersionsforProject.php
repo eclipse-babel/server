@@ -37,7 +37,7 @@ if(isset($_SESSION['language']) && isset($_SESSION['project'])) {
 
 	$return = array();
 
-	while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
+	while($line = mysqli_fetch_array($res, MYSQL_ASSOC)){
 		$ret = Array();
 		$ret['version'] = $line['version'];
 		$ret['pct'] = $line['pct_complete'];

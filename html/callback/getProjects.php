@@ -25,7 +25,7 @@ WHERE P.is_active = 1";
 
 //	$return = '<ul id="project-choices">';
 
-	while($line = mysql_fetch_array($res, MYSQL_ASSOC)){
+	while($line = mysqli_fetch_array($res, MYSQL_ASSOC)){
 		$ret = Array();
 		$ret['project'] = $line['project_id'];
 		//	$ret['version'] = $line['version'];

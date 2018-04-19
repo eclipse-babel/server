@@ -51,7 +51,7 @@ WHERE f.is_active = 1
 GROUP BY f.file_id, l.language_id
 HAVING translate_percent > 0";
 		$rs = mysqli_query($dbh, $sql);
-		while($myrow = mysql_fetch_assoc($rs)) {
+		while($myrow = mysqli_fetch_assoc($rs)) {
 			mysqli_query($dbh, "INSERT INTO file_progress (file_id, language_id, pct_complete)
 			VALUES(" . $myrow['file_id'] . ", " . $myrow['language_id'] . ", " . $myrow['translate_percent'] . ")
 			ON DUPLICATE KEY UPDATE pct_complete=" . $myrow['translate_percent']);
@@ -62,7 +62,7 @@ HAVING translate_percent > 0";
 	# Update project/version/language progress 
 	$sql = "SELECT * FROM project_progress WHERE is_stale";
 	$rs = mysqli_query($dbh, $sql);
-	while($myrow = mysql_fetch_assoc($rs)) {
+	while($myrow = mysqli_fetch_assoc($rs)) {
 		mysqli_query($dbh, "LOCK TABLES project_progress WRITE, 
 			project_versions AS v READ, 
 			files AS f READ, 
@@ -94,7 +94,7 @@ HAVING translate_percent > 0";
 					        AND v.version = '" . addslashes($myrow['version']) . "'
 					 )";
 		mysqli_query($dbh, $sql);
-		echo mysql_error();
+		echo mysqli_error();
 		
 		# Let's lock and unlock in the loop to allow other queries to go through. There's no rush on completing these stats.
 		mysqli_query($dbh, "UNLOCK TABLES");

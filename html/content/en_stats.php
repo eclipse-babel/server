@@ -28,7 +28,7 @@
  <td><select name="project_version">
  <option value="">All projects</option>
 <?php
-	while($myrow = mysql_fetch_assoc($rs_p_list)) {
+	while($myrow = mysqli_fetch_assoc($rs_p_list)) {
 		$selected = "";
 		if($myrow['project_id'] . "|" . $myrow['version'] == $PROJECT_ID . "|" . $VERSION) {
 			$selected = 'selected="selected"';
@@ -40,7 +40,7 @@
    <td><select name="language_id">
    <option value="">All languages</option>
 <?php
-	while($myrow = mysql_fetch_assoc($rs_l_list)) {
+	while($myrow = mysqli_fetch_assoc($rs_l_list)) {
 		$selected = "";
 		if($myrow['language_id'] == $LANGUAGE_ID) {
 			$selected = 'selected="selected"';
@@ -54,8 +54,8 @@
 <tr class="head">
 <?php
     $i = 0;
-	while($i < mysql_num_fields($rs_p_stat)) {
-		 $meta = mysql_fetch_field($rs_p_stat, $i);
+	while($i < mysqli_num_fields($rs_p_stat)) {
+		 $meta = mysqli_fetch_field($rs_p_stat, $i);
 		 $align = "";
 		 if($meta->numeric) {
 		 	$align="align='right'";
@@ -66,7 +66,7 @@
  ?></tr>
 <?php
 	$rowcount=0;
-	while($myrow = mysql_fetch_assoc($rs_p_stat)) {
+	while($myrow = mysqli_fetch_assoc($rs_p_stat)) {
 		$rowcount++;
 		$class="";
 		if($rowcount % 2) {
@@ -74,8 +74,8 @@
 		}
 		echo "<tr $class>";
 		$i = 0;
-		while($i < mysql_num_fields($rs_p_stat)) {
-			$meta = mysql_fetch_field($rs_p_stat, $i);
+		while($i < mysqli_num_fields($rs_p_stat)) {
+			$meta = mysqli_fetch_field($rs_p_stat, $i);
 			$align = "";
 		 	if($meta->numeric) {
 		 		$align="align='right'";

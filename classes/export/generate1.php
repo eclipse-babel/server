@@ -43,9 +43,9 @@ require(dirname(__FILE__) . "/../system/dbconnection.class.php");
 # Get all release trains
 $dbc = new DBConnection();
 $dbh = $dbc->connect();
-$result = mysqli_query("SELECT * FROM release_trains ORDER BY train_version DESC");
+$result = mysqli_query($dbh, "SELECT * FROM release_trains ORDER BY train_version DESC");
 $train_result = array();
-while ($train_row = mysql_fetch_assoc($result)) {
+while ($train_row = mysqli_fetch_assoc($result)) {
   $train_result[$train_row['train_id']] = $train_row['train_version'];
 }
 
@@ -136,13 +136,13 @@ foreach ($train_result as $train_id => $train_version) {
 	exec("mkdir ${output_dir_for_train}plugins/");
 
 	$sql = "SELECT language_id, iso_code, IF(locale <> '', CONCAT(CONCAT(CONCAT(name, ' ('), locale), ')'), name) as name, is_active, IF(language_id = 1,1,0) AS sorthack FROM languages ORDER BY sorthack, name ASC";
-	$language_result = mysqli_query($sql);
+	$language_result = mysqli_query($dbh, $sql);
 	if($language_result === FALSE) {
 		# We may have lost the database connection with our shell-outs, reconnect
 		$dbh = $dbc->connect();
-		$language_result = mysqli_query($sql);
+		$language_result = mysqli_query($dbh, $sql);
 	}
-	while (($language_row = mysql_fetch_assoc($language_result)) != null) {
+	while (($language_row = mysqli_fetch_assoc($language_result)) != null) {
 		$language_name = $language_row['name'];
 		$language_iso = $language_row['iso_code'];
 		$language_id = $language_row['language_id'];
@@ -155,14 +155,14 @@ foreach ($train_result as $train_id => $train_version) {
 
 		# Determine which plug-ins need to be in this language pack
 		if (strcmp($language_iso, "en_AA") == 0) {
-			$file_result = mysqli_query("SELECT DISTINCT f.project_id, f.version, f.file_id, f.name
+			$file_result = mysqli_query($dbh, "SELECT DISTINCT f.project_id, f.version, f.file_id, f.name
 				FROM files AS f
 				INNER JOIN strings AS s ON f.file_id = s.file_id
 				INNER JOIN release_train_projects as v ON (f.project_id = v.project_id AND f.version = v.version)
 				WHERE f.is_active
 				AND v.train_id = '" . $train_id . "'");
 		} else {
-			$file_result = mysqli_query("SELECT DISTINCT f.project_id, f.version, f.file_id, f.name
+			$file_result = mysqli_query($dbh, "SELECT DISTINCT f.project_id, f.version, f.file_id, f.name
 				FROM files AS f
 				INNER JOIN strings AS s ON f.file_id = s.file_id
 				INNER JOIN translations AS t ON (s.string_id = t.string_id AND t.is_active)
@@ -177,7 +177,7 @@ foreach ($train_result as $train_id => $train_version) {
 		$projects_include_orion = array();
 		$project_versions = array();
 		$pseudo_translations_indexes = array();
-		while (($file_row = mysql_fetch_assoc($file_result)) != null) {
+		while (($file_row = mysqli_fetch_assoc($file_result)) != null) {
 			# save original filename
 			$file_row['origname'] = $file_row['name'];
 
@@ -274,8 +274,8 @@ foreach ($train_result as $train_id => $train_version) {
 				if (strcmp($language_iso, "en_AA") == 0) {
 					$sql = "SELECT string_id, name, value FROM strings WHERE file_id = " . $properties_file['file_id'] .
 						" AND is_active AND non_translatable = 0";
-					$strings_result = mysqli_query($sql);
-					while (($strings_row = mysql_fetch_assoc($strings_result)) != null) {
+					$strings_result = mysqli_query($dbh, $sql);
+					while (($strings_row = mysqli_fetch_assoc($strings_result)) != null) {
 						/* Check for value starting with form tag (bug 270456) */
 						if (preg_match("/^(<form>)(.*)/i", $strings_row['value'], $matches)) {
 							$pattern = "/^(<form>)(.*)/i";
@@ -309,8 +309,8 @@ foreach ($train_result as $train_id => $train_version) {
 						AND strings.non_translatable = 0
 						AND translations.language_id = " . $language_id . "
 						AND translations.is_active";
-					$strings_result = mysqli_query($sql);
-					while (($strings_row = mysql_fetch_assoc($strings_result)) != null) {
+					$strings_result = mysqli_query($dbh, $sql);
+					while (($strings_row = mysqli_fetch_assoc($strings_result)) != null) {
 						fwrite($outp, "\n" . $strings_row['key'] . "=");
 						# echo "${leader1S}${leaderS}${leaderS}${leaderS}" . $strings_row['key'] . "=";
 						if ($strings_row['trans']) {
@@ -568,8 +568,8 @@ foreach ($train_result as $train_id => $train_version) {
 					WHERE project_id = \"$project_id\"
 						AND version = \"$project_version\"
 						AND language_id = $language_id";
-				$project_pct_complete_result = mysqli_query($sql);
-				$project_pct_complete = mysql_result($project_pct_complete_result, 0);
+				$project_pct_complete_result = mysqli_query($dbh, $sql);
+				$project_pct_complete = mysqli_result($project_pct_complete_result, 0);
 			}
 
 			$outp = fopen("$tmp_dir/feature.xml", "w");

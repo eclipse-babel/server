@@ -28,8 +28,8 @@ abstract class AbstractSchemaChecker {
 		if( $context->testmode && $context->initmode === false ) {
 			echo "..creating in memory <br>\n";
 		 	$sql = "DROP TABLE IF EXISTS $tablename ";
-		 	mysql_remember_query( $sql, $dbh );
-		 	mysql_error_check();
+		 	remember_query($dbh, $sql);
+		 	mysqli_error_check($dbh);
 		 	$sql = $this->$createfunction('');
 		 	$translations = array(
 				'/param(\d+) TEXT/' => 'param\1 varchar(1024)',
@@ -52,14 +52,14 @@ abstract class AbstractSchemaChecker {
 			return true;
 		} else {
 			$table_name = $tablename.$tablenamesuffix;		
-			$result = mysql_remember_query( "DESCRIBE $tablename$tablenamesuffix", $dbh );
-			if( strlen(mysql_error()) > 0 ) {
+			$result = remember_query($dbh, "DESCRIBE $tablename$tablenamesuffix");
+			if( strlen(mysqli_error()) > 0 ) {
 				if( $context->devmode
 				 || $context->testmode
 				 || $databasename == 'myfoundation' ) {
 					echo "..does not exist, creating <br>\n";
 					$this->create_db( $this->$createfunction($tablenamesuffix),  $dbh );
-					$result = mysql_remember_query( "DESCRIBE $tablename$tablenamesuffix", $dbh );
+					$result = remember_query($dbh, "DESCRIBE $tablename$tablenamesuffix");
 					$str = $this->table_has_schema($result, $tablename . $tablenamesuffix, $schemas[count($schemas)], $dbh);
 					if( $str === false )
 						return true;
@@ -69,10 +69,10 @@ abstract class AbstractSchemaChecker {
 						return false;
 					}
 				} else {
-//				print mysql_error();
+//				print mysqli_error();
 					echo "..does not exist, error <br>\n";
 					$this->createTableFromSchema($table_name,$schemas[count($schemas)],$dbh,$context);				
-					$result = mysql_remember_query( "DESCRIBE $tablename$tablenamesuffix", $dbh );
+					$result = remember_query($dbh, "DESCRIBE $tablename$tablenamesuffix");
 					$str = $this->table_has_schema($result, $tablename . $tablenamesuffix, $schemas[count($schemas)], $dbh);
 					if( $str === false )
 						return true;
@@ -87,7 +87,7 @@ abstract class AbstractSchemaChecker {
 			$laststr = '';
 			for( $i = 1; $i <= count($schemas); $i++ ) {
 				if( $i > 1 )
-					$result = mysql_remember_query( "DESCRIBE $tablename$tablenamesuffix", $dbh );
+					$result = remember_query($dbh, "DESCRIBE $tablename$tablenamesuffix");
 				$str = $this->table_has_schema($result, $tablename . $tablenamesuffix, $schemas[$i], $dbh);
 				if( $str === false )
 					$lastmatch = $i;
@@ -98,10 +98,10 @@ abstract class AbstractSchemaChecker {
 				if( $context->devmode
 				 || $context->testmode ) {
 		  			echo "..no matching schema, deleting and recreating <br>\n";
-		  			mysql_remember_query( "DROP TABLE $tablename$tablenamesuffix", $dbh);
-					mysql_error_check();
+		  			remember_query($dbh, "DROP TABLE $tablename$tablenamesuffix");
+					mysqli_error_check($dbh);
 					$this->create_db( $this->$createfunction($tablenamesuffix),  $dbh );
-					$result = mysql_remember_query( "DESCRIBE $tablename$tablenamesuffix", $dbh );
+					$result = remember_query($dbh, "DESCRIBE $tablename$tablenamesuffix");
 					$str = $this->table_has_schema($result, $tablename . $tablenamesuffix, $schemas[count($schemas)], $dbh);
 					if( $str === false )
 						return true;
@@ -129,7 +129,7 @@ abstract class AbstractSchemaChecker {
 			 		$modifyfunction = 'modify_' . $tablename . '_' . $i . '_' . ($i+1);
 			 		$this->$modifyfunction( $tablenamesuffix, $dbh );
 			 	}
-				$result = mysql_remember_query( "DESCRIBE $tablename$tablenamesuffix", $dbh );
+				$result = remember_query($dbh, "DESCRIBE $tablename$tablenamesuffix");
 				$str = $this->table_has_schema($result, $tablename . $tablenamesuffix, $schemas[count($schemas)], $dbh);
 				if( $str === false )
 					return true;
@@ -186,7 +186,7 @@ print "\n";//gogo
 				print "MODIFY - $k\n";
 				if($diff['Default'] or $diff['Field']){
 					$modq = "alter table $table_name modify  $k ".$new_fields[$k]['Type']." ".$new_fields[$k]['Default']. " ".$diff['Extra'];
-					mysql_remember_query($modq,$dbh);
+					remember_query($dbh, $modq);
 				}
 			}else{
 				//drop new field
@@ -198,7 +198,7 @@ print "\n";//gogo
 				if($v['Key'] == "MUL"){
 					$query .= " DROP INDEX ";
 				}
-				mysqli_query($query);
+				mysqli_query($dbh, $query);
 			}
 		}
 
@@ -221,9 +221,9 @@ print "\n";//gogo
 				}
 				
 				print $query."\n";
-				mysqli_query($query);
+				mysqli_query($dbh, $query);
 				foreach($endqueries as $q){
-					mysqli_query($q);
+					mysqli_query($dbh, $q);
 				}
 				
 			}
@@ -276,7 +276,7 @@ print "\n";//gogo
 		print $query;
 		$result = mysqli_query($dbh, $query);
 		$ret = array();
-		while( $row = mysql_fetch_assoc($result) ) {
+		while( $row = mysqli_fetch_assoc($result) ) {
 			$ret[$row['Field']] = $row;
 		}	
 		return $ret;
@@ -308,15 +308,15 @@ print "\n";//gogo
 	}
 	
 	private function create_db( $sql, $dbh ) {
-		mysql_remember_query( $sql, $dbh );
-		mysql_error_check();
+		remember_query($dbh, $sql);
+		mysqli_error_check($dbh);
 	}
 	
 	/* returns error string if error, null if schema matches */
 	private function table_has_schema( $result, $tablename, $schemadescription, $dbh ) {
 		$schema = $this->splitSchema($schemadescription);
 		
-		while( $row = mysql_fetch_assoc($result) ) {
+		while( $row = mysqli_fetch_assoc($result) ) {
 			if( !array_key_exists($row['Field'], $schema) ) {
 				$rtrn .= "..column " . $row['Field'] . " not in schema  <br>\n";
 				continue;

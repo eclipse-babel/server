@@ -23,8 +23,8 @@ $query = "SELECT pattern FROM plugin_exclude_patterns WHERE project_id = " . ret
 	" AND version = " . returnQuotedString(sqlSanitize($version, $dbh));
 
 $res = mysqli_query($dbh, $query);
-if (mysql_affected_rows($dbh) > 0) {
-	while ($line = mysql_fetch_array($res, MYSQL_ASSOC)) {
+if (mysqli_affected_rows($dbh) > 0) {
+	while ($line = mysqli_fetch_array($res, MYSQL_ASSOC)) {
 		echo $line['pattern'] . "\n";
 	}
 } else {

@@ -28,7 +28,7 @@ img {
 <?php
 	$prev_date = "";
 	$rowcount=0;
-	while($myrow = mysql_fetch_assoc($rs_p_stat)) {
+	while($myrow = mysqli_fetch_assoc($rs_p_stat)) {
 		$rowcount++;
 		if($prev_date != substr($myrow['created_on'],0,10)) {
 			$prev_date = substr($myrow['created_on'],0,10);

@@ -57,9 +57,9 @@ class Fragment {
 				AND f.is_active
 				AND v.train_id = '" . $train->id . "'";
 		}
-		$file_result = mysqli_query($sql);
+		$file_result = mysqli_query($dbh, $sql);
 		$plugins = array();
-		while (($file_row = mysql_fetch_assoc($file_result)) != null) {
+		while (($file_row = mysqli_fetch_assoc($file_result)) != null) {
 			$f = new File();
 			$f->file_id = $file_row['file_id'];
 			$f->name = $file_row['name'];

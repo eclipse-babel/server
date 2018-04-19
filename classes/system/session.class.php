@@ -45,9 +45,9 @@ class Session {
 		$sql = "SELECT id, userid, gid, subnet, updated_at FROM sessions WHERE gid = " . returnQuotedString($_gid);
 		
 		$result = mysqli_query($dbh, $sql);
-		if($result && mysql_num_rows($result) > 0) {
+		if($result && mysqli_num_rows($result) > 0) {
 			$rValue = true;
-			$myrow = mysql_fetch_assoc($result);
+			$myrow = mysqli_fetch_assoc($result);
 			$this->_id			= $myrow['id'];
 			$this->_userid		= $myrow['userid'];
 			$this->_gid			= $myrow['gid'];
@@ -55,7 +55,7 @@ class Session {
 			$this->updated_at	= $myrow['updated_at'];
 		}
 		else {
-			$GLOBALS['g_ERRSTRS'][1] = mysql_error();
+			$GLOBALS['g_ERRSTRS'][1] = mysqli_error();
 		}
 		
 		return $rValue;

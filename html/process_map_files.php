@@ -48,7 +48,7 @@ INNER JOIN release_train_projects AS r ON r.project_id = m.project_id AND r.vers
 INNER JOIN release_trains AS t on t.train_id = r.train_id 
 WHERE m.is_active = 1 AND m.is_map_file = 1 AND t.is_active = 1";
 $rs_maps = mysqli_query($dbh, $sql);
-while ($myrow_maps = mysql_fetch_assoc($rs_maps)) {
+while ($myrow_maps = mysqli_fetch_assoc($rs_maps)) {
   $location = $myrow_maps['location'];
   $project_id = $myrow_maps['project_id'];
   $version = $myrow_maps['version'];
@@ -63,7 +63,7 @@ while ($myrow_maps = mysql_fetch_assoc($rs_maps)) {
     $files_collected[$project_id][$version] = 1;
     $sql = "SELECT * FROM files WHERE project_id = \"$project_id\" AND version = \"$version\"";
     $rs_files = mysqli_query($dbh, $sql);
-    while($myrow_files = mysql_fetch_assoc($rs_files)) {
+    while($myrow_files = mysqli_fetch_assoc($rs_files)) {
       $file = new File();
       $file->project_id = $myrow_files['project_id'];
       $file->version = $myrow_files['version'];
@@ -87,7 +87,7 @@ while ($myrow_maps = mysql_fetch_assoc($rs_maps)) {
   $patterns[] = "/^.*\.test\/.*$/";
   $patterns[] = "/^.*\.tests\/.*$/";
   $patterns[] = "/^.*\.testing\/.*$/";
-  while ($myrow_patterns = mysql_fetch_assoc($rs_patterns)) {
+  while ($myrow_patterns = mysqli_fetch_assoc($rs_patterns)) {
     $patterns[] = $myrow_patterns['pattern'];
   }
 

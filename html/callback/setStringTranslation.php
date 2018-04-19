@@ -60,7 +60,7 @@ if (empty($translation) || (trim($translation) == '')) {
 				  	created_on = NOW()
 				  	";
 	$res = mysqli_query($dbh, $query);
-	$affected_rows += mysql_affected_rows();
+	$affected_rows += mysqli_affected_rows($dbh);
 	
 //	print $query;
 }else{
@@ -80,7 +80,7 @@ if (empty($translation) || (trim($translation) == '')) {
 			  and s.is_active = 1";
 		  	
 	$res = mysqli_query($dbh, $query);
-	while($row = mysql_fetch_assoc($res)){
+	while($row = mysqli_fetch_assoc($res)){
 		$string_ids[] = $row['string_id'];
 	}
 	
@@ -88,7 +88,7 @@ if (empty($translation) || (trim($translation) == '')) {
 	$query= "select value from translations where string_id = '".addslashes($string_id)."' and language_id = '".addslashes($language_id)."' and is_active = 1 order by version limit 1";
 	$res = mysqli_query($dbh, $query);
 	$string_translation = "";
-	while($row = mysql_fetch_assoc($res)){
+	while($row = mysqli_fetch_assoc($res)){
 		$string_translation = $row['value'];
 	}
 	
@@ -109,7 +109,7 @@ if (empty($translation) || (trim($translation) == '')) {
 		  ";
 		
 		$res = mysqli_query($dbh, $query);
-		while($row = mysql_fetch_assoc($res)){
+		while($row = mysqli_fetch_assoc($res)){
 			//DE-ACTIVATE ALL OLD TRANSLATIONS
 			$query = "update translations set is_active = 0 where translation_id = '".addslashes($row['translation_id'])."'";	
 			$res2 = mysqli_query($dbh, $query);
@@ -126,7 +126,7 @@ if (empty($translation) || (trim($translation) == '')) {
 				   		created_on  = NOW()
 					";
 			$res2 = mysqli_query($dbh, $query);
-			$affected_rows += mysql_affected_rows();
+			$affected_rows += mysqli_affected_rows($dbh);
 			
 		}
 		
@@ -148,7 +148,7 @@ if (empty($translation) || (trim($translation) == '')) {
 		
 		$res = mysqli_query($dbh, $query);
 		
-		while($row = mysql_fetch_assoc($res)){
+		while($row = mysqli_fetch_assoc($res)){
 			$translation_ids[] = $row['string_id'];
 			//INSERT NEW TRANSLATIONS
 			$query = "insert into 
@@ -162,7 +162,7 @@ if (empty($translation) || (trim($translation) == '')) {
 				   		created_on  = NOW()
 					";
 			$res2 = mysqli_query($dbh, $query);
-			$affected_rows += mysql_affected_rows();
+			$affected_rows += mysqli_affected_rows($dbh);
 		}	
 	}	
 }
@@ -178,9 +178,9 @@ if(!$do_nothing) {
 			AND s.is_active = 1 AND t.value IS NULL GROUP BY s.string_id HAVING tr_count = 0";
 
 		$res 		= mysqli_query($dbh, $sql);
-		$str_count 	= mysql_affected_rows();
+		$str_count 	= mysqli_affected_rows($dbh);
 	
-		while($myrow = mysql_fetch_assoc($res)) {
+		while($myrow = mysqli_fetch_assoc($res)) {
 			$sql = "insert into 
 						translations
 					  set
@@ -190,7 +190,7 @@ if(!$do_nothing) {
 					  	userid = '".addslashes($user_id)."',
 					  	created_on = NOW()";
 			mysqli_query($dbh, $sql);
-			$affected_rows += mysql_affected_rows();
+			$affected_rows += mysqli_affected_rows($dbh);
 		}
 	}
 }

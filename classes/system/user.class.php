@@ -61,9 +61,9 @@ class User {
 					users 
 				WHERE userid = $_userid";
 			$result = mysqli_query($dbh, $sql);
-			if($result && mysql_num_rows($result) > 0) {
+			if($result && mysqli_num_rows($result) > 0) {
 				$rValue = true;
-				$myrow = mysql_fetch_assoc($result);
+				$myrow = mysqli_fetch_assoc($result);
 				
 				$this->userid              = $myrow['userid'];
 				$this->username            = $myrow['username'];
@@ -79,7 +79,7 @@ class User {
 				$this->created_at			= $myrow['created_at'];
 			}
 			else {
-				$GLOBALS['g_ERRSTRS'][1] = mysql_error();
+				$GLOBALS['g_ERRSTRS'][1] = mysqli_error();
 			}
 		}
 		return $rValue;

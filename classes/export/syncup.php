@@ -34,9 +34,9 @@ if( !function_exists('json_encode') ){
 
 $User = getSyncupUser();
 
-$dbc = new DBConnection();
-global $dbh;
-$dbh = $dbc->connect();
+// $dbc = new DBConnection();
+// global $dbh;
+// $dbh = $dbc->connect();
 
 echo "Connection established. Ready to begin. The syncup user id is: $User->userid\n";
 
@@ -45,7 +45,7 @@ echo "Connection established. Ready to begin. The syncup user id is: $User->user
  * @param string $untranslated_value
  * @return string
  */
-function possible_translation($untranslated_value) {
+function possible_translation($dbh, $untranslated_value) {
 	global $language_id;
 	#candidate may not be found if new line is there.
 	$untranslated_value = rtrim($untranslated_value, "\n\r");
@@ -97,7 +97,7 @@ while( ($language_row = mysqli_fetch_assoc($language_result)) != null ) {
 		 * The if statement requires to be sorted by strings.value
 		 */
 		if ($untranslated_value !== $prev_value) {
-			$translation = possible_translation($untranslated_value);
+			$translation = possible_translation($dbh, $untranslated_value);
 			$prev_value  = $untranslated_value;
 		}
 

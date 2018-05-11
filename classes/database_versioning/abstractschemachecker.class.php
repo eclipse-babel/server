@@ -53,7 +53,7 @@ abstract class AbstractSchemaChecker {
 		} else {
 			$table_name = $tablename.$tablenamesuffix;		
 			$result = remember_query($dbh, "DESCRIBE $tablename$tablenamesuffix");
-			if( strlen(mysqli_error($dbh)) > 0 ) {
+			if( strlen(mysqli_error()) > 0 ) {
 				if( $context->devmode
 				 || $context->testmode
 				 || $databasename == 'myfoundation' ) {
@@ -69,7 +69,7 @@ abstract class AbstractSchemaChecker {
 						return false;
 					}
 				} else {
-//				print mysqli_error($dbh);
+//				print mysqli_error();
 					echo "..does not exist, error <br>\n";
 					$this->createTableFromSchema($table_name,$schemas[count($schemas)],$dbh,$context);				
 					$result = remember_query($dbh, "DESCRIBE $tablename$tablenamesuffix");

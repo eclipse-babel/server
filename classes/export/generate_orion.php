@@ -353,7 +353,7 @@ foreach ($train_result as $train_id => $train_version) {
 	fwrite($language_pack_links_file, "\n\t<br />\n</body>\n</html>");
 	fclose($language_pack_links_file);
 
-	$dbc->disconnect($dbh);
+	$dbh = $dbc->disconnect();
 	echo "Completed  language packs for: $train_id\n";
 }
 

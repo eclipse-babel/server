@@ -134,7 +134,7 @@ print "done!\n";
 			$query = "update translations set is_active = 1 where string_id = $string_id and language_id = $language_id and version = $max";			
 			print $query."\n";
 //			mysqli_query($dbh, $query);			
-			print mysqli_error($dbh);
+			print mysqli_error();
 			
 		}elseif($found_active > 1){
 			$query = "select max(version) as max from translations where string_id = $string_id and language_id = $language_id ";
@@ -143,12 +143,12 @@ print "done!\n";
 			$query = "update translations set is_active = 0 where string_id = $string_id and language_id = $language_id and version != $max";
 			print $query."\n";
 //			mysqli_query($dbh, $query);			
-			print mysqli_error($dbh);
+			print mysqli_error();
 			
 			$query =  "update translations set is_active = 1 where string_id = $string_id and language_id = $language_id and version = $max";
 			print $query."\n";
 //			mysqli_query($dbh, $query);
-			print mysqli_error($dbh);
+			print mysqli_error();
 			
 		}
 	}

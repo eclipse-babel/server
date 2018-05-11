@@ -79,7 +79,7 @@ class User {
 				$this->created_at			= $myrow['created_at'];
 			}
 			else {
-				$GLOBALS['g_ERRSTRS'][1] = mysqli_error($dbh);
+				$GLOBALS['g_ERRSTRS'][1] = mysqli_error();
 			}
 		}
 		return $rValue;

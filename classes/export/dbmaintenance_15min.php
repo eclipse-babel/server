@@ -94,7 +94,7 @@ HAVING translate_percent > 0";
 					        AND v.version = '" . addslashes($myrow['version']) . "'
 					 )";
 		mysqli_query($dbh, $sql);
-		echo mysqli_error($dbh);
+		echo mysqli_error();
 		
 		# Let's lock and unlock in the loop to allow other queries to go through. There's no rush on completing these stats.
 		mysqli_query($dbh, "UNLOCK TABLES");

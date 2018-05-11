@@ -59,7 +59,7 @@ class String {
 					$rValue = true;
 				}
 				else {
-					$GLOBALS['g_ERRSTRS'][1] = mysqli_error($dbh);
+					$GLOBALS['g_ERRSTRS'][1] = mysqli_error();
 				}
 			}
 			else {
@@ -108,7 +108,7 @@ class String {
 					$rValue = true;
 				}
 				else {
-					$GLOBALS['g_ERRSTRS'][1] = mysqli_error($dbh);
+					$GLOBALS['g_ERRSTRS'][1] = mysqli_error();
 				}
 			}
 			else {

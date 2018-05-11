@@ -68,7 +68,7 @@ class File {
 			}
 			else {
 				echo $sql . "\n";
-				$GLOBALS['g_ERRSTRS'][1] = mysqli_error($dbh);
+				$GLOBALS['g_ERRSTRS'][1] = mysqli_error();
 			}
 		}
 		else {

@@ -346,7 +346,7 @@ foreach ($train_result as $train_id => $train_version) {
 			$plugins[$plugin_name]['id'] = $fragment_id;
 			$plugins[$plugin_name]['version'] = $train_version_timestamp;
 
-			exec("mkdir $tmp_dir/META-INF" );
+			exec("mkdir -p $tmp_dir/META-INF" );
 			$outp = fopen("$tmp_dir/META-INF/MANIFEST.MF", "w");
 			fwrite($outp, "Manifest-Version: 1.0\n");
 			fwrite($outp, "Bundle-Name: $parent_plugin_id $language_name NLS Support\n");

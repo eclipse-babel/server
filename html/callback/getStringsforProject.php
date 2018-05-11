@@ -137,7 +137,7 @@ switch($state){
 
 $res = mysqli_query($dbh, $query);
 
-//print mysqli_error();
+//print mysqli_error($dbh);
 
 $stringids = Array();
 $return = Array();

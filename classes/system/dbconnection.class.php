@@ -39,8 +39,8 @@ class DBConnection {
 		return $dbh;
 	}
 
-	function disconnect() {
-		mysqli_close();
+	function disconnect($dbh) {
+		mysqli_close($dbh);
 	}
 }
 ?>

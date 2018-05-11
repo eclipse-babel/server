@@ -30,7 +30,7 @@ class DBConnection {
     	$database = $db_params['db_read_name'];
 		if (isset($database)) {
 			if (!mysqli_select_db($dbh, $database)) {
-				errorLog("Failed attempt to open database: $database - aborting \n\t" . mysqli_error());
+				errorLog("Failed attempt to open database: $database - aborting \n\t" . mysqli_error($dbh));
 				exitTo("/error.php?errNo=101303","error: 101303 - unknown database name");
 			}
 		}

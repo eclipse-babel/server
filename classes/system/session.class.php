@@ -55,7 +55,7 @@ class Session {
 			$this->updated_at	= $myrow['updated_at'];
 		}
 		else {
-			$GLOBALS['g_ERRSTRS'][1] = mysqli_error();
+			$GLOBALS['g_ERRSTRS'][1] = mysqli_error($dbh);
 		}
 		
 		return $rValue;

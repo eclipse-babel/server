@@ -73,11 +73,11 @@ class BabelEclipseOrg_backend {
 
             } else {
                 // password failed
-                $GLOBALS['g_ERRSTRS'][1] = mysqli_error();
+                $GLOBALS['g_ERRSTRS'][1] = mysqli_error($dbh);
             }
         } else {
             // username failed
-            $GLOBALS['g_ERRSTRS'][1] = mysqli_error();
+            $GLOBALS['g_ERRSTRS'][1] = mysqli_error($dbh);
         }
     }
 

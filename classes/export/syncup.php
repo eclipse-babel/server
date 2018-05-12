@@ -51,9 +51,15 @@ function possible_translation($untranslated_value) {
 	$untranslated_value = rtrim($untranslated_value, "\n\r");
 	# BINARY the lookup value instead of the field to support an index.
 	# is_active is not used in consideration of case to reuse.
-	$rs = mysqli_query($dbh, "SELECT string_id FROM strings WHERE value = BINARY '" . addslashes($untranslated_value) . "' and non_translatable = 0 ");
-	if ($rs === false) {
-		return NULL;
+	$sql = "SELECT string_id FROM strings WHERE value = BINARY '" . addslashes($untranslated_value) . "' and non_translatable = 0 ";
+	$rs = mysqli_query($dbh, $sql);
+	if($rs === FALSE) {
+		# We may have lost the database connection with our shell-outs, reconnect
+		$dbh = $dbc->connect();
+		$rs = mysqli_query($dbh, $sql);
+		if ($rs === false) {
+			return NULL;
+		}
 	}
 	$string_ids_tmp = array();
 	while ( ($row = mysqli_fetch_assoc($rs)) != null) {

@@ -34,10 +34,6 @@ if( !function_exists('json_encode') ){
 
 $User = getSyncupUser();
 
-// $dbc = new DBConnection();
-// global $dbh;
-// $dbh = $dbc->connect();
-
 echo "Connection established. Ready to begin. The syncup user id is: $User->userid\n";
 
 /**
@@ -84,8 +80,14 @@ while( ($language_row = mysqli_fetch_assoc($language_result)) != null ) {
 	$language_iso = $language_row['iso_code'];
 	$language_id = $language_row['language_id'];
 	echo "\nInvestigating $language_name ($language_iso) (language_id=$language_id)\n";
-	#In performance purpose, the SQL sorts a temporary table, TEMP.
-	$untranslated_strings = mysqli_query($dbh, "SELECT * FROM (SELECT string_id, value from strings where is_active and non_translatable = 0 and value <> '' and string_id not in(select string_id from translations where language_id=$language_id) ) AS TEMP order by value" );
+	#For performance purpose, the SQL sorts a temporary table, TEMP.
+	$sql = "SELECT * FROM (SELECT string_id, value from strings where is_active and non_translatable = 0 and value <> '' and string_id not in(select string_id from translations where language_id=$language_id) ) AS TEMP order by value";
+	$untranslated_strings = mysqli_query($dbh, $sql);
+	if($untranslated_strings === FALSE) {
+		# We may have lost the database connection with our shell-outs, reconnect
+		$dbh = $dbc->connect();
+		$untranslated_strings = mysqli_query($dbh, $sql);
+	}
 	$count = 0;
 	$prev_value = '';
     while ( ($string_row = mysqli_fetch_assoc($untranslated_strings)) != null) {

@@ -57,16 +57,16 @@ while($update_site = mysqli_fetch_assoc($rs_maps)) {
   $version = $update_site['version'];
 
   # fix WTP version "3.12 (2018-12)"
-  $version = str_replace(" ", "", $version);
-  $version = str_replace("(", "\(", $version);
-  $version = str_replace(")", "\)", $version);
+  $version_dir = str_replace(" ", "", $version);
+  $version_dir = str_replace("(", "\(", $version_dir);
+  $version_dir = str_replace(")", "\)", $version_dir);
 
   # Sample dirs:
   # $site_url           http://git.eclipse.org/c/platform/eclipse.platform.git/snapshot/I20130101-0800.zip
   # $temp_snapshots_dir /tmp/tmp-babel/snapshots/eclipse/4.3/
   # $temp_unzips_dir    /tmp/tmp-babel/unzips/eclipse/4.3/
-  $temp_snapshots_dir = $temp_dir . "snapshots/" . $project_id . "/" . $version . "/";
-  $temp_unzips_dir = $temp_dir . "unzips/" . $project_id . "/" . $version . "/";
+  $temp_snapshots_dir = $temp_dir . "snapshots/" . $project_id . "/" . $version_dir . "/";
+  $temp_unzips_dir = $temp_dir . "unzips/" . $project_id . "/" . $version_dir . "/";
 
   # Collect all files for this project version
   if (!(isset($files_collected[$project_id]) && isset($files_collected[$project_id][$version]))) {

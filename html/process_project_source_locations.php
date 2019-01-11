@@ -57,9 +57,9 @@ while($update_site = mysqli_fetch_assoc($rs_maps)) {
   $version = $update_site['version'];
 
   # fix WTP version "3.12 (2018-12)"
-  $version_dir = str_replace(" ", "", $version);
-  $version_dir = str_replace("(", "\(", $version_dir);
-  $version_dir = str_replace(")", "\)", $version_dir);
+  $version_dir = str_replace(" ", ".", $version);
+  $version_dir = str_replace("(", "", $version_dir);
+  $version_dir = str_replace(")", "", $version_dir);
 
   # Sample dirs:
   # $site_url           http://git.eclipse.org/c/platform/eclipse.platform.git/snapshot/I20130101-0800.zip

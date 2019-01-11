@@ -56,6 +56,11 @@ while($update_site = mysqli_fetch_assoc($rs_maps)) {
   $project_id = $update_site['project_id'];
   $version = $update_site['version'];
 
+  # fix WTP version "3.12 (2018-12)"
+  $version = str_replace(" ", "", $version);
+  $version = str_replace("(", "\(", $version);
+  $version = str_replace(")", "\)", $version);
+
   # Sample dirs:
   # $site_url           http://git.eclipse.org/c/platform/eclipse.platform.git/snapshot/I20130101-0800.zip
   # $temp_snapshots_dir /tmp/tmp-babel/snapshots/eclipse/4.3/

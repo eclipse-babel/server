@@ -602,7 +602,7 @@ foreach ($train_result as $train_id => $train_version) {
 			 */
 			exec("cp ${source_files_dir}about.html $tmp_dir");
 			exec("cp ${source_files_dir}eclipse_update_120.jpg $tmp_dir");
-			exec("cp ${source_files_dir}epl-v10.html $tmp_dir");
+			exec("cp ${source_files_dir}epl-2.0.html $tmp_dir");
 			exec("cp ${source_files_dir}feature.properties $tmp_dir");
 			exec("cp ${source_files_dir}license.html $tmp_dir");
 			/*

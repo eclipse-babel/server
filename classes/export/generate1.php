@@ -76,7 +76,7 @@ if (!isset($options['b'])) {
 	$build_id = $options['b'];
 }
 
-$release_id = "0.16.1";
+$release_id = "0.17.0";
 
 global $addon;
 $work_dir = $addon->callHook('babel_working');

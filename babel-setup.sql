@@ -405,7 +405,7 @@ DELIMITER ;
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
-  `userid` int(10) unsigned NOT NULL,
+  `userid` int(10) unsigned NOT NULL auto_increment,
   `username` varchar(256) NOT NULL default '',
   `first_name` varchar(256) NOT NULL default '',
   `last_name` varchar(256) NOT NULL default '',
@@ -418,8 +418,10 @@ CREATE TABLE `users` (
   `updated_at` time NOT NULL,
   `created_on` date NOT NULL,
   `created_at` time NOT NULL,
+  `sub` varchar(128),
   PRIMARY KEY  (`userid`),
-  KEY `primary_language_id` (`primary_language_id`)
+  KEY `primary_language_id` (`primary_language_id`),
+  UNIQUE KEY `sub_idx` (`sub`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `scoreboard`;

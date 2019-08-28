@@ -39,6 +39,7 @@ function InitPage($login) {
 	
   if (isset($_SERVER['REQUEST_URI']) &&
 	 (strpos($_SERVER['REQUEST_URI'], "login.php") == FALSE) &&
+	 (strpos($_SERVER['REQUEST_URI'], "login_oauth.php") == FALSE) &&
 	 (strpos($_SERVER['REQUEST_URI'], "callback") == FALSE)) {
 	  	SetSessionVar('s_pageLast', $_SERVER['REQUEST_URI']);
   }
@@ -56,7 +57,7 @@ function InitPage($login) {
   		$Session = new Session();
 
   		if(!$Session->validate()) {
-    		exitTo("login.php");
+    		exitTo("login_oauth.php");
   		}
   		else {
   			$User = new User();
@@ -65,7 +66,7 @@ function InitPage($login) {
   		}
   	}
   	else {
-  		exitTo("login.php");
+  		exitTo("login_oauth.php");
   	}
   }
   

@@ -22,7 +22,7 @@ if(!isset($User->userid)) {
 }
 
 if($User->is_committer != 1) {
-	exitTo("login.php?errNo=3214","error: 3214 - you must be an Eclipse committer to access this page.");
+	exitTo("login_oauth.php?errNo=3214","error: 3214 - you must be an Eclipse committer to access this page.");
 }
 
 require(dirname(__FILE__) . "/../classes/file/file.class.php");

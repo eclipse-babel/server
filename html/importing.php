@@ -45,13 +45,13 @@ $addon->callHook("head");
 		<li>Submit the bug. 
 	</ol> 
 
-	<a href="login.php"><img src="<?php echo imageRoot() ?>/large_icons/apps/preferences-desktop-theme.png"><h2>Project Leads</h2></a>
+	<a href="login_oauth.php"><img src="<?php echo imageRoot() ?>/large_icons/apps/preferences-desktop-theme.png"><h2>Project Leads</h2></a>
 	<br style='clear: both;'>
 	<p>
 	If you are a project lead and your project is not included in Babel then follow the steps below.
 	</p>
 	<ol>
-		<li><a href="login.php">Log into Babel</a>.
+		<li><a href="login_oauth.php">Log into Babel</a>.
 		<li>Click on the 'FOR COMMITTERS' link at the top left hand corner of the web page.
 		<li>Follow the instructions on that page, good luck!
 	</ol>	

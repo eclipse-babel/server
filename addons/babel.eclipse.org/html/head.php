@@ -93,5 +93,5 @@ if(!$User) {
 <script src='js/translationHint.js' type='text/javascript'></script>
 
 <script language="javascript">
-	document.getElementById("header-utils").innerHTML = "<ul><li><a href='login.php<?= $LoginAction ?>'><?= $LoginString ?></a></li></ul>";
+	document.getElementById("header-utils").innerHTML = "<ul><li><a href='login_oauth.php<?= $LoginAction ?>'><?= $LoginString ?></a></li></ul>";
 </script>

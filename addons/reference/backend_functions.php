@@ -53,6 +53,17 @@ class Reference_backend {
 					 'db_read_pass' => '', 
 					 'db_read_name' => '');
 	}
+
+	/**
+	 * Returns a hash of the oauth parameters.
+	 */
+	function oauth_params() {
+		return array(
+			'client_id' => '',
+			'client_secret' => '',
+			'client_callback' => ''
+		);
+	}
 	
 	/**
 	 * Deals with error messages.
@@ -76,6 +87,7 @@ function __register_backend_ref($addon) {
     $addon->register('genie_user', array('Reference_backend', 'genieUser'));
 	$addon->register('context', array('Reference_backend', 'context'));
 	$addon->register('db_params', array('Reference_backend', 'db_parameters'));
+	$addon->register('oauth_params', array('Reference_backend', 'oauth_params'));
 	$addon->register('error_log', array('Reference_backend', 'error_log'));
 	$addon->register('babel_working', array('Reference_backend', 'babel_working'));
 }

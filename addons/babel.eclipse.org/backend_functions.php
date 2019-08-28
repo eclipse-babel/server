@@ -126,6 +126,21 @@ class BabelEclipseOrg_backend {
 	}
 
 	/**
+	 * Returns a hash of the oauth parameters.
+	 */
+	function oauth_params() {
+		$ini = @parse_ini_file(dirname(__FILE__) . '/base.conf');
+		if (! $ini) {
+			die("Could not read the configuration file " . dirname(__FILE__) . "/base.conf");
+		}
+		return array(
+			'client_id' => $ini['oauth_client_id'],
+			'client_secret' => $ini['oauth_client_secret'],
+			'client_callback' => $ini['oauth_client_callback']
+		);
+	}
+
+	/**
 	 * Deals with error messages.
 	 */
 	function error_log() {
@@ -146,7 +161,8 @@ function __register_backend($addon) {
     $addon->register('syncup_user', array('BabelEclipseOrg_backend', 'syncupUser'));
     $addon->register('genie_user', array('BabelEclipseOrg_backend', 'genieUser'));
     $addon->register('context', array('BabelEclipseOrg_backend', 'context'));
-	$addon->register('db_params', array('BabelEclipseOrg_backend', 'db_params'));
+    $addon->register('db_params', array('BabelEclipseOrg_backend', 'db_params'));
+    $addon->register('oauth_params', array('BabelEclipseOrg_backend', 'oauth_params'));
 	$addon->register('error_log', array('BabelEclipseOrg_backend', 'error_log'));
 	$addon->register('babel_working', array('BabelEclipseOrg_backend', 'babel_working'));
 }

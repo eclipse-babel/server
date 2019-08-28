@@ -32,7 +32,7 @@ class User {
 
 	function load($email, $password) {
 		if($email != "" && $password != "") {
-			if (eregi('^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z.]{2,5}$', $email)) {
+		    if (preg_match('^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z.]{2,5}$', $email)) {
 				global $addon;
 				$addon->callHook('user_authentication', array(&$this, $email, $password));
 			}

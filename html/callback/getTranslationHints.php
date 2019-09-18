@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2008-2018 Eclipse Foundation and others.
+ * Copyright (c) 2008-2019 Eclipse Foundation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -54,12 +54,12 @@ else {
 	 INNER JOIN strings AS s ON s.string_id = t.string_id
 	 INNER JOIN files   AS f ON s.file_id = f.file_id
 	 INNER JOIN release_train_projects AS tr ON tr.project_id = f.project_id AND tr.version = f.version
+     INNER JOIN release_trains as rt ON rt.train_id = tr.train_id AND rt.is_active
 	WHERE s.value like '%" . addslashes($tr_string). "%'
 	 AND t.is_active
-	 AND tr.train_id IN (" . $train_id . ")
 	 AND t.language_id = '".addslashes($language)."'
 	ORDER BY LENGTH(t.value) ASC LIMIT 15";
-	
+
 	$res = mysqli_query($dbh, $query2);
 	if(mysqli_affected_rows($dbh) > 0) {
 		echo "<ul>";

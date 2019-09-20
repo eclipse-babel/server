@@ -55,9 +55,9 @@
 <?php
     $i = 0;
 	while($i < mysqli_num_fields($rs_p_stat)) {
-		 $meta = mysqli_fetch_field($rs_p_stat, $i);
+		 $meta = mysqli_fetch_field($rs_p_stat);
 		 $align = "";
-		 if($meta->numeric) {
+		 if($meta->flags & MYSQLI_NUM_FLAG) {
 		 	$align="align='right'";
 		 }
 		 echo "<td $align><b>" . $meta->name . "</b></td>";
@@ -74,10 +74,12 @@
 		}
 		echo "<tr $class>";
 		$i = 0;
+		mysqli_field_seek ( $rs_p_stat , 0 );
+
 		while($i < mysqli_num_fields($rs_p_stat)) {
-			$meta = mysqli_fetch_field($rs_p_stat, $i);
+			$meta = mysqli_fetch_field($rs_p_stat);
 			$align = "";
-		 	if($meta->numeric) {
+		 	if($meta->flags & MYSQLI_NUM_FLAG) {
 		 		$align="align='right'";
 			 }
 			

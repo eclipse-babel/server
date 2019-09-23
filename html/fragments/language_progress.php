@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2008 Eclipse Foundation and others.
+ * Copyright (c) 2008-2019 Eclipse Foundation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -20,7 +20,7 @@ $res = mysqli_query($dbh, $query);
 
 ?>
 <div id="trans-progress-area">
-	<h2>Translation Progress</h2>
+	<h2>Translation Progress %</h2>
 	<dl>
 	<?php
 		while($row = mysqli_fetch_assoc($res)){

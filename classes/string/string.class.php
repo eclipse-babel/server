@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2007-2013 Eclipse Foundation, IBM Corporation and others.
+ * Copyright (c) 2007-2019 Eclipse Foundation, IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,11 +11,12 @@
  *    Kit Lo (IBM) - 272661 - Pseudo translations change " to ', breaking link texts
  *    Kit Lo (IBM) - [402215] Extract Orion JavaScript files for translation
  *    Kit Lo (IBM) - [413459] Received "Cannot deactivate string" messages during process_project_source_locations.php
+ *    Denis Roy (Eclipse Foundation) - Bug 550544 - Babel server is not ready for PHP 7
  *******************************************************************************/
 
-class String {
+class BabelString {
   public $errStrs;
-  
+
   public $string_id		= 0;
   public $file_id		= 0;
   public $name			= '';
@@ -128,7 +129,7 @@ class String {
 	 * @return String String object
 	 */
 	function getStringFromName($_file_id, $_name) {
-		$rValue = new String();
+		$rValue = new BabelString();
 		if($_file_id > 0 && $_name != "") {
 			global $dbh;
 
@@ -142,7 +143,7 @@ class String {
 			$result = mysqli_query($dbh, $sql);
 			if($result && mysqli_num_rows($result) > 0) {
 				$myrow = mysqli_fetch_assoc($result);
-				$String = new String();
+				$String = new BabelString();
 				$String->string_id 	= $myrow['string_id'];
 				$String->file_id 	= $myrow['file_id'];
 				$String->name 		= $myrow['name'];
@@ -157,7 +158,7 @@ class String {
 	}
 	
 	function getStringFromNameJs($_file_id, $_name) {
-		$rValue = new String();
+		$rValue = new BabelString();
 		if($_file_id > 0 && $_name != "") {
 			global $dbh;
 
@@ -171,7 +172,7 @@ class String {
 			$result = mysqli_query($dbh, $sql);
 			if($result && mysqli_num_rows($result) > 0) {
 				$myrow = mysqli_fetch_assoc($result);
-				$String = new String();
+				$String = new BabelString();
 				$String->string_id 	= $myrow['string_id'];
 				$String->file_id 	= $myrow['file_id'];
 				$String->name 		= $myrow['name'];
@@ -186,7 +187,7 @@ class String {
 	}
 	
 	function getStringFromStringId($_file_id, $_string_id) {
-		$rValue = new String();
+		$rValue = new BabelString();
 		if($_file_id > 0 && $_string_id != "") {
 			global $dbh;
 
@@ -199,7 +200,7 @@ class String {
 			$result = mysqli_query($dbh, $sql);
 			if($result && mysqli_num_rows($result) > 0) {
 				$myrow = mysqli_fetch_assoc($result);
-				$String = new String();
+				$String = new BabelString();
 				$String->string_id 	= $myrow['string_id'];
 				$String->file_id 	= $myrow['file_id'];
 				$String->name 		= $myrow['name'];
@@ -232,7 +233,7 @@ class String {
 
 			$result = mysqli_query($dbh, $sql);
 			while($myrow = mysqli_fetch_assoc($result)) {
-				$String = new String();
+				$String = new BabelString();
 				$String->string_id 	= $myrow['string_id'];
 				$String->file_id 	= $myrow['file_id'];
 				$String->name 		= $myrow['name'];

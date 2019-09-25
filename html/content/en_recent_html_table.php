@@ -24,7 +24,7 @@
 }
 </style>
 
-<?include 'en_recent_html_common.php' ?>
+<?php include 'en_recent_html_common.php' ?>
 <table cellspacing=1 cellpadding=2 border=0>
 <tr class="head">
 <?php

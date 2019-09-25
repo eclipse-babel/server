@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2007-2013 Eclipse Foundation, IBM Corporation and others.
+ * Copyright (c) 2007-2019 Eclipse Foundation, IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,9 +15,9 @@
  *    Kit Lo (IBM) - Bug 299402, Extract properties files from Eclipse project update sites for translation
  *    Kit Lo (IBM) - [402215] Extract Orion JavaScript files for translation
  *    Kit Lo (IBM) - [413459] Received "Cannot deactivate string" messages during process_project_source_locations.php
+ *    Denis Roy (Eclipse Foundation) - Bug 550544 - Babel server is not ready for PHP 7
  *******************************************************************************/
 
-require_once("/home/data/httpd/babel.eclipse.org/html/json_encode.php");
 require(dirname(__FILE__) . "/../system/language.class.php"); 
 require(dirname(__FILE__) . "/../system/release_train.class.php"); 
 
@@ -110,7 +110,7 @@ class File {
 			$sql = "SELECT * from strings WHERE is_active = 1 AND file_id = $this->file_id";
 			$rs_strings = mysqli_query($dbh, $sql);
 			while ($myrow_strings = mysqli_fetch_assoc($rs_strings)) {
-			  $string = new String();
+			  $string = new BabelString();
 			  $string->string_id = $myrow_strings['string_id'];
 			  $string->file_id = $myrow_strings['file_id'];
 			  $string->name = $myrow_strings['name'];
@@ -165,7 +165,7 @@ class File {
 								
 								$rValue .= $tags[0];
 								
-								$String = new String();
+								$String = new BabelString();
 								$String->file_id 	= $this->file_id;
 								$String->name 		= $tags[0];
 								$String->value 		= $tags[1];
@@ -204,7 +204,7 @@ class File {
 			$sql = "SELECT * from strings WHERE is_active = 1 AND file_id = $this->file_id";
 			$rs_strings = mysqli_query($dbh, $sql);
 			while ($myrow_strings = mysqli_fetch_assoc($rs_strings)) {
-			  $string = new String();
+			  $string = new BabelString();
 			  $string->string_id = $myrow_strings['string_id'];
 			  $string->file_id = $myrow_strings['file_id'];
 			  $string->name = $myrow_strings['name'];
@@ -220,14 +220,13 @@ class File {
 			$file_contents = preg_replace("/\\/\\/\\$/", "", $file_contents);
 			$file_contents = preg_replace("/((.*?(\n))+.*?)define\(/", "define(", $file_contents);
 			$file_contents = preg_replace("/define\(((.*?(\n))+.*?)\)\;/", "$1", $file_contents);
-			$jsons = new Services_JSON();
-			$lines = $jsons->decode($file_contents);
+			$lines = $json_decode($file_contents, true, 10);
 			foreach($lines as $key => $value) {
 				# escape newlines and tabs
 				$value = preg_replace("/\\n/", "\\\\n", $value);
 				$value = preg_replace("/\\t/", "\\\\t", $value);
 
-				$String = new String();
+				$String = new BabelString();
 				$String->file_id 	= $this->file_id;
 				$String->name 		= $key;
 				$String->value 		= $value;

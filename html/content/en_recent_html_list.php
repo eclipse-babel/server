@@ -23,7 +23,7 @@ img {
 }
 </style>
 
-<?include 'en_recent_html_common.php' ?>
+<?php include 'en_recent_html_common.php' ?>
 <ul>
 <?php
 	$prev_date = "";

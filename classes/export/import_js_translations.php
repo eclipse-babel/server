@@ -78,8 +78,7 @@ foreach ($lines as $line) {
 			$file_contents = preg_replace("/\\/\\/\\$/", "", $file_contents);
 			$file_contents = preg_replace("/((.*?(\n))+.*?)define\(/", "define(", $file_contents);
 			$file_contents = preg_replace("/define\(((.*?(\n))+.*?)\)\;/", "$1", $file_contents);
-			$jsons = new Services_JSON();
-			$lines = $jsons->decode($file_contents);
+			$lines = $json_decode($file_contents, true, 10);
 			foreach($lines as $key => $value) {
 							# Get the matching string name
 							$SQL = "SELECT s.string_id, s.value, tr.value as tr_last, tr.possibly_incorrect as tr_last_fuzzy, trv.value as ever_tr_value

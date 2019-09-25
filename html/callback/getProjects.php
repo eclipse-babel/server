@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2007 Eclipse Foundation and others.
+ * Copyright (c) 2007-2019 Eclipse Foundation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,7 +8,7 @@
  *
  * Contributors:
  *    Paul Colton (Aptana)- initial API and implementation
-
+ *    Denis Roy (Eclipse Foundation) - Bug 550544 - Babel server is not ready for PHP 7
 *******************************************************************************/
 require_once("cb_global.php");
 
@@ -24,8 +24,8 @@ WHERE P.is_active = 1";
 	$res = mysqli_query($dbh, $query);
 
 //	$return = '<ul id="project-choices">';
-
-	while($line = mysqli_fetch_array($res, MYSQL_ASSOC)){
+	$return = Array();
+	while($line = mysqli_fetch_array($res, MYSQLI_ASSOC)){
 		$ret = Array();
 		$ret['project'] = $line['project_id'];
 		//	$ret['version'] = $line['version'];

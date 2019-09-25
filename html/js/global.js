@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2018 Eclipse Foundation and others.
+ * Copyright (c) 2007-2019 Eclipse Foundation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,6 +8,7 @@
  * Contributors:
  *    Paul Colton (Aptana)- initial API and implementation
  *    Eclipse Foundation
+ *    Denis Roy (Eclipse Foundation) - Bug 550544 - Babel server is not ready for PHP 7
 *******************************************************************************/
 
 YAHOO.widget.Logger.enableBrowserConsole();
@@ -17,7 +18,7 @@ YAHOO.spinable = {
 
 	attach: function(domIN){
 		if(domIN){
-			domIN.innerHTML = "<div id='spinner'><img src='http://babel.eclipse.org/images/spinner.gif' alt='spinner'><h1>...loading...</h1></div>";
+			domIN.innerHTML = "<div id='spinner'><img src='images/spinner.gif' alt='spinner'><h1>...loading...</h1></div>";
 		}
 	}
 };

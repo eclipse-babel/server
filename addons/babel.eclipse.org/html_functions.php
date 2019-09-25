@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2007-2009 Intalio, Inc.
+ * Copyright (c) 2007-2019 Intalio, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Antoine Toulme, Intalio Inc.
+ *    Denis Roy (Eclipse Foundation) - Bug 550544 - Babel server is not ready for PHP 7
 *******************************************************************************/
 
 // Use a class to define the hooks to avoid bugs with already defined functions.
@@ -17,9 +18,9 @@ class BabelEclipseOrg {
      * May be a distant server or a local folder.
      */
     function _imageRoot() {
-        return "http://dev.eclipse.org";
+        return "//dev.eclipse.org";
     }
-    
+
     function validateMapFileUrl() {
         return <<<JS
         function fnCheckUrl() {
@@ -37,14 +38,14 @@ class BabelEclipseOrg {
         }
 JS;
     }
-    
+
     /**
      * Outputs the head of the html page.
      */
     function head() {
         include(dirname(__FILE__) . "/html/head.php");
     }
-    
+
     /**
      * Outputs the footer of the html page.
      */

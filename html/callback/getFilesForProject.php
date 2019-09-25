@@ -61,7 +61,7 @@ WHERE
 $res = mysqli_query($dbh, $query);
 
 
-while($line = mysqli_fetch_array($res, MYSQL_ASSOC)){
+while($line = mysqli_fetch_array($res, MYSQLI_ASSOC)){
 	$ret = Array();
 	
 	$ret['name'] = $line['name'];

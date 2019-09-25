@@ -24,7 +24,7 @@ $query = "SELECT pattern FROM plugin_exclude_patterns WHERE project_id = " . ret
 
 $res = mysqli_query($dbh, $query);
 if (mysqli_affected_rows($dbh) > 0) {
-	while ($line = mysqli_fetch_array($res, MYSQL_ASSOC)) {
+	while ($line = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
 		echo $line['pattern'] . "\n";
 	}
 } else {

@@ -141,7 +141,7 @@ $res = mysqli_query($dbh, $query);
 
 $stringids = Array();
 $return = Array();
-while($line = mysqli_fetch_array($res, MYSQL_ASSOC)){
+while($line = mysqli_fetch_array($res, MYSQLI_ASSOC)){
     if(isset($stringids[$line['stringId']])){
  		  continue;
     }else{

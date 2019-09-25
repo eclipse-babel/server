@@ -22,7 +22,7 @@ $query = "SELECT is_map_file FROM map_files WHERE project_id = " . returnQuotedS
 
 $res = mysqli_query($dbh, $query);
 if (mysqli_affected_rows($dbh) > 0) {
-	while ($line = mysqli_fetch_array($res, MYSQL_ASSOC)) {
+	while ($line = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
 		echo $line['is_map_file'];
 	}
 } else {

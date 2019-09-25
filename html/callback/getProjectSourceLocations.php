@@ -24,7 +24,7 @@ $query = "SELECT m.project_id, m.version, r.train_id, m.location FROM project_so
 
 $res = mysqli_query($dbh, $query);
 if (mysqli_affected_rows($dbh) > 0) {
-	while ($line = mysqli_fetch_array($res, MYSQL_ASSOC)) {
+	while ($line = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
 		echo $line['location'] . "\n";
 	}
 } else {

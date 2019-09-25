@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2007-2013 Eclipse Foundation, IBM Corporation and others.
+ * Copyright (c) 2007-2019 Eclipse Foundation, IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -31,15 +31,15 @@ global $pageTitle, $pageAuthor, $pageKeywords;
     <div id="header-global-holder" class="babel-global">
         <div id="header-global-links">
             <ul>
-                <li><a href="http://www.eclipse.org/org/foundation/contact.php" class="first_one">Contact</a></li>
-                <li><a href="http://www.eclipse.org/legal/">Legal</a></li>
+                <li><a href="//www.eclipse.org/org/foundation/contact.php" class="first_one">Contact</a></li>
+                <li><a href="//www.eclipse.org/legal/">Legal</a></li>
             </ul>
         </div>
         <div id="header-icons">
-            <a href="http://www.eclipse.org"><img src="images/Icon_Org.png" width="28" height="28" alt="eclipse.org" title="Eclipse.org" /></a>
-            <a href="http://live.eclipse.org"><img src="images/Icon_Live.png" width="28" height="28" alt="Eclipse Live" title="Eclipse Live" /></a>
-            <a href="http://www.eclipseplugincentral.com"><img src="images/Icon_plugin.png" width="28" height="28" alt="Eclipse Plugin Central" title="Eclipse Plugin Central" /></a>
-            <a href="http://www.planeteclipse.org"><img src="images/Icon_planet.png" width="28" height="28" alt="Planet Eclipse" title="Planet Eclipse" /></a>
+            <a href="//www.eclipse.org"><img src="images/Icon_Org.png" width="28" height="28" alt="eclipse.org" title="Eclipse.org" /></a>
+            <a href="//live.eclipse.org"><img src="images/Icon_Live.png" width="28" height="28" alt="Eclipse Live" title="Eclipse Live" /></a>
+            <a href="//www.eclipseplugincentral.com"><img src="images/Icon_plugin.png" width="28" height="28" alt="Eclipse Plugin Central" title="Eclipse Plugin Central" /></a>
+            <a href="//www.planeteclipse.org"><img src="images/Icon_planet.png" width="28" height="28" alt="Planet Eclipse" title="Planet Eclipse" /></a>
         </div>
     </div>
 </div>
@@ -51,7 +51,7 @@ global $pageTitle, $pageAuthor, $pageKeywords;
         <li><a  href="project_source_locations.php" target="_self">For committers</a></li> 
         <li><a  href="stats.php" target="_self">Translation Statistics</a></li>
         <li><a  href="recent.php" target="_self">Recent Translations</a></li> 
-        <li><a  href="http://www.eclipse.org/babel" target="_self">About Babel</a></li> 
+        <li><a  href="//www.eclipse.org/babel" target="_self">About Babel</a></li> 
     </ul>
     </div>
     <div id="header-utils"></div>

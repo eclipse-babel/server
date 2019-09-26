@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2008 Eclipse Foundation and others.
+ * Copyright (c) 2008-2019 Eclipse Foundation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,6 +16,7 @@
  *    Kit Lo (IBM) - Bug 257332, NLS warnings appear unnecessarily in runtime log
  *    Kit Lo (IBM) - Bug 302834, Add plugin filtering supports to map files process
  *    Kit Lo (IBM) - [382800] CSSUIPluginResources.properties is missing on translator tool
+ *    Denis Roy (Eclipse Foundation) - Bug 550544 - Babel server is not ready for PHP 7
 *******************************************************************************/
 $temp_dir = "/tmp/tmp-babel/";
 $files = array();
@@ -100,11 +101,11 @@ while ($myrow_maps = mysqli_fetch_assoc($rs_maps)) {
   }
   mkdir($tmpdir) || die("Cannot create working directory $tmpdir !");
   chdir($tmpdir) || die("Cannot write to $tmpdir !"); 
-    
+
   $h = fopen($myrow_maps['location'], "rb");
   $file_contents = stream_get_contents($h);
   fclose($h);
-  $file_contents = ereg_replace("\r\n?", "\n", $file_contents);
+  $file_contents = preg_replace("/\r\n?/", "\n", $file_contents);
   $aLines = split("\n", $file_contents);
 
   foreach ($aLines as $line) {

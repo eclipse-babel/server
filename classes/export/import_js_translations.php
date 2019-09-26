@@ -73,7 +73,7 @@ foreach ($lines as $line) {
 			$content = fread($fh, $size);
 			# echo $content . "<br/>";
 			fclose($fh);
-			$file_contents = ereg_replace("\r\n?", "\n", $content);
+			$file_contents = preg_replace("\r\n?", "\n", $content);
 			$file_contents = preg_replace("/NON-NLS-(.*)/", "", $file_contents);
 			$file_contents = preg_replace("/\\/\\/\\$/", "", $file_contents);
 			$file_contents = preg_replace("/((.*?(\n))+.*?)define\(/", "define(", $file_contents);

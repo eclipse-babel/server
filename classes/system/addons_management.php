@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2007-2009 Intalio, Inc.
+ * Copyright (c) 2007-2019 Intalio, Inc. and others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,25 +8,26 @@
  *
  * Contributors:
  *    Antoine Toulme, Intalio Inc.
+ *    Denis Roy (Eclipse Foundation) - Bug 550544 - Babel server is not ready for PHP 7
 *******************************************************************************/
 
 class AddonsManagement {
 
     private $addon;
     private $hooks = array();
-  
+
     /**
      * Constructor. Registers the addon name to use.
      * The addon name should be the name of the folder in use.
      * You can directly pass the addon name, or have it be consumed
      * from a properties file as a separate location, under the key "addon".
      */
-    function AddonsManagement($addon = null) {
+    function __construct($addon = null) {
         if (!isSet($addon)) {
             if (!isSet($ini_file_path)) {
                 $ini_file_path = dirname(__FILE__) . '/../../addons/addons.conf';
             }
-            
+
             if (($ini = @parse_ini_file($ini_file_path)) && isSet($ini['addons'])) {
                 $addon = $ini['addons'];
             }
@@ -39,7 +40,7 @@ class AddonsManagement {
         }
         $this->addon = $addon;
     }
-    
+
     /**
      * Loads the addon, register the hooks for html functions.
      */
@@ -50,7 +51,7 @@ class AddonsManagement {
             call_user_func($register_function_html, $this);
         }
     }
-    
+
     /**
      * Loads the addon, register the hooks for backend functions.
      */
@@ -61,7 +62,7 @@ class AddonsManagement {
             call_user_func($register_function_backend, $this);
         }
     }
-    
+
     /**
      * Registers a function for a specific key.
      * The function will be called later on.
@@ -69,19 +70,19 @@ class AddonsManagement {
     public function register($hook_key, $function_name) {
         $this->hooks[$hook_key] = $function_name;
     }
-    
+
     /**
      * Returns the name of the function to be used in the hook.
      */ 
     public function hook($hook_key) {
         return $this->hooks[$hook_key];
     }
-    
+
     /**
      * Executes the function associated with the hook and returns the result
      */ 
     public function callHook($hook_key, $args = array()) {
-    	return call_user_func_array($this->hook($hook_key), $args);
+        return call_user_func_array($this->hook($hook_key), $args);
     }
 }
 

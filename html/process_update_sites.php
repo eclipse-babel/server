@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2010 Eclipse Foundation and others.
+ * Copyright (c) 2010-2019 Eclipse Foundation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,6 +10,7 @@
  *    Kit Lo (IBM) - Initial API and implementation
  *    Kit Lo (IBM) - [299402] Extract properties files from Eclipse project update sites for translation
  *    Kit Lo (IBM) - [382800] CSSUIPluginResources.properties is missing on translator tool
+ *    Denis Roy (Eclipse Foundation) - Bug 550544 - Babel server is not ready for PHP 7
 *******************************************************************************/
 /*
  * Extract properties files from update sites 
@@ -180,7 +181,7 @@ while($update_site = mysqli_fetch_assoc($rs_maps)) {
         echo "***ERROR: Cannot save file $file->name\n";
       } else {
         $file_name = $temp_unzip_dir . $properties_file_name;
-        $file_contents = ereg_replace("\r\n?", "\n", file_get_contents($file_name));
+        $file_contents = preg_replace("/\r\n?/", "\n", file_get_contents($file_name));
         $file->parseProperties($file_contents);
         echo "  $properties_file_name\n";
       }

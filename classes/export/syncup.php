@@ -24,14 +24,6 @@ $dbh = $dbc->connect();
 
 require_once(dirname(__FILE__) . "/../system/backend_functions.php");
 
-if( !function_exists('json_encode') ){
-	require("/home/data/httpd/babel.eclipse.org/html/json_encode.php");
-	function json_encode($encode){
- 		$jsons = new Services_JSON();
-		return $jsons->encode($encode);
-	}
-}
-
 $User = getSyncupUser();
 
 echo "Connection established. Ready to begin. The syncup user id is: $User->userid\n";

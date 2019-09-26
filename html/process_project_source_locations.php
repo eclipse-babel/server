@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2013 IBM Corporation and others.
+ * Copyright (c) 2013-2019 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Kit Lo (IBM) - [402192] Extract project source files from Git repositories for translation
+ *    Denis Roy (Eclipse Foundation) - Bug 550544 - Babel server is not ready for PHP 7
  *******************************************************************************/
 
 /*
@@ -169,7 +170,7 @@ while($update_site = mysqli_fetch_assoc($rs_maps)) {
       if (!$file->save()) {
         echo "***ERROR: Cannot save file $file->name\n";
       } else {
-        $file_contents = ereg_replace("\r\n?", "\n", file_get_contents($file_name));
+        $file_contents = preg_replace("/\r\n?/", "\n", file_get_contents($file_name));
         $file->parseProperties($file_contents);
         echo "  $properties_file_name\n";
       }
@@ -221,7 +222,7 @@ while($update_site = mysqli_fetch_assoc($rs_maps)) {
       if (!$file->save()) {
         echo "***ERROR: Cannot save file $file->name\n";
       } else {
-        $file_contents = ereg_replace("\r\n?", "\n", file_get_contents($file_name));
+        $file_contents = preg_replace("/\r\n?/", "\n", file_get_contents($file_name));
         $file->parseJs($file_contents);
         echo "  $js_file_name\n";
       }

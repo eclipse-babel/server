@@ -29,6 +29,7 @@
  *    Kit Lo (IBM) - [402215] Extract Orion JavaScript files for translation
  *    Satoru Yoshida - [487881] generate1.php needs some efficiency
  *    Satoru Yoshida - [487881] generate1.php needs some efficiency, array define fix
+ *    Kit Lo (IBM) - Bug 552610 - split function removed in PHP 7
  *******************************************************************************/
 
 /*
@@ -357,31 +358,31 @@ foreach ($train_result as $train_id => $train_version) {
 			if (preg_match("/64$/", $plugin_name)) {
 
 				if     (preg_match("/.gtk.linux.x86_64$/", $plugin_name)) {
-					$arr = split(".gtk.linux.x86_64", $plugin_name);
+					$arr = explode(".gtk.linux.x86_64", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.ws=gtk) (osgi.os=linux) (osgi.arch=x86_64))";
 				}
 				elseif (preg_match("/.linux.x86_64$/", $plugin_name)) {
-					$arr = split(".linux.x86_64", $plugin_name);
+					$arr = explode(".linux.x86_64", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.os=linux) (osgi.arch=x86_64))";
 				}
 				elseif (preg_match("/.gtk.linux.ppc64$/", $plugin_name)) {
-					$arr = split(".gtk.linux.ppc64", $plugin_name);
+					$arr = explode(".gtk.linux.ppc64", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.ws=gtk) (osgi.os=linux) (osgi.arch=ppc64))";
 				}
 				elseif (preg_match("/.gtk.aix.ppc64$/", $plugin_name)) {
-					$arr = split(".gtk.aix.ppc64", $plugin_name);
+					$arr = explode(".gtk.aix.ppc64", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.ws=gtk) (osgi.os=aix) (osgi.arch=ppc64))";
 				}
 				elseif (preg_match("/.cocoa.macosx.x86_64$/", $plugin_name)) {
-					$arr = split(".cocoa.macosx.x86_64", $plugin_name);
+					$arr = explode(".cocoa.macosx.x86_64", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.ws=cocoa) (osgi.os=macosx) (osgi.arch=x86_64))";
 				}
 				elseif (preg_match("/.win32.win32.x86_64$/", $plugin_name)) {
-					$arr = split(".win32.win32.x86_64", $plugin_name);
+					$arr = explode(".win32.win32.x86_64", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.ws=win32) (osgi.os=win32) (osgi.arch=x86_64))";
 				}
 				elseif (preg_match("/.win32.x86_64$/", $plugin_name)) {
-					$arr = split(".win32.x86_64", $plugin_name);
+					$arr = explode(".win32.x86_64", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.os=win32) (osgi.arch=x86_64))";
 				}
 
@@ -390,23 +391,23 @@ foreach ($train_result as $train_id => $train_version) {
 			elseif (preg_match("/86$/", $plugin_name)) {
 
 				if     (preg_match("/.gtk.linux.x86$/", $plugin_name)) {
-					$arr = split(".gtk.linux.x86", $plugin_name);
+					$arr = explode(".gtk.linux.x86", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.ws=gtk) (osgi.os=linux) (osgi.arch=x86))";
 				}
 				elseif (preg_match("/.linux.x86$/", $plugin_name)) {
-					$arr = split(".linux.x86", $plugin_name);
+					$arr = explode(".linux.x86", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.os=linux) (osgi.arch=x86))";
 				}
 				elseif (preg_match("/.gtk.solaris.x86$/", $plugin_name)) {
-					$arr = split(".gtk.solaris.x86", $plugin_name);
+					$arr = explode(".gtk.solaris.x86", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.ws=gtk) (osgi.os=solaris) (osgi.arch=x86))";
 				}
 				elseif (preg_match("/.win32.win32.x86$/", $plugin_name)) {
-					$arr = split(".win32.win32.x86", $plugin_name);
+					$arr = explode(".win32.win32.x86", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.ws=win32) (osgi.os=win32) (osgi.arch=x86))";
 				}
 				elseif (preg_match("/.win32.x86$/", $plugin_name)) {
-					$arr = split(".win32.x86", $plugin_name);
+					$arr = explode(".win32.x86", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.os=win32) (osgi.arch=x86))";
 				}
 
@@ -415,18 +416,18 @@ foreach ($train_result as $train_id => $train_version) {
 			elseif (preg_match("/32$/", $plugin_name)) {
 
 				if     (preg_match("/.gtk.hpux.ia64_32$/", $plugin_name)) {
-					$arr = split(".gtk.hpux.ia64_32", $plugin_name);
+					$arr = explode(".gtk.hpux.ia64_32", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.ws=gtk) (osgi.os=hpux) (osgi.arch=ia64_32))";
 				}
 				elseif (preg_match("/.hpux.ia64_32$/", $plugin_name)) {
-					$arr = split(".hpux.ia64_32", $plugin_name);
+					$arr = explode(".hpux.ia64_32", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.os=hpux) (osgi.arch=ia64_32))";
 				}
 				elseif (preg_match("/^org.eclipse.compare.win32$/", $plugin_name)) {
 					$parent_plugin_id .= "\nEclipse-PlatformFilter: (osgi.os=win32)";
 				}
 				elseif (preg_match("/.win32$/", $plugin_name)) {
-					$arr = split(".win32", $plugin_name);
+					$arr = explode(".win32", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (osgi.ws=win32)";
 				}
 
@@ -435,15 +436,15 @@ foreach ($train_result as $train_id => $train_version) {
 			elseif (preg_match("/.macosx$/", $plugin_name)) {
 
 				if     (preg_match("/.carbon.macosx$/", $plugin_name)) {
-					$arr = split(".carbon.macosx", $plugin_name);
+					$arr = explode(".carbon.macosx", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.ws=carbon) (osgi.os=macosx))";
 				}
 				elseif (preg_match("/.cocoa.macosx$/", $plugin_name)) {
-					$arr = split(".cocoa.macosx", $plugin_name);
+					$arr = explode(".cocoa.macosx", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.ws=cocoa) (osgi.os=macosx))";
 				}
 				else {
-					$arr = split(".macosx", $plugin_name);
+					$arr = explode(".macosx", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (osgi.os=macosx)";
 				}
 
@@ -452,11 +453,11 @@ foreach ($train_result as $train_id => $train_version) {
 			elseif (preg_match("/.aix.ppc$/", $plugin_name)) {
 
 				if (preg_match("/.gtk.aix.ppc$/", $plugin_name)) {
-					$arr = split(".gtk.aix.ppc", $plugin_name);
+					$arr = explode(".gtk.aix.ppc", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.ws=gtk) (osgi.os=aix) (osgi.arch=ppc))";
 				}
 				else {
-					$arr = split(".aix.ppc", $plugin_name);
+					$arr = explode(".aix.ppc", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.os=aix) (osgi.arch=ppc))";
 				}
 
@@ -465,35 +466,35 @@ foreach ($train_result as $train_id => $train_version) {
 			elseif (preg_match("/.solaris.sparc$/", $plugin_name)) {
 
 				if (preg_match("/.gtk.solaris.sparc$/", $plugin_name)) {
-					$arr = split(".gtk.solaris.sparc", $plugin_name);
+					$arr = explode(".gtk.solaris.sparc", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.ws=gtk) (osgi.os=solaris) (osgi.arch=sparc))";
 				}
 				else {
-					$arr = split(".solaris.sparc", $plugin_name);
+					$arr = explode(".solaris.sparc", $plugin_name);
 					$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.os=solaris) (osgi.arch=sparc))";
 				}
 
 			}
 
 			elseif (preg_match("/.gtk.linux.s390$/", $plugin_name)) {
-				$arr = split(".gtk.linux.s390", $plugin_name);
+				$arr = explode(".gtk.linux.s390", $plugin_name);
 				$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.ws=gtk) (osgi.os=linux) (osgi.arch=s390))";
 			}
 			elseif (preg_match("/.gtk.linux.s390x$/", $plugin_name)) {
-				$arr = split(".gtk.linux.s390x", $plugin_name);
+				$arr = explode(".gtk.linux.s390x", $plugin_name);
 				$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (& (osgi.ws=gtk) (osgi.os=linux) (osgi.arch=s390x))";
 			}
 
 			elseif (preg_match("/.carbon$/", $plugin_name)) {
-				$arr = split(".carbon", $plugin_name);
+				$arr = explode(".carbon", $plugin_name);
 				$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (osgi.ws=carbon)";
 			}
 			elseif (preg_match("/.cocoa$/", $plugin_name)) {
-				$arr = split(".cocoa", $plugin_name);
+				$arr = explode(".cocoa", $plugin_name);
 				$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (osgi.ws=cocoa)";
 			}
 			elseif (preg_match("/.linux$/", $plugin_name)) {
-				$arr = split(".linux", $plugin_name);
+				$arr = explode(".linux", $plugin_name);
 				$parent_plugin_id = $arr[0] . "\nEclipse-PlatformFilter: (osgi.os=linux)";
 			}
 

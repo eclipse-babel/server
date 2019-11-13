@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2007-2008 Eclipse Foundation and others.
+ * Copyright (c) 2007-2019 Eclipse Foundation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Antoine Toulme, Intalio Inc. bug 248845: Refactoring generate1.php into different files with a functional approach
+ *    Denis Roy (Eclipse Foundation) - Bug 550544 - Babel server is not ready for PHP 7
 *******************************************************************************/
 
 require_once(dirname(__FILE__) . "/fragment.class.php"); 
@@ -45,6 +46,7 @@ class Feature {
 	 * of the translation of this feature in this language.
 	 */
 	function pct_complete() {
+	    global $dbh;
 		if (strcmp($this->language->iso, "en_AA") == 0) {
 			return 100;
 		}
@@ -279,6 +281,7 @@ class Feature {
 	}
 	
 	function generateAsCSV() {
+	    global $dbh;
 		$this->cleanupOutput(null, false);
 		$filename = $this->filename() . ".csv";
 		$language = $this->language->id;

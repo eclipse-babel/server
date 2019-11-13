@@ -30,6 +30,7 @@ class ReleaseTrain {
 	
 	static function all() {
 		$trains = array();
+		global $dbh;
 		$train_result = mysqli_query($dbh, "SELECT DISTINCT train_id FROM release_train_projects");
 		while (($train_row = mysqli_fetch_assoc($train_result)) != null) {
 			$trains[] = new ReleaseTrain($train_row['train_id']);

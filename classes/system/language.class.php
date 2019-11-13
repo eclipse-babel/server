@@ -47,6 +47,7 @@ class Language {
   
 	static function all() {
 		$langs = array();
+		global $dbh;
 		$language_result = mysqli_query($dbh, "SELECT * FROM languages WHERE languages.is_active ORDER BY name, locale");
 		while (($language_row = mysqli_fetch_assoc($language_result)) != null) {
 			$langs[] = Language::fromRow($language_row);

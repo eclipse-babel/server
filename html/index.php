@@ -37,10 +37,6 @@ $addon->callHook("head");
 	      <br style='clear: both;'>
 		  <p>Eclipse needs help from everyone in the community to <a href="translate.php">speak in many tongues</a>.</p>
 
-		  <a href="map_files.php"><img src="<?php echo imageRoot() ?>/large_icons/apps/system-users.png"><h2>Add an Existing Eclipse Project to Babel</h2></a>
-	      <br style='clear: both;'>
-		  <p>Eclipse committers, find out how simple it is to include any existing Eclipse.org project <a href="map_files.php">in Babel</a>.</p>
-
 		  <a href="help_babel.php"><img src="<?php echo imageRoot() ?>/large_icons/categories/preferences-desktop-peripherals.png"><h2>Become a Babel Team Player</h2></a>
 	      <br style='clear: both;'>
 		  <p>The Babel project has lots of ideas and we need your help to take this project to the <a href="help_babel.php">next level</a>.</p>

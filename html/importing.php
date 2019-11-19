@@ -27,8 +27,6 @@ $addon->callHook("head");
 
 <h1 id="page-message">Help Getting Projects into Babel</h1>
 <div id="index-page">
-	
-
 
 	<a href="https://bugs.eclipse.org/bugs/enter_bug_wizard.cgi"><img src="<?php echo imageRoot() ?>/large_icons/apps/system-users.png"><h2>Eager Translators</h2></a>
 	<br style='clear: both;'>
@@ -45,17 +43,6 @@ $addon->callHook("head");
 		<li>Submit the bug. 
 	</ol> 
 
-	<a href="login_oauth.php"><img src="<?php echo imageRoot() ?>/large_icons/apps/preferences-desktop-theme.png"><h2>Project Leads</h2></a>
-	<br style='clear: both;'>
-	<p>
-	If you are a project lead and your project is not included in Babel then follow the steps below.
-	</p>
-	<ol>
-		<li><a href="login_oauth.php">Log into Babel</a>.
-		<li>Click on the 'FOR COMMITTERS' link at the top left hand corner of the web page.
-		<li>Follow the instructions on that page, good luck!
-	</ol>	
-		
 </div>
 
 <script>YAHOO.languageManager.getAjaxLanguages();</script>

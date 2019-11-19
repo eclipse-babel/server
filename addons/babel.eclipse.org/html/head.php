@@ -48,7 +48,6 @@ global $pageTitle, $pageAuthor, $pageKeywords;
     <div id="header-nav">
     <ul>
         <li><a class="first_one" href="./" target="_self">Home</a></li> 
-        <li><a  href="project_source_locations.php" target="_self">For committers</a></li> 
         <li><a  href="stats.php" target="_self">Translation Statistics</a></li>
         <li><a  href="recent.php" target="_self">Recent Translations</a></li> 
         <li><a  href="//www.eclipse.org/babel" target="_self">About Babel</a></li> 

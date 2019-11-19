@@ -1,5 +1,4 @@
 <script src="js/projectSourceLocations.js" type='text/javascript'></script>
-<script src="js/train.js" type='text/javascript'></script>
 <div id="maincontent">
 <div id="midcolumn">
 <h1><?= $pageTitle ?></h1>
@@ -113,7 +112,6 @@
 	}
 	
 	function fnSetTrain() {
-		<?# Update train according to selected project/version  ?>
 		if(typeof(project_trains[document.form1.project_id.value][cleanVersion(document.form1.version.options[document.form1.version.selectedIndex].value)]) != "undefined") {
 			for(i = 0; i < document.form1.train_id.length; i++) {
 				document.form1.train_id.options[i].selected = "";

@@ -77,7 +77,7 @@ if (!isset($options['b'])) {
 	$build_id = $options['b'];
 }
 
-$release_id = "0.17.0";
+$release_id = "0.17.1";
 
 global $addon;
 $work_dir = $addon->callHook('babel_working');
@@ -683,11 +683,11 @@ foreach ($train_result as $train_id => $train_version) {
 	 */
 	$outp = fopen("${output_dir_for_train}site.xml", "w");
 	fwrite($outp, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" .
-		"\n<site pack200=\"true\" digestURL=\"http://download.eclipse.org/technology/babel/update-site/R$release_id/$train_id\"" .
-		"\n\tmirrorsURL=\"http://www.eclipse.org/downloads/download.php?file=/technology/babel/update-site/R$release_id/$train_id/site.xml&amp;format=xml\">" .
-		"\n\t<description url=\"http://babel.eclipse.org/\">" .
+		"\n<site pack200=\"true\" digestURL=\"https://download.eclipse.org/technology/babel/update-site/R$release_id/$train_id\"" .
+		"\n\tmirrorsURL=\"https://www.eclipse.org/downloads/download.php?file=/technology/babel/update-site/R$release_id/$train_id/site.xml&amp;format=xml\">" .
+		"\n\t<description url=\"https://babel.eclipse.org/\">" .
 		"\n\t\tThis update site contains user-contributed translations of the strings in all Eclipse projects." .
-		"\n\t\tPlease see the http://babel.eclipse.org/ Babel project web pages for a full how-to-use explanation of" .
+		"\n\t\tPlease see the https://babel.eclipse.org/ Babel project web pages for a full how-to-use explanation of" .
 		"\n\t\tthese translations as well as how you can contribute to the translations of this and future versions of Eclipse." .
 		"\n\t</description>");
 	fwrite($outp, $site_xml);

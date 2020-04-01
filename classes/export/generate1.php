@@ -30,6 +30,7 @@
  *    Satoru Yoshida - [487881] generate1.php needs some efficiency
  *    Satoru Yoshida - [487881] generate1.php needs some efficiency, array define fix
  *    Kit Lo (IBM) - Bug 552610 - split function removed in PHP 7
+ *    Kit Lo (IBM) - Bug 561507 - translations for org.eclipse.e4.ui.workbench.renderers.swt missing
  *******************************************************************************/
 
 /*
@@ -161,7 +162,7 @@ foreach ($train_result as $train_id => $train_version) {
 				INNER JOIN strings AS s ON f.file_id = s.file_id
 				INNER JOIN release_train_projects as v ON (f.project_id = v.project_id AND f.version = v.version)
 				WHERE f.is_active
-				AND v.train_id = '" . $train_id . "'");
+				AND v.train_id = '" . $train_id . "' ORDER BY f.project_id DESC");
 		} else {
 			$file_result = mysqli_query($dbh, "SELECT DISTINCT f.project_id, f.version, f.file_id, f.name
 				FROM files AS f
@@ -170,7 +171,7 @@ foreach ($train_result as $train_id => $train_version) {
 				INNER JOIN release_train_projects as v ON (f.project_id = v.project_id AND f.version = v.version)
 				WHERE t.language_id = " . $language_id . "
 				AND f.is_active
-				AND v.train_id = '" . $train_id . "'");
+				AND v.train_id = '" . $train_id . "' ORDER BY f.project_id DESC");
 		}
 
 		$plugins = array();

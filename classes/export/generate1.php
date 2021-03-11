@@ -42,9 +42,17 @@ ini_set("memory_limit", "512M");
 require(dirname(__FILE__) . "/../system/backend_functions.php");
 require(dirname(__FILE__) . "/../system/dbconnection.class.php");
 
-# Get all release trains
+# Connect database
 $dbc = new DBConnection();
 $dbh = $dbc->connect();
+
+# Get release_id
+$query = "SELECT value FROM sys_values WHERE itemid = 'rel_id'";
+$res = mysqli_query($dbh, $query);
+$row = mysqli_fetch_assoc($res);
+$release_id = $row['value'];
+
+# Get all release trains
 $result = mysqli_query($dbh, "SELECT * FROM release_trains ORDER BY train_version DESC");
 $train_result = array();
 while ($train_row = mysqli_fetch_assoc($result)) {
@@ -77,8 +85,6 @@ if (!isset($options['b'])) {
 } else {
 	$build_id = $options['b'];
 }
-
-$release_id = "0.18.2";
 
 global $addon;
 $work_dir = $addon->callHook('babel_working');

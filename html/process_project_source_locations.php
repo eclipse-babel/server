@@ -256,6 +256,9 @@ chdir($temp_dir);
 exec("rm -rf snapshots");
 exec("rm -rf unzips");
 
+chdir("/tmp/");
+exec("rm -rf $temp_dir");
+
 if ($headless) {
   $User = null;
 }

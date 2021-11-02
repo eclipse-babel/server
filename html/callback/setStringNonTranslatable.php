@@ -1,4 +1,15 @@
 <?php
+/*******************************************************************************
+ * Copyright (c) 2008-2020 Eclipse Foundation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Eclipse Foundation - initial API and implementation
+ *    Andrew Johnson (IBM) - [564512] Escape HTML
+*******************************************************************************/
 require_once("cb_global.php");
 
 $string_id = getHTTPParameter("string_id", "POST");
@@ -47,5 +58,5 @@ if($updated_rows < 0){
 	$message = "'".$row['value']."' has been marked as translatable in ".$updated_rows." file(s).";
 }
 
-print "<br><br><br><center><b>$message</b></center>";
+print "<br><br><br><center><b>".nl2br(htmlspecialchars($message))."</b></center>";
 ?>

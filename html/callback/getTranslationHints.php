@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2008-2019 Eclipse Foundation and others.
+ * Copyright (c) 2008-2020 Eclipse Foundation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,6 +9,7 @@
  * Contributors:
  *    Eclipse Foundation - initial API and implementation
  *    Satoru Yoshida - [470120] it is nice if translation hint will prefer front match.
+ *    Andrew Johnson (IBM) - [564512] Escape HTML for hints
 *******************************************************************************/
 require_once("cb_global.php");
 
@@ -42,7 +43,7 @@ $res = mysqli_query($dbh, $query);
 if(mysqli_affected_rows($dbh) > 0) {
 	echo "<ul>";
 	while($line = mysqli_fetch_array($res, MYSQLI_ASSOC)){
-		echo "<li>", $line['value'], "</li>";
+	    echo "<li>", nl2br(htmlspecialchars($line['value'])), "</li>";
 	}
 	echo "</ul>";
 }
@@ -64,7 +65,7 @@ else {
 	if(mysqli_affected_rows($dbh) > 0) {
 		echo "<ul>";
 		while($line = mysqli_fetch_array($res, MYSQLI_ASSOC)){
-			echo "<li>", $line['value'], "</li>";
+			echo "<li>", nl2br(htmlspecialchars($line['value'])), "</li>";
 		}
 		echo "</ul>";
 	}

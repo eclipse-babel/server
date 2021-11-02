@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2019 Eclipse Foundation and others.
+ * Copyright (c) 2007-2020 Eclipse Foundation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,6 +9,7 @@
  *    Paul Colton (Aptana)- initial API and implementation
  *    Eclipse Foundation
  *    Denis Roy (Eclipse Foundation) - Bug 550544 - Babel server is not ready for PHP 7
+ *    Andrew Johnson (IBM) - Bug 564512 - Escape HTML for hints
 *******************************************************************************/
 
 YAHOO.widget.Logger.enableBrowserConsole();
@@ -111,6 +112,11 @@ function filesOrderRadioButtonClicked() {
 
 YAHOO.util.Event.onDOMReady(setupFilesOrder);
 
+function escapeHTML(str1) {
+	var el = document.createElement('div');
+	el.innerText = str1;
+	return el.innerHTML;
+}
 
 function catchSelection() {
 	var sel = "";
@@ -128,7 +134,7 @@ function catchSelection() {
 		if(document.getElementById('translation-hints') && !document.getElementById('translation-hints').innerHTML.includes("or use from the following:") ) {
 			var domNode = document.getElementById('translation-hints');
 
-			domNode.innerHTML = "Please wait, looking for : <b>" + sel + "</b>";
+			domNode.innerHTML = "Please wait, looking for : <b>" + escapeHTML(sel) + "</b>";
 			showTranslationHints(sel);
 		}
         	if(document.getElementById('translation-hints') && document.getElementById('translation-hints').innerHTML.includes("or use from the following:") ) {

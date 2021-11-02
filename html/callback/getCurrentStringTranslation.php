@@ -1,6 +1,6 @@
 <?php
 /*******************************************************************************
- * Copyright (c) 2007-2018 Eclipse Foundation and others.
+ * Copyright (c) 2007-2020 Eclipse Foundation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,6 +10,7 @@
  *    Paul Colton (Aptana)- initial API and implementation
  *    Eclipse Foundation
  *    Kit Lo (IBM) - [281434] Syncup overuses the "possibly incorrect" flag
+ *    Andrew Johnson (IBM) - [564512] Escape HTML for hints
 *******************************************************************************/
 
 require_once("cb_global.php");
@@ -125,7 +126,7 @@ $query = "SELECT
 		<h4 id="translation-hints-title">Translation Hints [<a id="clear-btn" href="javascript:clearHints();">Clear</a>]</h4>
 		<div id="translation-hints" style='overflow-x: hidden; overflow-y: auto; height: 75px;'>
 		<b>Select some English text above to find similar translations</b><?php
-		# offer up some hints is the string is not translated
+		# offer up some hints if the string is not translated
 		if($line['translation_value'] == "") {
 			$q_th = "SELECT DISTINCT t.value
                  FROM translations as t
@@ -139,7 +140,7 @@ $query = "SELECT
 			if(mysqli_affected_rows($dbh) > 0) {
 				echo "<b>, or use from the following:</b><ul>";
 				while($translation_hints = mysqli_fetch_array($res_th, MYSQLI_ASSOC)){
-					echo "<li>", $translation_hints['value'], "</li>";
+					echo "<li>", nl2br(htmlspecialchars($translation_hints['value'])), "</li>";
 				}
 				echo "</ul>";
 			}
@@ -195,7 +196,7 @@ $query = "SELECT
 					print "<div>".nl2br(htmlspecialchars($line['value']))."</div>";
 					print "</td>";
 					print "<td width='20%'>";
-					print $line['first_name']." ".$line['last_name'];
+					print htmlspecialchars($line['first_name'])." ".htmlspecialchars($line['last_name']);
 					print "</td>";
 					print "<td width='40%'>";
 					print $line['created_on'];

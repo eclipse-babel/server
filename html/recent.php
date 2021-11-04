@@ -58,7 +58,7 @@ if($FORMAT == "rss") {
 	$incfile 		= "content/en_recent_rss.php";
 }
 $s_value	= getHTTPParameter("s_value");
-$s_value	= trim($s_value);
+$s_value	= htmlspecialchars(trim($s_value));
 if ($s_value !== '') {
 	$s_value_in_sql = $s_value . '%';
 } else {
@@ -89,7 +89,7 @@ if($VERSION != "") {
 }
 if($s_value_in_sql !== "") {
 	$where = addAndIfNotNull($where) . "s.value like ";
-	$where .= returnQuotedString(sqlSanitize($s_value_in_sql, $dbh));
+	$where .= returnQuotedString(sqlSanitize(htmlspecialchars_decode($s_value_in_sql), $dbh));
 }
 if($USERID != "") {
 	$where = addAndIfNotNull($where) . "u.userid = ";

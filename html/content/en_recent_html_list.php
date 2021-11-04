@@ -40,14 +40,13 @@ img {
 		}
 		
 		echo "<li>" . 
-			substr($myrow['created_on'],11,5) . " " . $myrow['string_value'] . 
-				" -> " . $myrow['translation'] .
-				// [281434] Syncup overuses the "possibly incorrect" flag
-				// $fuzzy .
-				" [" . $myrow['language'] . ": <a href='translate.php?project=" . $myrow['project_id'] . "&version=" . $myrow['version'] . "&file=" . $myrow['name'] . "&string=" . $myrow['string_key'] . "'>" .$myrow['string_key'] . "</a>] <b>" . 
-				$myrow['project_id'] . " " . 
-				$myrow['version'] . "</b> 
-				(<a href='?userid=" . $myrow['userid'] . "'>" . $myrow['who'] . "</a>)"; 
+			substr($myrow['created_on'],11,5) . " " . htmlspecialchars($myrow['string_value']) . " -> " . htmlspecialchars($myrow['translation']) .
+			// [281434] Syncup overuses the "possibly incorrect" flag
+			// $fuzzy .
+			" [" . $myrow['language'] . ": <a href='translate.php?project=" . $myrow['project_id'] . "&version=" . $myrow['version'] . "&file=" . $myrow['name'] . "&string=" . $myrow['string_key'] . "'>" .$myrow['string_key'] . "</a>] <b>" . 
+			$myrow['project_id'] . " " . 
+			$myrow['version'] . "</b> 
+			(<a href='?userid=" . $myrow['userid'] . "'>" . $myrow['who'] . "</a>)"; 
 		echo "</li>";
 		
 		// $myrow['string_key'] . " " . 

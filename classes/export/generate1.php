@@ -319,18 +319,15 @@ foreach ($train_result as $train_id => $train_version) {
 						AND translations.is_active";
 					$strings_result = mysqli_query($dbh, $sql);
 					while (($strings_row = mysqli_fetch_assoc($strings_result)) != null) {
-						fwrite($outp, "\n" . $strings_row['key'] . "=");
-						# echo "${leader1S}${leaderS}${leaderS}${leaderS}" . $strings_row['key'] . "=";
-						if ($strings_row['trans']) {
-							# json_encode returns the string with quotes fore and aft.  Need to strip them.
-							# $tr_string = preg_replace('/^"(.*)"$/', '${1}', json_encode($strings_row['trans']));
-							# $tr_string = str_replace('\\\\', '\\', $tr_string);
-							$tr_string = toescapedunicode($strings_row['trans']);
-							fwrite($outp, $tr_string);
-							# echo $strings_row['trans'];
-						} else {
-							fwrite($outp, $strings_row['orig']);
-						}
+					    # echo "${leader1S}${leaderS}${leaderS}${leaderS}" . $strings_row['key'] . "=";
+					    if ($strings_row['trans'] != null && $strings_row['trans'] != $strings_row['orig']) {
+					        # json_encode returns the string with quotes fore and aft.  Need to strip them.
+					        # $tr_string = preg_replace('/^"(.*)"$/', '${1}', json_encode($strings_row['trans']));
+					        # $tr_string = str_replace('\\\\', '\\', $tr_string);
+					        $tr_string = toescapedunicode($strings_row['trans']);
+					        fwrite($outp, "\n" . $strings_row['key'] . "=" . $tr_string);
+					        # echo $strings_row['trans'];
+					    }
 					}
 				}
 				/*

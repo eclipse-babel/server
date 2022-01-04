@@ -94,6 +94,7 @@ while($update_site = mysqli_fetch_assoc($rs_maps)) {
   $patterns[] = "/^.*\/feature.properties$/";
   $patterns[] = "/^.*\/build.properties$/";
   $patterns[] = "/^.*\/pom.properties$/";
+  $patterns[] = "/^.*\/about.properties$/";
   $patterns[] = "/^.*\.source\/.*$/";
   $patterns[] = "/^.*\.test\/.*$/";
   $patterns[] = "/^.*\.tests\/.*$/";

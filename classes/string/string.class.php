@@ -39,8 +39,8 @@ class BabelString {
 					$this->string_id = $String->string_id;
 					$sql = "UPDATE";
 					$where = " WHERE string_id = " . sqlSanitize($this->string_id, $dbh);
-					$Event = new EventLog("strings", "string_id:old_value", $this->string_id . ":" . $String->value, "UPDATE");
-					$Event->add();
+					# $Event = new EventLog("strings", "string_id:old_value", $this->string_id . ":" . $String->value, "UPDATE");
+					# $Event->add();
 				}
 
                 # Bug 272661 - Pseudo translations change " to ', breaking link texts
@@ -90,8 +90,8 @@ class BabelString {
 					$this->string_id = $String->string_id;
 					$sql = "UPDATE";
 					$where = " WHERE string_id = " . sqlSanitize($this->string_id, $dbh);
-					$Event = new EventLog("strings", "string_id:old_value", $this->string_id . ":" . $String->value, "UPDATE");
-					$Event->add();
+					# $Event = new EventLog("strings", "string_id:old_value", $this->string_id . ":" . $String->value, "UPDATE");
+					# $Event->add();
 				}
 
 				$sql .= " strings 
@@ -263,8 +263,8 @@ class BabelString {
 
 			$rValue = mysqli_query($dbh, $sql);
 			
-			$Event = new EventLog("strings", "string_id", $_string_id, "DEACTIVATE");
-			$Event->add();
+			# $Event = new EventLog("strings", "string_id", $_string_id, "DEACTIVATE");
+			# $Event->add();
 		}
 		return $rValue;
 	}

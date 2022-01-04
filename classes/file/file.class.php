@@ -49,7 +49,7 @@ class File {
 				$where = " WHERE file_id = " . sqlSanitize($this->file_id, $dbh);
 			}
 			
-			$Event = new EventLog("files", "file_id", $this->file_id, $sql);
+			# $Event = new EventLog("files", "file_id", $this->file_id, $sql);
 			
 			$sql .= " files 
 						SET file_id 	= " . sqlSanitize($this->file_id, $dbh) . ",
@@ -61,10 +61,10 @@ class File {
 			if(mysqli_query($dbh, $sql)) {
 				if($this->file_id == 0) {
 					$this->file_id = mysqli_insert_id($dbh);
-					$Event->key_value = $this->file_id;
+					# $Event->key_value = $this->file_id;
 				}
 				$rValue = true;
-				$Event->add();
+				# $Event->add();
 			}
 			else {
 				echo $sql . "\n";

@@ -17,7 +17,7 @@
 <br /><center>
 	<a target="_blank" href="//bugs.eclipse.org/bugs/enter_bug.cgi?product=Babel&component=Server&bug_file_loc=<?= $_SERVER['SCRIPT_NAME'] ?>">Report errors or enhancements for server</a>&nbsp;|&nbsp;
 	<a target="_blank" href="//bugs.eclipse.org/bugs/enter_bug.cgi?product=Babel&component=EnglishStrings&bug_file_loc=URL_TO_THE_STRING&short_desc=Problem%20with%20KEY_NAME&comment=elaborate_here">Report errors for English strings</a>&nbsp;|&nbsp;
-	<a href="//dev.eclipse.org/mailman/listinfo/babel-translators">Discuss translations on translators mailing list</a>
+	<a href="//dev.eclipse.org/mailman/listinfo/babel-dev">Discuss development and translation issues on mailing list</a>
 </center><br />
 </div>
 <div id="footer">

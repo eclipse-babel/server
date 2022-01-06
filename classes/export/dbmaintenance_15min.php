@@ -30,11 +30,12 @@
 	$dbc = new DBConnection();
 	$dbh = $dbc->connect();
 
-
-	# refresh the scoreboard -- not every 15 minutes!
+	# refresh scoreboard and file progress -- only periodically!
 	$forceRefresh = strcasecmp(getenv("FORCE_BABEL_REFRESH"), "true");
 	if(rand(1, 100) < 25 || $forceRefresh) {
 		require_once(dirname(__FILE__) . "/../system/scoreboard.class.php");
+		echo date("h:i:sa") . "\n";
+		echo "Start refreshing scoreboard...\n";
 		$sb = new Scoreboard();
 		$sb->refresh($forceRefresh);
 		
@@ -51,8 +52,11 @@ WHERE f.is_active = 1
 GROUP BY f.file_id, l.language_id
 HAVING translate_percent > 0";
 		$rs = mysqli_query($dbh, $sql);
+		echo date("h:i:sa") . "\n";
+		echo "Start refreshing file progress...\n";
 		while($myrow = mysqli_fetch_assoc($rs)) {
-			mysqli_query($dbh, "INSERT INTO file_progress (file_id, language_id, pct_complete)
+		    echo "\tRefreshing file_id:" . $myrow['file_id'] . " language_id:" . $myrow['language_id'] . "...\n";
+		    mysqli_query($dbh, "INSERT INTO file_progress (file_id, language_id, pct_complete)
 			VALUES(" . $myrow['file_id'] . ", " . $myrow['language_id'] . ", " . $myrow['translate_percent'] . ")
 			ON DUPLICATE KEY UPDATE pct_complete=" . $myrow['translate_percent']);
 		}
@@ -62,6 +66,8 @@ HAVING translate_percent > 0";
 	# Update project/version/language progress 
 	$sql = "SELECT * FROM project_progress WHERE is_stale";
 	$rs = mysqli_query($dbh, $sql);
+	echo date("h:i:sa") . "\n";
+	echo "Start refreshing project/version/language progress...\n";
 	while($myrow = mysqli_fetch_assoc($rs)) {
 		mysqli_query($dbh, "LOCK TABLES project_progress WRITE, 
 			project_versions AS v READ, 
@@ -93,6 +99,7 @@ HAVING translate_percent > 0";
 					        v.project_id = '" . addslashes($myrow['project_id']) . "'
 					        AND v.version = '" . addslashes($myrow['version']) . "'
 					 )";
+		echo "\tRefreshing project_id:" . addslashes($myrow['project_id']) . " version:" . addslashes($myrow['version']) . " language_id:" . $myrow['language_id'] . "...\n";
 		mysqli_query($dbh, $sql);
 		echo mysqli_error($dbh);
 		
@@ -100,4 +107,6 @@ HAVING translate_percent > 0";
 		mysqli_query($dbh, "UNLOCK TABLES");
 		sleep(2);
 	}
+	echo date("h:i:sa") . "\n";
+	echo "Done\n";
 ?>
